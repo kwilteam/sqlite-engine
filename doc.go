@@ -21,6 +21,7 @@
 //	linux	amd64   3.38.0
 //	linux	arm     3.38.0
 //	linux	arm64   3.38.0
+//	linux	riscv64 3.38.0
 //	windows	amd64   3.38.0
 //
 // Builders
@@ -30,6 +31,10 @@
 //	https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2fsqlite
 //
 // Changelog
+//
+// 2022-03-13 v1.15.0:
+//
+// Support linux/riscv64.
 //
 // 2021-11-13 v1.14.0:
 //
