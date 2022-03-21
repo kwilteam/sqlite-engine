@@ -8,6 +8,11 @@
 // SQLite is an in-process implementation of a self-contained, serverless,
 // zero-configuration, transactional SQL database engine.
 //
+// Thanks
+//
+// This project is sponsored by Schleibinger Geräte Teubert u. Greim GmbH by
+// allowing one of the maintainers to work on it also in office hours.
+//
 // Supported platforms and architectures
 //
 // These combinations of GOOS and GOARCH are currently supported
