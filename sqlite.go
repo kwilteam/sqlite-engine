@@ -749,6 +749,7 @@ type conn struct {
 
 	writeTimeFormat string
 	beginMode       string
+	udfs            map[string]*userDefinedFunction
 }
 
 func newConn(dsn string) (*conn, error) {
@@ -765,7 +766,7 @@ func newConn(dsn string) (*conn, error) {
 		}
 	}
 
-	c := &conn{tls: libc.NewTLS()}
+	c := &conn{tls: libc.NewTLS(), udfs: make(map[string]*userDefinedFunction)}
 	db, err := c.openV2(
 		dsn,
 		sqlite3.SQLITE_OPEN_READWRITE|sqlite3.SQLITE_OPEN_CREATE|
@@ -1307,6 +1308,14 @@ func (c *conn) Close() error {
 
 		c.db = 0
 	}
+
+	if c.udfs != nil {
+		for _, v := range c.udfs {
+			v.close(c.tls)
+		}
+		c.udfs = nil
+	}
+
 	if c.tls != nil {
 		c.tls.Close()
 		c.tls = nil
@@ -1320,6 +1329,50 @@ func (c *conn) closeV2(db uintptr) error {
 		return c.errstr(rc)
 	}
 
+	return nil
+}
+
+type userDefinedFunction struct {
+	zFuncName uintptr
+	nArg      int32
+	eTextRep  int32
+	xFunc     func(*libc.TLS, uintptr, int32, uintptr)
+
+	freeOnce sync.Once
+}
+
+func (udf *userDefinedFunction) close(tls *libc.TLS) {
+	if udf == nil {
+		return
+	}
+	udf.freeOnce.Do(func() { libc.Xfree(tls, udf.zFuncName) })
+}
+
+func (c *conn) createFunctionInternal(fun *userDefinedFunction) error {
+	c.Mutex.Lock()
+	defer c.Mutex.Unlock()
+
+	goZFuncName := libc.GoString(fun.zFuncName)
+
+	if prev, ok := c.udfs[goZFuncName]; ok {
+		prev.close(c.tls)
+		delete(c.udfs, goZFuncName)
+	}
+	c.udfs[goZFuncName] = fun
+
+	if rc := sqlite3.Xsqlite3_create_function(
+		c.tls,
+		c.db,
+		fun.zFuncName,
+		fun.nArg,
+		fun.eTextRep,
+		0,
+		*(*uintptr)(unsafe.Pointer(&fun.xFunc)),
+		0,
+		0,
+	); rc != sqlite3.SQLITE_OK {
+		return c.errstr(rc)
+	}
 	return nil
 }
 
