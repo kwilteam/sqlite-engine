@@ -749,7 +749,6 @@ type conn struct {
 
 	writeTimeFormat string
 	beginMode       string
-	udfs            map[string]*userDefinedFunction
 }
 
 func newConn(dsn string) (*conn, error) {
@@ -766,7 +765,7 @@ func newConn(dsn string) (*conn, error) {
 		}
 	}
 
-	c := &conn{tls: libc.NewTLS(), udfs: make(map[string]*userDefinedFunction)}
+	c := &conn{tls: libc.NewTLS()}
 	db, err := c.openV2(
 		dsn,
 		sqlite3.SQLITE_OPEN_READWRITE|sqlite3.SQLITE_OPEN_CREATE|
@@ -1313,13 +1312,6 @@ func (c *conn) Close() error {
 		c.db = 0
 	}
 
-	if c.udfs != nil {
-		for _, v := range c.udfs {
-			v.close(c.tls)
-		}
-		c.udfs = nil
-	}
-
 	if c.tls != nil {
 		c.tls.Close()
 		c.tls = nil
@@ -1345,25 +1337,7 @@ type userDefinedFunction struct {
 	freeOnce sync.Once
 }
 
-func (udf *userDefinedFunction) close(tls *libc.TLS) {
-	if udf == nil {
-		return
-	}
-	udf.freeOnce.Do(func() { libc.Xfree(tls, udf.zFuncName) })
-}
-
 func (c *conn) createFunctionInternal(fun *userDefinedFunction) error {
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
-
-	goZFuncName := libc.GoString(fun.zFuncName)
-
-	if prev, ok := c.udfs[goZFuncName]; ok {
-		prev.close(c.tls)
-		delete(c.udfs, goZFuncName)
-	}
-	c.udfs[goZFuncName] = fun
-
 	if rc := sqlite3.Xsqlite3_create_function(
 		c.tls,
 		c.db,
@@ -1445,9 +1419,14 @@ func (c *conn) query(ctx context.Context, query string, args []driver.NamedValue
 }
 
 // Driver implements database/sql/driver.Driver.
-type Driver struct{}
+type Driver struct {
+	// user defined functions that are added to every new connection on Open
+	udfs map[string]*userDefinedFunction
+}
 
-func newDriver() *Driver { return &Driver{} }
+var d = &Driver{udfs: make(map[string]*userDefinedFunction)}
+
+func newDriver() *Driver { return d }
 
 // Open returns a new connection to the database.  The name is a string in a
 // driver-specific format.
@@ -1479,5 +1458,162 @@ func newDriver() *Driver { return &Driver{} }
 // available at
 // https://www.sqlite.org/lang_transaction.html#deferred_immediate_and_exclusive_transactions
 func (d *Driver) Open(name string) (driver.Conn, error) {
-	return newConn(name)
+	c, err := newConn(name)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, udf := range d.udfs {
+		if err = c.createFunctionInternal(udf); err != nil {
+			c.Close()
+			return nil, err
+		}
+	}
+	return c, nil
+}
+
+type FunctionContext struct{}
+
+const sqliteValPtrSize = unsafe.Sizeof(&sqlite3.Sqlite3_value{})
+
+func RegisterScalarFunction(
+	zFuncName string,
+	nArg int32,
+	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
+) error {
+	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8, xFunc)
+}
+
+func MustRegisterScalarFunction(
+	zFuncName string,
+	nArg int32,
+	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
+) {
+	if err := RegisterScalarFunction(zFuncName, nArg, xFunc); err != nil {
+		panic(err)
+	}
+}
+
+func MustRegisterDeterministicScalarFunction(
+	zFuncName string,
+	nArg int32,
+	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
+) {
+	if err := RegisterDeterministicScalarFunction(zFuncName, nArg, xFunc); err != nil {
+		panic(err)
+	}
+}
+
+func RegisterDeterministicScalarFunction(
+	zFuncName string,
+	nArg int32,
+	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
+) error {
+	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8|sqlite3.SQLITE_DETERMINISTIC, xFunc)
+}
+
+func registerScalarFunction(
+	zFuncName string,
+	nArg int32,
+	eTextRep int32,
+	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
+) error {
+
+	if _, ok := d.udfs[zFuncName]; ok {
+		return fmt.Errorf("a function named %q is already registered", zFuncName)
+	}
+
+	// dont free, functions registered on the driver live as long as the program
+	name, err := libc.CString(zFuncName)
+	if err != nil {
+		return err
+	}
+
+	udf := &userDefinedFunction{
+		zFuncName: name,
+		nArg:      nArg,
+		eTextRep:  eTextRep,
+		xFunc: func(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
+			setErrorResult := func(res error) {
+				errmsg, cerr := libc.CString(res.Error())
+				if cerr != nil {
+					panic(cerr)
+				}
+				defer libc.Xfree(tls, errmsg)
+				sqlite3.Xsqlite3_result_error(tls, ctx, errmsg, -1)
+				sqlite3.Xsqlite3_result_error_code(tls, ctx, sqlite3.SQLITE_ERROR)
+			}
+
+			args := make([]driver.Value, argc)
+			for i := int32(0); i < argc; i++ {
+				valPtr := *(*uintptr)(unsafe.Pointer(argv + uintptr(i)*sqliteValPtrSize))
+
+				switch valType := sqlite3.Xsqlite3_value_type(tls, valPtr); valType {
+				case sqlite3.SQLITE_TEXT:
+					args[i] = libc.GoString(sqlite3.Xsqlite3_value_text(tls, valPtr))
+				case sqlite3.SQLITE_INTEGER:
+					args[i] = sqlite3.Xsqlite3_value_int64(tls, valPtr)
+				case sqlite3.SQLITE_FLOAT:
+					args[i] = sqlite3.Xsqlite3_value_double(tls, valPtr)
+				case sqlite3.SQLITE_NULL:
+					args[i] = nil
+				case sqlite3.SQLITE_BLOB:
+					size := sqlite3.Xsqlite3_value_bytes(tls, valPtr)
+					blobPtr := sqlite3.Xsqlite3_value_blob(tls, valPtr)
+					v := make([]byte, size)
+					copy(v, (*libc.RawMem)(unsafe.Pointer(blobPtr))[:size:size])
+					args[i] = v
+				default:
+					panic(fmt.Sprintf("unexpected argument type %q passed by sqlite", valType))
+				}
+			}
+
+			res, err := xFunc(&FunctionContext{}, args)
+			if err != nil {
+				setErrorResult(err)
+				return
+			}
+
+			switch resTyped := res.(type) {
+			case nil:
+				sqlite3.Xsqlite3_result_null(tls, ctx)
+			case int64:
+				sqlite3.Xsqlite3_result_int64(tls, ctx, resTyped)
+			case float64:
+				sqlite3.Xsqlite3_result_double(tls, ctx, resTyped)
+			case bool:
+				sqlite3.Xsqlite3_result_int(tls, ctx, libc.Bool32(resTyped))
+			case time.Time:
+				sqlite3.Xsqlite3_result_int64(tls, ctx, resTyped.Unix())
+			case string:
+				size := int32(len(resTyped))
+				cstr, err := libc.CString(resTyped)
+				if err != nil {
+					panic(err)
+				}
+				defer libc.Xfree(tls, cstr)
+				sqlite3.Xsqlite3_result_text(tls, ctx, cstr, size, sqlite3.SQLITE_TRANSIENT)
+			case []byte:
+				size := int32(len(resTyped))
+				if size == 0 {
+					sqlite3.Xsqlite3_result_zeroblob(tls, ctx, 0)
+					return
+				}
+				p := libc.Xmalloc(tls, types.Size_t(size))
+				if p == 0 {
+					panic(fmt.Sprintf("unable to allocate space for blob: %d", size))
+				}
+				defer libc.Xfree(tls, p)
+				copy((*libc.RawMem)(unsafe.Pointer(p))[:size:size], resTyped)
+
+				sqlite3.Xsqlite3_result_blob(tls, ctx, p, size, sqlite3.SQLITE_TRANSIENT)
+			default:
+				setErrorResult(fmt.Errorf("function did not return a valid driver.Value: %T", resTyped))
+				return
+			}
+		},
+	}
+	d.udfs[zFuncName] = udf
+
+	return nil
 }
