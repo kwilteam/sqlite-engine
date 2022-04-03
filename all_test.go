@@ -149,6 +149,26 @@ func tempDB(t testing.TB) (string, *sql.DB) {
 	return dir, db
 }
 
+// https://gitlab.com/cznic/sqlite/issues/98
+func TestIssue98(t *testing.T) {
+	dir, db := tempDB(t)
+
+	defer func() {
+		db.Close()
+		os.RemoveAll(dir)
+	}()
+
+	if _, err := db.Exec("create table t(b mediumblob not null)"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec("insert into t values (?)", []byte{}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec("insert into t values (?)", nil); err == nil {
+		t.Fatal(errors.New("expected statement to fail"))
+	}
+}
+
 func TestScalar(t *testing.T) {
 	dir, db := tempDB(t)
 
