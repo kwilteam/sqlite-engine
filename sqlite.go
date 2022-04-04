@@ -1472,10 +1472,17 @@ func (d *Driver) Open(name string) (driver.Conn, error) {
 	return c, nil
 }
 
+// FunctionContext represents the context user defined functions execute in.
+// Fields and/or methods of this type may get addedd in the future.
 type FunctionContext struct{}
 
 const sqliteValPtrSize = unsafe.Sizeof(&sqlite3.Sqlite3_value{})
 
+// RegisterScalarFunction registers a scalar function named zFuncName with nArg
+// arguments. Passing -1 for nArg indicates the function is variadic.
+//
+// The new function will be available to all new connections opened after
+// executing RegisterScalarFunction.
 func RegisterScalarFunction(
 	zFuncName string,
 	nArg int32,
@@ -1484,6 +1491,8 @@ func RegisterScalarFunction(
 	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8, xFunc)
 }
 
+// MustRegisterScalarFunction is like RegisterScalarFunction but panics on
+// error.
 func MustRegisterScalarFunction(
 	zFuncName string,
 	nArg int32,
@@ -1494,6 +1503,8 @@ func MustRegisterScalarFunction(
 	}
 }
 
+// MustRegisterDeterministicScalarFunction is like
+// RegisterDeterministicScalarFunction but panics on error.
 func MustRegisterDeterministicScalarFunction(
 	zFuncName string,
 	nArg int32,
@@ -1504,6 +1515,13 @@ func MustRegisterDeterministicScalarFunction(
 	}
 }
 
+// RegisterDeterministicScalarFunction registers a deterministic scalar
+// function named zFuncName with nArg arguments. Passing -1 for nArg indicates
+// the function is variadic. A deterministic function means that the function
+// always gives the same output when the input parameters are the same.
+//
+// The new function will be available to all new connections opened after
+// executing RegisterDeterministicScalarFunction.
 func RegisterDeterministicScalarFunction(
 	zFuncName string,
 	nArg int32,
