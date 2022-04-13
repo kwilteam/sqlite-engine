@@ -471,6 +471,8 @@ func configure(goos, goarch string) {
 		switch goarch {
 		case "amd64":
 			args = append(args, "--host=x86_64-w64-mingw32")
+		case "arm64":
+			args = append(args, "--host=x86_64-w64-mingw32")
 		case "386":
 			args = append(args, "--host=i686-w64-mingw32")
 		default:
