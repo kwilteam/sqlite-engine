@@ -219,7 +219,6 @@ var (
 		"-DSQLITE_ENABLE_STAT4",
 		"-DSQLITE_ENABLE_STMTVTAB",      // testfixture
 		"-DSQLITE_ENABLE_UNLOCK_NOTIFY", // Adds sqlite3_unlock_notify().
-		"-DSQLITE_HAVE_ZLIB=1",          // testfixture
 		"-DSQLITE_LIKE_DOESNT_MATCH_BLOBS",
 		"-DSQLITE_MUTEX_APPDEF=1",
 		"-DSQLITE_MUTEX_NOOP",
@@ -471,8 +470,6 @@ func configure(goos, goarch string) {
 		switch goarch {
 		case "amd64":
 			args = append(args, "--host=x86_64-w64-mingw32")
-		case "arm64":
-			args = append(args, "--host=x86_64-w64-mingw32")
 		case "386":
 			args = append(args, "--host=i686-w64-mingw32")
 		default:
@@ -538,7 +535,6 @@ func makeTestfixture(goos, goarch string, more []string) {
 		"ext/misc/totype.c",
 		"ext/misc/unionvtab.c",
 		"ext/misc/wholenumber.c",
-		"ext/misc/zipfile.c",
 		"ext/rbu/test_rbu.c",
 		"ext/rtree/test_rtreedoc.c",
 		"ext/session/test_session.c",
