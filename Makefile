@@ -149,9 +149,9 @@ linux_ppc64le:
 
 # linux/riscv64
 linux_riscv64:
-	@echo "Should be executed only on linux/riscv64."
-	go generate 2>&1 | tee log-generate
-	go build -v ./...
+	@echo "Should be executed only on linux/amd64."
+	CCGO_CPP=riscv64-linux-gnu-cpp TARGET_GOARCH=riscv64 TARGET_GOOS=linux go generate 2>&1 | tee log-generate
+	GOOS=linux GOARCH=riscv64 go build -v ./...
 
 # 3900x
 linux_s390x:
@@ -165,7 +165,7 @@ openbsd_amd64:
 	go generate 2>&1 | tee log-generate
 	go build -v ./...
 
-generate_all_targets_on_linux_amd64: linux_amd64 linux_386 linux_arm linux_arm64 linux_s390x windows_amd64 #TODO windows_386
+generate_all_targets_on_linux_amd64: linux_amd64 linux_386 linux_arm linux_arm64 linux_s390x linux_ppc64le linux_riscv64 windows_amd64 #TODO windows_386
 	gofmt -l -s -w .
 	echo done
 
