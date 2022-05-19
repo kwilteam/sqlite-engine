@@ -10,3 +10,5 @@ require (
 	modernc.org/mathutil v1.4.1
 	modernc.org/tcl v1.13.1
 )
+
+retract [v1.16.0, v1.17.2] // https://gitlab.com/cznic/sqlite/-/issues/100
