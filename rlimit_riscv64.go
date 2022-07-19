@@ -2,9 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !freebsd && !ppc64le && !riscv64
-// +build !freebsd,!ppc64le,!riscv64
-
 package sqlite // import "modernc.org/sqlite"
 
-func setMaxOpenFiles(n int) error { return nil }
+import (
+	"golang.org/x/sys/unix"
+)
+
+func setMaxOpenFiles(n int64) error {
+	var rLimit unix.Rlimit
+	rLimit.Max = uint64(n)
+	rLimit.Cur = uint64(n)
+	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rLimit)
+}

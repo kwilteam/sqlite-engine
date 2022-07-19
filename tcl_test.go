@@ -51,7 +51,7 @@ func TestTclTest(t *testing.T) {
 		blacklist["tclsqlite.test"] = struct{}{}
 		blacklist["vtabA.test"] = struct{}{}
 		blacklist["windowC.test"] = struct{}{}
-	case "ppc64le":
+	case "ppc64le", "riscv64":
 		if err := setMaxOpenFiles(1024); err != nil { // Avoid misc7.test hanging for a long time.
 			t.Fatal(err)
 		}
