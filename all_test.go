@@ -5,6 +5,7 @@
 package sqlite // import "modernc.org/sqlite"
 
 import (
+	"embed"
 	"bytes"
 	"context"
 	"database/sql"
@@ -33,6 +34,7 @@ import (
 	"modernc.org/libc"
 	"modernc.org/mathutil"
 	sqlite3 "modernc.org/sqlite/lib"
+	"modernc.org/sqlite/embedvfs"
 )
 
 func caller(s string, va ...interface{}) {
@@ -2611,5 +2613,41 @@ func TestCancelRace(t *testing.T) {
 				cancel()
 			}
 		})
+	}
+}
+
+//go:embed embed.db
+var fs embed.FS
+
+func TestEmbedVFS(t *testing.T) {
+	embedvfs.FS = fs
+	const fn = "embed.db"
+	db, err := sql.Open("sqlite", fmt.Sprintf("file:%s?vfs=embed", fn))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer db.Close()
+
+	rows, err := db.Query("select * from t order by i;")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var a []int
+	for rows.Next() {
+		var i, j, k int
+		if err := rows.Scan(&i, &j, &k); err != nil {
+			t.Fatal(err)
+		}
+
+		a = append(a, i, j, k)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
+
+	if g, e := fmt.Sprint(a), "[1 2 3 40 50 60]"; g != e {
+		t.Fatalf("got %q, expected %q", g, e)
 	}
 }

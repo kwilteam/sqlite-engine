@@ -24,6 +24,7 @@ import (
 
 	"modernc.org/libc"
 	"modernc.org/libc/sys/types"
+	"modernc.org/sqlite/embedvfs"
 	sqlite3 "modernc.org/sqlite/lib"
 )
 
@@ -45,6 +46,14 @@ var (
 	_ driver.Tx                             = (*tx)(nil)
 	_ error                                 = (*Error)(nil)
 )
+
+func init() {
+	tls := libc.NewTLS()
+
+	defer tls.Close()
+
+	sqlite3.Xsqlite3_vfs_register(tls, embedvfs.Xsqlite3_embedvfs(tls), 0)
+}
 
 const (
 	driverName              = "sqlite"
