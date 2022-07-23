@@ -14,7 +14,7 @@ import (
 	"unsafe"
 
 	"modernc.org/libc"
-	"modernc.org/sqlite/lib"
+	sqlite3 "modernc.org/sqlite/lib"
 )
 
 var (
@@ -183,46 +183,43 @@ type FS struct {
 	closed int32
 }
 
-// New creates a new sqlite VFS and registers it as name. If successful, the
-// file system can be used by specifying an URI parameter `?vfs=name`.
-func New(name string, fs fs.FS, setAsDefault bool) (*FS, error) {
-	if name == "" {
-		return nil, fmt.Errorf("name argument cannot be an empty string")
-	}
-
+// New creates a new sqlite VFS and registers it. If successful, the
+// file system can be used with the URI parameter `?vfs=<returned name>`.
+func New(fs fs.FS) (name string, _ *FS, _ error) {
 	if fs == nil {
-		return nil, fmt.Errorf("fs argument cannot be nil")
+		return "", nil, fmt.Errorf("fs argument cannot be nil")
 	}
-
-	cname, err := libc.CString(name)
-	if err != nil {
-		return nil, err
-	}
-
-	tls := libc.NewTLS()
-	h := addObject(fs)
 
 	mu.Lock()
 
 	defer mu.Unlock()
+
+	tls := libc.NewTLS()
+	h := addObject(fs)
+
+	name = fmt.Sprintf("vfs%x", h)
+	cname, err := libc.CString(name)
+	if err != nil {
+		return "", nil, err
+	}
 
 	vfs := Xsqlite3_fsFS(tls, cname, h)
 	if vfs == 0 {
 		removeObject(h)
 		libc.Xfree(tls, cname)
 		tls.Close()
-		return nil, fmt.Errorf("out of memory")
+		return "", nil, fmt.Errorf("out of memory")
 	}
 
-	if rc := sqlite3.Xsqlite3_vfs_register(tls, vfs, libc.Bool32(setAsDefault)); rc != sqlite3.SQLITE_OK {
+	if rc := sqlite3.Xsqlite3_vfs_register(tls, vfs, libc.Bool32(false)); rc != sqlite3.SQLITE_OK {
 		removeObject(h)
 		libc.Xfree(tls, cname)
 		libc.Xfree(tls, vfs)
 		tls.Close()
-		return nil, fmt.Errorf("registering VFS %s: %d", name, rc)
+		return "", nil, fmt.Errorf("registering VFS %s: %d", name, rc)
 	}
 
-	return &FS{name: name, cname: cname, cvfs: vfs, fsHandle: h, tls: tls}, nil
+	return name, &FS{name: name, cname: cname, cvfs: vfs, fsHandle: h, tls: tls}, nil
 }
 
 // Close unregisters f and releases its resources.

@@ -2623,7 +2623,7 @@ var fs embed.FS
 var fs2 embed.FS
 
 func TestVFS(t *testing.T) {
-	f, err := vfs.New("foo", fs, false)
+	fn, f, err := vfs.New(fs)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2634,7 +2634,7 @@ func TestVFS(t *testing.T) {
 		}
 	}()
 
-	f2, err := vfs.New("bar", fs2, false)
+	f2n, f2, err := vfs.New(fs2)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2645,14 +2645,14 @@ func TestVFS(t *testing.T) {
 		}
 	}()
 
-	db, err := sql.Open("sqlite", "file:embed.db?vfs=foo")
+	db, err := sql.Open("sqlite", "file:embed.db?vfs="+fn)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	defer db.Close()
 
-	db2, err := sql.Open("sqlite", "file:embed2.db?vfs=bar")
+	db2, err := sql.Open("sqlite", "file:embed2.db?vfs="+f2n)
 	if err != nil {
 		t.Fatal(err)
 	}
