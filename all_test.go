@@ -2619,15 +2619,45 @@ func TestCancelRace(t *testing.T) {
 //go:embed embed.db
 var fs embed.FS
 
+//go:embed embed2.db
+var fs2 embed.FS
+
 func TestVFS(t *testing.T) {
-	vfs.FS = fs
-	const fn = "embed.db"
-	db, err := sql.Open("sqlite", fmt.Sprintf("file:%s?vfs=fsFS", fn))
+	f, err := vfs.New("foo", fs, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer func() {
+		if err := f.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+
+	f2, err := vfs.New("bar", fs2, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer func() {
+		if err := f2.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+
+	db, err := sql.Open("sqlite", "file:embed.db?vfs=foo")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	defer db.Close()
+
+	db2, err := sql.Open("sqlite", "file:embed2.db?vfs=bar")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer db2.Close()
 
 	rows, err := db.Query("select * from t order by i;")
 	if err != nil {
@@ -2647,7 +2677,30 @@ func TestVFS(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	t.Log(a)
 	if g, e := fmt.Sprint(a), "[1 2 3 40 50 60]"; g != e {
+		t.Fatalf("got %q, expected %q", g, e)
+	}
+
+	if rows, err = db2.Query("select * from u order by s;"); err != nil {
+		t.Fatal(err)
+	}
+
+	var b []string
+	for rows.Next() {
+		var x, y string
+		if err := rows.Scan(&x, &y); err != nil {
+			t.Fatal(err)
+		}
+
+		b = append(b, x, y)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log(b)
+	if g, e := fmt.Sprint(b), "[123 xyz abc def]"; g != e {
 		t.Fatalf("got %q, expected %q", g, e)
 	}
 }

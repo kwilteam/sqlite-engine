@@ -6069,41 +6069,53 @@ func vfsCurrentTime(tls *libc.TLS, pVfs uintptr, pTime uintptr) int32 { /* vfs.c
 // To make the VFS available to SQLite:
 //
 //   sqlite3_vfs_register(sqlite3_fsFS(), 0);
-func Xsqlite3_fsFS(tls *libc.TLS) uintptr { /* vfs.c:640:13: */
-	return uintptr(unsafe.Pointer(&fsFS))
+func Xsqlite3_fsFS(tls *libc.TLS, zName uintptr, pAppData uintptr) uintptr { /* vfs.c:640:13: */
+	var p uintptr = sqlite3.Xsqlite3_malloc(tls, int32(unsafe.Sizeof(sqlite3_vfs{})))
+	if !(p != 0) {
+		return uintptr(0)
+	}
+
+	*(*sqlite3_vfs)(unsafe.Pointer(p)) = sqlite3_vfs{
+		iVersion:   1,                               // iVersion
+		szOsFile:   int32(unsafe.Sizeof(VFSFile{})), // szOsFile
+		mxPathname: 4096,                            // pNext
+		zName:      zName,                           // zName
+		pAppData:   pAppData,                        // pAppData
+		xOpen: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr, uintptr, int32, uintptr) int32
+		}{vfsOpen})), // xOpen
+		xDelete: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr, int32) int32
+		}{vfsDelete})), // xDelete
+		xAccess: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32
+		}{vfsAccess})), // xAccess
+		xFullPathname: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32
+		}{vfsFullPathname})), // xFullPathname
+		xDlOpen: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr) uintptr
+		}{vfsDlOpen})), // xDlOpen
+		xDlError: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, int32, uintptr)
+		}{vfsDlError})), // xDlError
+		xDlSym: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr, uintptr) uintptr
+		}{vfsDlSym})), // xDlSym
+		xDlClose: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr)
+		}{vfsDlClose})), // xDlClose
+		xRandomness: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, int32, uintptr) int32
+		}{vfsRandomness})), // xRandomness
+		xSleep: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, int32) int32
+		}{vfsSleep})), // xSleep
+		xCurrentTime: *(*uintptr)(unsafe.Pointer(&struct {
+			f func(*libc.TLS, uintptr, uintptr) int32
+		}{vfsCurrentTime}))}
+	return p
 }
 
-var fsFS = sqlite3_vfs{
-	iVersion:      1,                               // iVersion
-	szOsFile:      int32(unsafe.Sizeof(VFSFile{})), // szOsFile
-	mxPathname:    4096,                            // pNext
-	zName:         ts + 163,
-	xOpen:         0, // xOpen
-	xDelete:       0, // xDelete
-	xAccess:       0, // xAccess
-	xFullPathname: 0, // xFullPathname
-	xDlOpen:       0, // xDlOpen
-	xDlError:      0, // xDlError
-	xDlSym:        0, // xDlSym
-	xDlClose:      0, // xDlClose
-	xRandomness:   0, // xRandomness
-	xSleep:        0, // xSleep
-	xCurrentTime:  0, // xCurrentTime
-} /* vfs.c:641:22 */
-
-func init() {
-	*(*func(*libc.TLS, uintptr, uintptr, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 40)) = vfsOpen // vfs.c:648:5:
-	*(*func(*libc.TLS, uintptr, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 48)) = vfsDelete                 // vfs.c:649:5:
-	*(*func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 56)) = vfsAccess        // vfs.c:650:5:
-	*(*func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 64)) = vfsFullPathname  // vfs.c:651:5:
-	*(*func(*libc.TLS, uintptr, uintptr) uintptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 72)) = vfsDlOpen                      // vfs.c:652:5:
-	*(*func(*libc.TLS, uintptr, int32, uintptr))(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 80)) = vfsDlError                      // vfs.c:653:5:
-	*(*func(*libc.TLS, uintptr, uintptr, uintptr) uintptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 88)) = vfsDlSym              // vfs.c:654:5:
-	*(*func(*libc.TLS, uintptr, uintptr))(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 96)) = vfsDlClose                             // vfs.c:655:5:
-	*(*func(*libc.TLS, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 104)) = vfsRandomness            // vfs.c:656:5:
-	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 112)) = vfsSleep                          // vfs.c:657:5:
-	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&fsFS)) + 120)) = vfsCurrentTime                  // vfs.c:658:5:
-}
-
-var ts1 = "TODO %s:%i:\n\x00vfsDirectWrite\x00vfsFlushBuffer\x00p->nBuffer==0 || p->iBufferOfst+p->nBuffer==i\x00vfs.c\x00vfsWrite\x00vfsSync\x00%s\x00vfsDelete\x00Loadable extensions are not supported\x00fsFS\x00"
+var ts1 = "TODO %s:%i:\n\x00vfsDirectWrite\x00vfsFlushBuffer\x00p->nBuffer==0 || p->iBufferOfst+p->nBuffer==i\x00vfs.c\x00vfsWrite\x00vfsSync\x00%s\x00vfsDelete\x00Loadable extensions are not supported\x00"
 var ts = (*reflect.StringHeader)(unsafe.Pointer(&ts1)).Data

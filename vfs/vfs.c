@@ -637,14 +637,19 @@ static int vfsCurrentTime(sqlite3_vfs *pVfs, double *pTime){
 **
 **   sqlite3_vfs_register(sqlite3_fsFS(), 0);
 */
-sqlite3_vfs *sqlite3_fsFS(void){
-  static sqlite3_vfs fsFS = {
-    1,                            /* iVersion */
+sqlite3_vfs *sqlite3_fsFS(char *zName, void *pAppData){
+  sqlite3_vfs *p = sqlite3_malloc(sizeof(sqlite3_vfs));
+  if (!p) {
+    return NULL;
+  }
+
+  *p = (sqlite3_vfs){
+    1,                           /* iVersion */
     sizeof(VFSFile),             /* szOsFile */
-    MAXPATHNAME,                  /* mxPathname */
-    0,                            /* pNext */
-    "fsFS",                       /* zName */
-    0,                            /* pAppData */
+    MAXPATHNAME,                 /* mxPathname */
+    0,                           /* pNext */
+    zName,                       /* zName */
+    pAppData,                    /* pAppData */
     vfsOpen,                     /* xOpen */
     vfsDelete,                   /* xDelete */
     vfsAccess,                   /* xAccess */
@@ -657,7 +662,7 @@ sqlite3_vfs *sqlite3_fsFS(void){
     vfsSleep,                    /* xSleep */
     vfsCurrentTime,              /* xCurrentTime */
   };
-  return &fsFS;
+  return p;
 }
 
 #endif /* !defined(SQLITE_TEST) || SQLITE_OS_UNIX */
@@ -681,7 +686,7 @@ static int SQLITE_TCLAPI register_fsFS(
   int objc,              /* Number of arguments */
   Tcl_Obj *CONST objv[]  /* Command arguments */
 ){
-  sqlite3_vfs_register(sqlite3_fsFS(), 1);
+  sqlite3_vfs_register(sqlite3_fsFS("fsFS", 0), 1);
   return TCL_OK;
 }
 static int SQLITE_TCLAPI unregister_fsFS(
@@ -690,7 +695,7 @@ static int SQLITE_TCLAPI unregister_fsFS(
   int objc,              /* Number of arguments */
   Tcl_Obj *CONST objv[]  /* Command arguments */
 ){
-  sqlite3_vfs_unregister(sqlite3_fsFS());
+  sqlite3_vfs_unregister(sqlite3_fsFS("fsFS", 0));
   return TCL_OK;
 }
 

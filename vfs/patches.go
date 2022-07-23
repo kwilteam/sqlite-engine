@@ -5,6 +5,7 @@
 package vfs
 
 import (
+	"fmt"
 	"io"
 	"io/fs"
 	"os"
@@ -17,10 +18,10 @@ import (
 )
 
 var (
-	// Client code must initialize FS before using the vfs functions.
-	FS fs.FS
-
 	fToken uintptr
+
+	// New, FS.Close
+	mu sync.Mutex
 
 	objectMu sync.Mutex
 	objects  = map[uintptr]interface{}{}
@@ -93,9 +94,9 @@ func vfsOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags in
 
 	p := pFile
 	*(*VFSFile)(unsafe.Pointer(p)) = VFSFile{}
-	f, err := FS.Open(libc.GoString(zName))
+	fsys := getObject((*sqlite3_vfs)(unsafe.Pointer(pVfs)).pAppData).(fs.FS)
+	f, err := fsys.Open(libc.GoString(zName))
 	if err != nil {
-		panic(err.Error())
 		return sqlite3.SQLITE_CANTOPEN
 	}
 
@@ -144,7 +145,8 @@ func vfsAccess(tls *libc.TLS, pVfs uintptr, zPath uintptr, flags int32, pResOut 
 	}
 
 	fn := libc.GoString(zPath)
-	if _, err := fs.Stat(FS, fn); err != nil {
+	fsys := getObject((*sqlite3_vfs)(unsafe.Pointer(pVfs)).pAppData).(fs.FS)
+	if _, err := fs.Stat(fsys, fn); err != nil {
 		*(*int32)(unsafe.Pointer(pResOut)) = 0
 		return sqlite3.SQLITE_OK
 	}
@@ -172,4 +174,78 @@ func vfsClose(tls *libc.TLS, pFile uintptr) int32 {
 	f.Close()
 	removeObject(h)
 	return sqlite3.SQLITE_OK
+}
+
+// FS represents a SQLite read only file system backed by Go's fs.FS.
+type FS struct {
+	cname    uintptr
+	cvfs     uintptr
+	fsHandle uintptr
+	name     string
+	tls      *libc.TLS
+
+	closed int32
+}
+
+// New creates a new sqlite VFS and registers it as name. If successful, the
+// file system can be used by specifying an URI parameter `?vfs=name`.
+func New(name string, fs fs.FS, setAsDefault bool) (*FS, error) {
+	if name == "" {
+		return nil, fmt.Errorf("name argument cannot be an empty string")
+	}
+
+	if fs == nil {
+		return nil, fmt.Errorf("fs argument cannot be nil")
+	}
+
+	cname, err := libc.CString(name)
+	if err != nil {
+		return nil, err
+	}
+
+	tls := libc.NewTLS()
+	h := addObject(fs)
+
+	mu.Lock()
+
+	defer mu.Unlock()
+
+	vfs := Xsqlite3_fsFS(tls, cname, h)
+	if vfs == 0 {
+		removeObject(h)
+		libc.Xfree(tls, cname)
+		tls.Close()
+		return nil, fmt.Errorf("out of memory")
+	}
+
+	if rc := sqlite3.Xsqlite3_vfs_register(tls, vfs, libc.Bool32(setAsDefault)); rc != sqlite3.SQLITE_OK {
+		removeObject(h)
+		libc.Xfree(tls, cname)
+		tls.Close()
+		return nil, fmt.Errorf("registering VFS %s: %d", name, rc)
+	}
+
+	return &FS{name: name, cname: cname, cvfs: vfs, fsHandle: h, tls: tls}, nil
+}
+
+// Close unregisters f and releases its resources.
+func (f *FS) Close() error {
+	if atomic.SwapInt32(&f.closed, 1) != 0 {
+		return nil
+	}
+
+	mu.Lock()
+
+	defer mu.Unlock()
+
+	rc := sqlite3.Xsqlite3_vfs_unregister(f.tls, f.cvfs)
+	libc.Xfree(f.tls, f.cname)
+	libc.Xfree(f.tls, f.cvfs)
+	f.tls.Close()
+	removeObject(f.fsHandle)
+	if rc != 0 {
+		return fmt.Errorf("unregistering VFS %s: %d", f.name, rc)
+	}
+
+	return nil
 }
