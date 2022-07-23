@@ -75,11 +75,7 @@ func init() {
 }
 
 func vfsFullPathname(tls *libc.TLS, pVfs uintptr, zPath uintptr, nPathOut int32, zPathOut uintptr) int32 {
-	out := libc.GoString(zPath)
-	for i := 0; i < len(out) && i < int(nPathOut); i++ {
-		*(*byte)(unsafe.Pointer(zPathOut)) = out[i]
-		zPathOut++
-	}
+	libc.Xstrncpy(tls, zPathOut, zPath, uint64(nPathOut))
 	return sqlite3.SQLITE_OK
 }
 
