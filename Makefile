@@ -234,7 +234,3 @@ todo:
 	@grep -nr $(grep) TODO * | grep -v $(ngrep) || true
 	@grep -nr $(grep) BUG * | grep -v $(ngrep) || true
 	@grep -nr $(grep) [^[:alpha:]]println * | grep -v $(ngrep) || true
-
-tmp:
-	ccgo3 -o embedvfs.go embedvfs.c -Itestdata/sqlite-amalgamation-3380500 -lmodernc.org/sqlite/lib -pkgname sqlite -nocapi
-	go build -v

@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package embedvfs
+package vfs
 
 import (
-	"embed"
 	"io"
 	"io/fs"
 	"os"
@@ -18,8 +17,8 @@ import (
 )
 
 var (
-	// Client code must initialize FS before using the embed VFS.
-	FS embed.FS
+	// Client code must initialize FS before using the vfs functions.
+	FS fs.FS
 
 	fToken uintptr
 
@@ -58,23 +57,23 @@ func removeObject(t uintptr) {
 	objectMu.Unlock()
 }
 
-var embedio = sqlite3_io_methods{
+var vfsio = sqlite3_io_methods{
 	iVersion: 1, // iVersion
 }
 
 func init() {
-	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 8)) = embedClose
-	*(*func(*libc.TLS, uintptr, uintptr, int32, sqlite_int64) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 16)) = embedRead
-	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 48)) = embedFileSize
-	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 56)) = embedLock
-	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 64)) = embedUnlock
-	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 72)) = embedCheckReservedLock
-	*(*func(*libc.TLS, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 80)) = embedFileControl
-	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 88)) = embedSectorSize
-	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&embedio)) + 96)) = embedDeviceCharacteristics
+	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 8)) = vfsClose
+	*(*func(*libc.TLS, uintptr, uintptr, int32, sqlite_int64) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 16)) = vfsRead
+	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 48)) = vfsFileSize
+	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 56)) = vfsLock
+	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 64)) = vfsUnlock
+	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 72)) = vfsCheckReservedLock
+	*(*func(*libc.TLS, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 80)) = vfsFileControl
+	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 88)) = vfsSectorSize
+	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 96)) = vfsDeviceCharacteristics
 }
 
-func embedFullPathname(tls *libc.TLS, pVfs uintptr, zPath uintptr, nPathOut int32, zPathOut uintptr) int32 {
+func vfsFullPathname(tls *libc.TLS, pVfs uintptr, zPath uintptr, nPathOut int32, zPathOut uintptr) int32 {
 	out := libc.GoString(zPath)
 	for i := 0; i < len(out) && i < int(nPathOut); i++ {
 		*(*byte)(unsafe.Pointer(zPathOut)) = out[i]
@@ -83,7 +82,7 @@ func embedFullPathname(tls *libc.TLS, pVfs uintptr, zPath uintptr, nPathOut int3
 	return sqlite3.SQLITE_OK
 }
 
-func embedOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags int32, pOutFlags uintptr) int32 {
+func vfsOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags int32, pOutFlags uintptr) int32 {
 	if zName == 0 {
 		return sqlite3.SQLITE_IOERR
 	}
@@ -93,7 +92,7 @@ func embedOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags 
 	}
 
 	p := pFile
-	*(*EmbedFile)(unsafe.Pointer(p)) = EmbedFile{}
+	*(*VFSFile)(unsafe.Pointer(p)) = VFSFile{}
 	f, err := FS.Open(libc.GoString(zName))
 	if err != nil {
 		panic(err.Error())
@@ -101,17 +100,17 @@ func embedOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags 
 	}
 
 	h := addObject(f)
-	(*EmbedFile)(unsafe.Pointer(p)).fsFile = h
+	(*VFSFile)(unsafe.Pointer(p)).fsFile = h
 	if pOutFlags != 0 {
 		*(*int32)(unsafe.Pointer(pOutFlags)) = int32(os.O_RDONLY)
 	}
-	(*EmbedFile)(unsafe.Pointer(p)).base.pMethods = uintptr(unsafe.Pointer(&embedio))
+	(*VFSFile)(unsafe.Pointer(p)).base.pMethods = uintptr(unsafe.Pointer(&vfsio))
 	return sqlite3.SQLITE_OK
 }
 
-func embedRead(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 {
+func vfsRead(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 {
 	p := pFile
-	f := getObject((*EmbedFile)(unsafe.Pointer(p)).fsFile).(fs.File)
+	f := getObject((*VFSFile)(unsafe.Pointer(p)).fsFile).(fs.File)
 	seeker, ok := f.(io.Seeker)
 	if !ok {
 		return sqlite3.SQLITE_IOERR_READ
@@ -138,7 +137,7 @@ func embedRead(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sql
 	return sqlite3.SQLITE_IOERR_READ
 }
 
-func embedAccess(tls *libc.TLS, pVfs uintptr, zPath uintptr, flags int32, pResOut uintptr) int32 {
+func vfsAccess(tls *libc.TLS, pVfs uintptr, zPath uintptr, flags int32, pResOut uintptr) int32 {
 	if flags == sqlite3.SQLITE_ACCESS_READWRITE {
 		*(*int32)(unsafe.Pointer(pResOut)) = 0
 		return sqlite3.SQLITE_OK
@@ -154,9 +153,9 @@ func embedAccess(tls *libc.TLS, pVfs uintptr, zPath uintptr, flags int32, pResOu
 	return sqlite3.SQLITE_OK
 }
 
-func embedFileSize(tls *libc.TLS, pFile uintptr, pSize uintptr) int32 {
+func vfsFileSize(tls *libc.TLS, pFile uintptr, pSize uintptr) int32 {
 	p := pFile
-	f := getObject((*EmbedFile)(unsafe.Pointer(p)).fsFile).(fs.File)
+	f := getObject((*VFSFile)(unsafe.Pointer(p)).fsFile).(fs.File)
 	fi, err := f.Stat()
 	if err != nil {
 		return sqlite3.SQLITE_IOERR_FSTAT
@@ -166,9 +165,9 @@ func embedFileSize(tls *libc.TLS, pFile uintptr, pSize uintptr) int32 {
 	return sqlite3.SQLITE_OK
 }
 
-func embedClose(tls *libc.TLS, pFile uintptr) int32 {
+func vfsClose(tls *libc.TLS, pFile uintptr) int32 {
 	p := pFile
-	h := (*EmbedFile)(unsafe.Pointer(p)).fsFile
+	h := (*VFSFile)(unsafe.Pointer(p)).fsFile
 	f := getObject(h).(fs.File)
 	f.Close()
 	removeObject(h)

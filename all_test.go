@@ -5,11 +5,11 @@
 package sqlite // import "modernc.org/sqlite"
 
 import (
-	"embed"
 	"bytes"
 	"context"
 	"database/sql"
 	"database/sql/driver"
+	"embed"
 	"errors"
 	"flag"
 	"fmt"
@@ -34,7 +34,7 @@ import (
 	"modernc.org/libc"
 	"modernc.org/mathutil"
 	sqlite3 "modernc.org/sqlite/lib"
-	"modernc.org/sqlite/embedvfs"
+	"modernc.org/sqlite/vfs"
 )
 
 func caller(s string, va ...interface{}) {
@@ -2619,10 +2619,10 @@ func TestCancelRace(t *testing.T) {
 //go:embed embed.db
 var fs embed.FS
 
-func TestEmbedVFS(t *testing.T) {
-	embedvfs.FS = fs
+func TestVFS(t *testing.T) {
+	vfs.FS = fs
 	const fn = "embed.db"
-	db, err := sql.Open("sqlite", fmt.Sprintf("file:%s?vfs=embed", fn))
+	db, err := sql.Open("sqlite", fmt.Sprintf("file:%s?vfs=fsFS", fn))
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -14,14 +14,14 @@ edit:
 
 editor:
 	ccgo3 -o vfs.go vfs.c -I../testdata/sqlite-amalgamation-3380500 \
-		-lmodernc.org/sqlite/lib -pkgname embedvfs -nocapi \
+		-lmodernc.org/sqlite/lib -pkgname vfs -nocapi \
 		-export-externs X -D SQLITE_OS_UNIX \
-		-hide=embedFullPathname \
-		-hide=embedOpen \
-		-hide=embedRead \
-		-hide=embedAccess \
-		-hide=embedFileSize \
-		-hide=embedClose
+		-hide=vfsFullPathname \
+		-hide=vfsOpen \
+		-hide=vfsRead \
+		-hide=vfsAccess \
+		-hide=vfsFileSize \
+		-hide=vfsClose
 	go build -v
 	gofmt -l -s -w *.go
 	go test -o /dev/null -c

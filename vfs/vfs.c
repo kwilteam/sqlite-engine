@@ -97,9 +97,9 @@
 **   start of a sector.
 **
 **   To work around this, the code in this file allocates a fixed size
-**   buffer of SQLITE_EMBEDVFS_BUFFERSZ using sqlite3_malloc() whenever a 
+**   buffer of SQLITE_VFS_BUFFERSZ using sqlite3_malloc() whenever a 
 **   journal file is opened. It uses the buffer to coalesce sequential
-**   writes into aligned SQLITE_EMBEDVFS_BUFFERSZ blocks. When SQLite
+**   writes into aligned SQLITE_VFS_BUFFERSZ blocks. When SQLite
 **   invokes the xSync() method to sync the contents of the file to disk,
 **   all accumulated data is written out, even if it does not constitute
 **   a complete block. This means the actual IO to create the rollback 
@@ -140,21 +140,21 @@
 /*
 ** Size of the write buffer used by journal files in bytes.
 */
-#ifndef SQLITE_EMBEDVFS_BUFFERSZ
-# define SQLITE_EMBEDVFS_BUFFERSZ 8192
+#ifndef SQLITE_VFS_BUFFERSZ
+# define SQLITE_VFS_BUFFERSZ 8192
 #endif
 
 /*
 ** The maximum pathname length supported by this VFS.
 */
-#define MAXPATHNAME 512
+#define MAXPATHNAME 4096
 
 /*
 ** When using this VFS, the sqlite3_file* handles that SQLite uses are
-** actually pointers to instances of type EmbedFile.
+** actually pointers to instances of type VFSFile.
 */
-typedef struct EmbedFile EmbedFile;
-struct EmbedFile {
+typedef struct VFSFile VFSFile;
+struct VFSFile {
   sqlite3_file base;              /* Base class. Must be first. */
   void *fsFile; // handle of Go fs.File
   int fd;                         /* File descriptor */
@@ -166,10 +166,10 @@ struct EmbedFile {
 
 /*
 ** Write directly to the file passed as the first argument. Even if the
-** file has a write-buffer (EmbedFile.aBuffer), ignore it.
+** file has a write-buffer (VFSFile.aBuffer), ignore it.
 */
-static int embedDirectWrite(
-  EmbedFile *p,                    /* File handle */
+static int vfsDirectWrite(
+  VFSFile *p,                    /* File handle */
   const void *zBuf,               /* Buffer containing data to write */
   int iAmt,                       /* Size of data to write in bytes */
   sqlite_int64 iOfst              /* File offset to write to */
@@ -192,15 +192,15 @@ static int embedDirectWrite(
 }
 
 /*
-** Flush the contents of the EmbedFile.aBuffer buffer to disk. This is a
+** Flush the contents of the VFSFile.aBuffer buffer to disk. This is a
 ** no-op if this particular file does not have a buffer (i.e. it is not
 ** a journal file) or if the buffer is currently empty.
 */
-static int embedFlushBuffer(EmbedFile *p){
+static int vfsFlushBuffer(VFSFile *p){
   hook
   int rc = SQLITE_OK;
   if( p->nBuffer ){
-    rc = embedDirectWrite(p, p->aBuffer, p->nBuffer, p->iBufferOfst);
+    rc = vfsDirectWrite(p, p->aBuffer, p->nBuffer, p->iBufferOfst);
     p->nBuffer = 0;
   }
   return rc;
@@ -209,11 +209,11 @@ static int embedFlushBuffer(EmbedFile *p){
 /*
 ** Close a file.
 */
-static int embedClose(sqlite3_file *pFile){
+static int vfsClose(sqlite3_file *pFile){
   hook
   int rc;
-  EmbedFile *p = (EmbedFile*)pFile;
-  rc = embedFlushBuffer(p);
+  VFSFile *p = (VFSFile*)pFile;
+  rc = vfsFlushBuffer(p);
   sqlite3_free(p->aBuffer);
   close(p->fd);
   return rc;
@@ -222,17 +222,17 @@ static int embedClose(sqlite3_file *pFile){
 /*
 ** Read data from a file.
 */
-static int embedRead(
+static int vfsRead(
   sqlite3_file *pFile, 
   void *zBuf, 
   int iAmt, 
   sqlite_int64 iOfst
 ){
   hook
-  EmbedFile *p = (EmbedFile*)pFile;
+  VFSFile *p = (VFSFile*)pFile;
   off_t ofst;                     /* Return value from lseek() */
   int nRead;                      /* Return value from read() */
-  int rc;                         /* Return code from embedFlushBuffer() */
+  int rc;                         /* Return code from vfsFlushBuffer() */
 
   /* Flush any data in the write buffer to disk in case this operation
   ** is trying to read data the file-region currently cached in the buffer.
@@ -240,7 +240,7 @@ static int embedRead(
   ** unnecessary write here, but in practice SQLite will rarely read from
   ** a journal file when there is data cached in the write-buffer.
   */
-  rc = embedFlushBuffer(p);
+  rc = vfsFlushBuffer(p);
   if( rc!=SQLITE_OK ){
     return rc;
   }
@@ -266,14 +266,14 @@ static int embedRead(
 /*
 ** Write data to a crash-file.
 */
-static int embedWrite(
+static int vfsWrite(
   sqlite3_file *pFile, 
   const void *zBuf, 
   int iAmt, 
   sqlite_int64 iOfst
 ){
   hook
-  EmbedFile *p = (EmbedFile*)pFile;
+  VFSFile *p = (VFSFile*)pFile;
   
   if( p->aBuffer ){
     char *z = (char *)zBuf;       /* Pointer to remaining data to write */
@@ -287,8 +287,8 @@ static int embedWrite(
       ** following the data already buffered, flush the buffer. Flushing
       ** the buffer is a no-op if it is empty.  
       */
-      if( p->nBuffer==SQLITE_EMBEDVFS_BUFFERSZ || p->iBufferOfst+p->nBuffer!=i ){
-        int rc = embedFlushBuffer(p);
+      if( p->nBuffer==SQLITE_VFS_BUFFERSZ || p->iBufferOfst+p->nBuffer!=i ){
+        int rc = vfsFlushBuffer(p);
         if( rc!=SQLITE_OK ){
           return rc;
         }
@@ -297,7 +297,7 @@ static int embedWrite(
       p->iBufferOfst = i - p->nBuffer;
 
       /* Copy as much data as possible into the buffer. */
-      nCopy = SQLITE_EMBEDVFS_BUFFERSZ - p->nBuffer;
+      nCopy = SQLITE_VFS_BUFFERSZ - p->nBuffer;
       if( nCopy>n ){
         nCopy = n;
       }
@@ -309,7 +309,7 @@ static int embedWrite(
       z += nCopy;
     }
   }else{
-    return embedDirectWrite(p, zBuf, iAmt, iOfst);
+    return vfsDirectWrite(p, zBuf, iAmt, iOfst);
   }
 
   return SQLITE_OK;
@@ -319,9 +319,9 @@ static int embedWrite(
 ** Truncate a file. This is a no-op for this VFS (see header comments at
 ** the top of the file).
 */
-static int embedTruncate(sqlite3_file *pFile, sqlite_int64 size){
+static int vfsTruncate(sqlite3_file *pFile, sqlite_int64 size){
 #if 0
-  if( ftruncate(((EmbedFile *)pFile)->fd, size) ) return SQLITE_IOERR_TRUNCATE;
+  if( ftruncate(((VFSFile *)pFile)->fd, size) ) return SQLITE_IOERR_TRUNCATE;
 #endif
   return SQLITE_OK;
 }
@@ -329,12 +329,12 @@ static int embedTruncate(sqlite3_file *pFile, sqlite_int64 size){
 /*
 ** Sync the contents of the file to the persistent media.
 */
-static int embedSync(sqlite3_file *pFile, int flags){
+static int vfsSync(sqlite3_file *pFile, int flags){
   hook
-  EmbedFile *p = (EmbedFile*)pFile;
+  VFSFile *p = (VFSFile*)pFile;
   int rc;
 
-  rc = embedFlushBuffer(p);
+  rc = vfsFlushBuffer(p);
   if( rc!=SQLITE_OK ){
     return rc;
   }
@@ -346,18 +346,18 @@ static int embedSync(sqlite3_file *pFile, int flags){
 /*
 ** Write the size of the file in bytes to *pSize.
 */
-static int embedFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
+static int vfsFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
   hook
-  EmbedFile *p = (EmbedFile*)pFile;
+  VFSFile *p = (VFSFile*)pFile;
   int rc;                         /* Return code from fstat() call */
   struct stat sStat;              /* Output of fstat() call */
 
   /* Flush the contents of the buffer to disk. As with the flush in the
-  ** embedRead() method, it would be possible to avoid this and save a write
+  ** vfsRead() method, it would be possible to avoid this and save a write
   ** here and there. But in practice this comes up so infrequently it is
   ** not worth the trouble.
   */
-  rc = embedFlushBuffer(p);
+  rc = vfsFlushBuffer(p);
   if( rc!=SQLITE_OK ){
     return rc;
   }
@@ -374,13 +374,13 @@ static int embedFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
 ** a reserved lock on the database file. This ensures that if a hot-journal
 ** file is found in the file-system it is rolled back.
 */
-static int embedLock(sqlite3_file *pFile, int eLock){
+static int vfsLock(sqlite3_file *pFile, int eLock){
   return SQLITE_OK;
 }
-static int embedUnlock(sqlite3_file *pFile, int eLock){
+static int vfsUnlock(sqlite3_file *pFile, int eLock){
   return SQLITE_OK;
 }
-static int embedCheckReservedLock(sqlite3_file *pFile, int *pResOut){
+static int vfsCheckReservedLock(sqlite3_file *pFile, int *pResOut){
   *pResOut = 0;
   return SQLITE_OK;
 }
@@ -388,7 +388,7 @@ static int embedCheckReservedLock(sqlite3_file *pFile, int *pResOut){
 /*
 ** No xFileControl() verbs are implemented by this VFS.
 */
-static int embedFileControl(sqlite3_file *pFile, int op, void *pArg){
+static int vfsFileControl(sqlite3_file *pFile, int op, void *pArg){
   return SQLITE_NOTFOUND;
 }
 
@@ -397,41 +397,41 @@ static int embedFileControl(sqlite3_file *pFile, int op, void *pArg){
 ** may return special values allowing SQLite to optimize file-system 
 ** access to some extent. But it is also safe to simply return 0.
 */
-static int embedSectorSize(sqlite3_file *pFile){
+static int vfsSectorSize(sqlite3_file *pFile){
   return 0;
 }
-static int embedDeviceCharacteristics(sqlite3_file *pFile){
+static int vfsDeviceCharacteristics(sqlite3_file *pFile){
   return 0;
 }
 
 /*
 ** Open a file handle.
 */
-static int embedOpen(
+static int vfsOpen(
   sqlite3_vfs *pVfs,              /* VFS */
   const char *zName,              /* File to open, or 0 for a temp file */
-  sqlite3_file *pFile,            /* Pointer to EmbedFile struct to populate */
+  sqlite3_file *pFile,            /* Pointer to VFSFile struct to populate */
   int flags,                      /* Input SQLITE_OPEN_XXX flags */
   int *pOutFlags                  /* Output SQLITE_OPEN_XXX flags (or NULL) */
 ){
-  static const sqlite3_io_methods embedio = {
+  static const sqlite3_io_methods vfsio = {
     1,                            /* iVersion */
-    embedClose,                    /* xClose */
-    embedRead,                     /* xRead */
-    embedWrite,                    /* xWrite */
-    embedTruncate,                 /* xTruncate */
-    embedSync,                     /* xSync */
-    embedFileSize,                 /* xFileSize */
-    embedLock,                     /* xLock */
-    embedUnlock,                   /* xUnlock */
-    embedCheckReservedLock,        /* xCheckReservedLock */
-    embedFileControl,              /* xFileControl */
-    embedSectorSize,               /* xSectorSize */
-    embedDeviceCharacteristics     /* xDeviceCharacteristics */
+    vfsClose,                    /* xClose */
+    vfsRead,                     /* xRead */
+    vfsWrite,                    /* xWrite */
+    vfsTruncate,                 /* xTruncate */
+    vfsSync,                     /* xSync */
+    vfsFileSize,                 /* xFileSize */
+    vfsLock,                     /* xLock */
+    vfsUnlock,                   /* xUnlock */
+    vfsCheckReservedLock,        /* xCheckReservedLock */
+    vfsFileControl,              /* xFileControl */
+    vfsSectorSize,               /* xSectorSize */
+    vfsDeviceCharacteristics     /* xDeviceCharacteristics */
   };
 
   hook
-  EmbedFile *p = (EmbedFile*)pFile; /* Populate this structure */
+  VFSFile *p = (VFSFile*)pFile; /* Populate this structure */
   int oflags = 0;                 /* flags to pass to open() call */
   char *aBuf = 0;
 
@@ -440,7 +440,7 @@ static int embedOpen(
   }
 
   if( flags&SQLITE_OPEN_MAIN_JOURNAL ){
-    aBuf = (char *)sqlite3_malloc(SQLITE_EMBEDVFS_BUFFERSZ);
+    aBuf = (char *)sqlite3_malloc(SQLITE_VFS_BUFFERSZ);
     if( !aBuf ){
       return SQLITE_NOMEM;
     }
@@ -451,7 +451,7 @@ static int embedOpen(
   if( flags&SQLITE_OPEN_READONLY )  oflags |= O_RDONLY;
   if( flags&SQLITE_OPEN_READWRITE ) oflags |= O_RDWR;
 
-  memset(p, 0, sizeof(EmbedFile));
+  memset(p, 0, sizeof(VFSFile));
   p->fd = open(zName, oflags, 0600);
   if( p->fd<0 ){
     sqlite3_free(aBuf);
@@ -462,7 +462,7 @@ static int embedOpen(
   if( pOutFlags ){
     *pOutFlags = flags;
   }
-  p->base.pMethods = &embedio;
+  p->base.pMethods = &vfsio;
   return SQLITE_OK;
 }
 
@@ -471,7 +471,7 @@ static int embedOpen(
 ** is non-zero, then ensure the file-system modification to delete the
 ** file has been synced to disk before returning.
 */
-static int embedDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
+static int vfsDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
   hook
   int rc;                         /* Return code */
 
@@ -515,7 +515,7 @@ static int embedDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
 ** Query the file-system to see if the named file exists, is readable or
 ** is both readable and writable.
 */
-static int embedAccess(
+static int vfsAccess(
   sqlite3_vfs *pVfs, 
   const char *zPath, 
   int flags, 
@@ -549,7 +549,7 @@ static int embedAccess(
 **   1. Path components are separated by a '/'. and 
 **   2. Full paths begin with a '/' character.
 */
-static int embedFullPathname(
+static int vfsFullPathname(
   sqlite3_vfs *pVfs,              /* VFS */
   const char *zPath,              /* Input path (possibly a relative path) */
   int nPathOut,                   /* Size of output buffer in bytes */
@@ -582,17 +582,17 @@ static int embedFullPathname(
 ** extensions compiled as shared objects. This simple VFS does not support
 ** this functionality, so the following functions are no-ops.
 */
-static void *embedDlOpen(sqlite3_vfs *pVfs, const char *zPath){
+static void *vfsDlOpen(sqlite3_vfs *pVfs, const char *zPath){
   return 0;
 }
-static void embedDlError(sqlite3_vfs *pVfs, int nByte, char *zErrMsg){
+static void vfsDlError(sqlite3_vfs *pVfs, int nByte, char *zErrMsg){
   sqlite3_snprintf(nByte, zErrMsg, "Loadable extensions are not supported");
   zErrMsg[nByte-1] = '\0';
 }
-static void (*embedDlSym(sqlite3_vfs *pVfs, void *pH, const char *z))(void){
+static void (*vfsDlSym(sqlite3_vfs *pVfs, void *pH, const char *z))(void){
   return 0;
 }
-static void embedDlClose(sqlite3_vfs *pVfs, void *pHandle){
+static void vfsDlClose(sqlite3_vfs *pVfs, void *pHandle){
   return;
 }
 
@@ -600,7 +600,7 @@ static void embedDlClose(sqlite3_vfs *pVfs, void *pHandle){
 ** Parameter zByte points to a buffer nByte bytes in size. Populate this
 ** buffer with pseudo-random data.
 */
-static int embedRandomness(sqlite3_vfs *pVfs, int nByte, char *zByte){
+static int vfsRandomness(sqlite3_vfs *pVfs, int nByte, char *zByte){
   return SQLITE_OK;
 }
 
@@ -608,7 +608,7 @@ static int embedRandomness(sqlite3_vfs *pVfs, int nByte, char *zByte){
 ** Sleep for at least nMicro microseconds. Return the (approximate) number 
 ** of microseconds slept for.
 */
-static int embedSleep(sqlite3_vfs *pVfs, int nMicro){
+static int vfsSleep(sqlite3_vfs *pVfs, int nMicro){
   sleep(nMicro / 1000000);
   usleep(nMicro % 1000000);
   return nMicro;
@@ -625,7 +625,7 @@ static int embedSleep(sqlite3_vfs *pVfs, int nMicro){
 ** value, it will stop working some time in the year 2038 AD (the so-called
 ** "year 2038" problem that afflicts systems that store time this way). 
 */
-static int embedCurrentTime(sqlite3_vfs *pVfs, double *pTime){
+static int vfsCurrentTime(sqlite3_vfs *pVfs, double *pTime){
   time_t t = time(0);
   *pTime = t/86400.0 + 2440587.5; 
   return SQLITE_OK;
@@ -635,29 +635,29 @@ static int embedCurrentTime(sqlite3_vfs *pVfs, double *pTime){
 ** This function returns a pointer to the VFS implemented in this file.
 ** To make the VFS available to SQLite:
 **
-**   sqlite3_vfs_register(sqlite3_embedvfs(), 0);
+**   sqlite3_vfs_register(sqlite3_fsFS(), 0);
 */
-sqlite3_vfs *sqlite3_embedvfs(void){
-  static sqlite3_vfs embedvfs = {
+sqlite3_vfs *sqlite3_fsFS(void){
+  static sqlite3_vfs fsFS = {
     1,                            /* iVersion */
-    sizeof(EmbedFile),             /* szOsFile */
+    sizeof(VFSFile),             /* szOsFile */
     MAXPATHNAME,                  /* mxPathname */
     0,                            /* pNext */
-    "embed",                       /* zName */
+    "fsFS",                       /* zName */
     0,                            /* pAppData */
-    embedOpen,                     /* xOpen */
-    embedDelete,                   /* xDelete */
-    embedAccess,                   /* xAccess */
-    embedFullPathname,             /* xFullPathname */
-    embedDlOpen,                   /* xDlOpen */
-    embedDlError,                  /* xDlError */
-    embedDlSym,                    /* xDlSym */
-    embedDlClose,                  /* xDlClose */
-    embedRandomness,               /* xRandomness */
-    embedSleep,                    /* xSleep */
-    embedCurrentTime,              /* xCurrentTime */
+    vfsOpen,                     /* xOpen */
+    vfsDelete,                   /* xDelete */
+    vfsAccess,                   /* xAccess */
+    vfsFullPathname,             /* xFullPathname */
+    vfsDlOpen,                   /* xDlOpen */
+    vfsDlError,                  /* xDlError */
+    vfsDlSym,                    /* xDlSym */
+    vfsDlClose,                  /* xDlClose */
+    vfsRandomness,               /* xRandomness */
+    vfsSleep,                    /* xSleep */
+    vfsCurrentTime,              /* xCurrentTime */
   };
-  return &embedvfs;
+  return &fsFS;
 }
 
 #endif /* !defined(SQLITE_TEST) || SQLITE_OS_UNIX */
@@ -675,36 +675,36 @@ sqlite3_vfs *sqlite3_embedvfs(void){
 #endif
 
 #if SQLITE_OS_UNIX
-static int SQLITE_TCLAPI register_embedvfs(
+static int SQLITE_TCLAPI register_fsFS(
   ClientData clientData, /* Pointer to sqlite3_enable_XXX function */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
   Tcl_Obj *CONST objv[]  /* Command arguments */
 ){
-  sqlite3_vfs_register(sqlite3_embedvfs(), 1);
+  sqlite3_vfs_register(sqlite3_fsFS(), 1);
   return TCL_OK;
 }
-static int SQLITE_TCLAPI unregister_embedvfs(
+static int SQLITE_TCLAPI unregister_fsFS(
   ClientData clientData, /* Pointer to sqlite3_enable_XXX function */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
   Tcl_Obj *CONST objv[]  /* Command arguments */
 ){
-  sqlite3_vfs_unregister(sqlite3_embedvfs());
+  sqlite3_vfs_unregister(sqlite3_fsFS());
   return TCL_OK;
 }
 
 /*
 ** Register commands with the TCL interpreter.
 */
-int Sqlitetest_embedvfs_Init(Tcl_Interp *interp){
-  Tcl_CreateObjCommand(interp, "register_embedvfs", register_embedvfs, 0, 0);
-  Tcl_CreateObjCommand(interp, "unregister_embedvfs", unregister_embedvfs, 0, 0);
+int Sqlitetest_fsFS_Init(Tcl_Interp *interp){
+  Tcl_CreateObjCommand(interp, "register_fsFS", register_fsFS, 0, 0);
+  Tcl_CreateObjCommand(interp, "unregister_fsFS", unregister_fsFS, 0, 0);
   return TCL_OK;
 }
 
 #else
-int Sqlitetest_embedvfs_Init(Tcl_Interp *interp){ return TCL_OK; }
+int Sqlitetest_fsFS_Init(Tcl_Interp *interp){ return TCL_OK; }
 #endif
 
 #endif /* SQLITE_TEST */
