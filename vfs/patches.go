@@ -221,6 +221,7 @@ func New(name string, fs fs.FS, setAsDefault bool) (*FS, error) {
 	if rc := sqlite3.Xsqlite3_vfs_register(tls, vfs, libc.Bool32(setAsDefault)); rc != sqlite3.SQLITE_OK {
 		removeObject(h)
 		libc.Xfree(tls, cname)
+		libc.Xfree(tls, vfs)
 		tls.Close()
 		return nil, fmt.Errorf("registering VFS %s: %d", name, rc)
 	}
