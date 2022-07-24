@@ -62,18 +62,6 @@ var vfsio = sqlite3_io_methods{
 	iVersion: 1, // iVersion
 }
 
-func init() {
-	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 8)) = vfsClose
-	*(*func(*libc.TLS, uintptr, uintptr, int32, sqlite_int64) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 16)) = vfsRead
-	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 48)) = vfsFileSize
-	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 56)) = vfsLock
-	*(*func(*libc.TLS, uintptr, int32) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 64)) = vfsUnlock
-	*(*func(*libc.TLS, uintptr, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 72)) = vfsCheckReservedLock
-	*(*func(*libc.TLS, uintptr, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 80)) = vfsFileControl
-	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 88)) = vfsSectorSize
-	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 96)) = vfsDeviceCharacteristics
-}
-
 func vfsOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags int32, pOutFlags uintptr) int32 {
 	if zName == 0 {
 		return sqlite3.SQLITE_IOERR
@@ -112,7 +100,7 @@ func vfsRead(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlit
 		return sqlite3.SQLITE_IOERR_READ
 	}
 
-	b := unsafe.Slice((*byte)(unsafe.Pointer(zBuf)), iAmt)
+	b := (*libc.RawMem)(unsafe.Pointer(zBuf))[:iAmt]
 	n, err := f.Read(b)
 	if n == int(iAmt) {
 		return sqlite3.SQLITE_OK
