@@ -1,5 +1,3 @@
-// +build none
-
 // https://www.sqlite.org/src/doc/trunk/src/test_demovfs.c
 
 /*

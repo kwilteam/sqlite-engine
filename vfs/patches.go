@@ -74,11 +74,6 @@ func init() {
 	*(*func(*libc.TLS, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&vfsio)) + 96)) = vfsDeviceCharacteristics
 }
 
-func vfsFullPathname(tls *libc.TLS, pVfs uintptr, zPath uintptr, nPathOut int32, zPathOut uintptr) int32 {
-	libc.Xstrncpy(tls, zPathOut, zPath, uint64(nPathOut))
-	return sqlite3.SQLITE_OK
-}
-
 func vfsOpen(tls *libc.TLS, pVfs uintptr, zName uintptr, pFile uintptr, flags int32, pOutFlags uintptr) int32 {
 	if zName == 0 {
 		return sqlite3.SQLITE_IOERR
