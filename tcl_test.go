@@ -31,6 +31,10 @@ func TestTclTest(t *testing.T) {
 		t.Skip("skipping test in short mode")
 	}
 
+	if err := setMaxOpenFiles(1024); err != nil { // Avoid misc7.test hanging for a long time.
+		t.Fatal(err)
+	}
+
 	blacklist := map[string]struct{}{}
 	switch runtime.GOARCH {
 	case "386", "arm":
@@ -51,16 +55,8 @@ func TestTclTest(t *testing.T) {
 		blacklist["tclsqlite.test"] = struct{}{}
 		blacklist["vtabA.test"] = struct{}{}
 		blacklist["windowC.test"] = struct{}{}
-	case "ppc64le", "riscv64":
-		if err := setMaxOpenFiles(1024); err != nil { // Avoid misc7.test hanging for a long time.
-			t.Fatal(err)
-		}
 	}
 	switch runtime.GOOS {
-	case "freebsd":
-		if err := setMaxOpenFiles(1024); err != nil { // Avoid misc7.test hanging for a long time.
-			t.Fatal(err)
-		}
 	case "windows":
 		// See https://gitlab.com/cznic/sqlite/-/issues/23#note_599920077 for details.
 		blacklist["symlink2.test"] = struct{}{}
