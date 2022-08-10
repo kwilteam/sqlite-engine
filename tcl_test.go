@@ -44,17 +44,7 @@ func TestTclTest(t *testing.T) {
 		blacklist["bigsort.test"] = struct{}{}
 	case "s390x":
 		//TODO
-		blacklist["autoindex5.test"] = struct{}{}
-		blacklist["capi2.test"] = struct{}{}
-		blacklist["delete.test"] = struct{}{}
-		blacklist["pragma.test"] = struct{}{}
-		blacklist["sqllimits1.test"] = struct{}{}
-		blacklist["stat.test"] = struct{}{}
 		blacklist["sysfault.test"] = struct{}{}
-		blacklist["tabfunc01.test"] = struct{}{}
-		blacklist["tclsqlite.test"] = struct{}{}
-		blacklist["vtabA.test"] = struct{}{}
-		blacklist["windowC.test"] = struct{}{}
 	}
 	switch runtime.GOOS {
 	case "windows":

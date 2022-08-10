@@ -3,10 +3,10 @@ module modernc.org/sqlite
 go 1.17
 
 require (
-	github.com/mattn/go-sqlite3 v1.14.12
+	github.com/mattn/go-sqlite3 v1.14.14
 	golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac
-	modernc.org/ccgo/v3 v3.16.6
-	modernc.org/libc v1.16.7
+	modernc.org/ccgo/v3 v3.16.8
+	modernc.org/libc v1.16.19
 	modernc.org/mathutil v1.4.1
 	modernc.org/tcl v1.13.1
 )
