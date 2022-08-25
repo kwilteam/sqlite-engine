@@ -13,7 +13,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"net/url"
 	"os"
@@ -126,7 +125,7 @@ func TestMain(m *testing.M) {
 
 func testMain(m *testing.M) int {
 	var err error
-	tempDir, err = ioutil.TempDir("", "sqlite-test-")
+	tempDir, err = os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		panic(err) //TODOOK
 	}
@@ -137,7 +136,7 @@ func testMain(m *testing.M) int {
 }
 
 func tempDB(t testing.TB) (string, *sql.DB) {
-	dir, err := ioutil.TempDir("", "sqlite-test-")
+	dir, err := os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -778,7 +777,7 @@ func TestConcurrentGoroutines(t *testing.T) {
 		nrows       = 5000
 	)
 
-	dir, err := ioutil.TempDir("", "sqlite-test-")
+	dir, err := os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -890,7 +889,7 @@ func TestConcurrentProcesses(t *testing.T) {
 		t.Skip("skipping test")
 	}
 
-	dir, err := ioutil.TempDir("", "sqlite-test-")
+	dir, err := os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -909,7 +908,7 @@ func TestConcurrentProcesses(t *testing.T) {
 			continue
 		}
 
-		b, err := ioutil.ReadFile(v)
+		b, err := os.ReadFile(v)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -922,7 +921,7 @@ func TestConcurrentProcesses(t *testing.T) {
 			b = bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n"))
 		}
 
-		if err := ioutil.WriteFile(filepath.Join(dir, filepath.Base(v)), b, 0666); err != nil {
+		if err := os.WriteFile(filepath.Join(dir, filepath.Base(v)), b, 0666); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -1026,7 +1025,7 @@ INSERT INTO "products" ("id", "user_id", "name", "description", "created_at", "c
 `
 	)
 
-	dir, err := ioutil.TempDir("", "sqlite-test-")
+	dir, err := os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1124,7 +1123,7 @@ func mustExec(t *testing.T, db *sql.DB, sql string, args ...interface{}) sql.Res
 func TestIssue20(t *testing.T) {
 	const TablePrefix = "gosqltest_"
 
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1184,7 +1183,7 @@ func TestIssue20(t *testing.T) {
 }
 
 func TestNoRows(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1277,7 +1276,7 @@ func TestColumnsNoRows(t *testing.T) {
 
 // https://gitlab.com/cznic/sqlite/-/issues/28
 func TestIssue28(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1306,7 +1305,7 @@ func TestIssue28(t *testing.T) {
 
 // https://gitlab.com/cznic/sqlite/-/issues/30
 func TestColumnTypes(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1375,7 +1374,7 @@ Col 3: DatabaseTypeName "DATE", DecimalSize 0 0 false, Length 922337203685477580
 
 // https://gitlab.com/cznic/sqlite/-/issues/32
 func TestColumnTypesNoRows(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1803,7 +1802,7 @@ func TestIssue51(t *testing.T) {
 		t.Skip("skipping test in short mode")
 	}
 
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1942,7 +1941,7 @@ const charset = "abcdefghijklmnopqrstuvwxyz" +
 
 // https://gitlab.com/cznic/sqlite/-/issues/53
 func TestIssue53(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1999,7 +1998,7 @@ CREATE TABLE IF NOT EXISTS loginst (
 
 // https://gitlab.com/cznic/sqlite/-/issues/37
 func TestPersistPragma(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2100,7 +2099,7 @@ func checkPragmas(db *sql.DB, pragmas []pragmaCfg) error {
 }
 
 func TestInMemory(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2154,13 +2153,13 @@ func testInMemory(db *sql.DB) error {
 		return err
 	}
 
-	files, err := ioutil.ReadDir("./")
+	dirEntries, err := os.ReadDir("./")
 	if err != nil {
 		return err
 	}
 
-	for _, file := range files {
-		if strings.Contains(file.Name(), "memory") {
+	for _, dirEntry := range dirEntries {
+		if strings.Contains(dirEntry.Name(), "memory") {
 			return fmt.Errorf("file was created for in memory database")
 		}
 	}
@@ -2225,7 +2224,7 @@ func TestIssue70(t *testing.T) {
 
 // https://gitlab.com/cznic/sqlite/-/issues/66
 func TestIssue66(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2289,7 +2288,7 @@ func TestIssue66(t *testing.T) {
 
 // https://gitlab.com/cznic/sqlite/-/issues/65
 func TestIssue65(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2469,7 +2468,7 @@ func TestConstraintUniqueError(t *testing.T) {
 
 // https://gitlab.com/cznic/sqlite/-/issues/92
 func TestBeginMode(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2535,7 +2534,7 @@ func TestBeginMode(t *testing.T) {
 
 // https://gitlab.com/cznic/sqlite/-/issues/94
 func TestCancelRace(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}

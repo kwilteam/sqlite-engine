@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -57,7 +56,7 @@ func TestTclTest(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	dir, err := ioutil.TempDir("", "sqlite-test-")
+	dir, err := os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -99,12 +98,12 @@ func TestTclTest(t *testing.T) {
 
 		s := filepath.Join(wd, v)
 		d := filepath.Join(dir, filepath.Base(v))
-		f, err := ioutil.ReadFile(s)
+		f, err := os.ReadFile(s)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if err := ioutil.WriteFile(d, f, 0660); err != nil {
+		if err := os.WriteFile(d, f, 0660); err != nil {
 			t.Fatal(err)
 		}
 	}
