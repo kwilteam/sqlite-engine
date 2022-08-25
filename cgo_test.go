@@ -6,9 +6,9 @@
 // +build ignore cgo,cgotest
 
 package sqlite // import "modernc.org/sqlite"
+
 import (
 	"database/sql"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -18,7 +18,7 @@ import (
 
 // https://gitlab.com/cznic/sqlite/-/issues/65
 func TestIssue65CGo(t *testing.T) {
-	tempDir, err := ioutil.TempDir("", "")
+	tempDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
