@@ -13,6 +13,8 @@ build_all_targets:
 	GOOS=freebsd GOARCH=amd64 go test -c -o /dev/null
 	GOOS=freebsd GOARCH=386 go build -v ./...
 	GOOS=freebsd GOARCH=386 go test -c -o /dev/null
+	GOOS=freebsd GOARCH=arm go build -v ./...
+	GOOS=freebsd GOARCH=arm go test -c -o /dev/null
 	GOOS=linux GOARCH=386 go build -v ./...
 	GOOS=linux GOARCH=386 go test -c -o /dev/null
 	GOOS=linux GOARCH=amd64 go build -v ./...
@@ -48,7 +50,7 @@ edit:
 	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile *.c *.go & fi
 
 editor:
-	ccgo -o vfs_$(shell go env GOOS)_$(shell go env GOARCH).go c/vfs.c -I../testdata/sqlite-amalgamation-3380500 \
+	ccgo -o vfs_$(shell go env GOOS)_$(shell go env GOARCH).go c/vfs.c -I../testdata/sqlite-amalgamation-3390300 \
 		-lmodernc.org/sqlite/lib -pkgname vfs -nocapi \
 		-export-externs X -D SQLITE_OS_UNIX \
 		-hide=vfsFullPathname \
