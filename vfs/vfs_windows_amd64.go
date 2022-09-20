@@ -20,29 +20,7 @@ var _ unsafe.Pointer
 var _ *libc.TLS
 var _ types.Size_t
 
-// Get the `_PC_*' symbols for the NAME argument to `pathconf' and `fpathconf';
-//    the `_SC_*' symbols for the NAME argument to `sysconf';
-//    and the `_CS_*' symbols for the NAME argument to `confstr'.
-// `sysconf', `pathconf', and `confstr' NAME values.  Generic version.
-//    Copyright (C) 1993-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Values for the NAME argument to `pathconf' and `fpathconf'.
-const ( /* confname.h:24:1: */
+const (
 	_PC_LINK_MAX           = 0
 	_PC_MAX_CANON          = 1
 	_PC_MAX_INPUT          = 2
@@ -66,9 +44,8 @@ const ( /* confname.h:24:1: */
 	_PC_2_SYMLINKS         = 20
 )
 
-// Values for the NAME argument to `confstr'.
-const ( /* confname.h:533:1: */
-	_CS_PATH = 0 // The default search path.
+const (
+	_CS_PATH = 0
 
 	_CS_V6_WIDTH_RESTRICTED_ENVS = 1
 
@@ -143,8 +120,7 @@ const ( /* confname.h:533:1: */
 	_CS_V7_ENV = 1149
 )
 
-// Values for the argument to `sysconf'.
-const ( /* confname.h:71:1: */
+const (
 	_SC_ARG_MAX               = 0
 	_SC_CHILD_MAX             = 1
 	_SC_CLK_TCK               = 2
@@ -182,8 +158,6 @@ const ( /* confname.h:71:1: */
 	_SC_SIGQUEUE_MAX          = 34
 	_SC_TIMER_MAX             = 35
 
-	// Values for the argument to `sysconf'
-	//        corresponding to _POSIX2_* symbols.
 	_SC_BC_BASE_MAX        = 36
 	_SC_BC_DIM_MAX         = 37
 	_SC_BC_SCALE_MAX       = 38
@@ -219,7 +193,6 @@ const ( /* confname.h:71:1: */
 	_SC_PII_OSI_M           = 65
 	_SC_T_IOV_MAX           = 66
 
-	// Values according to POSIX 1003.1c (POSIX threads).
 	_SC_THREADS                      = 67
 	_SC_THREAD_SAFE_FUNCTIONS        = 68
 	_SC_GETGR_R_SIZE_MAX             = 69
@@ -365,7 +338,6 @@ const ( /* confname.h:71:1: */
 	_SC_LEVEL4_CACHE_SIZE      = 197
 	_SC_LEVEL4_CACHE_ASSOC     = 198
 	_SC_LEVEL4_CACHE_LINESIZE  = 199
-	// Leave room here, maybe we need a few more cache levels some day.
 
 	_SC_IPV6        = 235
 	_SC_RAW_SOCKETS = 236
@@ -388,488 +360,112 @@ const ( /* confname.h:71:1: */
 	_SC_THREAD_ROBUST_PRIO_PROTECT = 248
 )
 
-// POSIX names to access some of the members.
-
-// sigevent constants.  Linux version.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// `sigev_notify' values.
-const ( /* sigevent-consts.h:27:1: */
-	SIGEV_SIGNAL = 0 // Notify via signal.
-	SIGEV_NONE   = 1 // Other notification: meaningless.
-	SIGEV_THREAD = 2 // Deliver via thread creation.
+const (
+	SIGEV_SIGNAL = 0
+	SIGEV_NONE   = 1
+	SIGEV_THREAD = 2
 
 	SIGEV_THREAD_ID = 4
 )
 
-// `si_code' values for SIGSEGV signal.
-const ( /* siginfo-consts.h:119:1: */
-	SEGV_MAPERR  = 1 // Address not mapped to object.
-	SEGV_ACCERR  = 2 // Invalid permissions for mapped object.
-	SEGV_BNDERR  = 3 // Bounds checking failure.
-	SEGV_PKUERR  = 4 // Protection key checking failure.
-	SEGV_ACCADI  = 5 // ADI not enabled for mapped object.
-	SEGV_ADIDERR = 6 // Disrupting MCD error.
+const (
+	SEGV_MAPERR  = 1
+	SEGV_ACCERR  = 2
+	SEGV_BNDERR  = 3
+	SEGV_PKUERR  = 4
+	SEGV_ACCADI  = 5
+	SEGV_ADIDERR = 6
 	SEGV_ADIPERR = 7
 )
 
-// `si_code' values for SIGBUS signal.
-const ( /* siginfo-consts.h:138:1: */
-	BUS_ADRALN    = 1 // Invalid address alignment.
-	BUS_ADRERR    = 2 // Non-existant physical address.
-	BUS_OBJERR    = 3 // Object specific hardware error.
-	BUS_MCEERR_AR = 4 // Hardware memory error: action required.
+const (
+	BUS_ADRALN    = 1
+	BUS_ADRERR    = 2
+	BUS_OBJERR    = 3
+	BUS_MCEERR_AR = 4
 	BUS_MCEERR_AO = 5
 )
 
-// `si_code' values for SIGCHLD signal.
-const ( /* siginfo-consts.h:172:1: */
-	CLD_EXITED    = 1 // Child has exited.
-	CLD_KILLED    = 2 // Child was killed.
-	CLD_DUMPED    = 3 // Child terminated abnormally.
-	CLD_TRAPPED   = 4 // Traced child has trapped.
-	CLD_STOPPED   = 5 // Child has stopped.
+const (
+	CLD_EXITED    = 1
+	CLD_KILLED    = 2
+	CLD_DUMPED    = 3
+	CLD_TRAPPED   = 4
+	CLD_STOPPED   = 5
 	CLD_CONTINUED = 6
 )
 
-// `si_code' values for SIGPOLL signal.
-const ( /* siginfo-consts.h:189:1: */
-	POLL_IN  = 1 // Data input available.
-	POLL_OUT = 2 // Output buffers available.
-	POLL_MSG = 3 // Input message available.
-	POLL_ERR = 4 // I/O error.
-	POLL_PRI = 5 // High priority input available.
+const (
+	POLL_IN  = 1
+	POLL_OUT = 2
+	POLL_MSG = 3
+	POLL_ERR = 4
+	POLL_PRI = 5
 	POLL_HUP = 6
 )
 
-// X/Open requires some more fields with fixed names.
+const (
+	SI_ASYNCNL  = -60
+	SI_DETHREAD = -7
 
-// siginfo constants.  Linux version.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Most of these constants are uniform across all architectures, but there
-//    is one exception.
-// Architecture-specific adjustments to siginfo_t.  x86 version.
-
-// Values for `si_code'.  Positive values are reserved for kernel-generated
-//
-//	signals.
-const ( /* siginfo-consts.h:35:1: */
-	SI_ASYNCNL  = -60 // Sent by asynch name lookup completion.
-	SI_DETHREAD = -7  // Sent by execve killing subsidiary
-	// 				   threads.
-	SI_TKILL   = -6 // Sent by tkill.
-	SI_SIGIO   = -5 // Sent by queued SIGIO.
-	SI_ASYNCIO = -4 // Sent by AIO completion.
-	SI_MESGQ   = -3 // Sent by real time mesq state change.
-	SI_TIMER   = -2 // Sent by timer expiration.
-	SI_QUEUE   = -1 // Sent by sigqueue.
-	SI_USER    = 0  // Sent by kill, sigsend.
+	SI_TKILL   = -6
+	SI_SIGIO   = -5
+	SI_ASYNCIO = -4
+	SI_MESGQ   = -3
+	SI_TIMER   = -2
+	SI_QUEUE   = -1
+	SI_USER    = 0
 	SI_KERNEL  = 128
 )
 
-// `si_code' values for SIGILL signal.
-const ( /* siginfo-consts.h:71:1: */
-	ILL_ILLOPC   = 1 // Illegal opcode.
-	ILL_ILLOPN   = 2 // Illegal operand.
-	ILL_ILLADR   = 3 // Illegal addressing mode.
-	ILL_ILLTRP   = 4 // Illegal trap.
-	ILL_PRVOPC   = 5 // Privileged opcode.
-	ILL_PRVREG   = 6 // Privileged register.
-	ILL_COPROC   = 7 // Coprocessor error.
-	ILL_BADSTK   = 8 // Internal stack error.
+const (
+	ILL_ILLOPC   = 1
+	ILL_ILLOPN   = 2
+	ILL_ILLADR   = 3
+	ILL_ILLTRP   = 4
+	ILL_PRVOPC   = 5
+	ILL_PRVREG   = 6
+	ILL_COPROC   = 7
+	ILL_BADSTK   = 8
 	ILL_BADIADDR = 9
 )
 
-// `si_code' values for SIGFPE signal.
-const ( /* siginfo-consts.h:94:1: */
-	FPE_INTDIV   = 1  // Integer divide by zero.
-	FPE_INTOVF   = 2  // Integer overflow.
-	FPE_FLTDIV   = 3  // Floating point divide by zero.
-	FPE_FLTOVF   = 4  // Floating point overflow.
-	FPE_FLTUND   = 5  // Floating point underflow.
-	FPE_FLTRES   = 6  // Floating point inexact result.
-	FPE_FLTINV   = 7  // Floating point invalid operation.
-	FPE_FLTSUB   = 8  // Subscript out of range.
-	FPE_FLTUNK   = 14 // Undiagnosed floating-point exception.
+const (
+	FPE_INTDIV   = 1
+	FPE_INTOVF   = 2
+	FPE_FLTDIV   = 3
+	FPE_FLTOVF   = 4
+	FPE_FLTUND   = 5
+	FPE_FLTRES   = 6
+	FPE_FLTINV   = 7
+	FPE_FLTSUB   = 8
+	FPE_FLTUNK   = 14
 	FPE_CONDTRAP = 15
 )
 
-// sigstack, sigaltstack definitions.
-//    Copyright (C) 1998-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Minimum stack size for a signal handler.
-
-// System default stack size.
-
-// ss_flags values for stack_t.  Linux version.
-//    Copyright (C) 1998-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Possible values for `ss_flags'.
-const ( /* ss_flags.h:27:1: */
+const (
 	SS_ONSTACK = 1
 	SS_DISABLE = 2
 )
 
-type ptrdiff_t = int64 /* <builtin>:3:26 */
+type ptrdiff_t = int64
 
-type size_t = uint64 /* <builtin>:9:23 */
+type size_t = uint64
 
-type wchar_t = int32 /* <builtin>:15:24 */
+type wchar_t = int32
 
-// Define the standard macros for the user,
-//    if this invocation was from the user program.
+type va_list = uintptr
 
-// Define va_list, if desired, from __gnuc_va_list.
-// We deliberately do not define va_list when called from
-//    stdio.h, because ANSI C says that stdio.h is not supposed to define
-//    va_list.  stdio.h needs to have access to that data type,
-//    but must not use that name.  It should use the name __gnuc_va_list,
-//    which is safe because it is reserved for the implementation.
+type sqlite_int64 = int64
+type sqlite_uint64 = uint64
+type sqlite3_int64 = sqlite_int64
+type sqlite3_uint64 = sqlite_uint64
 
-// The macro _VA_LIST_ is the same thing used by this file in Ultrix.
-//
-//	But on BSD NET2 we must not test or define or undef it.
-//	(Note that the comments in NET 2's ansi.h
-//	are incorrect for _VA_LIST_--see stdio.h!)
-//
-// The macro _VA_LIST_DEFINED is used in Windows NT 3.5
-// The macro _VA_LIST is used in SCO Unix 3.2.
-// The macro _VA_LIST_T_H is used in the Bull dpx2
-// The macro __va_list__ is used by BeOS.
-type va_list = uintptr /* stdarg.h:99:24 */
+type sqlite3_callback = uintptr
 
-// CAPI3REF: 64-Bit Integer Types
-// KEYWORDS: sqlite_int64 sqlite_uint64
-//
-// Because there is no cross-platform way to specify 64-bit integer types
-// SQLite includes typedefs for 64-bit signed and unsigned integers.
-//
-// The sqlite3_int64 and sqlite3_uint64 are the preferred type definitions.
-// The sqlite_int64 and sqlite_uint64 types are supported for backwards
-// compatibility only.
-//
-// ^The sqlite3_int64 and sqlite_int64 types can store integer values
-// between -9223372036854775808 and +9223372036854775807 inclusive.  ^The
-// sqlite3_uint64 and sqlite_uint64 types can store integer values
-// between 0 and +18446744073709551615 inclusive.
-type sqlite_int64 = int64           /* sqlite3.h:301:25 */
-type sqlite_uint64 = uint64         /* sqlite3.h:302:34 */
-type sqlite3_int64 = sqlite_int64   /* sqlite3.h:304:22 */
-type sqlite3_uint64 = sqlite_uint64 /* sqlite3.h:305:23 */
+type sqlite3_file1 = struct{ pMethods uintptr }
 
-// The type for a callback function.
-// This is legacy and deprecated.  It is included for historical
-// compatibility and is not documented.
-type sqlite3_callback = uintptr /* sqlite3.h:361:13 */
-
-// CAPI3REF: Result Codes
-// KEYWORDS: {result code definitions}
-//
-// Many SQLite functions return an integer result code from the set shown
-// here in order to indicate success or failure.
-//
-// New error codes may be added in future versions of SQLite.
-//
-// See also: [extended result code definitions]
-// beginning-of-error-codes
-// end-of-error-codes
-
-// CAPI3REF: Extended Result Codes
-// KEYWORDS: {extended result code definitions}
-//
-// In its default configuration, SQLite API routines return one of 30 integer
-// [result codes].  However, experience has shown that many of
-// these result codes are too coarse-grained.  They do not provide as
-// much information about problems as programmers might like.  In an effort to
-// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
-// and later) include
-// support for additional result codes that provide more detailed information
-// about errors. These [extended result codes] are enabled or disabled
-// on a per database connection basis using the
-// [sqlite3_extended_result_codes()] API.  Or, the extended code for
-// the most recent error can be obtained using
-// [sqlite3_extended_errcode()].
-
-// CAPI3REF: Flags For File Open Operations
-//
-// These bit values are intended for use in the
-// 3rd parameter to the [sqlite3_open_v2()] interface and
-// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
-//
-// Only those flags marked as "Ok for sqlite3_open_v2()" may be
-// used as the third argument to the [sqlite3_open_v2()] interface.
-// The other flags have historically been ignored by sqlite3_open_v2(),
-// though future versions of SQLite might change so that an error is
-// raised if any of the disallowed bits are passed into sqlite3_open_v2().
-// Applications should not depend on the historical behavior.
-//
-// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
-// [sqlite3_open_v2()] does *not* cause the underlying database file
-// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
-// [sqlite3_open_v2()] has historically be a no-op and might become an
-// error in future versions of SQLite.
-
-// Reserved:                         0x00F00000
-// Legacy compatibility:
-
-// CAPI3REF: Device Characteristics
-//
-// The xDeviceCharacteristics method of the [sqlite3_io_methods]
-// object returns an integer which is a vector of these
-// bit values expressing I/O characteristics of the mass storage
-// device that holds the file that the [sqlite3_io_methods]
-// refers to.
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
-// after reboot following a crash or power loss, the only bytes in a
-// file that were written at the application level might have changed
-// and that adjacent bytes, even bytes within the same sector are
-// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
-// flag indicates that a file cannot be deleted when open.  The
-// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
-// read-only media and cannot be changed even by processes with
-// elevated privileges.
-//
-// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
-// filesystem supports doing multiple write operations atomically when those
-// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
-// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
-
-// CAPI3REF: File Locking Levels
-//
-// SQLite uses one of these integer values as the second
-// argument to calls it makes to the xLock() and xUnlock() methods
-// of an [sqlite3_io_methods] object.
-
-// CAPI3REF: Synchronization Type Flags
-//
-// When SQLite invokes the xSync() method of an
-// [sqlite3_io_methods] object it uses a combination of
-// these integer values as the second argument.
-//
-// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-// sync operation only needs to flush data to mass storage.  Inode
-// information need not be flushed. If the lower four bits of the flag
-// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
-// If the lower four bits equal SQLITE_SYNC_FULL, that means
-// to use Mac OS X style fullsync instead of fsync().
-//
-// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
-// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
-// settings.  The [synchronous pragma] determines when calls to the
-// xSync VFS method occur and applies uniformly across all platforms.
-// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
-// energetic or rigorous or forceful the sync operations are and
-// only make a difference on Mac OSX for the default SQLite code.
-// (Third-party VFS implementations might also make the distinction
-// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
-// operating systems natively supported by SQLite, only Mac OSX
-// cares about the difference.)
-
-// CAPI3REF: OS Interface Open File Handle
-//
-// An [sqlite3_file] object represents an open file in the
-// [sqlite3_vfs | OS interface layer].  Individual OS interface
-// implementations will
-// want to subclass this object by appending additional fields
-// for their own use.  The pMethods entry is a pointer to an
-// [sqlite3_io_methods] object that defines methods for performing
-// I/O operations on the open file.
-type sqlite3_file1 = struct{ pMethods uintptr } /* sqlite3.h:722:9 */
-
-// CAPI3REF: Result Codes
-// KEYWORDS: {result code definitions}
-//
-// Many SQLite functions return an integer result code from the set shown
-// here in order to indicate success or failure.
-//
-// New error codes may be added in future versions of SQLite.
-//
-// See also: [extended result code definitions]
-// beginning-of-error-codes
-// end-of-error-codes
-
-// CAPI3REF: Extended Result Codes
-// KEYWORDS: {extended result code definitions}
-//
-// In its default configuration, SQLite API routines return one of 30 integer
-// [result codes].  However, experience has shown that many of
-// these result codes are too coarse-grained.  They do not provide as
-// much information about problems as programmers might like.  In an effort to
-// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
-// and later) include
-// support for additional result codes that provide more detailed information
-// about errors. These [extended result codes] are enabled or disabled
-// on a per database connection basis using the
-// [sqlite3_extended_result_codes()] API.  Or, the extended code for
-// the most recent error can be obtained using
-// [sqlite3_extended_errcode()].
-
-// CAPI3REF: Flags For File Open Operations
-//
-// These bit values are intended for use in the
-// 3rd parameter to the [sqlite3_open_v2()] interface and
-// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
-//
-// Only those flags marked as "Ok for sqlite3_open_v2()" may be
-// used as the third argument to the [sqlite3_open_v2()] interface.
-// The other flags have historically been ignored by sqlite3_open_v2(),
-// though future versions of SQLite might change so that an error is
-// raised if any of the disallowed bits are passed into sqlite3_open_v2().
-// Applications should not depend on the historical behavior.
-//
-// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
-// [sqlite3_open_v2()] does *not* cause the underlying database file
-// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
-// [sqlite3_open_v2()] has historically be a no-op and might become an
-// error in future versions of SQLite.
-
-// Reserved:                         0x00F00000
-// Legacy compatibility:
-
-// CAPI3REF: Device Characteristics
-//
-// The xDeviceCharacteristics method of the [sqlite3_io_methods]
-// object returns an integer which is a vector of these
-// bit values expressing I/O characteristics of the mass storage
-// device that holds the file that the [sqlite3_io_methods]
-// refers to.
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
-// after reboot following a crash or power loss, the only bytes in a
-// file that were written at the application level might have changed
-// and that adjacent bytes, even bytes within the same sector are
-// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
-// flag indicates that a file cannot be deleted when open.  The
-// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
-// read-only media and cannot be changed even by processes with
-// elevated privileges.
-//
-// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
-// filesystem supports doing multiple write operations atomically when those
-// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
-// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
-
-// CAPI3REF: File Locking Levels
-//
-// SQLite uses one of these integer values as the second
-// argument to calls it makes to the xLock() and xUnlock() methods
-// of an [sqlite3_io_methods] object.
-
-// CAPI3REF: Synchronization Type Flags
-//
-// When SQLite invokes the xSync() method of an
-// [sqlite3_io_methods] object it uses a combination of
-// these integer values as the second argument.
-//
-// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-// sync operation only needs to flush data to mass storage.  Inode
-// information need not be flushed. If the lower four bits of the flag
-// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
-// If the lower four bits equal SQLITE_SYNC_FULL, that means
-// to use Mac OS X style fullsync instead of fsync().
-//
-// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
-// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
-// settings.  The [synchronous pragma] determines when calls to the
-// xSync VFS method occur and applies uniformly across all platforms.
-// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
-// energetic or rigorous or forceful the sync operations are and
-// only make a difference on Mac OSX for the default SQLite code.
-// (Third-party VFS implementations might also make the distinction
-// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
-// operating systems natively supported by SQLite, only Mac OSX
-// cares about the difference.)
-
-// CAPI3REF: OS Interface Open File Handle
-//
-// An [sqlite3_file] object represents an open file in the
-// [sqlite3_vfs | OS interface layer].  Individual OS interface
-// implementations will
-// want to subclass this object by appending additional fields
-// for their own use.  The pMethods entry is a pointer to an
-// [sqlite3_io_methods] object that defines methods for performing
-// I/O operations on the open file.
-type sqlite3_file = sqlite3_file1 /* sqlite3.h:722:29 */
+type sqlite3_file = sqlite3_file1
 type sqlite3_io_methods1 = struct {
 	iVersion               int32
 	_                      [4]byte
@@ -891,269 +487,10 @@ type sqlite3_io_methods1 = struct {
 	xShmUnmap              uintptr
 	xFetch                 uintptr
 	xUnfetch               uintptr
-} /* sqlite3.h:722:9 */
+}
 
-// CAPI3REF: OS Interface File Virtual Methods Object
-//
-// Every file opened by the [sqlite3_vfs.xOpen] method populates an
-// [sqlite3_file] object (or, more commonly, a subclass of the
-// [sqlite3_file] object) with a pointer to an instance of this object.
-// This object defines the methods used to perform various operations
-// against the open file represented by the [sqlite3_file] object.
-//
-// If the [sqlite3_vfs.xOpen] method sets the sqlite3_file.pMethods element
-// to a non-NULL pointer, then the sqlite3_io_methods.xClose method
-// may be invoked even if the [sqlite3_vfs.xOpen] reported that it failed.  The
-// only way to prevent a call to xClose following a failed [sqlite3_vfs.xOpen]
-// is for the [sqlite3_vfs.xOpen] to set the sqlite3_file.pMethods element
-// to NULL.
-//
-// The flags argument to xSync may be one of [SQLITE_SYNC_NORMAL] or
-// [SQLITE_SYNC_FULL].  The first choice is the normal fsync().
-// The second choice is a Mac OS X style fullsync.  The [SQLITE_SYNC_DATAONLY]
-// flag may be ORed in to indicate that only the data of the file
-// and not its inode needs to be synced.
-//
-// The integer values to xLock() and xUnlock() are one of
-// <ul>
-// <li> [SQLITE_LOCK_NONE],
-// <li> [SQLITE_LOCK_SHARED],
-// <li> [SQLITE_LOCK_RESERVED],
-// <li> [SQLITE_LOCK_PENDING], or
-// <li> [SQLITE_LOCK_EXCLUSIVE].
-// </ul>
-// xLock() increases the lock. xUnlock() decreases the lock.
-// The xCheckReservedLock() method checks whether any database connection,
-// either in this process or in some other process, is holding a RESERVED,
-// PENDING, or EXCLUSIVE lock on the file.  It returns true
-// if such a lock exists and false otherwise.
-//
-// The xFileControl() method is a generic interface that allows custom
-// VFS implementations to directly control an open file using the
-// [sqlite3_file_control()] interface.  The second "op" argument is an
-// integer opcode.  The third argument is a generic pointer intended to
-// point to a structure that may contain arguments or space in which to
-// write return values.  Potential uses for xFileControl() might be
-// functions to enable blocking locks with timeouts, to change the
-// locking strategy (for example to use dot-file locks), to inquire
-// about the status of a lock, or to break stale locks.  The SQLite
-// core reserves all opcodes less than 100 for its own use.
-// A [file control opcodes | list of opcodes] less than 100 is available.
-// Applications that define a custom xFileControl method should use opcodes
-// greater than 100 to avoid conflicts.  VFS implementations should
-// return [SQLITE_NOTFOUND] for file control opcodes that they do not
-// recognize.
-//
-// The xSectorSize() method returns the sector size of the
-// device that underlies the file.  The sector size is the
-// minimum write that can be performed without disturbing
-// other bytes in the file.  The xDeviceCharacteristics()
-// method returns a bit vector describing behaviors of the
-// underlying device:
-//
-// <ul>
-// <li> [SQLITE_IOCAP_ATOMIC]
-// <li> [SQLITE_IOCAP_ATOMIC512]
-// <li> [SQLITE_IOCAP_ATOMIC1K]
-// <li> [SQLITE_IOCAP_ATOMIC2K]
-// <li> [SQLITE_IOCAP_ATOMIC4K]
-// <li> [SQLITE_IOCAP_ATOMIC8K]
-// <li> [SQLITE_IOCAP_ATOMIC16K]
-// <li> [SQLITE_IOCAP_ATOMIC32K]
-// <li> [SQLITE_IOCAP_ATOMIC64K]
-// <li> [SQLITE_IOCAP_SAFE_APPEND]
-// <li> [SQLITE_IOCAP_SEQUENTIAL]
-// <li> [SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN]
-// <li> [SQLITE_IOCAP_POWERSAFE_OVERWRITE]
-// <li> [SQLITE_IOCAP_IMMUTABLE]
-// <li> [SQLITE_IOCAP_BATCH_ATOMIC]
-// </ul>
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().
-//
-// If xRead() returns SQLITE_IOERR_SHORT_READ it must also fill
-// in the unread portions of the buffer with zeros.  A VFS that
-// fails to zero-fill short reads might seem to work.  However,
-// failure to zero-fill short reads will eventually lead to
-// database corruption.
-type sqlite3_io_methods = sqlite3_io_methods1 /* sqlite3.h:821:35 */
+type sqlite3_io_methods = sqlite3_io_methods1
 
-// CAPI3REF: OS Interface Object
-//
-// An instance of the sqlite3_vfs object defines the interface between
-// the SQLite core and the underlying operating system.  The "vfs"
-// in the name of the object stands for "virtual file system".  See
-// the [VFS | VFS documentation] for further information.
-//
-// The VFS interface is sometimes extended by adding new methods onto
-// the end.  Each time such an extension occurs, the iVersion field
-// is incremented.  The iVersion value started out as 1 in
-// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
-// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
-// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
-// may be appended to the sqlite3_vfs object and the iVersion value
-// may increase again in future versions of SQLite.
-// Note that due to an oversight, the structure
-// of the sqlite3_vfs object changed in the transition from
-// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
-// and yet the iVersion field was not increased.
-//
-// The szOsFile field is the size of the subclassed [sqlite3_file]
-// structure used by this VFS.  mxPathname is the maximum length of
-// a pathname in this VFS.
-//
-// Registered sqlite3_vfs objects are kept on a linked list formed by
-// the pNext pointer.  The [sqlite3_vfs_register()]
-// and [sqlite3_vfs_unregister()] interfaces manage this list
-// in a thread-safe way.  The [sqlite3_vfs_find()] interface
-// searches the list.  Neither the application code nor the VFS
-// implementation should use the pNext pointer.
-//
-// The pNext field is the only field in the sqlite3_vfs
-// structure that SQLite will ever modify.  SQLite will only access
-// or modify this field while holding a particular static mutex.
-// The application should never modify anything within the sqlite3_vfs
-// object once the object has been registered.
-//
-// The zName field holds the name of the VFS module.  The name must
-// be unique across all VFS modules.
-//
-// [[sqlite3_vfs.xOpen]]
-// ^SQLite guarantees that the zFilename parameter to xOpen
-// is either a NULL pointer or string obtained
-// from xFullPathname() with an optional suffix added.
-// ^If a suffix is added to the zFilename parameter, it will
-// consist of a single "-" character followed by no more than
-// 11 alphanumeric and/or "-" characters.
-// ^SQLite further guarantees that
-// the string will be valid and unchanged until xClose() is
-// called. Because of the previous sentence,
-// the [sqlite3_file] can safely store a pointer to the
-// filename if it needs to remember the filename for some reason.
-// If the zFilename parameter to xOpen is a NULL pointer then xOpen
-// must invent its own temporary name for the file.  ^Whenever the
-// xFilename parameter is NULL it will also be the case that the
-// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
-//
-// The flags argument to xOpen() includes all bits set in
-// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
-// or [sqlite3_open16()] is used, then flags includes at least
-// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
-// If xOpen() opens a file read-only then it sets *pOutFlags to
-// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
-//
-// ^(SQLite will also add one of the following flags to the xOpen()
-// call, depending on the object being opened:
-//
-// <ul>
-// <li>  [SQLITE_OPEN_MAIN_DB]
-// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
-// <li>  [SQLITE_OPEN_TEMP_DB]
-// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
-// <li>  [SQLITE_OPEN_TRANSIENT_DB]
-// <li>  [SQLITE_OPEN_SUBJOURNAL]
-// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
-// <li>  [SQLITE_OPEN_WAL]
-// </ul>)^
-//
-// The file I/O implementation can use the object type flags to
-// change the way it deals with files.  For example, an application
-// that does not care about crash recovery or rollback might make
-// the open of a journal file a no-op.  Writes to this journal would
-// also be no-ops, and any attempt to read the journal would return
-// SQLITE_IOERR.  Or the implementation might recognize that a database
-// file will be doing page-aligned sector reads and writes in a random
-// order and set up its I/O subsystem accordingly.
-//
-// SQLite might also add one of the following flags to the xOpen method:
-//
-// <ul>
-// <li> [SQLITE_OPEN_DELETEONCLOSE]
-// <li> [SQLITE_OPEN_EXCLUSIVE]
-// </ul>
-//
-// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
-// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
-// will be set for TEMP databases and their journals, transient
-// databases, and subjournals.
-//
-// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
-// with the [SQLITE_OPEN_CREATE] flag, which are both directly
-// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
-// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
-// SQLITE_OPEN_CREATE, is used to indicate that file should always
-// be created, and that it is an error if it already exists.
-// It is <i>not</i> used to indicate the file should be opened
-// for exclusive access.
-//
-// ^At least szOsFile bytes of memory are allocated by SQLite
-// to hold the [sqlite3_file] structure passed as the third
-// argument to xOpen.  The xOpen method does not have to
-// allocate the structure; it should just fill it in.  Note that
-// the xOpen method must set the sqlite3_file.pMethods to either
-// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
-// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
-// element will be valid after xOpen returns regardless of the success
-// or failure of the xOpen call.
-//
-// [[sqlite3_vfs.xAccess]]
-// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
-// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
-// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
-// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
-// flag is never actually used and is not implemented in the built-in
-// VFSes of SQLite.  The file is named by the second argument and can be a
-// directory. The xAccess method returns [SQLITE_OK] on success or some
-// non-zero error code if there is an I/O error or if the name of
-// the file given in the second argument is illegal.  If SQLITE_OK
-// is returned, then non-zero or zero is written into *pResOut to indicate
-// whether or not the file is accessible.
-//
-// ^SQLite will always allocate at least mxPathname+1 bytes for the
-// output buffer xFullPathname.  The exact size of the output buffer
-// is also passed as a parameter to both  methods. If the output buffer
-// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
-// handled as a fatal error by SQLite, vfs implementations should endeavor
-// to prevent this by setting mxPathname to a sufficiently large value.
-//
-// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
-// interfaces are not strictly a part of the filesystem, but they are
-// included in the VFS structure for completeness.
-// The xRandomness() function attempts to return nBytes bytes
-// of good-quality randomness into zOut.  The return value is
-// the actual number of bytes of randomness obtained.
-// The xSleep() method causes the calling thread to sleep for at
-// least the number of microseconds given.  ^The xCurrentTime()
-// method returns a Julian Day Number for the current date and time as
-// a floating point value.
-// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
-// Day Number multiplied by 86400000 (the number of milliseconds in
-// a 24-hour day).
-// ^SQLite will use the xCurrentTimeInt64() method to get the current
-// date and time if that method is available (if iVersion is 2 or
-// greater and the function pointer is not NULL) and will fall back
-// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
-//
-// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
-// are not used by the SQLite core.  These optional interfaces are provided
-// by some VFSes to facilitate testing of the VFS code. By overriding
-// system calls with functions under its control, a test program can
-// simulate faults and error conditions that would otherwise be difficult
-// or impossible to induce.  The set of system calls that can be overridden
-// varies from one VFS to another, and from one version of the same VFS to the
-// next.  Applications that use these interfaces must be prepared for any
-// or all of these interfaces to be NULL or for their behavior to change
-// from one release to the next.  Applications must not attempt to access
-// any of these methods if the iVersion of the VFS is less than 3.
 type sqlite3_vfs1 = struct {
 	iVersion          int32
 	szOsFile          int32
@@ -1178,239 +515,11 @@ type sqlite3_vfs1 = struct {
 	xSetSystemCall    uintptr
 	xGetSystemCall    uintptr
 	xNextSystemCall   uintptr
-} /* sqlite3.h:1425:9 */
+}
 
-// CAPI3REF: OS Interface Object
-//
-// An instance of the sqlite3_vfs object defines the interface between
-// the SQLite core and the underlying operating system.  The "vfs"
-// in the name of the object stands for "virtual file system".  See
-// the [VFS | VFS documentation] for further information.
-//
-// The VFS interface is sometimes extended by adding new methods onto
-// the end.  Each time such an extension occurs, the iVersion field
-// is incremented.  The iVersion value started out as 1 in
-// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
-// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
-// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
-// may be appended to the sqlite3_vfs object and the iVersion value
-// may increase again in future versions of SQLite.
-// Note that due to an oversight, the structure
-// of the sqlite3_vfs object changed in the transition from
-// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
-// and yet the iVersion field was not increased.
-//
-// The szOsFile field is the size of the subclassed [sqlite3_file]
-// structure used by this VFS.  mxPathname is the maximum length of
-// a pathname in this VFS.
-//
-// Registered sqlite3_vfs objects are kept on a linked list formed by
-// the pNext pointer.  The [sqlite3_vfs_register()]
-// and [sqlite3_vfs_unregister()] interfaces manage this list
-// in a thread-safe way.  The [sqlite3_vfs_find()] interface
-// searches the list.  Neither the application code nor the VFS
-// implementation should use the pNext pointer.
-//
-// The pNext field is the only field in the sqlite3_vfs
-// structure that SQLite will ever modify.  SQLite will only access
-// or modify this field while holding a particular static mutex.
-// The application should never modify anything within the sqlite3_vfs
-// object once the object has been registered.
-//
-// The zName field holds the name of the VFS module.  The name must
-// be unique across all VFS modules.
-//
-// [[sqlite3_vfs.xOpen]]
-// ^SQLite guarantees that the zFilename parameter to xOpen
-// is either a NULL pointer or string obtained
-// from xFullPathname() with an optional suffix added.
-// ^If a suffix is added to the zFilename parameter, it will
-// consist of a single "-" character followed by no more than
-// 11 alphanumeric and/or "-" characters.
-// ^SQLite further guarantees that
-// the string will be valid and unchanged until xClose() is
-// called. Because of the previous sentence,
-// the [sqlite3_file] can safely store a pointer to the
-// filename if it needs to remember the filename for some reason.
-// If the zFilename parameter to xOpen is a NULL pointer then xOpen
-// must invent its own temporary name for the file.  ^Whenever the
-// xFilename parameter is NULL it will also be the case that the
-// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
-//
-// The flags argument to xOpen() includes all bits set in
-// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
-// or [sqlite3_open16()] is used, then flags includes at least
-// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
-// If xOpen() opens a file read-only then it sets *pOutFlags to
-// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
-//
-// ^(SQLite will also add one of the following flags to the xOpen()
-// call, depending on the object being opened:
-//
-// <ul>
-// <li>  [SQLITE_OPEN_MAIN_DB]
-// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
-// <li>  [SQLITE_OPEN_TEMP_DB]
-// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
-// <li>  [SQLITE_OPEN_TRANSIENT_DB]
-// <li>  [SQLITE_OPEN_SUBJOURNAL]
-// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
-// <li>  [SQLITE_OPEN_WAL]
-// </ul>)^
-//
-// The file I/O implementation can use the object type flags to
-// change the way it deals with files.  For example, an application
-// that does not care about crash recovery or rollback might make
-// the open of a journal file a no-op.  Writes to this journal would
-// also be no-ops, and any attempt to read the journal would return
-// SQLITE_IOERR.  Or the implementation might recognize that a database
-// file will be doing page-aligned sector reads and writes in a random
-// order and set up its I/O subsystem accordingly.
-//
-// SQLite might also add one of the following flags to the xOpen method:
-//
-// <ul>
-// <li> [SQLITE_OPEN_DELETEONCLOSE]
-// <li> [SQLITE_OPEN_EXCLUSIVE]
-// </ul>
-//
-// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
-// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
-// will be set for TEMP databases and their journals, transient
-// databases, and subjournals.
-//
-// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
-// with the [SQLITE_OPEN_CREATE] flag, which are both directly
-// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
-// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
-// SQLITE_OPEN_CREATE, is used to indicate that file should always
-// be created, and that it is an error if it already exists.
-// It is <i>not</i> used to indicate the file should be opened
-// for exclusive access.
-//
-// ^At least szOsFile bytes of memory are allocated by SQLite
-// to hold the [sqlite3_file] structure passed as the third
-// argument to xOpen.  The xOpen method does not have to
-// allocate the structure; it should just fill it in.  Note that
-// the xOpen method must set the sqlite3_file.pMethods to either
-// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
-// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
-// element will be valid after xOpen returns regardless of the success
-// or failure of the xOpen call.
-//
-// [[sqlite3_vfs.xAccess]]
-// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
-// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
-// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
-// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
-// flag is never actually used and is not implemented in the built-in
-// VFSes of SQLite.  The file is named by the second argument and can be a
-// directory. The xAccess method returns [SQLITE_OK] on success or some
-// non-zero error code if there is an I/O error or if the name of
-// the file given in the second argument is illegal.  If SQLITE_OK
-// is returned, then non-zero or zero is written into *pResOut to indicate
-// whether or not the file is accessible.
-//
-// ^SQLite will always allocate at least mxPathname+1 bytes for the
-// output buffer xFullPathname.  The exact size of the output buffer
-// is also passed as a parameter to both  methods. If the output buffer
-// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
-// handled as a fatal error by SQLite, vfs implementations should endeavor
-// to prevent this by setting mxPathname to a sufficiently large value.
-//
-// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
-// interfaces are not strictly a part of the filesystem, but they are
-// included in the VFS structure for completeness.
-// The xRandomness() function attempts to return nBytes bytes
-// of good-quality randomness into zOut.  The return value is
-// the actual number of bytes of randomness obtained.
-// The xSleep() method causes the calling thread to sleep for at
-// least the number of microseconds given.  ^The xCurrentTime()
-// method returns a Julian Day Number for the current date and time as
-// a floating point value.
-// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
-// Day Number multiplied by 86400000 (the number of milliseconds in
-// a 24-hour day).
-// ^SQLite will use the xCurrentTimeInt64() method to get the current
-// date and time if that method is available (if iVersion is 2 or
-// greater and the function pointer is not NULL) and will fall back
-// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
-//
-// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
-// are not used by the SQLite core.  These optional interfaces are provided
-// by some VFSes to facilitate testing of the VFS code. By overriding
-// system calls with functions under its control, a test program can
-// simulate faults and error conditions that would otherwise be difficult
-// or impossible to induce.  The set of system calls that can be overridden
-// varies from one VFS to another, and from one version of the same VFS to the
-// next.  Applications that use these interfaces must be prepared for any
-// or all of these interfaces to be NULL or for their behavior to change
-// from one release to the next.  Applications must not attempt to access
-// any of these methods if the iVersion of the VFS is less than 3.
-type sqlite3_vfs = sqlite3_vfs1    /* sqlite3.h:1425:28 */
-type sqlite3_syscall_ptr = uintptr /* sqlite3.h:1426:14 */
+type sqlite3_vfs = sqlite3_vfs1
+type sqlite3_syscall_ptr = uintptr
 
-// CAPI3REF: Memory Allocation Routines
-//
-// An instance of this object defines the interface between SQLite
-// and low-level memory allocation routines.
-//
-// This object is used in only one place in the SQLite interface.
-// A pointer to an instance of this object is the argument to
-// [sqlite3_config()] when the configuration option is
-// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
-// By creating an instance of this object
-// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
-// during configuration, an application can specify an alternative
-// memory allocation subsystem for SQLite to use for all of its
-// dynamic memory needs.
-//
-// Note that SQLite comes with several [built-in memory allocators]
-// that are perfectly adequate for the overwhelming majority of applications
-// and that this object is only useful to a tiny minority of applications
-// with specialized memory allocation requirements.  This object is
-// also used during testing of SQLite in order to specify an alternative
-// memory allocator that simulates memory out-of-memory conditions in
-// order to verify that SQLite recovers gracefully from such
-// conditions.
-//
-// The xMalloc, xRealloc, and xFree methods must work like the
-// malloc(), realloc() and free() functions from the standard C library.
-// ^SQLite guarantees that the second argument to
-// xRealloc is always a value returned by a prior call to xRoundup.
-//
-// xSize should return the allocated size of a memory allocation
-// previously obtained from xMalloc or xRealloc.  The allocated size
-// is always at least as big as the requested size but may be larger.
-//
-// The xRoundup method returns what would be the allocated size of
-// a memory allocation given a particular requested size.  Most memory
-// allocators round up memory allocations at least to the next multiple
-// of 8.  Some allocators round up to a larger multiple or to a power of 2.
-// Every memory allocation request coming in through [sqlite3_malloc()]
-// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
-// that causes the corresponding memory allocation to fail.
-//
-// The xInit method initializes the memory allocator.  For example,
-// it might allocate any required mutexes or initialize internal data
-// structures.  The xShutdown method is invoked (indirectly) by
-// [sqlite3_shutdown()] and should deallocate any resources acquired
-// by xInit.  The pAppData pointer is used as the only parameter to
-// xInit and xShutdown.
-//
-// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
-// the xInit method, so the xInit method need not be threadsafe.  The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  For all other methods, SQLite
-// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
-// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
-// it is by default) and so the methods are automatically serialized.
-// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
-// methods must be threadsafe or else make their own arrangements for
-// serialization.
-//
-// SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
 type sqlite3_mem_methods1 = struct {
 	xMalloc   uintptr
 	xFree     uintptr
@@ -1420,109 +529,20 @@ type sqlite3_mem_methods1 = struct {
 	xInit     uintptr
 	xShutdown uintptr
 	pAppData  uintptr
-} /* sqlite3.h:1723:9 */
+}
 
-// CAPI3REF: Memory Allocation Routines
-//
-// An instance of this object defines the interface between SQLite
-// and low-level memory allocation routines.
-//
-// This object is used in only one place in the SQLite interface.
-// A pointer to an instance of this object is the argument to
-// [sqlite3_config()] when the configuration option is
-// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
-// By creating an instance of this object
-// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
-// during configuration, an application can specify an alternative
-// memory allocation subsystem for SQLite to use for all of its
-// dynamic memory needs.
-//
-// Note that SQLite comes with several [built-in memory allocators]
-// that are perfectly adequate for the overwhelming majority of applications
-// and that this object is only useful to a tiny minority of applications
-// with specialized memory allocation requirements.  This object is
-// also used during testing of SQLite in order to specify an alternative
-// memory allocator that simulates memory out-of-memory conditions in
-// order to verify that SQLite recovers gracefully from such
-// conditions.
-//
-// The xMalloc, xRealloc, and xFree methods must work like the
-// malloc(), realloc() and free() functions from the standard C library.
-// ^SQLite guarantees that the second argument to
-// xRealloc is always a value returned by a prior call to xRoundup.
-//
-// xSize should return the allocated size of a memory allocation
-// previously obtained from xMalloc or xRealloc.  The allocated size
-// is always at least as big as the requested size but may be larger.
-//
-// The xRoundup method returns what would be the allocated size of
-// a memory allocation given a particular requested size.  Most memory
-// allocators round up memory allocations at least to the next multiple
-// of 8.  Some allocators round up to a larger multiple or to a power of 2.
-// Every memory allocation request coming in through [sqlite3_malloc()]
-// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
-// that causes the corresponding memory allocation to fail.
-//
-// The xInit method initializes the memory allocator.  For example,
-// it might allocate any required mutexes or initialize internal data
-// structures.  The xShutdown method is invoked (indirectly) by
-// [sqlite3_shutdown()] and should deallocate any resources acquired
-// by xInit.  The pAppData pointer is used as the only parameter to
-// xInit and xShutdown.
-//
-// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
-// the xInit method, so the xInit method need not be threadsafe.  The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  For all other methods, SQLite
-// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
-// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
-// it is by default) and so the methods are automatically serialized.
-// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
-// methods must be threadsafe or else make their own arrangements for
-// serialization.
-//
-// SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-type sqlite3_mem_methods = sqlite3_mem_methods1 /* sqlite3.h:1723:36 */
+type sqlite3_mem_methods = sqlite3_mem_methods1
 
-// CAPI3REF: Constants Defining Special Destructor Behavior
-//
-// These are special values for the destructor that is passed in as the
-// final argument to routines like [sqlite3_result_blob()].  ^If the destructor
-// argument is SQLITE_STATIC, it means that the content pointer is constant
-// and will never change.  It does not need to be destroyed.  ^The
-// SQLITE_TRANSIENT value means that the content will likely change in
-// the near future and that SQLite should make its own private copy of
-// the content before returning.
-//
-// The typedef is necessary to work around problems in certain
-// C++ compilers.
-type sqlite3_destructor_type = uintptr /* sqlite3.h:5752:14 */
+type sqlite3_destructor_type = uintptr
 
-// The interface to the virtual-table mechanism is currently considered
-// to be experimental.  The interface might change in incompatible ways.
-// If this is a problem for you, do not use the interface at this time.
-//
-// When the virtual-table mechanism stabilizes, we will declare the
-// interface fixed, support it indefinitely, and remove this comment.
-
-// Structures used by the virtual table interface
 type sqlite3_vtab1 = struct {
 	pModule uintptr
 	nRef    int32
 	_       [4]byte
 	zErrMsg uintptr
-} /* sqlite3.h:6937:9 */
+}
 
-// The interface to the virtual-table mechanism is currently considered
-// to be experimental.  The interface might change in incompatible ways.
-// If this is a problem for you, do not use the interface at this time.
-//
-// When the virtual-table mechanism stabilizes, we will declare the
-// interface fixed, support it indefinitely, and remove this comment.
-
-// Structures used by the virtual table interface
-type sqlite3_vtab = sqlite3_vtab1 /* sqlite3.h:6937:29 */
+type sqlite3_vtab = sqlite3_vtab1
 type sqlite3_index_info1 = struct {
 	nConstraint      int32
 	_                [4]byte
@@ -1541,12 +561,12 @@ type sqlite3_index_info1 = struct {
 	idxFlags         int32
 	_                [4]byte
 	colUsed          sqlite3_uint64
-} /* sqlite3.h:6938:9 */
+}
 
-type sqlite3_index_info = sqlite3_index_info1       /* sqlite3.h:6938:35 */
-type sqlite3_vtab_cursor1 = struct{ pVtab uintptr } /* sqlite3.h:6939:9 */
+type sqlite3_index_info = sqlite3_index_info1
+type sqlite3_vtab_cursor1 = struct{ pVtab uintptr }
 
-type sqlite3_vtab_cursor = sqlite3_vtab_cursor1 /* sqlite3.h:6939:36 */
+type sqlite3_vtab_cursor = sqlite3_vtab_cursor1
 type sqlite3_module1 = struct {
 	iVersion      int32
 	_             [4]byte
@@ -1573,395 +593,30 @@ type sqlite3_module1 = struct {
 	xRelease      uintptr
 	xRollbackTo   uintptr
 	xShadowName   uintptr
-} /* sqlite3.h:6937:9 */
+}
 
-type sqlite3_module = sqlite3_module1 /* sqlite3.h:6940:31 */
+type sqlite3_module = sqlite3_module1
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_constraint = struct {
 	iColumn     int32
 	op          uint8
 	usable      uint8
 	_           [2]byte
 	iTermOffset int32
-} /* sqlite3.h:6938:9 */
+}
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_orderby = struct {
 	iColumn int32
 	desc    uint8
 	_       [3]byte
-} /* sqlite3.h:6938:9 */
+}
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_constraint_usage = struct {
 	argvIndex int32
 	omit      uint8
 	_         [3]byte
-} /* sqlite3.h:6938:9 */
+}
 
-// CAPI3REF: Mutex Methods Object
-//
-// An instance of this structure defines the low-level routines
-// used to allocate and use mutexes.
-//
-// Usually, the default mutex implementations provided by SQLite are
-// sufficient, however the application has the option of substituting a custom
-// implementation for specialized deployments or systems for which SQLite
-// does not provide a suitable implementation. In this case, the application
-// creates and populates an instance of this structure to pass
-// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
-// Additionally, an instance of this structure can be used as an
-// output variable when querying the system for the current mutex
-// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
-//
-// ^The xMutexInit method defined by this structure is invoked as
-// part of system initialization by the sqlite3_initialize() function.
-// ^The xMutexInit routine is called by SQLite exactly once for each
-// effective call to [sqlite3_initialize()].
-//
-// ^The xMutexEnd method defined by this structure is invoked as
-// part of system shutdown by the sqlite3_shutdown() function. The
-// implementation of this method is expected to release all outstanding
-// resources obtained by the mutex methods implementation, especially
-// those obtained by the xMutexInit method.  ^The xMutexEnd()
-// interface is invoked exactly once for each call to [sqlite3_shutdown()].
-//
-// ^(The remaining seven methods defined by this structure (xMutexAlloc,
-// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
-// xMutexNotheld) implement the following interfaces (respectively):
-//
-// <ul>
-//
-//	<li>  [sqlite3_mutex_alloc()] </li>
-//	<li>  [sqlite3_mutex_free()] </li>
-//	<li>  [sqlite3_mutex_enter()] </li>
-//	<li>  [sqlite3_mutex_try()] </li>
-//	<li>  [sqlite3_mutex_leave()] </li>
-//	<li>  [sqlite3_mutex_held()] </li>
-//	<li>  [sqlite3_mutex_notheld()] </li>
-//
-// </ul>)^
-//
-// The only difference is that the public sqlite3_XXX functions enumerated
-// above silently ignore any invocations that pass a NULL pointer instead
-// of a valid mutex handle. The implementations of the methods defined
-// by this structure are not required to handle this case. The results
-// of passing a NULL pointer instead of a valid mutex handle are undefined
-// (i.e. it is acceptable to provide an implementation that segfaults if
-// it is passed a NULL pointer).
-//
-// The xMutexInit() method must be threadsafe.  It must be harmless to
-// invoke xMutexInit() multiple times within the same process and without
-// intervening calls to xMutexEnd().  Second and subsequent calls to
-// xMutexInit() must be no-ops.
-//
-// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
-// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
-// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
-// memory allocation for a fast or recursive mutex.
-//
-// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
-// called, but only if the prior call to xMutexInit returned SQLITE_OK.
-// If xMutexInit fails in any way, it is expected to clean up after itself
-// prior to returning.
 type sqlite3_mutex_methods1 = struct {
 	xMutexInit    uintptr
 	xMutexEnd     uintptr
@@ -1972,259 +627,17 @@ type sqlite3_mutex_methods1 = struct {
 	xMutexLeave   uintptr
 	xMutexHeld    uintptr
 	xMutexNotheld uintptr
-} /* sqlite3.h:7804:9 */
+}
 
-// CAPI3REF: Mutex Methods Object
-//
-// An instance of this structure defines the low-level routines
-// used to allocate and use mutexes.
-//
-// Usually, the default mutex implementations provided by SQLite are
-// sufficient, however the application has the option of substituting a custom
-// implementation for specialized deployments or systems for which SQLite
-// does not provide a suitable implementation. In this case, the application
-// creates and populates an instance of this structure to pass
-// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
-// Additionally, an instance of this structure can be used as an
-// output variable when querying the system for the current mutex
-// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
-//
-// ^The xMutexInit method defined by this structure is invoked as
-// part of system initialization by the sqlite3_initialize() function.
-// ^The xMutexInit routine is called by SQLite exactly once for each
-// effective call to [sqlite3_initialize()].
-//
-// ^The xMutexEnd method defined by this structure is invoked as
-// part of system shutdown by the sqlite3_shutdown() function. The
-// implementation of this method is expected to release all outstanding
-// resources obtained by the mutex methods implementation, especially
-// those obtained by the xMutexInit method.  ^The xMutexEnd()
-// interface is invoked exactly once for each call to [sqlite3_shutdown()].
-//
-// ^(The remaining seven methods defined by this structure (xMutexAlloc,
-// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
-// xMutexNotheld) implement the following interfaces (respectively):
-//
-// <ul>
-//
-//	<li>  [sqlite3_mutex_alloc()] </li>
-//	<li>  [sqlite3_mutex_free()] </li>
-//	<li>  [sqlite3_mutex_enter()] </li>
-//	<li>  [sqlite3_mutex_try()] </li>
-//	<li>  [sqlite3_mutex_leave()] </li>
-//	<li>  [sqlite3_mutex_held()] </li>
-//	<li>  [sqlite3_mutex_notheld()] </li>
-//
-// </ul>)^
-//
-// The only difference is that the public sqlite3_XXX functions enumerated
-// above silently ignore any invocations that pass a NULL pointer instead
-// of a valid mutex handle. The implementations of the methods defined
-// by this structure are not required to handle this case. The results
-// of passing a NULL pointer instead of a valid mutex handle are undefined
-// (i.e. it is acceptable to provide an implementation that segfaults if
-// it is passed a NULL pointer).
-//
-// The xMutexInit() method must be threadsafe.  It must be harmless to
-// invoke xMutexInit() multiple times within the same process and without
-// intervening calls to xMutexEnd().  Second and subsequent calls to
-// xMutexInit() must be no-ops.
-//
-// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
-// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
-// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
-// memory allocation for a fast or recursive mutex.
-//
-// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
-// called, but only if the prior call to xMutexInit returned SQLITE_OK.
-// If xMutexInit fails in any way, it is expected to clean up after itself
-// prior to returning.
-type sqlite3_mutex_methods = sqlite3_mutex_methods1 /* sqlite3.h:7804:38 */
+type sqlite3_mutex_methods = sqlite3_mutex_methods1
 
-// CAPI3REF: Custom Page Cache Object
-//
-// The sqlite3_pcache_page object represents a single page in the
-// page cache.  The page cache will allocate instances of this
-// object.  Various methods of the page cache use pointers to instances
-// of this object as parameters or as their return value.
-//
-// See [sqlite3_pcache_methods2] for additional information.
 type sqlite3_pcache_page1 = struct {
 	pBuf   uintptr
 	pExtra uintptr
-} /* sqlite3.h:8573:9 */
+}
 
-// CAPI3REF: Custom Page Cache Object
-//
-// The sqlite3_pcache_page object represents a single page in the
-// page cache.  The page cache will allocate instances of this
-// object.  Various methods of the page cache use pointers to instances
-// of this object as parameters or as their return value.
-//
-// See [sqlite3_pcache_methods2] for additional information.
-type sqlite3_pcache_page = sqlite3_pcache_page1 /* sqlite3.h:8573:36 */
+type sqlite3_pcache_page = sqlite3_pcache_page1
 
-// CAPI3REF: Application Defined Page Cache.
-// KEYWORDS: {page cache}
-//
-// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
-// register an alternative page cache implementation by passing in an
-// instance of the sqlite3_pcache_methods2 structure.)^
-// In many applications, most of the heap memory allocated by
-// SQLite is used for the page cache.
-// By implementing a
-// custom page cache using this API, an application can better control
-// the amount of memory consumed by SQLite, the way in which
-// that memory is allocated and released, and the policies used to
-// determine exactly which parts of a database file are cached and for
-// how long.
-//
-// The alternative page cache mechanism is an
-// extreme measure that is only needed by the most demanding applications.
-// The built-in page cache is recommended for most uses.
-//
-// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
-// internal buffer by SQLite within the call to [sqlite3_config].  Hence
-// the application may discard the parameter after the call to
-// [sqlite3_config()] returns.)^
-//
-// [[the xInit() page cache method]]
-// ^(The xInit() method is called once for each effective
-// call to [sqlite3_initialize()])^
-// (usually only once during the lifetime of the process). ^(The xInit()
-// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
-// The intent of the xInit() method is to set up global data structures
-// required by the custom page cache implementation.
-// ^(If the xInit() method is NULL, then the
-// built-in default page cache is used instead of the application defined
-// page cache.)^
-//
-// [[the xShutdown() page cache method]]
-// ^The xShutdown() method is called by [sqlite3_shutdown()].
-// It can be used to clean up
-// any outstanding resources before process shutdown, if required.
-// ^The xShutdown() method may be NULL.
-//
-// ^SQLite automatically serializes calls to the xInit method,
-// so the xInit method need not be threadsafe.  ^The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  All other methods must be threadsafe
-// in multithreaded applications.
-//
-// ^SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-//
-// [[the xCreate() page cache methods]]
-// ^SQLite invokes the xCreate() method to construct a new cache instance.
-// SQLite will typically create one cache instance for each open database file,
-// though this is not guaranteed. ^The
-// first parameter, szPage, is the size in bytes of the pages that must
-// be allocated by the cache.  ^szPage will always a power of two.  ^The
-// second parameter szExtra is a number of bytes of extra storage
-// associated with each page cache entry.  ^The szExtra parameter will
-// a number less than 250.  SQLite will use the
-// extra szExtra bytes on each page to store metadata about the underlying
-// database page on disk.  The value passed into szExtra depends
-// on the SQLite version, the target platform, and how SQLite was compiled.
-// ^The third argument to xCreate(), bPurgeable, is true if the cache being
-// created will be used to cache database pages of a file stored on disk, or
-// false if it is used for an in-memory database. The cache implementation
-// does not have to do anything special based with the value of bPurgeable;
-// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
-// never invoke xUnpin() except to deliberately delete a page.
-// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
-// false will always have the "discard" flag set to true.
-// ^Hence, a cache created with bPurgeable false will
-// never contain any unpinned pages.
-//
-// [[the xCachesize() page cache method]]
-// ^(The xCachesize() method may be called at any time by SQLite to set the
-// suggested maximum cache-size (number of pages stored by) the cache
-// instance passed as the first argument. This is the value configured using
-// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
-// parameter, the implementation is not required to do anything with this
-// value; it is advisory only.
-//
-// [[the xPagecount() page cache methods]]
-// The xPagecount() method must return the number of pages currently
-// stored in the cache, both pinned and unpinned.
-//
-// [[the xFetch() page cache methods]]
-// The xFetch() method locates a page in the cache and returns a pointer to
-// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
-// The pBuf element of the returned sqlite3_pcache_page object will be a
-// pointer to a buffer of szPage bytes used to store the content of a
-// single database page.  The pExtra element of sqlite3_pcache_page will be
-// a pointer to the szExtra bytes of extra storage that SQLite has requested
-// for each entry in the page cache.
-//
-// The page to be fetched is determined by the key. ^The minimum key value
-// is 1.  After it has been retrieved using xFetch, the page is considered
-// to be "pinned".
-//
-// If the requested page is already in the page cache, then the page cache
-// implementation must return a pointer to the page buffer with its content
-// intact.  If the requested page is not already in the cache, then the
-// cache implementation should use the value of the createFlag
-// parameter to help it determined what action to take:
-//
-// <table border=1 width=85% align=center>
-// <tr><th> createFlag <th> Behavior when page is not already in cache
-// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
-// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
-//
-//	Otherwise return NULL.
-//
-// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
-//
-//	NULL if allocating a new page is effectively impossible.
-//
-// </table>
-//
-// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
-// will only use a createFlag of 2 after a prior call with a createFlag of 1
-// failed.)^  In between the xFetch() calls, SQLite may
-// attempt to unpin one or more cache pages by spilling the content of
-// pinned pages to disk and synching the operating system disk cache.
-//
-// [[the xUnpin() page cache method]]
-// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
-// as its second argument.  If the third parameter, discard, is non-zero,
-// then the page must be evicted from the cache.
-// ^If the discard parameter is
-// zero, then the page may be discarded or retained at the discretion of
-// page cache implementation. ^The page cache implementation
-// may choose to evict unpinned pages at any time.
-//
-// The cache must not perform any reference counting. A single
-// call to xUnpin() unpins the page regardless of the number of prior calls
-// to xFetch().
-//
-// [[the xRekey() page cache methods]]
-// The xRekey() method is used to change the key value associated with the
-// page passed as the second argument. If the cache
-// previously contains an entry associated with newKey, it must be
-// discarded. ^Any prior cache entry associated with newKey is guaranteed not
-// to be pinned.
-//
-// When SQLite calls the xTruncate() method, the cache must discard all
-// existing cache entries with page numbers (keys) greater than or equal
-// to the value of the iLimit parameter passed to xTruncate(). If any
-// of these pages are pinned, they are implicitly unpinned, meaning that
-// they can be safely discarded.
-//
-// [[the xDestroy() page cache method]]
-// ^The xDestroy() method is used to delete a cache allocated by xCreate().
-// All resources associated with the specified cache should be freed. ^After
-// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
-// handle invalid, and will not use it with any other sqlite3_pcache_methods2
-// functions.
-//
-// [[the xShrink() page cache method]]
-// ^SQLite invokes the xShrink() method when it wants the page cache to
-// free up as much of heap memory as possible.  The page cache implementation
-// is not obligated to free any memory, but well-behaved implementations should
-// do their best.
 type sqlite3_pcache_methods21 = struct {
 	iVersion   int32
 	_          [4]byte
@@ -2240,174 +653,10 @@ type sqlite3_pcache_methods21 = struct {
 	xTruncate  uintptr
 	xDestroy   uintptr
 	xShrink    uintptr
-} /* sqlite3.h:8738:9 */
+}
 
-// CAPI3REF: Application Defined Page Cache.
-// KEYWORDS: {page cache}
-//
-// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
-// register an alternative page cache implementation by passing in an
-// instance of the sqlite3_pcache_methods2 structure.)^
-// In many applications, most of the heap memory allocated by
-// SQLite is used for the page cache.
-// By implementing a
-// custom page cache using this API, an application can better control
-// the amount of memory consumed by SQLite, the way in which
-// that memory is allocated and released, and the policies used to
-// determine exactly which parts of a database file are cached and for
-// how long.
-//
-// The alternative page cache mechanism is an
-// extreme measure that is only needed by the most demanding applications.
-// The built-in page cache is recommended for most uses.
-//
-// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
-// internal buffer by SQLite within the call to [sqlite3_config].  Hence
-// the application may discard the parameter after the call to
-// [sqlite3_config()] returns.)^
-//
-// [[the xInit() page cache method]]
-// ^(The xInit() method is called once for each effective
-// call to [sqlite3_initialize()])^
-// (usually only once during the lifetime of the process). ^(The xInit()
-// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
-// The intent of the xInit() method is to set up global data structures
-// required by the custom page cache implementation.
-// ^(If the xInit() method is NULL, then the
-// built-in default page cache is used instead of the application defined
-// page cache.)^
-//
-// [[the xShutdown() page cache method]]
-// ^The xShutdown() method is called by [sqlite3_shutdown()].
-// It can be used to clean up
-// any outstanding resources before process shutdown, if required.
-// ^The xShutdown() method may be NULL.
-//
-// ^SQLite automatically serializes calls to the xInit method,
-// so the xInit method need not be threadsafe.  ^The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  All other methods must be threadsafe
-// in multithreaded applications.
-//
-// ^SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-//
-// [[the xCreate() page cache methods]]
-// ^SQLite invokes the xCreate() method to construct a new cache instance.
-// SQLite will typically create one cache instance for each open database file,
-// though this is not guaranteed. ^The
-// first parameter, szPage, is the size in bytes of the pages that must
-// be allocated by the cache.  ^szPage will always a power of two.  ^The
-// second parameter szExtra is a number of bytes of extra storage
-// associated with each page cache entry.  ^The szExtra parameter will
-// a number less than 250.  SQLite will use the
-// extra szExtra bytes on each page to store metadata about the underlying
-// database page on disk.  The value passed into szExtra depends
-// on the SQLite version, the target platform, and how SQLite was compiled.
-// ^The third argument to xCreate(), bPurgeable, is true if the cache being
-// created will be used to cache database pages of a file stored on disk, or
-// false if it is used for an in-memory database. The cache implementation
-// does not have to do anything special based with the value of bPurgeable;
-// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
-// never invoke xUnpin() except to deliberately delete a page.
-// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
-// false will always have the "discard" flag set to true.
-// ^Hence, a cache created with bPurgeable false will
-// never contain any unpinned pages.
-//
-// [[the xCachesize() page cache method]]
-// ^(The xCachesize() method may be called at any time by SQLite to set the
-// suggested maximum cache-size (number of pages stored by) the cache
-// instance passed as the first argument. This is the value configured using
-// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
-// parameter, the implementation is not required to do anything with this
-// value; it is advisory only.
-//
-// [[the xPagecount() page cache methods]]
-// The xPagecount() method must return the number of pages currently
-// stored in the cache, both pinned and unpinned.
-//
-// [[the xFetch() page cache methods]]
-// The xFetch() method locates a page in the cache and returns a pointer to
-// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
-// The pBuf element of the returned sqlite3_pcache_page object will be a
-// pointer to a buffer of szPage bytes used to store the content of a
-// single database page.  The pExtra element of sqlite3_pcache_page will be
-// a pointer to the szExtra bytes of extra storage that SQLite has requested
-// for each entry in the page cache.
-//
-// The page to be fetched is determined by the key. ^The minimum key value
-// is 1.  After it has been retrieved using xFetch, the page is considered
-// to be "pinned".
-//
-// If the requested page is already in the page cache, then the page cache
-// implementation must return a pointer to the page buffer with its content
-// intact.  If the requested page is not already in the cache, then the
-// cache implementation should use the value of the createFlag
-// parameter to help it determined what action to take:
-//
-// <table border=1 width=85% align=center>
-// <tr><th> createFlag <th> Behavior when page is not already in cache
-// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
-// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
-//
-//	Otherwise return NULL.
-//
-// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
-//
-//	NULL if allocating a new page is effectively impossible.
-//
-// </table>
-//
-// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
-// will only use a createFlag of 2 after a prior call with a createFlag of 1
-// failed.)^  In between the xFetch() calls, SQLite may
-// attempt to unpin one or more cache pages by spilling the content of
-// pinned pages to disk and synching the operating system disk cache.
-//
-// [[the xUnpin() page cache method]]
-// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
-// as its second argument.  If the third parameter, discard, is non-zero,
-// then the page must be evicted from the cache.
-// ^If the discard parameter is
-// zero, then the page may be discarded or retained at the discretion of
-// page cache implementation. ^The page cache implementation
-// may choose to evict unpinned pages at any time.
-//
-// The cache must not perform any reference counting. A single
-// call to xUnpin() unpins the page regardless of the number of prior calls
-// to xFetch().
-//
-// [[the xRekey() page cache methods]]
-// The xRekey() method is used to change the key value associated with the
-// page passed as the second argument. If the cache
-// previously contains an entry associated with newKey, it must be
-// discarded. ^Any prior cache entry associated with newKey is guaranteed not
-// to be pinned.
-//
-// When SQLite calls the xTruncate() method, the cache must discard all
-// existing cache entries with page numbers (keys) greater than or equal
-// to the value of the iLimit parameter passed to xTruncate(). If any
-// of these pages are pinned, they are implicitly unpinned, meaning that
-// they can be safely discarded.
-//
-// [[the xDestroy() page cache method]]
-// ^The xDestroy() method is used to delete a cache allocated by xCreate().
-// All resources associated with the specified cache should be freed. ^After
-// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
-// handle invalid, and will not use it with any other sqlite3_pcache_methods2
-// functions.
-//
-// [[the xShrink() page cache method]]
-// ^SQLite invokes the xShrink() method when it wants the page cache to
-// free up as much of heap memory as possible.  The page cache implementation
-// is not obligated to free any memory, but well-behaved implementations should
-// do their best.
-type sqlite3_pcache_methods2 = sqlite3_pcache_methods21 /* sqlite3.h:8738:40 */
+type sqlite3_pcache_methods2 = sqlite3_pcache_methods21
 
-// This is the obsolete pcache_methods object that has now been replaced
-// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
-// retained in the header file for backwards compatibility only.
 type sqlite3_pcache_methods1 = struct {
 	pArg       uintptr
 	xInit      uintptr
@@ -2420,87 +669,13 @@ type sqlite3_pcache_methods1 = struct {
 	xRekey     uintptr
 	xTruncate  uintptr
 	xDestroy   uintptr
-} /* sqlite3.h:8761:9 */
+}
 
-// This is the obsolete pcache_methods object that has now been replaced
-// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
-// retained in the header file for backwards compatibility only.
-type sqlite3_pcache_methods = sqlite3_pcache_methods1 /* sqlite3.h:8761:39 */
+type sqlite3_pcache_methods = sqlite3_pcache_methods1
 
-// CAPI3REF: Database Snapshot
-// KEYWORDS: {snapshot} {sqlite3_snapshot}
-//
-// An instance of the snapshot object records the state of a [WAL mode]
-// database for some specific point in history.
-//
-// In [WAL mode], multiple [database connections] that are open on the
-// same database file can each be reading a different historical version
-// of the database file.  When a [database connection] begins a read
-// transaction, that connection sees an unchanging copy of the database
-// as it existed for the point in time when the transaction first started.
-// Subsequent changes to the database from other connections are not seen
-// by the reader until a new read transaction is started.
-//
-// The sqlite3_snapshot object records state information about an historical
-// version of the database file so that it is possible to later open a new read
-// transaction that sees that historical version of the database rather than
-// the most recent version.
-type sqlite3_snapshot1 = struct{ hidden [48]uint8 } /* sqlite3.h:10079:9 */
+type sqlite3_snapshot1 = struct{ hidden [48]uint8 }
 
-// CAPI3REF: Database Snapshot
-// KEYWORDS: {snapshot} {sqlite3_snapshot}
-//
-// An instance of the snapshot object records the state of a [WAL mode]
-// database for some specific point in history.
-//
-// In [WAL mode], multiple [database connections] that are open on the
-// same database file can each be reading a different historical version
-// of the database file.  When a [database connection] begins a read
-// transaction, that connection sees an unchanging copy of the database
-// as it existed for the point in time when the transaction first started.
-// Subsequent changes to the database from other connections are not seen
-// by the reader until a new read transaction is started.
-//
-// The sqlite3_snapshot object records state information about an historical
-// version of the database file so that it is possible to later open a new read
-// transaction that sees that historical version of the database rather than
-// the most recent version.
-type sqlite3_snapshot = sqlite3_snapshot1 /* sqlite3.h:10081:3 */
-
-// CAPI3REF: Flags for sqlite3_deserialize()
-//
-// The following are allowed values for 6th argument (the F argument) to
-// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
-//
-// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
-// in the P argument is held in memory obtained from [sqlite3_malloc64()]
-// and that SQLite should take ownership of this memory and automatically
-// free it when it has finished using it.  Without this flag, the caller
-// is responsible for freeing any dynamically allocated memory.
-//
-// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
-// grow the size of the database using calls to [sqlite3_realloc64()].  This
-// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
-// Without this flag, the deserialized database cannot increase in size beyond
-// the number of bytes specified by the M parameter.
-//
-// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
-// should be treated as read-only.
-
-// Undo the hack that converts floating point types to integer for
-// builds on processors without floating point support.
-
-//******* Begin file sqlite3rtree.h ********
-// 2010 August 30
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
+type sqlite3_snapshot = sqlite3_snapshot1
 
 type sqlite3_rtree_geometry1 = struct {
 	pContext uintptr
@@ -2509,44 +684,9 @@ type sqlite3_rtree_geometry1 = struct {
 	aParam   uintptr
 	pUser    uintptr
 	xDelUser uintptr
-} /* sqlite3.h:10410:9 */
+}
 
-// CAPI3REF: Flags for sqlite3_deserialize()
-//
-// The following are allowed values for 6th argument (the F argument) to
-// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
-//
-// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
-// in the P argument is held in memory obtained from [sqlite3_malloc64()]
-// and that SQLite should take ownership of this memory and automatically
-// free it when it has finished using it.  Without this flag, the caller
-// is responsible for freeing any dynamically allocated memory.
-//
-// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
-// grow the size of the database using calls to [sqlite3_realloc64()].  This
-// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
-// Without this flag, the deserialized database cannot increase in size beyond
-// the number of bytes specified by the M parameter.
-//
-// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
-// should be treated as read-only.
-
-// Undo the hack that converts floating point types to integer for
-// builds on processors without floating point support.
-
-//******* Begin file sqlite3rtree.h ********
-// 2010 August 30
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-
-type sqlite3_rtree_geometry = sqlite3_rtree_geometry1 /* sqlite3.h:10410:39 */
+type sqlite3_rtree_geometry = sqlite3_rtree_geometry1
 type sqlite3_rtree_query_info1 = struct {
 	pContext      uintptr
 	nParam        int32
@@ -2566,44 +706,11 @@ type sqlite3_rtree_query_info1 = struct {
 	eWithin       int32
 	rScore        sqlite3_rtree_dbl
 	apSqlParam    uintptr
-} /* sqlite3.h:10411:9 */
+}
 
-type sqlite3_rtree_query_info = sqlite3_rtree_query_info1 /* sqlite3.h:10411:41 */
+type sqlite3_rtree_query_info = sqlite3_rtree_query_info1
 
-// The double-precision datatype used by RTree depends on the
-// SQLITE_RTREE_INT_ONLY compile-time option.
-type sqlite3_rtree_dbl = float64 /* sqlite3.h:10419:18 */
-
-// Allowed values for sqlite3_rtree_query.eWithin and .eParentWithin.
-
-//******* End of sqlite3rtree.h ********
-//******* Begin file sqlite3session.h ********
-
-//******* End of sqlite3session.h ********
-//******* Begin file fts5.h ********
-// 2014 May 31
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// Interfaces to extend FTS5. Using the interfaces defined in this file,
-// FTS5 may be extended with:
-//
-//     * custom tokenizers, and
-//     * custom auxiliary functions.
-
-// ************************************************************************
-//
-// CUSTOM AUXILIARY FUNCTIONS
-//
-// Virtual table implementations may overload SQL functions by implementing
-// the sqlite3_module.xFindFunction() method.
+type sqlite3_rtree_dbl = float64
 
 type Fts5ExtensionApi1 = struct {
 	iVersion           int32
@@ -2627,132 +734,34 @@ type Fts5ExtensionApi1 = struct {
 	xPhraseNext        uintptr
 	xPhraseFirstColumn uintptr
 	xPhraseNextColumn  uintptr
-} /* sqlite3.h:12266:9 */
+}
 
-// Allowed values for sqlite3_rtree_query.eWithin and .eParentWithin.
-
-//******* End of sqlite3rtree.h ********
-//******* Begin file sqlite3session.h ********
-
-//******* End of sqlite3session.h ********
-//******* Begin file fts5.h ********
-// 2014 May 31
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// Interfaces to extend FTS5. Using the interfaces defined in this file,
-// FTS5 may be extended with:
-//
-//     * custom tokenizers, and
-//     * custom auxiliary functions.
-
-// ************************************************************************
-//
-// CUSTOM AUXILIARY FUNCTIONS
-//
-// Virtual table implementations may overload SQL functions by implementing
-// the sqlite3_module.xFindFunction() method.
-
-type Fts5ExtensionApi = Fts5ExtensionApi1 /* sqlite3.h:12266:33 */
+type Fts5ExtensionApi = Fts5ExtensionApi1
 type Fts5PhraseIter1 = struct {
 	a uintptr
 	b uintptr
-} /* sqlite3.h:12268:9 */
+}
 
-type Fts5PhraseIter = Fts5PhraseIter1 /* sqlite3.h:12268:31 */
+type Fts5PhraseIter = Fts5PhraseIter1
 
-type fts5_extension_function = uintptr /* sqlite3.h:12270:14 */
+type fts5_extension_function = uintptr
 type fts5_tokenizer1 = struct {
 	xCreate   uintptr
 	xDelete   uintptr
 	xTokenize uintptr
-} /* sqlite3.h:12729:9 */
+}
 
-type fts5_tokenizer = fts5_tokenizer1 /* sqlite3.h:12729:31 */
+type fts5_tokenizer = fts5_tokenizer1
 
-// Flags that may be passed as the third argument to xTokenize()
-
-// Flags that may be passed by the tokenizer implementation back to FTS5
-// as the third argument to the supplied xToken callback.
-
-//
-// END OF CUSTOM TOKENIZERS
-//
-
-// ************************************************************************
-//
-// FTS5 EXTENSION REGISTRATION API
 type fts5_api1 = struct {
 	iVersion         int32
 	_                [4]byte
 	xCreateTokenizer uintptr
 	xFindTokenizer   uintptr
 	xCreateFunction  uintptr
-} /* sqlite3.h:12765:9 */
+}
 
-// Flags that may be passed as the third argument to xTokenize()
-
-// Flags that may be passed by the tokenizer implementation back to FTS5
-// as the third argument to the supplied xToken callback.
-
-//
-// END OF CUSTOM TOKENIZERS
-//
-
-// ************************************************************************
-//
-// FTS5 EXTENSION REGISTRATION API
-type fts5_api = fts5_api1 /* sqlite3.h:12765:25 */
-
-// POSIX.1-2008 extended locale interface (see locale.h).
-// Definition of locale_t.
-//    Copyright (C) 2017-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Definition of struct __locale_struct and __locale_t.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//    Contributed by Ulrich Drepper <drepper@cygnus.com>, 1997.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// POSIX.1-2008: the locale_t type, representing a locale context
-//    (implementation-namespace version).  This type should be treated
-//    as opaque by applications; some details are exposed for the sake of
-//    efficiency in e.g. ctype functions.
+type fts5_api = fts5_api1
 
 type __locale_struct = struct {
 	__locales       [13]uintptr
@@ -2760,490 +769,98 @@ type __locale_struct = struct {
 	__ctype_tolower uintptr
 	__ctype_toupper uintptr
 	__names         [13]uintptr
-} /* __locale_t.h:28:1 */
+}
 
-type locale_t = uintptr /* locale_t.h:24:20 */
+type locale_t = uintptr
 
-// Seconds since the Epoch, visible to user code when time_t is too
-//    narrow only for consistency with the old way of widening too-narrow
-//    types.  User code should never use __time64_t.
+type u_char = uint8
+type u_short = uint16
+type u_int = uint32
+type u_long = uint64
+type quad_t = int64
+type u_quad_t = uint64
+type fsid_t = struct{ __val [2]int32 }
+type loff_t = int64
 
-type u_char = uint8                    /* types.h:33:18 */
-type u_short = uint16                  /* types.h:34:19 */
-type u_int = uint32                    /* types.h:35:17 */
-type u_long = uint64                   /* types.h:36:18 */
-type quad_t = int64                    /* types.h:37:18 */
-type u_quad_t = uint64                 /* types.h:38:20 */
-type fsid_t = struct{ __val [2]int32 } /* types.h:39:18 */
-type loff_t = int64                    /* types.h:42:18 */
+type ino_t = uint64
 
-type ino_t = uint64 /* types.h:49:19 */
+type dev_t = uint64
 
-type dev_t = uint64 /* types.h:59:17 */
+type gid_t = uint32
 
-type gid_t = uint32 /* types.h:64:17 */
+type mode_t = uint32
 
-type mode_t = uint32 /* types.h:69:18 */
+type nlink_t = uint64
 
-type nlink_t = uint64 /* types.h:74:19 */
+type uid_t = uint32
 
-type uid_t = uint32 /* types.h:79:17 */
+type off_t = int64
 
-type off_t = int64 /* types.h:87:19 */
+type pid_t = int32
 
-type pid_t = int32 /* types.h:97:17 */
+type id_t = uint32
 
-type id_t = uint32 /* types.h:103:16 */
+type ssize_t = int64
 
-type ssize_t = int64 /* types.h:108:19 */
+type daddr_t = int32
+type caddr_t = uintptr
 
-type daddr_t = int32   /* types.h:114:19 */
-type caddr_t = uintptr /* types.h:115:19 */
+type key_t = int32
 
-type key_t = int32 /* types.h:121:17 */
+type clock_t = int64
 
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type clockid_t = int32
 
-// Never include this file directly; use <sys/types.h> instead.
+type time_t = int64
 
-// Returned by `clock'.
-type clock_t = int64 /* clock_t.h:7:19 */
+type timer_t = uintptr
 
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type ulong = uint64
+type ushort = uint16
+type uint = uint32
 
-// Never include this file directly; use <sys/types.h> instead.
+type int8_t = int8
+type int16_t = int16
+type int32_t = int32
+type int64_t = int64
 
-// Clock ID used in clock and timer functions.
-type clockid_t = int32 /* clockid_t.h:7:21 */
+type u_int8_t = uint8
+type u_int16_t = uint16
+type u_int32_t = uint32
+type u_int64_t = uint64
 
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type register_t = int32
 
-// Never include this file directly; use <sys/types.h> instead.
+type sigset_t = struct{ __val [16]uint64 }
 
-// Returned by `time'.
-type time_t = int64 /* time_t.h:7:18 */
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Timer ID returned by `timer_create'.
-type timer_t = uintptr /* timer_t.h:7:19 */
-
-// Copyright (C) 1989-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 3, or (at your option)
-// any later version.
-//
-// GCC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// ISO C Standard:  7.17  Common definitions  <stddef.h>
-
-// Any one of these symbols __need_* means that GNU libc
-//    wants us just to define one data type.  So don't define
-//    the symbols that indicate this file's entire job has been done.
-
-// This avoids lossage on SunOS but only if stdtypes.h comes first.
-//    There's no way to win with the other order!  Sun lossage.
-
-// Sequent's header files use _PTRDIFF_T_ in some conflicting way.
-//    Just ignore it.
-
-// On VxWorks, <type/vxTypesBase.h> may have defined macros like
-//    _TYPE_size_t which will typedef size_t.  fixincludes patched the
-//    vxTypesBase.h so that this macro is only defined if _GCC_SIZE_T is
-//    not defined, and so that defining this macro defines _GCC_SIZE_T.
-//    If we find that the macros are still defined at this point, we must
-//    invoke them so that the type is defined as expected.
-
-// In case nobody has defined these types, but we aren't running under
-//    GCC 2.00, make sure that __PTRDIFF_TYPE__, __SIZE_TYPE__, and
-//    __WCHAR_TYPE__ have reasonable values.  This can happen if the
-//    parts of GCC is compiled by an older compiler, that actually
-//    include gstddef.h, such as collect2.
-
-// Signed type of difference of two pointers.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Unsigned type of `sizeof' something.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Wide character type.
-//    Locale-writers should change this as necessary to
-//    be big enough to hold unique values not between 0 and 127,
-//    and not (wchar_t) -1, for each defined multibyte character.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// A null pointer constant.
-
-// Old compatibility names for C types.
-type ulong = uint64  /* types.h:148:27 */
-type ushort = uint16 /* types.h:149:28 */
-type uint = uint32   /* types.h:150:22 */
-
-// These size-specific names are used by some of the inet code.
-
-// Define intN_t types.
-//    Copyright (C) 2017-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-type int8_t = int8   /* stdint-intn.h:24:18 */
-type int16_t = int16 /* stdint-intn.h:25:19 */
-type int32_t = int32 /* stdint-intn.h:26:19 */
-type int64_t = int64 /* stdint-intn.h:27:19 */
-
-// These were defined by ISO C without the first `_'.
-type u_int8_t = uint8   /* types.h:158:19 */
-type u_int16_t = uint16 /* types.h:159:20 */
-type u_int32_t = uint32 /* types.h:160:20 */
-type u_int64_t = uint64 /* types.h:161:20 */
-
-type register_t = int32 /* types.h:164:13 */
-
-// A set of signals to be blocked, unblocked, or waited for.
-type sigset_t = struct{ __val [16]uint64 } /* sigset_t.h:7:20 */
-
-// Get definition of timer specification structures.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// A time value that is accurate to the nearest
-//
-//	microsecond but also has a range of years.
 type timeval = struct {
 	tv_sec  int64
 	tv_usec int64
-} /* struct_timeval.h:8:1 */
+}
 
-// NB: Include guard matches what <linux/time.h> uses.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Endian macros for string.h functions
-//    Copyright (C) 1992-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <http://www.gnu.org/licenses/>.
-
-// POSIX.1b structure for a time value.  This is like a `struct timeval' but
-//
-//	has nanoseconds instead of microseconds.
 type timespec = struct {
 	tv_sec  int64
 	tv_nsec int64
-} /* struct_timespec.h:10:1 */
+}
 
-type suseconds_t = int64 /* select.h:43:23 */
+type suseconds_t = int64
 
-// Some versions of <linux/posix_types.h> define this macros.
-// It's easier to assume 8-bit bytes than to get CHAR_BIT.
+type fd_set = struct{ __fds_bits [16]int64 }
 
-// fd_set for select and pselect.
-type fd_set = struct{ __fds_bits [16]int64 } /* select.h:70:5 */
+type fd_mask = int64
 
-// Maximum number of file descriptors in `fd_set'.
+type blksize_t = int64
 
-// Sometimes the fd_set member is assumed to have this type.
-type fd_mask = int64 /* select.h:77:19 */
-
-// Define some inlines helping to catch common problems.
-
-type blksize_t = int64 /* types.h:185:21 */
-
-// Types from the Large File Support interface.
-type blkcnt_t = int64    /* types.h:205:22 */ // Type to count number of disk blocks.
-type fsblkcnt_t = uint64 /* types.h:209:24 */ // Type to count file system blocks.
-type fsfilcnt_t = uint64 /* types.h:213:24 */ // Type to count file system inodes.
-
-// Now add the thread types.
-// Declaration of common pthread types for all architectures.
-//    Copyright (C) 2017-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// For internal mutex and condition variable definitions.
-// Common threading primitives definitions for both POSIX and C11.
-//    Copyright (C) 2017-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Arch-specific definitions.  Each architecture must define the following
-//    macros to define the expected sizes of pthread data types:
-//
-//    __SIZEOF_PTHREAD_ATTR_T        - size of pthread_attr_t.
-//    __SIZEOF_PTHREAD_MUTEX_T       - size of pthread_mutex_t.
-//    __SIZEOF_PTHREAD_MUTEXATTR_T   - size of pthread_mutexattr_t.
-//    __SIZEOF_PTHREAD_COND_T        - size of pthread_cond_t.
-//    __SIZEOF_PTHREAD_CONDATTR_T    - size of pthread_condattr_t.
-//    __SIZEOF_PTHREAD_RWLOCK_T      - size of pthread_rwlock_t.
-//    __SIZEOF_PTHREAD_RWLOCKATTR_T  - size of pthread_rwlockattr_t.
-//    __SIZEOF_PTHREAD_BARRIER_T     - size of pthread_barrier_t.
-//    __SIZEOF_PTHREAD_BARRIERATTR_T - size of pthread_barrierattr_t.
-//
-//    The additional macro defines any constraint for the lock alignment
-//    inside the thread structures:
-//
-//    __LOCK_ALIGNMENT - for internal lock/futex usage.
-//
-//    Same idea but for the once locking primitive:
-//
-//    __ONCE_ALIGNMENT - for pthread_once_t/once_flag definition.
-
-// Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Determine the wordsize from the preprocessor defines.
-
-// Both x86-64 and x32 use the 64-bit system call interface.
-
-// Common definition of pthread_mutex_t.
+type blkcnt_t = int64
+type fsblkcnt_t = uint64
+type fsfilcnt_t = uint64
 
 type __pthread_internal_list = struct {
 	__prev uintptr
 	__next uintptr
-} /* thread-shared-types.h:49:9 */
+}
 
-type __pthread_internal_slist = struct{ __next uintptr } /* thread-shared-types.h:55:9 */
-
-// Arch-specific mutex definitions.  A generic implementation is provided
-//    by sysdeps/nptl/bits/struct_mutex.h.  If required, an architecture
-//    can override it by defining:
-//
-//    1. struct __pthread_mutex_s (used on both pthread_mutex_t and mtx_t
-//       definition).  It should contains at least the internal members
-//       defined in the generic version.
-//
-//    2. __LOCK_ALIGNMENT for any extra attribute for internal lock used with
-//       atomic operations.
-//
-//    3. The macro __PTHREAD_MUTEX_INITIALIZER used for static initialization.
-//       It should initialize the mutex internal flag.
-
-// x86 internal mutex struct definitions.
-//    Copyright (C) 2019-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <http://www.gnu.org/licenses/>.
+type __pthread_internal_slist = struct{ __next uintptr }
 
 type __pthread_mutex_s = struct {
 	__lock    int32
@@ -3257,37 +874,7 @@ type __pthread_mutex_s = struct {
 		__prev uintptr
 		__next uintptr
 	}
-} /* struct_mutex.h:22:1 */
-
-// Arch-sepecific read-write lock definitions.  A generic implementation is
-//    provided by struct_rwlock.h.  If required, an architecture can override it
-//    by defining:
-//
-//    1. struct __pthread_rwlock_arch_t (used on pthread_rwlock_t definition).
-//       It should contain at least the internal members defined in the
-//       generic version.
-//
-//    2. The macro __PTHREAD_RWLOCK_INITIALIZER used for static initialization.
-//       It should initialize the rwlock internal type.
-
-// x86 internal rwlock struct definitions.
-//    Copyright (C) 2019-2020 Free Software Foundation, Inc.
-//
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <http://www.gnu.org/licenses/>.
+}
 
 type __pthread_rwlock_arch_t = struct {
 	__readers       uint32
@@ -3303,9 +890,7 @@ type __pthread_rwlock_arch_t = struct {
 	__pad2          uint64
 	__flags         uint32
 	_               [4]byte
-} /* struct_rwlock.h:23:1 */
-
-// Common definition of pthread_cond_t.
+}
 
 type __pthread_cond_s = struct {
 	__0            struct{ __wseq uint64 }
@@ -3315,153 +900,53 @@ type __pthread_cond_s = struct {
 	__g1_orig_size uint32
 	__wrefs        uint32
 	__g_signals    [2]uint32
-} /* thread-shared-types.h:92:1 */
+}
 
-// Thread identifiers.  The structure of the attribute type is not
-//
-//	exposed on purpose.
-type pthread_t = uint64 /* pthreadtypes.h:27:27 */
+type pthread_t = uint64
 
-// Data structures for mutex handling.  The structure of the attribute
-//
-//	type is not exposed on purpose.
 type pthread_mutexattr_t = struct {
 	_      [0]uint32
 	__size [4]int8
-} /* pthreadtypes.h:36:3 */
+}
 
-// Data structure for condition variable handling.  The structure of
-//
-//	the attribute type is not exposed on purpose.
 type pthread_condattr_t = struct {
 	_      [0]uint32
 	__size [4]int8
-} /* pthreadtypes.h:45:3 */
+}
 
-// Keys for thread-specific data
-type pthread_key_t = uint32 /* pthreadtypes.h:49:22 */
+type pthread_key_t = uint32
 
-// Once-only execution
-type pthread_once_t = int32 /* pthreadtypes.h:53:30 */
+type pthread_once_t = int32
 
 type pthread_attr_t1 = struct {
 	_      [0]uint64
 	__size [56]int8
-} /* pthreadtypes.h:56:1 */
+}
 
-type pthread_attr_t = pthread_attr_t1 /* pthreadtypes.h:62:30 */
+type pthread_attr_t = pthread_attr_t1
 
-type pthread_mutex_t = struct{ __data __pthread_mutex_s } /* pthreadtypes.h:72:3 */
+type pthread_mutex_t = struct{ __data __pthread_mutex_s }
 
-type pthread_cond_t = struct{ __data __pthread_cond_s } /* pthreadtypes.h:80:3 */
+type pthread_cond_t = struct{ __data __pthread_cond_s }
 
-// Data structure for reader-writer lock variable handling.  The
-//
-//	structure of the attribute type is deliberately not exposed.
-type pthread_rwlock_t = struct{ __data __pthread_rwlock_arch_t } /* pthreadtypes.h:91:3 */
+type pthread_rwlock_t = struct{ __data __pthread_rwlock_arch_t }
 
 type pthread_rwlockattr_t = struct {
 	_      [0]uint64
 	__size [8]int8
-} /* pthreadtypes.h:97:3 */
+}
 
-// POSIX spinlock data type.
-type pthread_spinlock_t = int32 /* pthreadtypes.h:103:22 */
+type pthread_spinlock_t = int32
 
-// POSIX barriers data type.  The structure of the type is
-//
-//	deliberately not exposed.
 type pthread_barrier_t = struct {
 	_      [0]uint64
 	__size [32]int8
-} /* pthreadtypes.h:112:3 */
+}
 
 type pthread_barrierattr_t = struct {
 	_      [0]uint32
 	__size [4]int8
-} /* pthreadtypes.h:118:3 */
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	POSIX Standard: 5.6 File Characteristics	<sys/stat.h>
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// NB: Include guard matches what <linux/time.h> uses.
-
-// The Single Unix specification says that some more types are
-//    available here.
-
-// Copyright (C) 1999-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Versions of the `struct stat' data structure.
-
-// x86-64 versions of the `xmknod' interface.
+}
 
 type stat = struct {
 	st_dev     uint64
@@ -3488,122 +973,7 @@ type stat = struct {
 		tv_nsec int64
 	}
 	__glibc_reserved [3]int64
-} /* stat.h:46:1 */
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	POSIX Standard: 6.5 File Control Operations	<fcntl.h>
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// This must be early so <bits/fcntl.h> can define types winningly.
-
-// Get __mode_t, __dev_t and __off_t  .
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Get the definitions of O_*, F_*, FD_*: all the
-//    numbers and flag bits for `open', `fcntl', et al.
-// O_*, F_*, FD_* bit values for Linux/x86.
-//    Copyright (C) 2001-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Not necessary, we always have 64-bit offsets.
+}
 
 type flock = struct {
 	l_type   int16
@@ -3613,728 +983,15 @@ type flock = struct {
 	l_len    int64
 	l_pid    int32
 	_        [4]byte
-} /* fcntl.h:35:1 */
+}
 
-// Compatibility header for old-style Unix parameters and limits.
-//    Copyright (C) 1995-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type sig_atomic_t = int32
 
-// Copyright (C) 1989-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 3, or (at your option)
-// any later version.
-//
-// GCC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// ISO C Standard:  7.17  Common definitions  <stddef.h>
-
-// Any one of these symbols __need_* means that GNU libc
-//    wants us just to define one data type.  So don't define
-//    the symbols that indicate this file's entire job has been done.
-
-// This avoids lossage on SunOS but only if stdtypes.h comes first.
-//    There's no way to win with the other order!  Sun lossage.
-
-// Sequent's header files use _PTRDIFF_T_ in some conflicting way.
-//    Just ignore it.
-
-// On VxWorks, <type/vxTypesBase.h> may have defined macros like
-//    _TYPE_size_t which will typedef size_t.  fixincludes patched the
-//    vxTypesBase.h so that this macro is only defined if _GCC_SIZE_T is
-//    not defined, and so that defining this macro defines _GCC_SIZE_T.
-//    If we find that the macros are still defined at this point, we must
-//    invoke them so that the type is defined as expected.
-
-// In case nobody has defined these types, but we aren't running under
-//    GCC 2.00, make sure that __PTRDIFF_TYPE__, __SIZE_TYPE__, and
-//    __WCHAR_TYPE__ have reasonable values.  This can happen if the
-//    parts of GCC is compiled by an older compiler, that actually
-//    include gstddef.h, such as collect2.
-
-// Signed type of difference of two pointers.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Unsigned type of `sizeof' something.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Wide character type.
-//    Locale-writers should change this as necessary to
-//    be big enough to hold unique values not between 0 and 127,
-//    and not (wchar_t) -1, for each defined multibyte character.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// A null pointer constant.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	POSIX Standard: 2.6 Primitive System Data Types	<sys/types.h>
-
-// Copyright (C) 1992-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 3, or (at your option) any later
-// version.
-//
-// GCC is distributed in the hope that it will be useful, but WITHOUT ANY
-// WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-// for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// This administrivia gets added to the beginning of limits.h
-//    if the system has its own version of limits.h.
-
-// We use _GCC_LIMITS_H_ because we want this not to match
-//    any macros that the system's limits.h uses for its own purposes.
-
-// Use "..." so that we find syslimits.h only in this same directory.
-// syslimits.h stands for the system's own limits.h file.
-//    If we can use it ok unmodified, then we install this text.
-//    If fixincludes fixes it, then the fixed version is installed
-//    instead of this text.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	ISO C99 Standard: 7.10/5.2.4.2.1 Sizes of integer types	<limits.h>
-
-// Handle feature test macros at the start of a header.
-//    Copyright (C) 2016-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// This header is internal to glibc and should not be included outside
-//    of glibc headers.  Headers including it must define
-//    __GLIBC_INTERNAL_STARTING_HEADER_IMPLEMENTATION first.  This header
-//    cannot have multiple include guards because ISO C feature test
-//    macros depend on the definition of the macro when an affected
-//    header is included, not when the first system header is
-//    included.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// ISO/IEC TR 24731-2:2010 defines the __STDC_WANT_LIB_EXT2__
-//    macro.
-
-// ISO/IEC TS 18661-1:2014 defines the __STDC_WANT_IEC_60559_BFP_EXT__
-//    macro.  Most but not all symbols enabled by that macro in TS
-//    18661-1 are enabled unconditionally in C2X; the symbols in Annex F
-//    still require that macro in C2X.
-
-// ISO/IEC TS 18661-4:2015 defines the
-//    __STDC_WANT_IEC_60559_FUNCS_EXT__ macro.  Other than the reduction
-//    functions, the symbols from this TS are enabled unconditionally in
-//    C2X.
-
-// ISO/IEC TS 18661-3:2015 defines the
-//    __STDC_WANT_IEC_60559_TYPES_EXT__ macro.
-
-// Maximum length of any multibyte character in any locale.
-//    We define this value here since the gcc header does not define
-//    the correct value.
-
-// If we are not using GNU CC we have to define all the symbols ourself.
-//    Otherwise use gcc's definitions (see below).
-
-// Get the compiler's limits.h, which defines almost all the ISO constants.
-//
-//     We put this #include_next outside the double inclusion check because
-//     it should be possible to include this file more than once and still get
-//     the definitions from gcc's header.
-
-// The <limits.h> files in some gcc versions don't define LLONG_MIN,
-//    LLONG_MAX, and ULLONG_MAX.  Instead only the values gcc defined for
-//    ages are available.
-
-// The integer width macros are not defined by GCC's <limits.h> before
-//    GCC 7, or if _GNU_SOURCE rather than
-//    __STDC_WANT_IEC_60559_BFP_EXT__ is used to enable this feature.
-
-// POSIX adds things to <limits.h>.
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	POSIX Standard: 2.9.2 Minimum Values	Added to <limits.h>
-//
-//	Never include this file directly; use <limits.h> instead.
-
-// Determine the wordsize from the preprocessor defines.
-
-// Both x86-64 and x32 use the 64-bit system call interface.
-
-// These are the standard-mandated minimum values.
-
-// Minimum number of operations in one list I/O call.
-
-// Minimal number of outstanding asynchronous I/O operations.
-
-// Maximum length of arguments to `execve', including environment.
-
-// Maximum simultaneous processes per real user ID.
-
-// Minimal number of timer expiration overruns.
-
-// Maximum length of a host name (not including the terminating null)
-//    as returned from the GETHOSTNAME function.
-
-// Maximum link count of a file.
-
-// Maximum length of login name.
-
-// Number of bytes in a terminal canonical input queue.
-
-// Number of bytes for which space will be
-//    available in a terminal input queue.
-
-// Maximum number of message queues open for a process.
-
-// Maximum number of supported message priorities.
-
-// Number of bytes in a filename.
-
-// Number of simultaneous supplementary group IDs per process.
-
-// Number of files one process can have open at once.
-
-// Number of bytes in a pathname.
-
-// Number of bytes than can be written atomically to a pipe.
-
-// The number of repeated occurrences of a BRE permitted by the
-//    REGEXEC and REGCOMP functions when using the interval notation.
-
-// Minimal number of realtime signals reserved for the application.
-
-// Number of semaphores a process can have.
-
-// Maximal value of a semaphore.
-
-// Number of pending realtime signals.
-
-// Largest value of a `ssize_t'.
-
-// Number of streams a process can have open at once.
-
-// The number of bytes in a symbolic link.
-
-// The number of symbolic links that can be traversed in the
-//    resolution of a pathname in the absence of a loop.
-
-// Number of timer for a process.
-
-// Maximum number of characters in a tty name.
-
-// Maximum length of a timezone name (element of `tzname').
-
-// Maximum clock resolution in nanoseconds.
-
-// Get the implementation-specific values for the above.
-// Minimum guaranteed maximum values for system limits.  Linux version.
-//    Copyright (C) 1993-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public License as
-//    published by the Free Software Foundation; either version 2.1 of the
-//    License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; see the file COPYING.LIB.  If
-//    not, see <https://www.gnu.org/licenses/>.
-
-// The kernel header pollutes the namespace with the NR_OPEN symbol
-//    and defines LINK_MAX although filesystems have different maxima.  A
-//    similar thing is true for OPEN_MAX: the limit can be changed at
-//    runtime and therefore the macro must not be defined.  Remove this
-//    after including the header if necessary.
-
-// The kernel sources contain a file with all the needed information.
-// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
-
-// Have to remove NR_OPEN?
-// Have to remove LINK_MAX?
-// Have to remove OPEN_MAX?
-// Have to remove ARG_MAX?
-
-// The number of data keys per process.
-// This is the value this implementation supports.
-
-// Controlling the iterations of destructors for thread-specific data.
-// Number of iterations this implementation does.
-
-// The number of threads per process.
-// We have no predefined limit on the number of threads.
-
-// Maximum amount by which a process can descrease its asynchronous I/O
-//    priority level.
-
-// Minimum size for a thread.  We are free to choose a reasonable value.
-
-// Maximum number of timer expiration overruns.
-
-// Maximum tty name length.
-
-// Maximum login name length.  This is arbitrary.
-
-// Maximum host name length.
-
-// Maximum message queue priority level.
-
-// Maximum value the semaphore can have.
-
-// ssize_t is not formally required to be the signed type
-//    corresponding to size_t, but it is for all configurations supported
-//    by glibc.
-
-// This value is a guaranteed minimum maximum.
-//    The current maximum can be got from `sysconf'.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; include <limits.h> instead.
-
-// The maximum `ibase' and `obase' values allowed by the `bc' utility.
-
-// The maximum number of elements allowed in an array by the `bc' utility.
-
-// The maximum `scale' value allowed by the `bc' utility.
-
-// The maximum length of a string constant accepted by the `bc' utility.
-
-// The maximum number of weights that can be assigned to an entry of
-//    the LC_COLLATE `order' keyword in the locale definition file.
-
-// The maximum number of expressions that can be nested
-//    within parentheses by the `expr' utility.
-
-// The maximum length, in bytes, of an input line.
-
-// The maximum number of repeated occurrences of a regular expression
-//    permitted when using the interval notation `\{M,N\}'.
-
-// The maximum number of bytes in a character class name.  We have no
-//    fixed limit, 2048 is a high number.
-
-// These values are implementation-specific,
-//    and may vary within the implementation.
-//    Their precise values can be obtained from sysconf.
-
-// This value is defined like this in regex.h.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 3, or (at your option) any later
-// version.
-//
-// GCC is distributed in the hope that it will be useful, but WITHOUT ANY
-// WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-// for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// Number of bits in a `char'.
-
-// Maximum length of a multibyte character.
-
-// Minimum and maximum values a `signed char' can hold.
-
-// Maximum value an `unsigned char' can hold.  (Minimum is 0).
-
-// Minimum and maximum values a `char' can hold.
-
-// Minimum and maximum values a `signed short int' can hold.
-
-// Maximum value an `unsigned short int' can hold.  (Minimum is 0).
-
-// Minimum and maximum values a `signed int' can hold.
-
-// Maximum value an `unsigned int' can hold.  (Minimum is 0).
-
-// Minimum and maximum values a `signed long int' can hold.
-//    (Same as `int').
-
-// Maximum value an `unsigned long int' can hold.  (Minimum is 0).
-
-// Minimum and maximum values a `signed long long int' can hold.
-
-// Maximum value an `unsigned long long int' can hold.  (Minimum is 0).
-
-// This administrivia gets added to the end of limits.h
-//    if the system has its own version of limits.h.
-
-// Copyright (C) 1992-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	ISO C99 Standard: 7.14 Signal handling <signal.h>
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Signal number definitions.  Linux version.
-//    Copyright (C) 1995-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Signal number constants.  Generic template.
-//    Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Fake signal functions.
-
-// We define here all the signal names listed in POSIX (1003.1-2008);
-//    as of 1003.1-2013, no additional signals have been added by POSIX.
-//    We also define here signal names that historically exist in every
-//    real-world POSIX variant (e.g. SIGWINCH).
-//
-//    Signals in the 1-15 range are defined with their historical numbers.
-//    For other signals, we use the BSD numbers.
-//    There are two unallocated signal numbers in the 1-31 range: 7 and 29.
-//    Signal number 0 is reserved for use as kill(pid, 0), to test whether
-//    a process exists without sending it a signal.
-
-// ISO C99 signals.
-
-// Historical signals specified by POSIX.
-
-// New(er) POSIX signals (1003.1-2008, 1003.1-2013).
-
-// Nonstandard signals found in all modern POSIX systems
-//    (including both BSD and Linux).
-
-// Archaic names for compatibility.
-
-// Not all systems support real-time signals.  bits/signum.h indicates
-//    that they are supported by overriding __SIGRTMAX to a value greater
-//    than __SIGRTMIN.  These constants give the kernel-level hard limits,
-//    but some real-time signals may be used internally by glibc.  Do not
-//    use these constants in application code; use SIGRTMIN and SIGRTMAX
-//    (defined in signal.h) instead.
-
-// Biggest signal number + 1 (including real-time signals).
-
-// Adjustments and additions to the signal number constants for
-//    most Linux systems.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// An integral type that can be modified atomically, without the
-//
-//	possibility of a signal arriving in the middle of the operation.
-type sig_atomic_t = int32 /* sig_atomic_t.h:8:24 */
-
-// We need `struct timespec' later on.
-// NB: Include guard matches what <linux/time.h> uses.
-
-// Determine the wordsize from the preprocessor defines.
-
-// Both x86-64 and x32 use the 64-bit system call interface.
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Define __sigval_t.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Type for data associated with a signal.
 type sigval = struct {
 	_         [0]uint64
 	sival_int int32
 	_         [4]byte
-} /* __sigval_t.h:24:1 */
-
-// Some fields of siginfo_t have architecture-specific variations.
-// Architecture-specific adjustments to siginfo_t.  x86 version.
+}
 
 type siginfo_t = struct {
 	si_signo  int32
@@ -4345,82 +1002,10 @@ type siginfo_t = struct {
 		_    [0]uint64
 		_pad [28]int32
 	}
-} /* siginfo_t.h:124:5 */
+}
 
-// Architectures might also add architecture-specific constants.
-//    These are all considered GNU extensions.
+type sigval_t = sigval
 
-// Define __sigval_t.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// To avoid sigval_t (not a standard type name) having C++ name
-//    mangling depending on whether the selected standard includes union
-//    sigval, it should not be defined at all when using a standard for
-//    which the sigval name is not reserved; in that case, headers should
-//    not include <bits/types/sigval_t.h> and should use only the
-//    internal __sigval_t name.
-
-type sigval_t = sigval /* sigval_t.h:16:20 */
-
-// Determine the wordsize from the preprocessor defines.
-
-// Both x86-64 and x32 use the 64-bit system call interface.
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Define __sigval_t.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Forward declaration.
-
-// Structure to transport application-defined values with signals.
 type sigevent = struct {
 	sigev_value struct {
 		_         [0]uint64
@@ -4433,123 +1018,19 @@ type sigevent = struct {
 		_    [0]uint64
 		_pad [12]int32
 	}
-} /* sigevent_t.h:22:9 */
+}
 
-// Determine the wordsize from the preprocessor defines.
+type sigevent_t = sigevent
 
-// Both x86-64 and x32 use the 64-bit system call interface.
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type sig_t = uintptr
 
-// Never include this file directly; use <sys/types.h> instead.
-
-// Define __sigval_t.
-//    Copyright (C) 1997-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Forward declaration.
-
-// Structure to transport application-defined values with signals.
-type sigevent_t = sigevent /* sigevent_t.h:42:5 */
-
-// 4.4 BSD uses the name `sig_t' for this.
-type sig_t = uintptr /* signal.h:190:24 */
-
-// Get the system-specific definitions of `struct sigaction'
-//    and the `SA_*' and `SIG_*'. constants.
-// The proper definitions for Linux's sigaction.
-//    Copyright (C) 1993-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Structure describing the action to be taken when a signal arrives.
 type sigaction = struct {
 	__sigaction_handler struct{ sa_handler uintptr }
 	sa_mask             struct{ __val [16]uint64 }
 	sa_flags            int32
 	_                   [4]byte
 	sa_restorer         uintptr
-} /* sigaction.h:27:1 */
-
-// Get machine-dependent `struct sigcontext' and signal subcodes.
-// Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
+}
 
 type _fpx_sw_bytes = struct {
 	magic1            uint32
@@ -4557,20 +1038,20 @@ type _fpx_sw_bytes = struct {
 	xstate_bv         uint64
 	xstate_size       uint32
 	__glibc_reserved1 [7]uint32
-} /* sigcontext.h:31:1 */
+}
 
 type _fpreg = struct {
 	significand [4]uint16
 	exponent    uint16
-} /* sigcontext.h:40:1 */
+}
 
 type _fpxreg = struct {
 	significand       [4]uint16
 	exponent          uint16
 	__glibc_reserved1 [3]uint16
-} /* sigcontext.h:46:1 */
+}
 
-type _xmmreg = struct{ element [4]uint32 } /* sigcontext.h:53:1 */
+type _xmmreg = struct{ element [4]uint32 }
 
 type _fpstate = struct {
 	cwd       uint16
@@ -4588,7 +1069,7 @@ type _fpstate = struct {
 	}
 	_xmm              [16]struct{ element [4]uint32 }
 	__glibc_reserved1 [24]uint32
-} /* sigcontext.h:123:1 */
+}
 
 type sigcontext = struct {
 	r8          uint64
@@ -4619,15 +1100,15 @@ type sigcontext = struct {
 	cr2         uint64
 	__184       struct{ fpstate uintptr }
 	__reserved1 [8]uint64
-} /* sigcontext.h:139:1 */
+}
 
 type _xsave_hdr = struct {
 	xstate_bv         uint64
 	__glibc_reserved1 [2]uint64
 	__glibc_reserved2 [5]uint64
-} /* sigcontext.h:177:1 */
+}
 
-type _ymmh_state = struct{ ymmh_space [64]uint32 } /* sigcontext.h:184:1 */
+type _ymmh_state = struct{ ymmh_space [64]uint32 }
 
 type _xstate = struct {
 	fpstate struct {
@@ -4653,258 +1134,26 @@ type _xstate = struct {
 		__glibc_reserved2 [5]uint64
 	}
 	ymmh struct{ ymmh_space [64]uint32 }
-} /* sigcontext.h:189:1 */
+}
 
-// Copyright (C) 1989-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 3, or (at your option)
-// any later version.
-//
-// GCC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// ISO C Standard:  7.17  Common definitions  <stddef.h>
-
-// Any one of these symbols __need_* means that GNU libc
-//    wants us just to define one data type.  So don't define
-//    the symbols that indicate this file's entire job has been done.
-
-// This avoids lossage on SunOS but only if stdtypes.h comes first.
-//    There's no way to win with the other order!  Sun lossage.
-
-// Sequent's header files use _PTRDIFF_T_ in some conflicting way.
-//    Just ignore it.
-
-// On VxWorks, <type/vxTypesBase.h> may have defined macros like
-//    _TYPE_size_t which will typedef size_t.  fixincludes patched the
-//    vxTypesBase.h so that this macro is only defined if _GCC_SIZE_T is
-//    not defined, and so that defining this macro defines _GCC_SIZE_T.
-//    If we find that the macros are still defined at this point, we must
-//    invoke them so that the type is defined as expected.
-
-// In case nobody has defined these types, but we aren't running under
-//    GCC 2.00, make sure that __PTRDIFF_TYPE__, __SIZE_TYPE__, and
-//    __WCHAR_TYPE__ have reasonable values.  This can happen if the
-//    parts of GCC is compiled by an older compiler, that actually
-//    include gstddef.h, such as collect2.
-
-// Signed type of difference of two pointers.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Unsigned type of `sizeof' something.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Wide character type.
-//    Locale-writers should change this as necessary to
-//    be big enough to hold unique values not between 0 and 127,
-//    and not (wchar_t) -1, for each defined multibyte character.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// A null pointer constant.
-
-// Define stack_t.  Linux version.
-//    Copyright (C) 1998-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Copyright (C) 1989-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 3, or (at your option)
-// any later version.
-//
-// GCC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// ISO C Standard:  7.17  Common definitions  <stddef.h>
-
-// Any one of these symbols __need_* means that GNU libc
-//    wants us just to define one data type.  So don't define
-//    the symbols that indicate this file's entire job has been done.
-
-// This avoids lossage on SunOS but only if stdtypes.h comes first.
-//    There's no way to win with the other order!  Sun lossage.
-
-// Sequent's header files use _PTRDIFF_T_ in some conflicting way.
-//    Just ignore it.
-
-// On VxWorks, <type/vxTypesBase.h> may have defined macros like
-//    _TYPE_size_t which will typedef size_t.  fixincludes patched the
-//    vxTypesBase.h so that this macro is only defined if _GCC_SIZE_T is
-//    not defined, and so that defining this macro defines _GCC_SIZE_T.
-//    If we find that the macros are still defined at this point, we must
-//    invoke them so that the type is defined as expected.
-
-// In case nobody has defined these types, but we aren't running under
-//    GCC 2.00, make sure that __PTRDIFF_TYPE__, __SIZE_TYPE__, and
-//    __WCHAR_TYPE__ have reasonable values.  This can happen if the
-//    parts of GCC is compiled by an older compiler, that actually
-//    include gstddef.h, such as collect2.
-
-// Signed type of difference of two pointers.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Unsigned type of `sizeof' something.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Wide character type.
-//    Locale-writers should change this as necessary to
-//    be big enough to hold unique values not between 0 and 127,
-//    and not (wchar_t) -1, for each defined multibyte character.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// A null pointer constant.
-
-// Structure describing a signal stack.
 type stack_t = struct {
 	ss_sp    uintptr
 	ss_flags int32
 	_        [4]byte
 	ss_size  size_t
-} /* stack_t.h:31:5 */
+}
 
-// This will define `ucontext_t' and `mcontext_t'.
-// Copyright (C) 2001-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type greg_t = int64
 
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Define stack_t.  Linux version.
-//    Copyright (C) 1998-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Type for general register.
-type greg_t = int64 /* ucontext.h:37:37 */
-
-// Number of general registers.
-
-// Container for all general registers.
-type gregset_t = [23]greg_t /* ucontext.h:46:16 */
+type gregset_t = [23]greg_t
 
 type _libc_fpxreg = struct {
 	significand       [4]uint16
 	exponent          uint16
 	__glibc_reserved1 [3]uint16
-} /* ucontext.h:101:1 */
+}
 
-type _libc_xmmreg = struct{ element [4]uint32 } /* ucontext.h:108:1 */
+type _libc_xmmreg = struct{ element [4]uint32 }
 
 type _libc_fpstate = struct {
 	cwd       uint16
@@ -4922,19 +1171,16 @@ type _libc_fpstate = struct {
 	}
 	_xmm              [16]struct{ element [4]uint32 }
 	__glibc_reserved1 [24]uint32
-} /* ucontext.h:113:1 */
+}
 
-// Structure to describe FPU registers.
-type fpregset_t = uintptr /* ucontext.h:130:30 */
+type fpregset_t = uintptr
 
-// Context to describe whole processor state.
 type mcontext_t = struct {
 	gregs       gregset_t
 	fpregs      fpregset_t
 	__reserved1 [8]uint64
-} /* ucontext.h:139:3 */
+}
 
-// Userlevel context.
 type ucontext_t1 = struct {
 	uc_flags     uint64
 	uc_link      uintptr
@@ -4959,750 +1205,22 @@ type ucontext_t1 = struct {
 		__glibc_reserved1 [24]uint32
 	}
 	__ssp [4]uint64
-} /* ucontext.h:142:9 */
+}
 
-// Userlevel context.
-type ucontext_t = ucontext_t1 /* ucontext.h:151:5 */
+type ucontext_t = ucontext_t1
 
-// Define struct sigstack.
-//    Copyright (C) 1998-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Structure describing a signal stack (obsolete).
 type sigstack = struct {
 	ss_sp      uintptr
 	ss_onstack int32
 	_          [4]byte
-} /* struct_sigstack.h:23:1 */
+}
 
-// System-specific extensions.
-// System-specific extensions of <signal.h>, Linux version.
-//    Copyright (C) 2019-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type useconds_t = uint32
 
-// This file defines some things in system-specific ways.
-// Old-style Unix parameters and limits.  Linux version.
-//    Copyright (C) 1995-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type intptr_t = int64
 
-// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
-// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
+type socklen_t = uint32
 
-// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
-
-// The kernel headers define ARG_MAX.  The value is wrong, though.
-
-// The following are not really correct but it is a value we used for a
-//    long time and which seems to be usable.  People should not use NOFILE
-//    and NCARGS anyway.
-
-// BSD names for some <limits.h> values.
-
-// Magical constants.
-
-// Unit of `st_blocks'.
-
-// Bit map related macros.
-
-// Macros for counting and rounding.
-
-// Macros for min/max.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	POSIX Standard: 2.10 Symbolic Constants		<unistd.h>
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// These may be used to determine what facilities are present at compile time.
-//    Their values can be obtained at run time from `sysconf'.
-
-// POSIX Standard approved as ISO/IEC 9945-1 as of September 2008.
-
-// These are not #ifdef __USE_POSIX2 because they are
-//    in the theoretically application-owned namespace.
-
-// The utilities on GNU systems also correspond to this version.
-
-// The utilities on GNU systems also correspond to this version.
-
-// This symbol was required until the 2001 edition of POSIX.
-
-// If defined, the implementation supports the
-//    C Language Bindings Option.
-
-// If defined, the implementation supports the
-//    C Language Development Utilities Option.
-
-// If defined, the implementation supports the
-//    Software Development Utilities Option.
-
-// If defined, the implementation supports the
-//    creation of locales with the localedef utility.
-
-// X/Open version number to which the library conforms.  It is selectable.
-
-// Commands and utilities from XPG4 are available.
-
-// We are compatible with the old published standards as well.
-
-// The X/Open Unix extensions are available.
-
-// The enhanced internationalization capabilities according to XPG4.2
-//    are present.
-
-// The legacy interfaces are also available.
-
-// Get values of POSIX options:
-//
-//    If these symbols are defined, the corresponding features are
-//    always available.  If not, they may be available sometimes.
-//    The current values can be obtained with `sysconf'.
-//
-//    _POSIX_JOB_CONTROL		Job control is supported.
-//    _POSIX_SAVED_IDS		Processes have a saved set-user-ID
-// 				and a saved set-group-ID.
-//    _POSIX_REALTIME_SIGNALS	Real-time, queued signals are supported.
-//    _POSIX_PRIORITY_SCHEDULING	Priority scheduling is supported.
-//    _POSIX_TIMERS		POSIX.4 clocks and timers are supported.
-//    _POSIX_ASYNCHRONOUS_IO	Asynchronous I/O is supported.
-//    _POSIX_PRIORITIZED_IO	Prioritized asynchronous I/O is supported.
-//    _POSIX_SYNCHRONIZED_IO	Synchronizing file data is supported.
-//    _POSIX_FSYNC			The fsync function is present.
-//    _POSIX_MAPPED_FILES		Mapping of files to memory is supported.
-//    _POSIX_MEMLOCK		Locking of all memory is supported.
-//    _POSIX_MEMLOCK_RANGE		Locking of ranges of memory is supported.
-//    _POSIX_MEMORY_PROTECTION	Setting of memory protections is supported.
-//    _POSIX_MESSAGE_PASSING	POSIX.4 message queues are supported.
-//    _POSIX_SEMAPHORES		POSIX.4 counting semaphores are supported.
-//    _POSIX_SHARED_MEMORY_OBJECTS	POSIX.4 shared memory objects are supported.
-//    _POSIX_THREADS		POSIX.1c pthreads are supported.
-//    _POSIX_THREAD_ATTR_STACKADDR	Thread stack address attribute option supported.
-//    _POSIX_THREAD_ATTR_STACKSIZE	Thread stack size attribute option supported.
-//    _POSIX_THREAD_SAFE_FUNCTIONS	Thread-safe functions are supported.
-//    _POSIX_THREAD_PRIORITY_SCHEDULING
-// 				POSIX.1c thread execution scheduling supported.
-//    _POSIX_THREAD_PRIO_INHERIT	Thread priority inheritance option supported.
-//    _POSIX_THREAD_PRIO_PROTECT	Thread priority protection option supported.
-//    _POSIX_THREAD_PROCESS_SHARED	Process-shared synchronization supported.
-//    _POSIX_PII			Protocol-independent interfaces are supported.
-//    _POSIX_PII_XTI		XTI protocol-indep. interfaces are supported.
-//    _POSIX_PII_SOCKET		Socket protocol-indep. interfaces are supported.
-//    _POSIX_PII_INTERNET		Internet family of protocols supported.
-//    _POSIX_PII_INTERNET_STREAM	Connection-mode Internet protocol supported.
-//    _POSIX_PII_INTERNET_DGRAM	Connectionless Internet protocol supported.
-//    _POSIX_PII_OSI		ISO/OSI family of protocols supported.
-//    _POSIX_PII_OSI_COTS		Connection-mode ISO/OSI service supported.
-//    _POSIX_PII_OSI_CLTS		Connectionless ISO/OSI service supported.
-//    _POSIX_POLL			Implementation supports `poll' function.
-//    _POSIX_SELECT		Implementation supports `select' and `pselect'.
-//
-//    _XOPEN_REALTIME		X/Open realtime support is available.
-//    _XOPEN_REALTIME_THREADS	X/Open realtime thread support is available.
-//    _XOPEN_SHM			Shared memory interface according to XPG4.2.
-//
-//    _XBS5_ILP32_OFF32		Implementation provides environment with 32-bit
-// 				int, long, pointer, and off_t types.
-//    _XBS5_ILP32_OFFBIG		Implementation provides environment with 32-bit
-// 				int, long, and pointer and off_t with at least
-// 				64 bits.
-//    _XBS5_LP64_OFF64		Implementation provides environment with 32-bit
-// 				int, and 64-bit long, pointer, and off_t types.
-//    _XBS5_LPBIG_OFFBIG		Implementation provides environment with at
-// 				least 32 bits int and long, pointer, and off_t
-// 				with at least 64 bits.
-//
-//    If any of these symbols is defined as -1, the corresponding option is not
-//    true for any file.  If any is defined as other than -1, the corresponding
-//    option is true for all files.  If a symbol is not defined at all, the value
-//    for a specific file can be obtained from `pathconf' and `fpathconf'.
-//
-//    _POSIX_CHOWN_RESTRICTED	Only the super user can use `chown' to change
-// 				the owner of a file.  `chown' can only be used
-// 				to change the group ID of a file to a group of
-// 				which the calling process is a member.
-//    _POSIX_NO_TRUNC		Pathname components longer than
-// 				NAME_MAX generate an error.
-//    _POSIX_VDISABLE		If defined, if the value of an element of the
-// 				`c_cc' member of `struct termios' is
-// 				_POSIX_VDISABLE, no character will have the
-// 				effect associated with that element.
-//    _POSIX_SYNC_IO		Synchronous I/O may be performed.
-//    _POSIX_ASYNC_IO		Asynchronous I/O may be performed.
-//    _POSIX_PRIO_IO		Prioritized Asynchronous I/O may be performed.
-//
-//    Support for the Large File Support interface is not generally available.
-//    If it is available the following constants are defined to one.
-//    _LFS64_LARGEFILE		Low-level I/O supports large files.
-//    _LFS64_STDIO			Standard I/O supports large files.
-//
-
-// Define POSIX options for Linux.
-//    Copyright (C) 1996-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public License as
-//    published by the Free Software Foundation; either version 2.1 of the
-//    License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; see the file COPYING.LIB.  If
-//    not, see <https://www.gnu.org/licenses/>.
-
-// Job control is supported.
-
-// Processes have a saved set-user-ID and a saved set-group-ID.
-
-// Priority scheduling is not supported with the correct semantics,
-//    but GNU/Linux applications expect that the corresponding interfaces
-//    are available, even though the semantics do not meet the POSIX
-//    requirements.  See glibc bug 14829.
-
-// Synchronizing file data is supported.
-
-// The fsync function is present.
-
-// Mapping of files to memory is supported.
-
-// Locking of all memory is supported.
-
-// Locking of ranges of memory is supported.
-
-// Setting of memory protections is supported.
-
-// Some filesystems allow all users to change file ownership.
-
-// `c_cc' member of 'struct termios' structure can be disabled by
-//    using the value _POSIX_VDISABLE.
-
-// Filenames are not silently truncated.
-
-// X/Open realtime support is available.
-
-// X/Open thread realtime support is available.
-
-// XPG4.2 shared memory is supported.
-
-// Tell we have POSIX threads.
-
-// We have the reentrant functions described in POSIX.
-
-// We provide priority scheduling for threads.
-
-// We support user-defined stack sizes.
-
-// We support user-defined stacks.
-
-// We support priority inheritence.
-
-// We support priority protection, though only for non-robust
-//    mutexes.
-
-// We support priority inheritence for robust mutexes.
-
-// We do not support priority protection for robust mutexes.
-
-// We support POSIX.1b semaphores.
-
-// Real-time signals are supported.
-
-// We support asynchronous I/O.
-// Alternative name for Unix98.
-// Support for prioritization is also available.
-
-// The LFS support in asynchronous I/O is also available.
-
-// The rest of the LFS is also available.
-
-// POSIX shared memory objects are implemented.
-
-// CPU-time clocks support needs to be checked at runtime.
-
-// Clock support in threads must be also checked at runtime.
-
-// GNU libc provides regular expression handling.
-
-// Reader/Writer locks are available.
-
-// We have a POSIX shell.
-
-// We support the Timeouts option.
-
-// We support spinlocks.
-
-// The `spawn' function family is supported.
-
-// We have POSIX timers.
-
-// The barrier functions are available.
-
-// POSIX message queues are available.
-
-// Thread process-shared synchronization is supported.
-
-// The monotonic clock might be available.
-
-// The clock selection interfaces are available.
-
-// Advisory information interfaces are available.
-
-// IPv6 support is available.
-
-// Raw socket support is available.
-
-// We have at least one terminal.
-
-// Neither process nor thread sporadic server interfaces is available.
-
-// trace.h is not available.
-
-// Typed memory objects are not available.
-
-// Get the environment definitions from Unix98.
-// Copyright (C) 1999-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Determine the wordsize from the preprocessor defines.
-
-// Both x86-64 and x32 use the 64-bit system call interface.
-
-// This header should define the following symbols under the described
-//    situations.  A value `1' means that the model is always supported,
-//    `-1' means it is never supported.  Undefined means it cannot be
-//    statically decided.
-//
-//    _POSIX_V7_ILP32_OFF32   32bit int, long, pointers, and off_t type
-//    _POSIX_V7_ILP32_OFFBIG  32bit int, long, and pointers and larger off_t type
-//
-//    _POSIX_V7_LP64_OFF32	   64bit long and pointers and 32bit off_t type
-//    _POSIX_V7_LPBIG_OFFBIG  64bit long and pointers and large off_t type
-//
-//    The macros _POSIX_V6_ILP32_OFF32, _POSIX_V6_ILP32_OFFBIG,
-//    _POSIX_V6_LP64_OFF32, _POSIX_V6_LPBIG_OFFBIG, _XBS5_ILP32_OFF32,
-//    _XBS5_ILP32_OFFBIG, _XBS5_LP64_OFF32, and _XBS5_LPBIG_OFFBIG were
-//    used in previous versions of the Unix standard and are available
-//    only for compatibility.
-
-// Environments with 32-bit wide pointers are optionally provided.
-//    Therefore following macros aren't defined:
-//    # undef _POSIX_V7_ILP32_OFF32
-//    # undef _POSIX_V7_ILP32_OFFBIG
-//    # undef _POSIX_V6_ILP32_OFF32
-//    # undef _POSIX_V6_ILP32_OFFBIG
-//    # undef _XBS5_ILP32_OFF32
-//    # undef _XBS5_ILP32_OFFBIG
-//    and users need to check at runtime.
-
-// We also have no use (for now) for an environment with bigger pointers
-//    and offsets.
-
-// By default we have 64-bit wide `long int', pointers and `off_t'.
-
-// Standard file descriptors.
-
-// All functions that are not declared anywhere else.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// Copyright (C) 1989-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 3, or (at your option)
-// any later version.
-//
-// GCC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// ISO C Standard:  7.17  Common definitions  <stddef.h>
-
-// Any one of these symbols __need_* means that GNU libc
-//    wants us just to define one data type.  So don't define
-//    the symbols that indicate this file's entire job has been done.
-
-// This avoids lossage on SunOS but only if stdtypes.h comes first.
-//    There's no way to win with the other order!  Sun lossage.
-
-// Sequent's header files use _PTRDIFF_T_ in some conflicting way.
-//    Just ignore it.
-
-// On VxWorks, <type/vxTypesBase.h> may have defined macros like
-//    _TYPE_size_t which will typedef size_t.  fixincludes patched the
-//    vxTypesBase.h so that this macro is only defined if _GCC_SIZE_T is
-//    not defined, and so that defining this macro defines _GCC_SIZE_T.
-//    If we find that the macros are still defined at this point, we must
-//    invoke them so that the type is defined as expected.
-
-// In case nobody has defined these types, but we aren't running under
-//    GCC 2.00, make sure that __PTRDIFF_TYPE__, __SIZE_TYPE__, and
-//    __WCHAR_TYPE__ have reasonable values.  This can happen if the
-//    parts of GCC is compiled by an older compiler, that actually
-//    include gstddef.h, such as collect2.
-
-// Signed type of difference of two pointers.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Unsigned type of `sizeof' something.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Wide character type.
-//    Locale-writers should change this as necessary to
-//    be big enough to hold unique values not between 0 and 127,
-//    and not (wchar_t) -1, for each defined multibyte character.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// A null pointer constant.
-
-// The Single Unix specification says that some more types are
-//    available here.
-
-type useconds_t = uint32 /* unistd.h:255:22 */
-
-type intptr_t = int64 /* unistd.h:267:20 */
-
-type socklen_t = uint32 /* unistd.h:274:21 */
-
-// Define some macros helping to catch buffer overflows.
-
-// System-specific extensions.
-// System-specific extensions of <unistd.h>, Linux version.
-//    Copyright (C) 2019-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	ISO C99 Standard: 7.23 Date and time	<time.h>
-
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Copyright (C) 1989-2020 Free Software Foundation, Inc.
-//
-// This file is part of GCC.
-//
-// GCC is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 3, or (at your option)
-// any later version.
-//
-// GCC is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-//
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-// ISO C Standard:  7.17  Common definitions  <stddef.h>
-
-// Any one of these symbols __need_* means that GNU libc
-//    wants us just to define one data type.  So don't define
-//    the symbols that indicate this file's entire job has been done.
-
-// This avoids lossage on SunOS but only if stdtypes.h comes first.
-//    There's no way to win with the other order!  Sun lossage.
-
-// Sequent's header files use _PTRDIFF_T_ in some conflicting way.
-//    Just ignore it.
-
-// On VxWorks, <type/vxTypesBase.h> may have defined macros like
-//    _TYPE_size_t which will typedef size_t.  fixincludes patched the
-//    vxTypesBase.h so that this macro is only defined if _GCC_SIZE_T is
-//    not defined, and so that defining this macro defines _GCC_SIZE_T.
-//    If we find that the macros are still defined at this point, we must
-//    invoke them so that the type is defined as expected.
-
-// In case nobody has defined these types, but we aren't running under
-//    GCC 2.00, make sure that __PTRDIFF_TYPE__, __SIZE_TYPE__, and
-//    __WCHAR_TYPE__ have reasonable values.  This can happen if the
-//    parts of GCC is compiled by an older compiler, that actually
-//    include gstddef.h, such as collect2.
-
-// Signed type of difference of two pointers.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Unsigned type of `sizeof' something.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// Wide character type.
-//    Locale-writers should change this as necessary to
-//    be big enough to hold unique values not between 0 and 127,
-//    and not (wchar_t) -1, for each defined multibyte character.
-
-// Define this type if we are doing the whole job,
-//    or if we want this type in particular.
-
-// A null pointer constant.
-
-// This defines CLOCKS_PER_SEC, which is the number of processor clock
-//    ticks per second, and possibly a number of other constants.
-// System-dependent timing definitions.  Linux version.
-//    Copyright (C) 1996-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <time.h> instead.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// ISO/IEC 9899:1999 7.23.1: Components of time
-//    The macro `CLOCKS_PER_SEC' is an expression with type `clock_t' that is
-//    the number per second of the value returned by the `clock' function.
-// CAE XSH, Issue 4, Version 2: <time.h>
-//    The value of CLOCKS_PER_SEC is required to be 1 million on all
-//    XSI-conformant systems.
-
-// Identifier for system-wide realtime clock.
-// Monotonic system-wide clock.
-// High-resolution timer from the CPU.
-// Thread-specific CPU-time clock.
-// Monotonic system-wide clock, not adjusted for frequency scaling.
-// Identifier for system-wide realtime clock, updated only on ticks.
-// Monotonic system-wide clock, updated only on ticks.
-// Monotonic system-wide clock that includes time spent in suspension.
-// Like CLOCK_REALTIME but also wakes suspended system.
-// Like CLOCK_BOOTTIME but also wakes suspended system.
-// Like CLOCK_REALTIME but in International Atomic Time.
-
-// Flag to indicate time is absolute.
-
-// Many of the typedefs and structs whose official home is this header
-//    may also need to be defined by other headers.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// ISO C `broken-down time' structure.
 type tm = struct {
 	tm_sec    int32
 	tm_min    int32
@@ -5716,33 +1234,8 @@ type tm = struct {
 	_         [4]byte
 	tm_gmtoff int64
 	tm_zone   uintptr
-} /* struct_tm.h:7:1 */
+}
 
-// NB: Include guard matches what <linux/time.h> uses.
-
-// bits/types.h -- definitions of __*_t types underlying *_t types.
-//    Copyright (C) 2002-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-// Never include this file directly; use <sys/types.h> instead.
-
-// NB: Include guard matches what <linux/time.h> uses.
-
-// POSIX.1b structure for timer start values and intervals.
 type itimerspec = struct {
 	it_interval struct {
 		tv_sec  int64
@@ -5752,35 +1245,8 @@ type itimerspec = struct {
 		tv_sec  int64
 		tv_nsec int64
 	}
-} /* struct_itimerspec.h:8:1 */
+}
 
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
-
-//	POSIX Standard: 6.5 File Control Operations	<fcntl.h>
-
-// #define hook __builtin_printf("TRC %s:%i:\n", __func__, __LINE__);
-
-// Size of the write buffer used by journal files in bytes.
-
-// The maximum pathname length supported by this VFS.
-
-// When using this VFS, the sqlite3_file* handles that SQLite uses are
-// actually pointers to instances of type VFSFile.
 type VFSFile1 = struct {
 	base        sqlite3_file
 	fsFile      uintptr
@@ -5790,50 +1256,21 @@ type VFSFile1 = struct {
 	nBuffer     int32
 	_           [4]byte
 	iBufferOfst sqlite3_int64
-} /* vfs.c:156:9 */
+}
 
-// Copyright (C) 1991-2020 Free Software Foundation, Inc.
-//    This file is part of the GNU C Library.
-//
-//    The GNU C Library is free software; you can redistribute it and/or
-//    modify it under the terms of the GNU Lesser General Public
-//    License as published by the Free Software Foundation; either
-//    version 2.1 of the License, or (at your option) any later version.
-//
-//    The GNU C Library is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//    Lesser General Public License for more details.
-//
-//    You should have received a copy of the GNU Lesser General Public
-//    License along with the GNU C Library; if not, see
-//    <https://www.gnu.org/licenses/>.
+type VFSFile = VFSFile1
 
-//	POSIX Standard: 6.5 File Control Operations	<fcntl.h>
-
-// #define hook __builtin_printf("TRC %s:%i:\n", __func__, __LINE__);
-
-// Size of the write buffer used by journal files in bytes.
-
-// The maximum pathname length supported by this VFS.
-
-// When using this VFS, the sqlite3_file* handles that SQLite uses are
-// actually pointers to instances of type VFSFile.
-type VFSFile = VFSFile1 /* vfs.c:156:24 */
-
-// Write directly to the file passed as the first argument. Even if the
-// file has a write-buffer (VFSFile.aBuffer), ignore it.
-func vfsDirectWrite(tls *libc.TLS, p uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 { /* vfs.c:171:12: */
+func vfsDirectWrite(tls *libc.TLS, p uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
-	var ofst off_t    // Return value from lseek()
-	var nWrite size_t // Return value from write()
+	var ofst off_t
+	var nWrite size_t
 
 	libc.X__builtin_printf(tls, ts, libc.VaList(bp, uintptr(unsafe.Pointer(&__func__)), 180))
 	libc.X__builtin_abort(tls)
-	ofst = libc.Xlseek(tls, (*VFSFile)(unsafe.Pointer(p)).fd, int64(iOfst), 0)
-	if sqlite_int64(ofst) != iOfst {
+	ofst = libc.Xlseek(tls, (*VFSFile)(unsafe.Pointer(p)).fd, iOfst, 0)
+	if ofst != iOfst {
 		return 10 | int32(3)<<8
 	}
 
@@ -5845,12 +1282,9 @@ func vfsDirectWrite(tls *libc.TLS, p uintptr, zBuf uintptr, iAmt int32, iOfst sq
 	return 0
 }
 
-var __func__ = *(*[15]int8)(unsafe.Pointer(ts + 13)) /* vfs.c:176:2 */
+var __func__ = *(*[15]int8)(unsafe.Pointer(ts + 13))
 
-// Flush the contents of the VFSFile.aBuffer buffer to disk. This is a
-// no-op if this particular file does not have a buffer (i.e. it is not
-// a journal file) or if the buffer is currently empty.
-func vfsFlushBuffer(tls *libc.TLS, p uintptr) int32 { /* vfs.c:199:12: */
+func vfsFlushBuffer(tls *libc.TLS, p uintptr) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -5864,10 +1298,9 @@ func vfsFlushBuffer(tls *libc.TLS, p uintptr) int32 { /* vfs.c:199:12: */
 	return rc
 }
 
-var __func__1 = *(*[15]int8)(unsafe.Pointer(ts + 28)) /* vfs.c:199:38 */
+var __func__1 = *(*[15]int8)(unsafe.Pointer(ts + 28))
 
-// Write data to a crash-file.
-func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 { /* vfs.c:269:12: */
+func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -5876,16 +1309,13 @@ func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqli
 	var p uintptr = pFile
 
 	if (*VFSFile)(unsafe.Pointer(p)).aBuffer != 0 {
-		var z uintptr = zBuf        // Pointer to remaining data to write
-		var n int32 = iAmt          // Number of bytes at z
-		var i sqlite3_int64 = iOfst // File offset to write to
+		var z uintptr = zBuf
+		var n int32 = iAmt
+		var i sqlite3_int64 = iOfst
 
 		for n > 0 {
-			var nCopy int32 // Number of bytes to copy into buffer
+			var nCopy int32
 
-			// If the buffer is full, or if this data is not being written directly
-			// following the data already buffered, flush the buffer. Flushing
-			// the buffer is a no-op if it is empty.
 			if (*VFSFile)(unsafe.Pointer(p)).nBuffer == 8192 || (*VFSFile)(unsafe.Pointer(p)).iBufferOfst+sqlite3_int64((*VFSFile)(unsafe.Pointer(p)).nBuffer) != i {
 				var rc int32 = vfsFlushBuffer(tls, p)
 				if rc != 0 {
@@ -5898,7 +1328,6 @@ func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqli
 			}
 			(*VFSFile)(unsafe.Pointer(p)).iBufferOfst = i - sqlite3_int64((*VFSFile)(unsafe.Pointer(p)).nBuffer)
 
-			// Copy as much data as possible into the buffer.
 			nCopy = 8192 - (*VFSFile)(unsafe.Pointer(p)).nBuffer
 			if nCopy > n {
 				nCopy = n
@@ -5917,16 +1346,13 @@ func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqli
 	return 0
 }
 
-var __func__4 = *(*[9]int8)(unsafe.Pointer(ts + 95)) /* vfs.c:274:2 */
+var __func__4 = *(*[9]int8)(unsafe.Pointer(ts + 95))
 
-// Truncate a file. This is a no-op for this VFS (see header comments at
-// the top of the file).
-func vfsTruncate(tls *libc.TLS, pFile uintptr, size sqlite_int64) int32 { /* vfs.c:322:12: */
+func vfsTruncate(tls *libc.TLS, pFile uintptr, size sqlite_int64) int32 {
 	return 0
 }
 
-// Sync the contents of the file to the persistent media.
-func vfsSync(tls *libc.TLS, pFile uintptr, flags int32) int32 { /* vfs.c:332:12: */
+func vfsSync(tls *libc.TLS, pFile uintptr, flags int32) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -5949,51 +1375,40 @@ func vfsSync(tls *libc.TLS, pFile uintptr, flags int32) int32 { /* vfs.c:332:12:
 	}()
 }
 
-var __func__5 = *(*[8]int8)(unsafe.Pointer(ts + 104)) /* vfs.c:332:51 */
+var __func__5 = *(*[8]int8)(unsafe.Pointer(ts + 104))
 
-// Locking functions. The xLock() and xUnlock() methods are both no-ops.
-// The xCheckReservedLock() always indicates that no other process holds
-// a reserved lock on the database file. This ensures that if a hot-journal
-// file is found in the file-system it is rolled back.
-func vfsLock(tls *libc.TLS, pFile uintptr, eLock int32) int32 { /* vfs.c:377:12: */
+func vfsLock(tls *libc.TLS, pFile uintptr, eLock int32) int32 {
 	return 0
 }
 
-func vfsUnlock(tls *libc.TLS, pFile uintptr, eLock int32) int32 { /* vfs.c:380:12: */
+func vfsUnlock(tls *libc.TLS, pFile uintptr, eLock int32) int32 {
 	return 0
 }
 
-func vfsCheckReservedLock(tls *libc.TLS, pFile uintptr, pResOut uintptr) int32 { /* vfs.c:383:12: */
+func vfsCheckReservedLock(tls *libc.TLS, pFile uintptr, pResOut uintptr) int32 {
 	*(*int32)(unsafe.Pointer(pResOut)) = 0
 	return 0
 }
 
-// No xFileControl() verbs are implemented by this VFS.
-func vfsFileControl(tls *libc.TLS, pFile uintptr, op int32, pArg uintptr) int32 { /* vfs.c:391:12: */
+func vfsFileControl(tls *libc.TLS, pFile uintptr, op int32, pArg uintptr) int32 {
 	return 12
 }
 
-// The xSectorSize() and xDeviceCharacteristics() methods. These two
-// may return special values allowing SQLite to optimize file-system
-// access to some extent. But it is also safe to simply return 0.
-func vfsSectorSize(tls *libc.TLS, pFile uintptr) int32 { /* vfs.c:400:12: */
+func vfsSectorSize(tls *libc.TLS, pFile uintptr) int32 {
 	return 0
 }
 
-func vfsDeviceCharacteristics(tls *libc.TLS, pFile uintptr) int32 { /* vfs.c:403:12: */
+func vfsDeviceCharacteristics(tls *libc.TLS, pFile uintptr) int32 {
 	return 0
 }
 
-// Delete the file identified by argument zPath. If the dirSync parameter
-// is non-zero, then ensure the file-system modification to delete the
-// file has been synced to disk before returning.
-func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 { /* vfs.c:474:12: */
+func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 {
 	bp := tls.Alloc(4129)
 	defer tls.Free(4129)
 
 	libc.X__builtin_printf(tls, ts, libc.VaList(bp, uintptr(unsafe.Pointer(&__func__8)), 475))
 	libc.X__builtin_abort(tls)
-	var rc int32 // Return code
+	var rc int32
 
 	rc = libc.Xunlink(tls, zPath)
 	if rc != 0 && *(*int32)(unsafe.Pointer(libc.X__errno_location(tls))) == 2 {
@@ -6001,19 +1416,15 @@ func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 
 	}
 
 	if rc == 0 && dirSync != 0 {
-		var dfd int32 // File descriptor open on directory
-		var i int32   // Iterator variable
-		// var zDir [4097]int8 at bp+32, 4097
-		// Name of directory containing file zPath
+		var dfd int32
+		var i int32
 
-		// Figure out the directory name from the path of the file deleted.
 		sqlite3.Xsqlite3_snprintf(tls, 4096, bp+32, ts+112, libc.VaList(bp+16, zPath))
 		*(*int8)(unsafe.Pointer(bp + 32 + 4096)) = int8(0)
-		for i = int32(libc.Xstrlen(tls, bp+32)); i > 1 && int32(*(*int8)(unsafe.Pointer(bp + 32 /* &zDir[0] */ + uintptr(i)))) != '/'; i++ {
+		for i = int32(libc.Xstrlen(tls, bp+32)); i > 1 && int32(*(*int8)(unsafe.Pointer(bp + 32 + uintptr(i)))) != '/'; i++ {
 		}
 		*(*int8)(unsafe.Pointer(bp + 32 + uintptr(i))) = int8(0)
 
-		// Open a file-descriptor on the directory. Sync. Close.
 		dfd = libc.Xopen(tls, bp+32, 00, libc.VaList(bp+24, 0))
 		if dfd < 0 {
 			rc = -1
@@ -6030,110 +1441,83 @@ func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 
 	}()
 }
 
-var __func__8 = *(*[10]int8)(unsafe.Pointer(ts + 115)) /* vfs.c:474:72 */
+var __func__8 = *(*[10]int8)(unsafe.Pointer(ts + 115))
 
-// The following four VFS methods:
-//
-//	xDlOpen
-//	xDlError
-//	xDlSym
-//	xDlClose
-//
-// are supposed to implement the functionality needed by SQLite to load
-// extensions compiled as shared objects. This simple VFS does not support
-// this functionality, so the following functions are no-ops.
-func vfsDlOpen(tls *libc.TLS, pVfs uintptr, zPath uintptr) uintptr { /* vfs.c:585:13: */
+func vfsDlOpen(tls *libc.TLS, pVfs uintptr, zPath uintptr) uintptr {
 	return uintptr(0)
 }
 
-func vfsDlError(tls *libc.TLS, pVfs uintptr, nByte int32, zErrMsg uintptr) { /* vfs.c:588:13: */
+func vfsDlError(tls *libc.TLS, pVfs uintptr, nByte int32, zErrMsg uintptr) {
 	sqlite3.Xsqlite3_snprintf(tls, nByte, zErrMsg, ts+125, 0)
 	*(*int8)(unsafe.Pointer(zErrMsg + uintptr(nByte-1))) = int8(0)
 }
 
-func vfsDlSym(tls *libc.TLS, pVfs uintptr, pH uintptr, z uintptr) uintptr { /* vfs.c:592:13: */
+func vfsDlSym(tls *libc.TLS, pVfs uintptr, pH uintptr, z uintptr) uintptr {
 	return uintptr(0)
 }
 
-func vfsDlClose(tls *libc.TLS, pVfs uintptr, pHandle uintptr) { /* vfs.c:595:13: */
+func vfsDlClose(tls *libc.TLS, pVfs uintptr, pHandle uintptr) {
 	return
 }
 
-// Parameter zByte points to a buffer nByte bytes in size. Populate this
-// buffer with pseudo-random data.
-func vfsRandomness(tls *libc.TLS, pVfs uintptr, nByte int32, zByte uintptr) int32 { /* vfs.c:603:12: */
+func vfsRandomness(tls *libc.TLS, pVfs uintptr, nByte int32, zByte uintptr) int32 {
 	return 0
 }
 
-// Sleep for at least nMicro microseconds. Return the (approximate) number
-// of microseconds slept for.
-func vfsSleep(tls *libc.TLS, pVfs uintptr, nMicro int32) int32 { /* vfs.c:611:12: */
+func vfsSleep(tls *libc.TLS, pVfs uintptr, nMicro int32) int32 {
 	libc.Xsleep(tls, uint32(nMicro/1000000))
 	libc.Xusleep(tls, uint32(nMicro%1000000))
 	return nMicro
 }
 
-// Set *pTime to the current UTC time expressed as a Julian day. Return
-// SQLITE_OK if successful, or an error code otherwise.
-//
-//	http://en.wikipedia.org/wiki/Julian_day
-//
-// This implementation is not very good. The current time is rounded to
-// an integer number of seconds. Also, assuming time_t is a signed 32-bit
-// value, it will stop working some time in the year 2038 AD (the so-called
-// "year 2038" problem that afflicts systems that store time this way).
-func vfsCurrentTime(tls *libc.TLS, pVfs uintptr, pTime uintptr) int32 { /* vfs.c:628:12: */
+func vfsCurrentTime(tls *libc.TLS, pVfs uintptr, pTime uintptr) int32 {
 	var t time_t = libc.Xtime(tls, uintptr(0))
 	*(*float64)(unsafe.Pointer(pTime)) = float64(t)/86400.0 + 2440587.5
 	return 0
 }
 
-// This function returns a pointer to the VFS implemented in this file.
-// To make the VFS available to SQLite:
-//
-//	sqlite3_vfs_register(sqlite3_fsFS(), 0);
-func Xsqlite3_fsFS(tls *libc.TLS, zName uintptr, pAppData uintptr) uintptr { /* vfs.c:640:13: */
+func Xsqlite3_fsFS(tls *libc.TLS, zName uintptr, pAppData uintptr) uintptr {
 	var p uintptr = sqlite3.Xsqlite3_malloc(tls, int32(unsafe.Sizeof(sqlite3_vfs{})))
 	if !(p != 0) {
 		return uintptr(0)
 	}
 
 	*(*sqlite3_vfs)(unsafe.Pointer(p)) = sqlite3_vfs{
-		iVersion:   1,                               // iVersion
-		szOsFile:   int32(unsafe.Sizeof(VFSFile{})), // szOsFile
-		mxPathname: 4096,                            // pNext
-		zName:      zName,                           // zName
-		pAppData:   pAppData,                        // pAppData
+		iVersion:   1,
+		szOsFile:   int32(unsafe.Sizeof(VFSFile{})),
+		mxPathname: 4096,
+		zName:      zName,
+		pAppData:   pAppData,
 		xOpen: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, uintptr, int32, uintptr) int32
-		}{vfsOpen})), // xOpen
+		}{vfsOpen})),
 		xDelete: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, int32) int32
-		}{vfsDelete})), // xDelete
+		}{vfsDelete})),
 		xAccess: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32
-		}{vfsAccess})), // xAccess
+		}{vfsAccess})),
 		xFullPathname: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32
-		}{vfsFullPathname})), // xFullPathname
+		}{vfsFullPathname})),
 		xDlOpen: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr) uintptr
-		}{vfsDlOpen})), // xDlOpen
+		}{vfsDlOpen})),
 		xDlError: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, int32, uintptr)
-		}{vfsDlError})), // xDlError
+		}{vfsDlError})),
 		xDlSym: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, uintptr) uintptr
-		}{vfsDlSym})), // xDlSym
+		}{vfsDlSym})),
 		xDlClose: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr)
-		}{vfsDlClose})), // xDlClose
+		}{vfsDlClose})),
 		xRandomness: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, int32, uintptr) int32
-		}{vfsRandomness})), // xRandomness
+		}{vfsRandomness})),
 		xSleep: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, int32) int32
-		}{vfsSleep})), // xSleep
+		}{vfsSleep})),
 		xCurrentTime: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr) int32
 		}{vfsCurrentTime}))}

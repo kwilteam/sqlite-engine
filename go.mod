@@ -8,7 +8,7 @@ require (
 	modernc.org/ccgo/v3 v3.16.9
 	modernc.org/libc v1.19.0
 	modernc.org/mathutil v1.5.0
-	modernc.org/tcl v1.14.0
+	modernc.org/tcl v1.15.0
 )
 
 require (
@@ -26,7 +26,7 @@ require (
 	modernc.org/opt v0.1.3 // indirect
 	modernc.org/strutil v1.1.3 // indirect
 	modernc.org/token v1.0.1 // indirect
-	modernc.org/z v1.6.0 // indirect
+	modernc.org/z v1.7.0 // indirect
 )
 
 retract [v1.16.0, v1.17.2] // https://gitlab.com/cznic/sqlite/-/issues/100

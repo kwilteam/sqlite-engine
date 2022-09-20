@@ -20,33 +20,7 @@ var _ unsafe.Pointer
 var _ *libc.TLS
 var _ types.Size_t
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-const ( /* fcntl.h:547:1: */
+const (
 	FILESEC_OWNER   = 1
 	FILESEC_GROUP   = 2
 	FILESEC_UUID    = 3
@@ -54,12 +28,11 @@ const ( /* fcntl.h:547:1: */
 	FILESEC_ACL     = 5
 	FILESEC_GRPUUID = 6
 
-	// XXX these are private to the implementation
 	FILESEC_ACL_RAW       = 100
 	FILESEC_ACL_ALLOCSIZE = 101
 )
 
-const ( /* time.h:153:1: */
+const (
 	_CLOCK_REALTIME             = 0
 	_CLOCK_MONOTONIC            = 6
 	_CLOCK_MONOTONIC_RAW        = 4
@@ -70,442 +43,26 @@ const ( /* time.h:153:1: */
 	_CLOCK_THREAD_CPUTIME_ID    = 16
 )
 
-type ptrdiff_t = int64 /* <builtin>:3:26 */
+type ptrdiff_t = int64
 
-type size_t = uint64 /* <builtin>:9:23 */
+type size_t = uint64
 
-type wchar_t = int32 /* <builtin>:15:24 */
+type wchar_t = int32
 
-var X__darwin_check_fd_set_overflow uintptr /* <builtin>:146:5: */
+var X__darwin_check_fd_set_overflow uintptr
 
-// https://www.sqlite.org/src/doc/trunk/src/test_demovfs.c
+type va_list = uintptr
 
-// 2010 April 7
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// This file implements an example of a simple VFS implementation that
-// omits complex features often not required or not possible on embedded
-// platforms.  Code is included to buffer writes to the journal file,
-// which can be a significant performance improvement on some embedded
-// platforms.
-//
-// OVERVIEW
-//
-//   The code in this file implements a minimal SQLite VFS that can be
-//   used on Linux and other posix-like operating systems. The following
-//   system calls are used:
-//
-//    File-system: access(), unlink(), getcwd()
-//    File IO:     open(), read(), write(), fsync(), close(), fstat()
-//    Other:       sleep(), usleep(), time()
-//
-//   The following VFS features are omitted:
-//
-//     1. File locking. The user must ensure that there is at most one
-//        connection to each database when using this VFS. Multiple
-//        connections to a single shared-cache count as a single connection
-//        for the purposes of the previous statement.
-//
-//     2. The loading of dynamic extensions (shared libraries).
-//
-//     3. Temporary files. The user must configure SQLite to use in-memory
-//        temp files when using this VFS. The easiest way to do this is to
-//        compile with:
-//
-//          -DSQLITE_TEMP_STORE=3
-//
-//     4. File truncation. As of version 3.6.24, SQLite may run without
-//        a working xTruncate() call, providing the user does not configure
-//        SQLite to use "journal_mode=truncate", or use both
-//        "journal_mode=persist" and ATTACHed databases.
-//
-//   It is assumed that the system uses UNIX-like path-names. Specifically,
-//   that '/' characters are used to separate path components and that
-//   a path-name is a relative path unless it begins with a '/'. And that
-//   no UTF-8 encoded paths are greater than 512 bytes in length.
-//
-// JOURNAL WRITE-BUFFERING
-//
-//   To commit a transaction to the database, SQLite first writes rollback
-//   information into the journal file. This usually consists of 4 steps:
-//
-//     1. The rollback information is sequentially written into the journal
-//        file, starting at the start of the file.
-//     2. The journal file is synced to disk.
-//     3. A modification is made to the first few bytes of the journal file.
-//     4. The journal file is synced to disk again.
-//
-//   Most of the data is written in step 1 using a series of calls to the
-//   VFS xWrite() method. The buffers passed to the xWrite() calls are of
-//   various sizes. For example, as of version 3.6.24, when committing a
-//   transaction that modifies 3 pages of a database file that uses 4096
-//   byte pages residing on a media with 512 byte sectors, SQLite makes
-//   eleven calls to the xWrite() method to create the rollback journal,
-//   as follows:
-//
-//             Write offset | Bytes written
-//             ----------------------------
-//                        0            512
-//                      512              4
-//                      516           4096
-//                     4612              4
-//                     4616              4
-//                     4620           4096
-//                     8716              4
-//                     8720              4
-//                     8724           4096
-//                    12820              4
-//             ++++++++++++SYNC+++++++++++
-//                        0             12
-//             ++++++++++++SYNC+++++++++++
-//
-//   On many operating systems, this is an efficient way to write to a file.
-//   However, on some embedded systems that do not cache writes in OS
-//   buffers it is much more efficient to write data in blocks that are
-//   an integer multiple of the sector-size in size and aligned at the
-//   start of a sector.
-//
-//   To work around this, the code in this file allocates a fixed size
-//   buffer of SQLITE_VFS_BUFFERSZ using sqlite3_malloc() whenever a
-//   journal file is opened. It uses the buffer to coalesce sequential
-//   writes into aligned SQLITE_VFS_BUFFERSZ blocks. When SQLite
-//   invokes the xSync() method to sync the contents of the file to disk,
-//   all accumulated data is written out, even if it does not constitute
-//   a complete block. This means the actual IO to create the rollback
-//   journal for the example transaction above is this:
-//
-//             Write offset | Bytes written
-//             ----------------------------
-//                        0           8192
-//                     8192           4632
-//             ++++++++++++SYNC+++++++++++
-//                        0             12
-//             ++++++++++++SYNC+++++++++++
-//
-//   Much more efficient if the underlying OS is not caching write
-//   operations.
+type sqlite_int64 = int64
+type sqlite_uint64 = uint64
+type sqlite3_int64 = sqlite_int64
+type sqlite3_uint64 = sqlite_uint64
 
-// This file is modified to support Go's embed.FS
+type sqlite3_callback = uintptr
 
-// 2001-09-15
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-// This header file defines the interface that the SQLite library
-// presents to client programs.  If a C-function, structure, datatype,
-// or constant definition does not appear in this file, then it is
-// not a published API of SQLite, is subject to change without
-// notice, and should not be referenced by programs that use SQLite.
-//
-// Some of the definitions that are in this file are marked as
-// "experimental".  Experimental interfaces are normally new
-// features recently added to SQLite.  We do not anticipate changes
-// to experimental interfaces but reserve the right to make minor changes
-// if experience from use "in the wild" suggest such changes are prudent.
-//
-// The official C-language API documentation for SQLite is derived
-// from comments in this file.  This file is the authoritative source
-// on how SQLite interfaces are supposed to operate.
-//
-// The name of this file under configuration management is "sqlite.h.in".
-// The makefile makes some minor changes to this file (such as inserting
-// the version number) and changes its name to "sqlite3.h" as
-// part of the build process.
-// ===---- stdarg.h - Variable argument handling ----------------------------===
-//
-// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-// See https://llvm.org/LICENSE.txt for license information.
-// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-//
-//===-----------------------------------------------------------------------===
+type sqlite3_file1 = struct{ pMethods uintptr }
 
-type va_list = uintptr /* stdarg.h:14:27 */
-
-// CAPI3REF: 64-Bit Integer Types
-// KEYWORDS: sqlite_int64 sqlite_uint64
-//
-// Because there is no cross-platform way to specify 64-bit integer types
-// SQLite includes typedefs for 64-bit signed and unsigned integers.
-//
-// The sqlite3_int64 and sqlite3_uint64 are the preferred type definitions.
-// The sqlite_int64 and sqlite_uint64 types are supported for backwards
-// compatibility only.
-//
-// ^The sqlite3_int64 and sqlite_int64 types can store integer values
-// between -9223372036854775808 and +9223372036854775807 inclusive.  ^The
-// sqlite3_uint64 and sqlite_uint64 types can store integer values
-// between 0 and +18446744073709551615 inclusive.
-type sqlite_int64 = int64           /* sqlite3.h:301:25 */
-type sqlite_uint64 = uint64         /* sqlite3.h:302:34 */
-type sqlite3_int64 = sqlite_int64   /* sqlite3.h:304:22 */
-type sqlite3_uint64 = sqlite_uint64 /* sqlite3.h:305:23 */
-
-// The type for a callback function.
-// This is legacy and deprecated.  It is included for historical
-// compatibility and is not documented.
-type sqlite3_callback = uintptr /* sqlite3.h:361:13 */
-
-// CAPI3REF: Result Codes
-// KEYWORDS: {result code definitions}
-//
-// Many SQLite functions return an integer result code from the set shown
-// here in order to indicate success or failure.
-//
-// New error codes may be added in future versions of SQLite.
-//
-// See also: [extended result code definitions]
-// beginning-of-error-codes
-// end-of-error-codes
-
-// CAPI3REF: Extended Result Codes
-// KEYWORDS: {extended result code definitions}
-//
-// In its default configuration, SQLite API routines return one of 30 integer
-// [result codes].  However, experience has shown that many of
-// these result codes are too coarse-grained.  They do not provide as
-// much information about problems as programmers might like.  In an effort to
-// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
-// and later) include
-// support for additional result codes that provide more detailed information
-// about errors. These [extended result codes] are enabled or disabled
-// on a per database connection basis using the
-// [sqlite3_extended_result_codes()] API.  Or, the extended code for
-// the most recent error can be obtained using
-// [sqlite3_extended_errcode()].
-
-// CAPI3REF: Flags For File Open Operations
-//
-// These bit values are intended for use in the
-// 3rd parameter to the [sqlite3_open_v2()] interface and
-// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
-//
-// Only those flags marked as "Ok for sqlite3_open_v2()" may be
-// used as the third argument to the [sqlite3_open_v2()] interface.
-// The other flags have historically been ignored by sqlite3_open_v2(),
-// though future versions of SQLite might change so that an error is
-// raised if any of the disallowed bits are passed into sqlite3_open_v2().
-// Applications should not depend on the historical behavior.
-//
-// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
-// [sqlite3_open_v2()] does *not* cause the underlying database file
-// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
-// [sqlite3_open_v2()] has historically be a no-op and might become an
-// error in future versions of SQLite.
-
-// Reserved:                         0x00F00000
-// Legacy compatibility:
-
-// CAPI3REF: Device Characteristics
-//
-// The xDeviceCharacteristics method of the [sqlite3_io_methods]
-// object returns an integer which is a vector of these
-// bit values expressing I/O characteristics of the mass storage
-// device that holds the file that the [sqlite3_io_methods]
-// refers to.
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
-// after reboot following a crash or power loss, the only bytes in a
-// file that were written at the application level might have changed
-// and that adjacent bytes, even bytes within the same sector are
-// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
-// flag indicates that a file cannot be deleted when open.  The
-// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
-// read-only media and cannot be changed even by processes with
-// elevated privileges.
-//
-// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
-// filesystem supports doing multiple write operations atomically when those
-// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
-// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
-
-// CAPI3REF: File Locking Levels
-//
-// SQLite uses one of these integer values as the second
-// argument to calls it makes to the xLock() and xUnlock() methods
-// of an [sqlite3_io_methods] object.
-
-// CAPI3REF: Synchronization Type Flags
-//
-// When SQLite invokes the xSync() method of an
-// [sqlite3_io_methods] object it uses a combination of
-// these integer values as the second argument.
-//
-// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-// sync operation only needs to flush data to mass storage.  Inode
-// information need not be flushed. If the lower four bits of the flag
-// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
-// If the lower four bits equal SQLITE_SYNC_FULL, that means
-// to use Mac OS X style fullsync instead of fsync().
-//
-// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
-// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
-// settings.  The [synchronous pragma] determines when calls to the
-// xSync VFS method occur and applies uniformly across all platforms.
-// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
-// energetic or rigorous or forceful the sync operations are and
-// only make a difference on Mac OSX for the default SQLite code.
-// (Third-party VFS implementations might also make the distinction
-// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
-// operating systems natively supported by SQLite, only Mac OSX
-// cares about the difference.)
-
-// CAPI3REF: OS Interface Open File Handle
-//
-// An [sqlite3_file] object represents an open file in the
-// [sqlite3_vfs | OS interface layer].  Individual OS interface
-// implementations will
-// want to subclass this object by appending additional fields
-// for their own use.  The pMethods entry is a pointer to an
-// [sqlite3_io_methods] object that defines methods for performing
-// I/O operations on the open file.
-type sqlite3_file1 = struct{ pMethods uintptr } /* sqlite3.h:722:9 */
-
-// CAPI3REF: Result Codes
-// KEYWORDS: {result code definitions}
-//
-// Many SQLite functions return an integer result code from the set shown
-// here in order to indicate success or failure.
-//
-// New error codes may be added in future versions of SQLite.
-//
-// See also: [extended result code definitions]
-// beginning-of-error-codes
-// end-of-error-codes
-
-// CAPI3REF: Extended Result Codes
-// KEYWORDS: {extended result code definitions}
-//
-// In its default configuration, SQLite API routines return one of 30 integer
-// [result codes].  However, experience has shown that many of
-// these result codes are too coarse-grained.  They do not provide as
-// much information about problems as programmers might like.  In an effort to
-// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
-// and later) include
-// support for additional result codes that provide more detailed information
-// about errors. These [extended result codes] are enabled or disabled
-// on a per database connection basis using the
-// [sqlite3_extended_result_codes()] API.  Or, the extended code for
-// the most recent error can be obtained using
-// [sqlite3_extended_errcode()].
-
-// CAPI3REF: Flags For File Open Operations
-//
-// These bit values are intended for use in the
-// 3rd parameter to the [sqlite3_open_v2()] interface and
-// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
-//
-// Only those flags marked as "Ok for sqlite3_open_v2()" may be
-// used as the third argument to the [sqlite3_open_v2()] interface.
-// The other flags have historically been ignored by sqlite3_open_v2(),
-// though future versions of SQLite might change so that an error is
-// raised if any of the disallowed bits are passed into sqlite3_open_v2().
-// Applications should not depend on the historical behavior.
-//
-// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
-// [sqlite3_open_v2()] does *not* cause the underlying database file
-// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
-// [sqlite3_open_v2()] has historically be a no-op and might become an
-// error in future versions of SQLite.
-
-// Reserved:                         0x00F00000
-// Legacy compatibility:
-
-// CAPI3REF: Device Characteristics
-//
-// The xDeviceCharacteristics method of the [sqlite3_io_methods]
-// object returns an integer which is a vector of these
-// bit values expressing I/O characteristics of the mass storage
-// device that holds the file that the [sqlite3_io_methods]
-// refers to.
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
-// after reboot following a crash or power loss, the only bytes in a
-// file that were written at the application level might have changed
-// and that adjacent bytes, even bytes within the same sector are
-// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
-// flag indicates that a file cannot be deleted when open.  The
-// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
-// read-only media and cannot be changed even by processes with
-// elevated privileges.
-//
-// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
-// filesystem supports doing multiple write operations atomically when those
-// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
-// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
-
-// CAPI3REF: File Locking Levels
-//
-// SQLite uses one of these integer values as the second
-// argument to calls it makes to the xLock() and xUnlock() methods
-// of an [sqlite3_io_methods] object.
-
-// CAPI3REF: Synchronization Type Flags
-//
-// When SQLite invokes the xSync() method of an
-// [sqlite3_io_methods] object it uses a combination of
-// these integer values as the second argument.
-//
-// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-// sync operation only needs to flush data to mass storage.  Inode
-// information need not be flushed. If the lower four bits of the flag
-// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
-// If the lower four bits equal SQLITE_SYNC_FULL, that means
-// to use Mac OS X style fullsync instead of fsync().
-//
-// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
-// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
-// settings.  The [synchronous pragma] determines when calls to the
-// xSync VFS method occur and applies uniformly across all platforms.
-// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
-// energetic or rigorous or forceful the sync operations are and
-// only make a difference on Mac OSX for the default SQLite code.
-// (Third-party VFS implementations might also make the distinction
-// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
-// operating systems natively supported by SQLite, only Mac OSX
-// cares about the difference.)
-
-// CAPI3REF: OS Interface Open File Handle
-//
-// An [sqlite3_file] object represents an open file in the
-// [sqlite3_vfs | OS interface layer].  Individual OS interface
-// implementations will
-// want to subclass this object by appending additional fields
-// for their own use.  The pMethods entry is a pointer to an
-// [sqlite3_io_methods] object that defines methods for performing
-// I/O operations on the open file.
-type sqlite3_file = sqlite3_file1 /* sqlite3.h:722:29 */
+type sqlite3_file = sqlite3_file1
 type sqlite3_io_methods1 = struct {
 	iVersion               int32
 	_                      [4]byte
@@ -527,269 +84,10 @@ type sqlite3_io_methods1 = struct {
 	xShmUnmap              uintptr
 	xFetch                 uintptr
 	xUnfetch               uintptr
-} /* sqlite3.h:722:9 */
+}
 
-// CAPI3REF: OS Interface File Virtual Methods Object
-//
-// Every file opened by the [sqlite3_vfs.xOpen] method populates an
-// [sqlite3_file] object (or, more commonly, a subclass of the
-// [sqlite3_file] object) with a pointer to an instance of this object.
-// This object defines the methods used to perform various operations
-// against the open file represented by the [sqlite3_file] object.
-//
-// If the [sqlite3_vfs.xOpen] method sets the sqlite3_file.pMethods element
-// to a non-NULL pointer, then the sqlite3_io_methods.xClose method
-// may be invoked even if the [sqlite3_vfs.xOpen] reported that it failed.  The
-// only way to prevent a call to xClose following a failed [sqlite3_vfs.xOpen]
-// is for the [sqlite3_vfs.xOpen] to set the sqlite3_file.pMethods element
-// to NULL.
-//
-// The flags argument to xSync may be one of [SQLITE_SYNC_NORMAL] or
-// [SQLITE_SYNC_FULL].  The first choice is the normal fsync().
-// The second choice is a Mac OS X style fullsync.  The [SQLITE_SYNC_DATAONLY]
-// flag may be ORed in to indicate that only the data of the file
-// and not its inode needs to be synced.
-//
-// The integer values to xLock() and xUnlock() are one of
-// <ul>
-// <li> [SQLITE_LOCK_NONE],
-// <li> [SQLITE_LOCK_SHARED],
-// <li> [SQLITE_LOCK_RESERVED],
-// <li> [SQLITE_LOCK_PENDING], or
-// <li> [SQLITE_LOCK_EXCLUSIVE].
-// </ul>
-// xLock() increases the lock. xUnlock() decreases the lock.
-// The xCheckReservedLock() method checks whether any database connection,
-// either in this process or in some other process, is holding a RESERVED,
-// PENDING, or EXCLUSIVE lock on the file.  It returns true
-// if such a lock exists and false otherwise.
-//
-// The xFileControl() method is a generic interface that allows custom
-// VFS implementations to directly control an open file using the
-// [sqlite3_file_control()] interface.  The second "op" argument is an
-// integer opcode.  The third argument is a generic pointer intended to
-// point to a structure that may contain arguments or space in which to
-// write return values.  Potential uses for xFileControl() might be
-// functions to enable blocking locks with timeouts, to change the
-// locking strategy (for example to use dot-file locks), to inquire
-// about the status of a lock, or to break stale locks.  The SQLite
-// core reserves all opcodes less than 100 for its own use.
-// A [file control opcodes | list of opcodes] less than 100 is available.
-// Applications that define a custom xFileControl method should use opcodes
-// greater than 100 to avoid conflicts.  VFS implementations should
-// return [SQLITE_NOTFOUND] for file control opcodes that they do not
-// recognize.
-//
-// The xSectorSize() method returns the sector size of the
-// device that underlies the file.  The sector size is the
-// minimum write that can be performed without disturbing
-// other bytes in the file.  The xDeviceCharacteristics()
-// method returns a bit vector describing behaviors of the
-// underlying device:
-//
-// <ul>
-// <li> [SQLITE_IOCAP_ATOMIC]
-// <li> [SQLITE_IOCAP_ATOMIC512]
-// <li> [SQLITE_IOCAP_ATOMIC1K]
-// <li> [SQLITE_IOCAP_ATOMIC2K]
-// <li> [SQLITE_IOCAP_ATOMIC4K]
-// <li> [SQLITE_IOCAP_ATOMIC8K]
-// <li> [SQLITE_IOCAP_ATOMIC16K]
-// <li> [SQLITE_IOCAP_ATOMIC32K]
-// <li> [SQLITE_IOCAP_ATOMIC64K]
-// <li> [SQLITE_IOCAP_SAFE_APPEND]
-// <li> [SQLITE_IOCAP_SEQUENTIAL]
-// <li> [SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN]
-// <li> [SQLITE_IOCAP_POWERSAFE_OVERWRITE]
-// <li> [SQLITE_IOCAP_IMMUTABLE]
-// <li> [SQLITE_IOCAP_BATCH_ATOMIC]
-// </ul>
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().
-//
-// If xRead() returns SQLITE_IOERR_SHORT_READ it must also fill
-// in the unread portions of the buffer with zeros.  A VFS that
-// fails to zero-fill short reads might seem to work.  However,
-// failure to zero-fill short reads will eventually lead to
-// database corruption.
-type sqlite3_io_methods = sqlite3_io_methods1 /* sqlite3.h:821:35 */
+type sqlite3_io_methods = sqlite3_io_methods1
 
-// CAPI3REF: OS Interface Object
-//
-// An instance of the sqlite3_vfs object defines the interface between
-// the SQLite core and the underlying operating system.  The "vfs"
-// in the name of the object stands for "virtual file system".  See
-// the [VFS | VFS documentation] for further information.
-//
-// The VFS interface is sometimes extended by adding new methods onto
-// the end.  Each time such an extension occurs, the iVersion field
-// is incremented.  The iVersion value started out as 1 in
-// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
-// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
-// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
-// may be appended to the sqlite3_vfs object and the iVersion value
-// may increase again in future versions of SQLite.
-// Note that due to an oversight, the structure
-// of the sqlite3_vfs object changed in the transition from
-// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
-// and yet the iVersion field was not increased.
-//
-// The szOsFile field is the size of the subclassed [sqlite3_file]
-// structure used by this VFS.  mxPathname is the maximum length of
-// a pathname in this VFS.
-//
-// Registered sqlite3_vfs objects are kept on a linked list formed by
-// the pNext pointer.  The [sqlite3_vfs_register()]
-// and [sqlite3_vfs_unregister()] interfaces manage this list
-// in a thread-safe way.  The [sqlite3_vfs_find()] interface
-// searches the list.  Neither the application code nor the VFS
-// implementation should use the pNext pointer.
-//
-// The pNext field is the only field in the sqlite3_vfs
-// structure that SQLite will ever modify.  SQLite will only access
-// or modify this field while holding a particular static mutex.
-// The application should never modify anything within the sqlite3_vfs
-// object once the object has been registered.
-//
-// The zName field holds the name of the VFS module.  The name must
-// be unique across all VFS modules.
-//
-// [[sqlite3_vfs.xOpen]]
-// ^SQLite guarantees that the zFilename parameter to xOpen
-// is either a NULL pointer or string obtained
-// from xFullPathname() with an optional suffix added.
-// ^If a suffix is added to the zFilename parameter, it will
-// consist of a single "-" character followed by no more than
-// 11 alphanumeric and/or "-" characters.
-// ^SQLite further guarantees that
-// the string will be valid and unchanged until xClose() is
-// called. Because of the previous sentence,
-// the [sqlite3_file] can safely store a pointer to the
-// filename if it needs to remember the filename for some reason.
-// If the zFilename parameter to xOpen is a NULL pointer then xOpen
-// must invent its own temporary name for the file.  ^Whenever the
-// xFilename parameter is NULL it will also be the case that the
-// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
-//
-// The flags argument to xOpen() includes all bits set in
-// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
-// or [sqlite3_open16()] is used, then flags includes at least
-// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
-// If xOpen() opens a file read-only then it sets *pOutFlags to
-// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
-//
-// ^(SQLite will also add one of the following flags to the xOpen()
-// call, depending on the object being opened:
-//
-// <ul>
-// <li>  [SQLITE_OPEN_MAIN_DB]
-// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
-// <li>  [SQLITE_OPEN_TEMP_DB]
-// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
-// <li>  [SQLITE_OPEN_TRANSIENT_DB]
-// <li>  [SQLITE_OPEN_SUBJOURNAL]
-// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
-// <li>  [SQLITE_OPEN_WAL]
-// </ul>)^
-//
-// The file I/O implementation can use the object type flags to
-// change the way it deals with files.  For example, an application
-// that does not care about crash recovery or rollback might make
-// the open of a journal file a no-op.  Writes to this journal would
-// also be no-ops, and any attempt to read the journal would return
-// SQLITE_IOERR.  Or the implementation might recognize that a database
-// file will be doing page-aligned sector reads and writes in a random
-// order and set up its I/O subsystem accordingly.
-//
-// SQLite might also add one of the following flags to the xOpen method:
-//
-// <ul>
-// <li> [SQLITE_OPEN_DELETEONCLOSE]
-// <li> [SQLITE_OPEN_EXCLUSIVE]
-// </ul>
-//
-// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
-// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
-// will be set for TEMP databases and their journals, transient
-// databases, and subjournals.
-//
-// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
-// with the [SQLITE_OPEN_CREATE] flag, which are both directly
-// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
-// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
-// SQLITE_OPEN_CREATE, is used to indicate that file should always
-// be created, and that it is an error if it already exists.
-// It is <i>not</i> used to indicate the file should be opened
-// for exclusive access.
-//
-// ^At least szOsFile bytes of memory are allocated by SQLite
-// to hold the [sqlite3_file] structure passed as the third
-// argument to xOpen.  The xOpen method does not have to
-// allocate the structure; it should just fill it in.  Note that
-// the xOpen method must set the sqlite3_file.pMethods to either
-// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
-// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
-// element will be valid after xOpen returns regardless of the success
-// or failure of the xOpen call.
-//
-// [[sqlite3_vfs.xAccess]]
-// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
-// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
-// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
-// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
-// flag is never actually used and is not implemented in the built-in
-// VFSes of SQLite.  The file is named by the second argument and can be a
-// directory. The xAccess method returns [SQLITE_OK] on success or some
-// non-zero error code if there is an I/O error or if the name of
-// the file given in the second argument is illegal.  If SQLITE_OK
-// is returned, then non-zero or zero is written into *pResOut to indicate
-// whether or not the file is accessible.
-//
-// ^SQLite will always allocate at least mxPathname+1 bytes for the
-// output buffer xFullPathname.  The exact size of the output buffer
-// is also passed as a parameter to both  methods. If the output buffer
-// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
-// handled as a fatal error by SQLite, vfs implementations should endeavor
-// to prevent this by setting mxPathname to a sufficiently large value.
-//
-// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
-// interfaces are not strictly a part of the filesystem, but they are
-// included in the VFS structure for completeness.
-// The xRandomness() function attempts to return nBytes bytes
-// of good-quality randomness into zOut.  The return value is
-// the actual number of bytes of randomness obtained.
-// The xSleep() method causes the calling thread to sleep for at
-// least the number of microseconds given.  ^The xCurrentTime()
-// method returns a Julian Day Number for the current date and time as
-// a floating point value.
-// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
-// Day Number multiplied by 86400000 (the number of milliseconds in
-// a 24-hour day).
-// ^SQLite will use the xCurrentTimeInt64() method to get the current
-// date and time if that method is available (if iVersion is 2 or
-// greater and the function pointer is not NULL) and will fall back
-// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
-//
-// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
-// are not used by the SQLite core.  These optional interfaces are provided
-// by some VFSes to facilitate testing of the VFS code. By overriding
-// system calls with functions under its control, a test program can
-// simulate faults and error conditions that would otherwise be difficult
-// or impossible to induce.  The set of system calls that can be overridden
-// varies from one VFS to another, and from one version of the same VFS to the
-// next.  Applications that use these interfaces must be prepared for any
-// or all of these interfaces to be NULL or for their behavior to change
-// from one release to the next.  Applications must not attempt to access
-// any of these methods if the iVersion of the VFS is less than 3.
 type sqlite3_vfs1 = struct {
 	iVersion          int32
 	szOsFile          int32
@@ -814,239 +112,11 @@ type sqlite3_vfs1 = struct {
 	xSetSystemCall    uintptr
 	xGetSystemCall    uintptr
 	xNextSystemCall   uintptr
-} /* sqlite3.h:1425:9 */
+}
 
-// CAPI3REF: OS Interface Object
-//
-// An instance of the sqlite3_vfs object defines the interface between
-// the SQLite core and the underlying operating system.  The "vfs"
-// in the name of the object stands for "virtual file system".  See
-// the [VFS | VFS documentation] for further information.
-//
-// The VFS interface is sometimes extended by adding new methods onto
-// the end.  Each time such an extension occurs, the iVersion field
-// is incremented.  The iVersion value started out as 1 in
-// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
-// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
-// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
-// may be appended to the sqlite3_vfs object and the iVersion value
-// may increase again in future versions of SQLite.
-// Note that due to an oversight, the structure
-// of the sqlite3_vfs object changed in the transition from
-// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
-// and yet the iVersion field was not increased.
-//
-// The szOsFile field is the size of the subclassed [sqlite3_file]
-// structure used by this VFS.  mxPathname is the maximum length of
-// a pathname in this VFS.
-//
-// Registered sqlite3_vfs objects are kept on a linked list formed by
-// the pNext pointer.  The [sqlite3_vfs_register()]
-// and [sqlite3_vfs_unregister()] interfaces manage this list
-// in a thread-safe way.  The [sqlite3_vfs_find()] interface
-// searches the list.  Neither the application code nor the VFS
-// implementation should use the pNext pointer.
-//
-// The pNext field is the only field in the sqlite3_vfs
-// structure that SQLite will ever modify.  SQLite will only access
-// or modify this field while holding a particular static mutex.
-// The application should never modify anything within the sqlite3_vfs
-// object once the object has been registered.
-//
-// The zName field holds the name of the VFS module.  The name must
-// be unique across all VFS modules.
-//
-// [[sqlite3_vfs.xOpen]]
-// ^SQLite guarantees that the zFilename parameter to xOpen
-// is either a NULL pointer or string obtained
-// from xFullPathname() with an optional suffix added.
-// ^If a suffix is added to the zFilename parameter, it will
-// consist of a single "-" character followed by no more than
-// 11 alphanumeric and/or "-" characters.
-// ^SQLite further guarantees that
-// the string will be valid and unchanged until xClose() is
-// called. Because of the previous sentence,
-// the [sqlite3_file] can safely store a pointer to the
-// filename if it needs to remember the filename for some reason.
-// If the zFilename parameter to xOpen is a NULL pointer then xOpen
-// must invent its own temporary name for the file.  ^Whenever the
-// xFilename parameter is NULL it will also be the case that the
-// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
-//
-// The flags argument to xOpen() includes all bits set in
-// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
-// or [sqlite3_open16()] is used, then flags includes at least
-// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
-// If xOpen() opens a file read-only then it sets *pOutFlags to
-// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
-//
-// ^(SQLite will also add one of the following flags to the xOpen()
-// call, depending on the object being opened:
-//
-// <ul>
-// <li>  [SQLITE_OPEN_MAIN_DB]
-// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
-// <li>  [SQLITE_OPEN_TEMP_DB]
-// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
-// <li>  [SQLITE_OPEN_TRANSIENT_DB]
-// <li>  [SQLITE_OPEN_SUBJOURNAL]
-// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
-// <li>  [SQLITE_OPEN_WAL]
-// </ul>)^
-//
-// The file I/O implementation can use the object type flags to
-// change the way it deals with files.  For example, an application
-// that does not care about crash recovery or rollback might make
-// the open of a journal file a no-op.  Writes to this journal would
-// also be no-ops, and any attempt to read the journal would return
-// SQLITE_IOERR.  Or the implementation might recognize that a database
-// file will be doing page-aligned sector reads and writes in a random
-// order and set up its I/O subsystem accordingly.
-//
-// SQLite might also add one of the following flags to the xOpen method:
-//
-// <ul>
-// <li> [SQLITE_OPEN_DELETEONCLOSE]
-// <li> [SQLITE_OPEN_EXCLUSIVE]
-// </ul>
-//
-// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
-// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
-// will be set for TEMP databases and their journals, transient
-// databases, and subjournals.
-//
-// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
-// with the [SQLITE_OPEN_CREATE] flag, which are both directly
-// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
-// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
-// SQLITE_OPEN_CREATE, is used to indicate that file should always
-// be created, and that it is an error if it already exists.
-// It is <i>not</i> used to indicate the file should be opened
-// for exclusive access.
-//
-// ^At least szOsFile bytes of memory are allocated by SQLite
-// to hold the [sqlite3_file] structure passed as the third
-// argument to xOpen.  The xOpen method does not have to
-// allocate the structure; it should just fill it in.  Note that
-// the xOpen method must set the sqlite3_file.pMethods to either
-// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
-// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
-// element will be valid after xOpen returns regardless of the success
-// or failure of the xOpen call.
-//
-// [[sqlite3_vfs.xAccess]]
-// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
-// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
-// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
-// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
-// flag is never actually used and is not implemented in the built-in
-// VFSes of SQLite.  The file is named by the second argument and can be a
-// directory. The xAccess method returns [SQLITE_OK] on success or some
-// non-zero error code if there is an I/O error or if the name of
-// the file given in the second argument is illegal.  If SQLITE_OK
-// is returned, then non-zero or zero is written into *pResOut to indicate
-// whether or not the file is accessible.
-//
-// ^SQLite will always allocate at least mxPathname+1 bytes for the
-// output buffer xFullPathname.  The exact size of the output buffer
-// is also passed as a parameter to both  methods. If the output buffer
-// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
-// handled as a fatal error by SQLite, vfs implementations should endeavor
-// to prevent this by setting mxPathname to a sufficiently large value.
-//
-// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
-// interfaces are not strictly a part of the filesystem, but they are
-// included in the VFS structure for completeness.
-// The xRandomness() function attempts to return nBytes bytes
-// of good-quality randomness into zOut.  The return value is
-// the actual number of bytes of randomness obtained.
-// The xSleep() method causes the calling thread to sleep for at
-// least the number of microseconds given.  ^The xCurrentTime()
-// method returns a Julian Day Number for the current date and time as
-// a floating point value.
-// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
-// Day Number multiplied by 86400000 (the number of milliseconds in
-// a 24-hour day).
-// ^SQLite will use the xCurrentTimeInt64() method to get the current
-// date and time if that method is available (if iVersion is 2 or
-// greater and the function pointer is not NULL) and will fall back
-// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
-//
-// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
-// are not used by the SQLite core.  These optional interfaces are provided
-// by some VFSes to facilitate testing of the VFS code. By overriding
-// system calls with functions under its control, a test program can
-// simulate faults and error conditions that would otherwise be difficult
-// or impossible to induce.  The set of system calls that can be overridden
-// varies from one VFS to another, and from one version of the same VFS to the
-// next.  Applications that use these interfaces must be prepared for any
-// or all of these interfaces to be NULL or for their behavior to change
-// from one release to the next.  Applications must not attempt to access
-// any of these methods if the iVersion of the VFS is less than 3.
-type sqlite3_vfs = sqlite3_vfs1    /* sqlite3.h:1425:28 */
-type sqlite3_syscall_ptr = uintptr /* sqlite3.h:1426:14 */
+type sqlite3_vfs = sqlite3_vfs1
+type sqlite3_syscall_ptr = uintptr
 
-// CAPI3REF: Memory Allocation Routines
-//
-// An instance of this object defines the interface between SQLite
-// and low-level memory allocation routines.
-//
-// This object is used in only one place in the SQLite interface.
-// A pointer to an instance of this object is the argument to
-// [sqlite3_config()] when the configuration option is
-// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
-// By creating an instance of this object
-// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
-// during configuration, an application can specify an alternative
-// memory allocation subsystem for SQLite to use for all of its
-// dynamic memory needs.
-//
-// Note that SQLite comes with several [built-in memory allocators]
-// that are perfectly adequate for the overwhelming majority of applications
-// and that this object is only useful to a tiny minority of applications
-// with specialized memory allocation requirements.  This object is
-// also used during testing of SQLite in order to specify an alternative
-// memory allocator that simulates memory out-of-memory conditions in
-// order to verify that SQLite recovers gracefully from such
-// conditions.
-//
-// The xMalloc, xRealloc, and xFree methods must work like the
-// malloc(), realloc() and free() functions from the standard C library.
-// ^SQLite guarantees that the second argument to
-// xRealloc is always a value returned by a prior call to xRoundup.
-//
-// xSize should return the allocated size of a memory allocation
-// previously obtained from xMalloc or xRealloc.  The allocated size
-// is always at least as big as the requested size but may be larger.
-//
-// The xRoundup method returns what would be the allocated size of
-// a memory allocation given a particular requested size.  Most memory
-// allocators round up memory allocations at least to the next multiple
-// of 8.  Some allocators round up to a larger multiple or to a power of 2.
-// Every memory allocation request coming in through [sqlite3_malloc()]
-// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
-// that causes the corresponding memory allocation to fail.
-//
-// The xInit method initializes the memory allocator.  For example,
-// it might allocate any required mutexes or initialize internal data
-// structures.  The xShutdown method is invoked (indirectly) by
-// [sqlite3_shutdown()] and should deallocate any resources acquired
-// by xInit.  The pAppData pointer is used as the only parameter to
-// xInit and xShutdown.
-//
-// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
-// the xInit method, so the xInit method need not be threadsafe.  The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  For all other methods, SQLite
-// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
-// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
-// it is by default) and so the methods are automatically serialized.
-// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
-// methods must be threadsafe or else make their own arrangements for
-// serialization.
-//
-// SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
 type sqlite3_mem_methods1 = struct {
 	xMalloc   uintptr
 	xFree     uintptr
@@ -1056,109 +126,20 @@ type sqlite3_mem_methods1 = struct {
 	xInit     uintptr
 	xShutdown uintptr
 	pAppData  uintptr
-} /* sqlite3.h:1723:9 */
+}
 
-// CAPI3REF: Memory Allocation Routines
-//
-// An instance of this object defines the interface between SQLite
-// and low-level memory allocation routines.
-//
-// This object is used in only one place in the SQLite interface.
-// A pointer to an instance of this object is the argument to
-// [sqlite3_config()] when the configuration option is
-// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
-// By creating an instance of this object
-// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
-// during configuration, an application can specify an alternative
-// memory allocation subsystem for SQLite to use for all of its
-// dynamic memory needs.
-//
-// Note that SQLite comes with several [built-in memory allocators]
-// that are perfectly adequate for the overwhelming majority of applications
-// and that this object is only useful to a tiny minority of applications
-// with specialized memory allocation requirements.  This object is
-// also used during testing of SQLite in order to specify an alternative
-// memory allocator that simulates memory out-of-memory conditions in
-// order to verify that SQLite recovers gracefully from such
-// conditions.
-//
-// The xMalloc, xRealloc, and xFree methods must work like the
-// malloc(), realloc() and free() functions from the standard C library.
-// ^SQLite guarantees that the second argument to
-// xRealloc is always a value returned by a prior call to xRoundup.
-//
-// xSize should return the allocated size of a memory allocation
-// previously obtained from xMalloc or xRealloc.  The allocated size
-// is always at least as big as the requested size but may be larger.
-//
-// The xRoundup method returns what would be the allocated size of
-// a memory allocation given a particular requested size.  Most memory
-// allocators round up memory allocations at least to the next multiple
-// of 8.  Some allocators round up to a larger multiple or to a power of 2.
-// Every memory allocation request coming in through [sqlite3_malloc()]
-// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
-// that causes the corresponding memory allocation to fail.
-//
-// The xInit method initializes the memory allocator.  For example,
-// it might allocate any required mutexes or initialize internal data
-// structures.  The xShutdown method is invoked (indirectly) by
-// [sqlite3_shutdown()] and should deallocate any resources acquired
-// by xInit.  The pAppData pointer is used as the only parameter to
-// xInit and xShutdown.
-//
-// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
-// the xInit method, so the xInit method need not be threadsafe.  The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  For all other methods, SQLite
-// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
-// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
-// it is by default) and so the methods are automatically serialized.
-// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
-// methods must be threadsafe or else make their own arrangements for
-// serialization.
-//
-// SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-type sqlite3_mem_methods = sqlite3_mem_methods1 /* sqlite3.h:1723:36 */
+type sqlite3_mem_methods = sqlite3_mem_methods1
 
-// CAPI3REF: Constants Defining Special Destructor Behavior
-//
-// These are special values for the destructor that is passed in as the
-// final argument to routines like [sqlite3_result_blob()].  ^If the destructor
-// argument is SQLITE_STATIC, it means that the content pointer is constant
-// and will never change.  It does not need to be destroyed.  ^The
-// SQLITE_TRANSIENT value means that the content will likely change in
-// the near future and that SQLite should make its own private copy of
-// the content before returning.
-//
-// The typedef is necessary to work around problems in certain
-// C++ compilers.
-type sqlite3_destructor_type = uintptr /* sqlite3.h:5752:14 */
+type sqlite3_destructor_type = uintptr
 
-// The interface to the virtual-table mechanism is currently considered
-// to be experimental.  The interface might change in incompatible ways.
-// If this is a problem for you, do not use the interface at this time.
-//
-// When the virtual-table mechanism stabilizes, we will declare the
-// interface fixed, support it indefinitely, and remove this comment.
-
-// Structures used by the virtual table interface
 type sqlite3_vtab1 = struct {
 	pModule uintptr
 	nRef    int32
 	_       [4]byte
 	zErrMsg uintptr
-} /* sqlite3.h:6937:9 */
+}
 
-// The interface to the virtual-table mechanism is currently considered
-// to be experimental.  The interface might change in incompatible ways.
-// If this is a problem for you, do not use the interface at this time.
-//
-// When the virtual-table mechanism stabilizes, we will declare the
-// interface fixed, support it indefinitely, and remove this comment.
-
-// Structures used by the virtual table interface
-type sqlite3_vtab = sqlite3_vtab1 /* sqlite3.h:6937:29 */
+type sqlite3_vtab = sqlite3_vtab1
 type sqlite3_index_info1 = struct {
 	nConstraint      int32
 	_                [4]byte
@@ -1177,12 +158,12 @@ type sqlite3_index_info1 = struct {
 	idxFlags         int32
 	_                [4]byte
 	colUsed          sqlite3_uint64
-} /* sqlite3.h:6938:9 */
+}
 
-type sqlite3_index_info = sqlite3_index_info1       /* sqlite3.h:6938:35 */
-type sqlite3_vtab_cursor1 = struct{ pVtab uintptr } /* sqlite3.h:6939:9 */
+type sqlite3_index_info = sqlite3_index_info1
+type sqlite3_vtab_cursor1 = struct{ pVtab uintptr }
 
-type sqlite3_vtab_cursor = sqlite3_vtab_cursor1 /* sqlite3.h:6939:36 */
+type sqlite3_vtab_cursor = sqlite3_vtab_cursor1
 type sqlite3_module1 = struct {
 	iVersion      int32
 	_             [4]byte
@@ -1209,395 +190,30 @@ type sqlite3_module1 = struct {
 	xRelease      uintptr
 	xRollbackTo   uintptr
 	xShadowName   uintptr
-} /* sqlite3.h:6937:9 */
+}
 
-type sqlite3_module = sqlite3_module1 /* sqlite3.h:6940:31 */
+type sqlite3_module = sqlite3_module1
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_constraint = struct {
 	iColumn     int32
 	op          uint8
 	usable      uint8
 	_           [2]byte
 	iTermOffset int32
-} /* sqlite3.h:6938:9 */
+}
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_orderby = struct {
 	iColumn int32
 	desc    uint8
 	_       [3]byte
-} /* sqlite3.h:6938:9 */
+}
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_constraint_usage = struct {
 	argvIndex int32
 	omit      uint8
 	_         [3]byte
-} /* sqlite3.h:6938:9 */
+}
 
-// CAPI3REF: Mutex Methods Object
-//
-// An instance of this structure defines the low-level routines
-// used to allocate and use mutexes.
-//
-// Usually, the default mutex implementations provided by SQLite are
-// sufficient, however the application has the option of substituting a custom
-// implementation for specialized deployments or systems for which SQLite
-// does not provide a suitable implementation. In this case, the application
-// creates and populates an instance of this structure to pass
-// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
-// Additionally, an instance of this structure can be used as an
-// output variable when querying the system for the current mutex
-// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
-//
-// ^The xMutexInit method defined by this structure is invoked as
-// part of system initialization by the sqlite3_initialize() function.
-// ^The xMutexInit routine is called by SQLite exactly once for each
-// effective call to [sqlite3_initialize()].
-//
-// ^The xMutexEnd method defined by this structure is invoked as
-// part of system shutdown by the sqlite3_shutdown() function. The
-// implementation of this method is expected to release all outstanding
-// resources obtained by the mutex methods implementation, especially
-// those obtained by the xMutexInit method.  ^The xMutexEnd()
-// interface is invoked exactly once for each call to [sqlite3_shutdown()].
-//
-// ^(The remaining seven methods defined by this structure (xMutexAlloc,
-// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
-// xMutexNotheld) implement the following interfaces (respectively):
-//
-// <ul>
-//
-//	<li>  [sqlite3_mutex_alloc()] </li>
-//	<li>  [sqlite3_mutex_free()] </li>
-//	<li>  [sqlite3_mutex_enter()] </li>
-//	<li>  [sqlite3_mutex_try()] </li>
-//	<li>  [sqlite3_mutex_leave()] </li>
-//	<li>  [sqlite3_mutex_held()] </li>
-//	<li>  [sqlite3_mutex_notheld()] </li>
-//
-// </ul>)^
-//
-// The only difference is that the public sqlite3_XXX functions enumerated
-// above silently ignore any invocations that pass a NULL pointer instead
-// of a valid mutex handle. The implementations of the methods defined
-// by this structure are not required to handle this case. The results
-// of passing a NULL pointer instead of a valid mutex handle are undefined
-// (i.e. it is acceptable to provide an implementation that segfaults if
-// it is passed a NULL pointer).
-//
-// The xMutexInit() method must be threadsafe.  It must be harmless to
-// invoke xMutexInit() multiple times within the same process and without
-// intervening calls to xMutexEnd().  Second and subsequent calls to
-// xMutexInit() must be no-ops.
-//
-// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
-// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
-// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
-// memory allocation for a fast or recursive mutex.
-//
-// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
-// called, but only if the prior call to xMutexInit returned SQLITE_OK.
-// If xMutexInit fails in any way, it is expected to clean up after itself
-// prior to returning.
 type sqlite3_mutex_methods1 = struct {
 	xMutexInit    uintptr
 	xMutexEnd     uintptr
@@ -1608,259 +224,17 @@ type sqlite3_mutex_methods1 = struct {
 	xMutexLeave   uintptr
 	xMutexHeld    uintptr
 	xMutexNotheld uintptr
-} /* sqlite3.h:7804:9 */
+}
 
-// CAPI3REF: Mutex Methods Object
-//
-// An instance of this structure defines the low-level routines
-// used to allocate and use mutexes.
-//
-// Usually, the default mutex implementations provided by SQLite are
-// sufficient, however the application has the option of substituting a custom
-// implementation for specialized deployments or systems for which SQLite
-// does not provide a suitable implementation. In this case, the application
-// creates and populates an instance of this structure to pass
-// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
-// Additionally, an instance of this structure can be used as an
-// output variable when querying the system for the current mutex
-// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
-//
-// ^The xMutexInit method defined by this structure is invoked as
-// part of system initialization by the sqlite3_initialize() function.
-// ^The xMutexInit routine is called by SQLite exactly once for each
-// effective call to [sqlite3_initialize()].
-//
-// ^The xMutexEnd method defined by this structure is invoked as
-// part of system shutdown by the sqlite3_shutdown() function. The
-// implementation of this method is expected to release all outstanding
-// resources obtained by the mutex methods implementation, especially
-// those obtained by the xMutexInit method.  ^The xMutexEnd()
-// interface is invoked exactly once for each call to [sqlite3_shutdown()].
-//
-// ^(The remaining seven methods defined by this structure (xMutexAlloc,
-// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
-// xMutexNotheld) implement the following interfaces (respectively):
-//
-// <ul>
-//
-//	<li>  [sqlite3_mutex_alloc()] </li>
-//	<li>  [sqlite3_mutex_free()] </li>
-//	<li>  [sqlite3_mutex_enter()] </li>
-//	<li>  [sqlite3_mutex_try()] </li>
-//	<li>  [sqlite3_mutex_leave()] </li>
-//	<li>  [sqlite3_mutex_held()] </li>
-//	<li>  [sqlite3_mutex_notheld()] </li>
-//
-// </ul>)^
-//
-// The only difference is that the public sqlite3_XXX functions enumerated
-// above silently ignore any invocations that pass a NULL pointer instead
-// of a valid mutex handle. The implementations of the methods defined
-// by this structure are not required to handle this case. The results
-// of passing a NULL pointer instead of a valid mutex handle are undefined
-// (i.e. it is acceptable to provide an implementation that segfaults if
-// it is passed a NULL pointer).
-//
-// The xMutexInit() method must be threadsafe.  It must be harmless to
-// invoke xMutexInit() multiple times within the same process and without
-// intervening calls to xMutexEnd().  Second and subsequent calls to
-// xMutexInit() must be no-ops.
-//
-// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
-// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
-// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
-// memory allocation for a fast or recursive mutex.
-//
-// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
-// called, but only if the prior call to xMutexInit returned SQLITE_OK.
-// If xMutexInit fails in any way, it is expected to clean up after itself
-// prior to returning.
-type sqlite3_mutex_methods = sqlite3_mutex_methods1 /* sqlite3.h:7804:38 */
+type sqlite3_mutex_methods = sqlite3_mutex_methods1
 
-// CAPI3REF: Custom Page Cache Object
-//
-// The sqlite3_pcache_page object represents a single page in the
-// page cache.  The page cache will allocate instances of this
-// object.  Various methods of the page cache use pointers to instances
-// of this object as parameters or as their return value.
-//
-// See [sqlite3_pcache_methods2] for additional information.
 type sqlite3_pcache_page1 = struct {
 	pBuf   uintptr
 	pExtra uintptr
-} /* sqlite3.h:8573:9 */
+}
 
-// CAPI3REF: Custom Page Cache Object
-//
-// The sqlite3_pcache_page object represents a single page in the
-// page cache.  The page cache will allocate instances of this
-// object.  Various methods of the page cache use pointers to instances
-// of this object as parameters or as their return value.
-//
-// See [sqlite3_pcache_methods2] for additional information.
-type sqlite3_pcache_page = sqlite3_pcache_page1 /* sqlite3.h:8573:36 */
+type sqlite3_pcache_page = sqlite3_pcache_page1
 
-// CAPI3REF: Application Defined Page Cache.
-// KEYWORDS: {page cache}
-//
-// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
-// register an alternative page cache implementation by passing in an
-// instance of the sqlite3_pcache_methods2 structure.)^
-// In many applications, most of the heap memory allocated by
-// SQLite is used for the page cache.
-// By implementing a
-// custom page cache using this API, an application can better control
-// the amount of memory consumed by SQLite, the way in which
-// that memory is allocated and released, and the policies used to
-// determine exactly which parts of a database file are cached and for
-// how long.
-//
-// The alternative page cache mechanism is an
-// extreme measure that is only needed by the most demanding applications.
-// The built-in page cache is recommended for most uses.
-//
-// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
-// internal buffer by SQLite within the call to [sqlite3_config].  Hence
-// the application may discard the parameter after the call to
-// [sqlite3_config()] returns.)^
-//
-// [[the xInit() page cache method]]
-// ^(The xInit() method is called once for each effective
-// call to [sqlite3_initialize()])^
-// (usually only once during the lifetime of the process). ^(The xInit()
-// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
-// The intent of the xInit() method is to set up global data structures
-// required by the custom page cache implementation.
-// ^(If the xInit() method is NULL, then the
-// built-in default page cache is used instead of the application defined
-// page cache.)^
-//
-// [[the xShutdown() page cache method]]
-// ^The xShutdown() method is called by [sqlite3_shutdown()].
-// It can be used to clean up
-// any outstanding resources before process shutdown, if required.
-// ^The xShutdown() method may be NULL.
-//
-// ^SQLite automatically serializes calls to the xInit method,
-// so the xInit method need not be threadsafe.  ^The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  All other methods must be threadsafe
-// in multithreaded applications.
-//
-// ^SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-//
-// [[the xCreate() page cache methods]]
-// ^SQLite invokes the xCreate() method to construct a new cache instance.
-// SQLite will typically create one cache instance for each open database file,
-// though this is not guaranteed. ^The
-// first parameter, szPage, is the size in bytes of the pages that must
-// be allocated by the cache.  ^szPage will always a power of two.  ^The
-// second parameter szExtra is a number of bytes of extra storage
-// associated with each page cache entry.  ^The szExtra parameter will
-// a number less than 250.  SQLite will use the
-// extra szExtra bytes on each page to store metadata about the underlying
-// database page on disk.  The value passed into szExtra depends
-// on the SQLite version, the target platform, and how SQLite was compiled.
-// ^The third argument to xCreate(), bPurgeable, is true if the cache being
-// created will be used to cache database pages of a file stored on disk, or
-// false if it is used for an in-memory database. The cache implementation
-// does not have to do anything special based with the value of bPurgeable;
-// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
-// never invoke xUnpin() except to deliberately delete a page.
-// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
-// false will always have the "discard" flag set to true.
-// ^Hence, a cache created with bPurgeable false will
-// never contain any unpinned pages.
-//
-// [[the xCachesize() page cache method]]
-// ^(The xCachesize() method may be called at any time by SQLite to set the
-// suggested maximum cache-size (number of pages stored by) the cache
-// instance passed as the first argument. This is the value configured using
-// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
-// parameter, the implementation is not required to do anything with this
-// value; it is advisory only.
-//
-// [[the xPagecount() page cache methods]]
-// The xPagecount() method must return the number of pages currently
-// stored in the cache, both pinned and unpinned.
-//
-// [[the xFetch() page cache methods]]
-// The xFetch() method locates a page in the cache and returns a pointer to
-// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
-// The pBuf element of the returned sqlite3_pcache_page object will be a
-// pointer to a buffer of szPage bytes used to store the content of a
-// single database page.  The pExtra element of sqlite3_pcache_page will be
-// a pointer to the szExtra bytes of extra storage that SQLite has requested
-// for each entry in the page cache.
-//
-// The page to be fetched is determined by the key. ^The minimum key value
-// is 1.  After it has been retrieved using xFetch, the page is considered
-// to be "pinned".
-//
-// If the requested page is already in the page cache, then the page cache
-// implementation must return a pointer to the page buffer with its content
-// intact.  If the requested page is not already in the cache, then the
-// cache implementation should use the value of the createFlag
-// parameter to help it determined what action to take:
-//
-// <table border=1 width=85% align=center>
-// <tr><th> createFlag <th> Behavior when page is not already in cache
-// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
-// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
-//
-//	Otherwise return NULL.
-//
-// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
-//
-//	NULL if allocating a new page is effectively impossible.
-//
-// </table>
-//
-// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
-// will only use a createFlag of 2 after a prior call with a createFlag of 1
-// failed.)^  In between the xFetch() calls, SQLite may
-// attempt to unpin one or more cache pages by spilling the content of
-// pinned pages to disk and synching the operating system disk cache.
-//
-// [[the xUnpin() page cache method]]
-// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
-// as its second argument.  If the third parameter, discard, is non-zero,
-// then the page must be evicted from the cache.
-// ^If the discard parameter is
-// zero, then the page may be discarded or retained at the discretion of
-// page cache implementation. ^The page cache implementation
-// may choose to evict unpinned pages at any time.
-//
-// The cache must not perform any reference counting. A single
-// call to xUnpin() unpins the page regardless of the number of prior calls
-// to xFetch().
-//
-// [[the xRekey() page cache methods]]
-// The xRekey() method is used to change the key value associated with the
-// page passed as the second argument. If the cache
-// previously contains an entry associated with newKey, it must be
-// discarded. ^Any prior cache entry associated with newKey is guaranteed not
-// to be pinned.
-//
-// When SQLite calls the xTruncate() method, the cache must discard all
-// existing cache entries with page numbers (keys) greater than or equal
-// to the value of the iLimit parameter passed to xTruncate(). If any
-// of these pages are pinned, they are implicitly unpinned, meaning that
-// they can be safely discarded.
-//
-// [[the xDestroy() page cache method]]
-// ^The xDestroy() method is used to delete a cache allocated by xCreate().
-// All resources associated with the specified cache should be freed. ^After
-// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
-// handle invalid, and will not use it with any other sqlite3_pcache_methods2
-// functions.
-//
-// [[the xShrink() page cache method]]
-// ^SQLite invokes the xShrink() method when it wants the page cache to
-// free up as much of heap memory as possible.  The page cache implementation
-// is not obligated to free any memory, but well-behaved implementations should
-// do their best.
 type sqlite3_pcache_methods21 = struct {
 	iVersion   int32
 	_          [4]byte
@@ -1876,174 +250,10 @@ type sqlite3_pcache_methods21 = struct {
 	xTruncate  uintptr
 	xDestroy   uintptr
 	xShrink    uintptr
-} /* sqlite3.h:8738:9 */
+}
 
-// CAPI3REF: Application Defined Page Cache.
-// KEYWORDS: {page cache}
-//
-// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
-// register an alternative page cache implementation by passing in an
-// instance of the sqlite3_pcache_methods2 structure.)^
-// In many applications, most of the heap memory allocated by
-// SQLite is used for the page cache.
-// By implementing a
-// custom page cache using this API, an application can better control
-// the amount of memory consumed by SQLite, the way in which
-// that memory is allocated and released, and the policies used to
-// determine exactly which parts of a database file are cached and for
-// how long.
-//
-// The alternative page cache mechanism is an
-// extreme measure that is only needed by the most demanding applications.
-// The built-in page cache is recommended for most uses.
-//
-// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
-// internal buffer by SQLite within the call to [sqlite3_config].  Hence
-// the application may discard the parameter after the call to
-// [sqlite3_config()] returns.)^
-//
-// [[the xInit() page cache method]]
-// ^(The xInit() method is called once for each effective
-// call to [sqlite3_initialize()])^
-// (usually only once during the lifetime of the process). ^(The xInit()
-// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
-// The intent of the xInit() method is to set up global data structures
-// required by the custom page cache implementation.
-// ^(If the xInit() method is NULL, then the
-// built-in default page cache is used instead of the application defined
-// page cache.)^
-//
-// [[the xShutdown() page cache method]]
-// ^The xShutdown() method is called by [sqlite3_shutdown()].
-// It can be used to clean up
-// any outstanding resources before process shutdown, if required.
-// ^The xShutdown() method may be NULL.
-//
-// ^SQLite automatically serializes calls to the xInit method,
-// so the xInit method need not be threadsafe.  ^The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  All other methods must be threadsafe
-// in multithreaded applications.
-//
-// ^SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-//
-// [[the xCreate() page cache methods]]
-// ^SQLite invokes the xCreate() method to construct a new cache instance.
-// SQLite will typically create one cache instance for each open database file,
-// though this is not guaranteed. ^The
-// first parameter, szPage, is the size in bytes of the pages that must
-// be allocated by the cache.  ^szPage will always a power of two.  ^The
-// second parameter szExtra is a number of bytes of extra storage
-// associated with each page cache entry.  ^The szExtra parameter will
-// a number less than 250.  SQLite will use the
-// extra szExtra bytes on each page to store metadata about the underlying
-// database page on disk.  The value passed into szExtra depends
-// on the SQLite version, the target platform, and how SQLite was compiled.
-// ^The third argument to xCreate(), bPurgeable, is true if the cache being
-// created will be used to cache database pages of a file stored on disk, or
-// false if it is used for an in-memory database. The cache implementation
-// does not have to do anything special based with the value of bPurgeable;
-// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
-// never invoke xUnpin() except to deliberately delete a page.
-// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
-// false will always have the "discard" flag set to true.
-// ^Hence, a cache created with bPurgeable false will
-// never contain any unpinned pages.
-//
-// [[the xCachesize() page cache method]]
-// ^(The xCachesize() method may be called at any time by SQLite to set the
-// suggested maximum cache-size (number of pages stored by) the cache
-// instance passed as the first argument. This is the value configured using
-// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
-// parameter, the implementation is not required to do anything with this
-// value; it is advisory only.
-//
-// [[the xPagecount() page cache methods]]
-// The xPagecount() method must return the number of pages currently
-// stored in the cache, both pinned and unpinned.
-//
-// [[the xFetch() page cache methods]]
-// The xFetch() method locates a page in the cache and returns a pointer to
-// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
-// The pBuf element of the returned sqlite3_pcache_page object will be a
-// pointer to a buffer of szPage bytes used to store the content of a
-// single database page.  The pExtra element of sqlite3_pcache_page will be
-// a pointer to the szExtra bytes of extra storage that SQLite has requested
-// for each entry in the page cache.
-//
-// The page to be fetched is determined by the key. ^The minimum key value
-// is 1.  After it has been retrieved using xFetch, the page is considered
-// to be "pinned".
-//
-// If the requested page is already in the page cache, then the page cache
-// implementation must return a pointer to the page buffer with its content
-// intact.  If the requested page is not already in the cache, then the
-// cache implementation should use the value of the createFlag
-// parameter to help it determined what action to take:
-//
-// <table border=1 width=85% align=center>
-// <tr><th> createFlag <th> Behavior when page is not already in cache
-// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
-// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
-//
-//	Otherwise return NULL.
-//
-// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
-//
-//	NULL if allocating a new page is effectively impossible.
-//
-// </table>
-//
-// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
-// will only use a createFlag of 2 after a prior call with a createFlag of 1
-// failed.)^  In between the xFetch() calls, SQLite may
-// attempt to unpin one or more cache pages by spilling the content of
-// pinned pages to disk and synching the operating system disk cache.
-//
-// [[the xUnpin() page cache method]]
-// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
-// as its second argument.  If the third parameter, discard, is non-zero,
-// then the page must be evicted from the cache.
-// ^If the discard parameter is
-// zero, then the page may be discarded or retained at the discretion of
-// page cache implementation. ^The page cache implementation
-// may choose to evict unpinned pages at any time.
-//
-// The cache must not perform any reference counting. A single
-// call to xUnpin() unpins the page regardless of the number of prior calls
-// to xFetch().
-//
-// [[the xRekey() page cache methods]]
-// The xRekey() method is used to change the key value associated with the
-// page passed as the second argument. If the cache
-// previously contains an entry associated with newKey, it must be
-// discarded. ^Any prior cache entry associated with newKey is guaranteed not
-// to be pinned.
-//
-// When SQLite calls the xTruncate() method, the cache must discard all
-// existing cache entries with page numbers (keys) greater than or equal
-// to the value of the iLimit parameter passed to xTruncate(). If any
-// of these pages are pinned, they are implicitly unpinned, meaning that
-// they can be safely discarded.
-//
-// [[the xDestroy() page cache method]]
-// ^The xDestroy() method is used to delete a cache allocated by xCreate().
-// All resources associated with the specified cache should be freed. ^After
-// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
-// handle invalid, and will not use it with any other sqlite3_pcache_methods2
-// functions.
-//
-// [[the xShrink() page cache method]]
-// ^SQLite invokes the xShrink() method when it wants the page cache to
-// free up as much of heap memory as possible.  The page cache implementation
-// is not obligated to free any memory, but well-behaved implementations should
-// do their best.
-type sqlite3_pcache_methods2 = sqlite3_pcache_methods21 /* sqlite3.h:8738:40 */
+type sqlite3_pcache_methods2 = sqlite3_pcache_methods21
 
-// This is the obsolete pcache_methods object that has now been replaced
-// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
-// retained in the header file for backwards compatibility only.
 type sqlite3_pcache_methods1 = struct {
 	pArg       uintptr
 	xInit      uintptr
@@ -2056,87 +266,13 @@ type sqlite3_pcache_methods1 = struct {
 	xRekey     uintptr
 	xTruncate  uintptr
 	xDestroy   uintptr
-} /* sqlite3.h:8761:9 */
+}
 
-// This is the obsolete pcache_methods object that has now been replaced
-// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
-// retained in the header file for backwards compatibility only.
-type sqlite3_pcache_methods = sqlite3_pcache_methods1 /* sqlite3.h:8761:39 */
+type sqlite3_pcache_methods = sqlite3_pcache_methods1
 
-// CAPI3REF: Database Snapshot
-// KEYWORDS: {snapshot} {sqlite3_snapshot}
-//
-// An instance of the snapshot object records the state of a [WAL mode]
-// database for some specific point in history.
-//
-// In [WAL mode], multiple [database connections] that are open on the
-// same database file can each be reading a different historical version
-// of the database file.  When a [database connection] begins a read
-// transaction, that connection sees an unchanging copy of the database
-// as it existed for the point in time when the transaction first started.
-// Subsequent changes to the database from other connections are not seen
-// by the reader until a new read transaction is started.
-//
-// The sqlite3_snapshot object records state information about an historical
-// version of the database file so that it is possible to later open a new read
-// transaction that sees that historical version of the database rather than
-// the most recent version.
-type sqlite3_snapshot1 = struct{ hidden [48]uint8 } /* sqlite3.h:10079:9 */
+type sqlite3_snapshot1 = struct{ hidden [48]uint8 }
 
-// CAPI3REF: Database Snapshot
-// KEYWORDS: {snapshot} {sqlite3_snapshot}
-//
-// An instance of the snapshot object records the state of a [WAL mode]
-// database for some specific point in history.
-//
-// In [WAL mode], multiple [database connections] that are open on the
-// same database file can each be reading a different historical version
-// of the database file.  When a [database connection] begins a read
-// transaction, that connection sees an unchanging copy of the database
-// as it existed for the point in time when the transaction first started.
-// Subsequent changes to the database from other connections are not seen
-// by the reader until a new read transaction is started.
-//
-// The sqlite3_snapshot object records state information about an historical
-// version of the database file so that it is possible to later open a new read
-// transaction that sees that historical version of the database rather than
-// the most recent version.
-type sqlite3_snapshot = sqlite3_snapshot1 /* sqlite3.h:10081:3 */
-
-// CAPI3REF: Flags for sqlite3_deserialize()
-//
-// The following are allowed values for 6th argument (the F argument) to
-// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
-//
-// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
-// in the P argument is held in memory obtained from [sqlite3_malloc64()]
-// and that SQLite should take ownership of this memory and automatically
-// free it when it has finished using it.  Without this flag, the caller
-// is responsible for freeing any dynamically allocated memory.
-//
-// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
-// grow the size of the database using calls to [sqlite3_realloc64()].  This
-// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
-// Without this flag, the deserialized database cannot increase in size beyond
-// the number of bytes specified by the M parameter.
-//
-// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
-// should be treated as read-only.
-
-// Undo the hack that converts floating point types to integer for
-// builds on processors without floating point support.
-
-//******* Begin file sqlite3rtree.h ********
-// 2010 August 30
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
+type sqlite3_snapshot = sqlite3_snapshot1
 
 type sqlite3_rtree_geometry1 = struct {
 	pContext uintptr
@@ -2145,44 +281,9 @@ type sqlite3_rtree_geometry1 = struct {
 	aParam   uintptr
 	pUser    uintptr
 	xDelUser uintptr
-} /* sqlite3.h:10410:9 */
+}
 
-// CAPI3REF: Flags for sqlite3_deserialize()
-//
-// The following are allowed values for 6th argument (the F argument) to
-// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
-//
-// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
-// in the P argument is held in memory obtained from [sqlite3_malloc64()]
-// and that SQLite should take ownership of this memory and automatically
-// free it when it has finished using it.  Without this flag, the caller
-// is responsible for freeing any dynamically allocated memory.
-//
-// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
-// grow the size of the database using calls to [sqlite3_realloc64()].  This
-// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
-// Without this flag, the deserialized database cannot increase in size beyond
-// the number of bytes specified by the M parameter.
-//
-// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
-// should be treated as read-only.
-
-// Undo the hack that converts floating point types to integer for
-// builds on processors without floating point support.
-
-//******* Begin file sqlite3rtree.h ********
-// 2010 August 30
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-
-type sqlite3_rtree_geometry = sqlite3_rtree_geometry1 /* sqlite3.h:10410:39 */
+type sqlite3_rtree_geometry = sqlite3_rtree_geometry1
 type sqlite3_rtree_query_info1 = struct {
 	pContext      uintptr
 	nParam        int32
@@ -2202,44 +303,11 @@ type sqlite3_rtree_query_info1 = struct {
 	eWithin       int32
 	rScore        sqlite3_rtree_dbl
 	apSqlParam    uintptr
-} /* sqlite3.h:10411:9 */
+}
 
-type sqlite3_rtree_query_info = sqlite3_rtree_query_info1 /* sqlite3.h:10411:41 */
+type sqlite3_rtree_query_info = sqlite3_rtree_query_info1
 
-// The double-precision datatype used by RTree depends on the
-// SQLITE_RTREE_INT_ONLY compile-time option.
-type sqlite3_rtree_dbl = float64 /* sqlite3.h:10419:18 */
-
-// Allowed values for sqlite3_rtree_query.eWithin and .eParentWithin.
-
-//******* End of sqlite3rtree.h ********
-//******* Begin file sqlite3session.h ********
-
-//******* End of sqlite3session.h ********
-//******* Begin file fts5.h ********
-// 2014 May 31
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// Interfaces to extend FTS5. Using the interfaces defined in this file,
-// FTS5 may be extended with:
-//
-//     * custom tokenizers, and
-//     * custom auxiliary functions.
-
-// ************************************************************************
-//
-// CUSTOM AUXILIARY FUNCTIONS
-//
-// Virtual table implementations may overload SQL functions by implementing
-// the sqlite3_module.xFindFunction() method.
+type sqlite3_rtree_dbl = float64
 
 type Fts5ExtensionApi1 = struct {
 	iVersion           int32
@@ -2263,2344 +331,238 @@ type Fts5ExtensionApi1 = struct {
 	xPhraseNext        uintptr
 	xPhraseFirstColumn uintptr
 	xPhraseNextColumn  uintptr
-} /* sqlite3.h:12266:9 */
+}
 
-// Allowed values for sqlite3_rtree_query.eWithin and .eParentWithin.
-
-//******* End of sqlite3rtree.h ********
-//******* Begin file sqlite3session.h ********
-
-//******* End of sqlite3session.h ********
-//******* Begin file fts5.h ********
-// 2014 May 31
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// Interfaces to extend FTS5. Using the interfaces defined in this file,
-// FTS5 may be extended with:
-//
-//     * custom tokenizers, and
-//     * custom auxiliary functions.
-
-// ************************************************************************
-//
-// CUSTOM AUXILIARY FUNCTIONS
-//
-// Virtual table implementations may overload SQL functions by implementing
-// the sqlite3_module.xFindFunction() method.
-
-type Fts5ExtensionApi = Fts5ExtensionApi1 /* sqlite3.h:12266:33 */
+type Fts5ExtensionApi = Fts5ExtensionApi1
 type Fts5PhraseIter1 = struct {
 	a uintptr
 	b uintptr
-} /* sqlite3.h:12268:9 */
+}
 
-type Fts5PhraseIter = Fts5PhraseIter1 /* sqlite3.h:12268:31 */
+type Fts5PhraseIter = Fts5PhraseIter1
 
-type fts5_extension_function = uintptr /* sqlite3.h:12270:14 */
+type fts5_extension_function = uintptr
 type fts5_tokenizer1 = struct {
 	xCreate   uintptr
 	xDelete   uintptr
 	xTokenize uintptr
-} /* sqlite3.h:12729:9 */
+}
 
-type fts5_tokenizer = fts5_tokenizer1 /* sqlite3.h:12729:31 */
+type fts5_tokenizer = fts5_tokenizer1
 
-// Flags that may be passed as the third argument to xTokenize()
-
-// Flags that may be passed by the tokenizer implementation back to FTS5
-// as the third argument to the supplied xToken callback.
-
-//
-// END OF CUSTOM TOKENIZERS
-//
-
-// ************************************************************************
-//
-// FTS5 EXTENSION REGISTRATION API
 type fts5_api1 = struct {
 	iVersion         int32
 	_                [4]byte
 	xCreateTokenizer uintptr
 	xFindTokenizer   uintptr
 	xCreateFunction  uintptr
-} /* sqlite3.h:12765:9 */
+}
 
-// Flags that may be passed as the third argument to xTokenize()
-
-// Flags that may be passed by the tokenizer implementation back to FTS5
-// as the third argument to the supplied xToken callback.
-
-//
-// END OF CUSTOM TOKENIZERS
-//
-
-// ************************************************************************
-//
-// FTS5 EXTENSION REGISTRATION API
-type fts5_api = fts5_api1 /* sqlite3.h:12765:25 */
-
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// pthread opaque structures
+type fts5_api = fts5_api1
 
 type __darwin_pthread_handler_rec = struct {
 	__routine uintptr
 	__arg     uintptr
 	__next    uintptr
-} /* _pthread_types.h:57:1 */
+}
 
 type _opaque_pthread_attr_t = struct {
 	__sig    int64
 	__opaque [56]int8
-} /* _pthread_types.h:63:1 */
+}
 
 type _opaque_pthread_cond_t = struct {
 	__sig    int64
 	__opaque [40]int8
-} /* _pthread_types.h:68:1 */
+}
 
 type _opaque_pthread_condattr_t = struct {
 	__sig    int64
 	__opaque [8]int8
-} /* _pthread_types.h:73:1 */
+}
 
 type _opaque_pthread_mutex_t = struct {
 	__sig    int64
 	__opaque [56]int8
-} /* _pthread_types.h:78:1 */
+}
 
 type _opaque_pthread_mutexattr_t = struct {
 	__sig    int64
 	__opaque [8]int8
-} /* _pthread_types.h:83:1 */
+}
 
 type _opaque_pthread_once_t = struct {
 	__sig    int64
 	__opaque [8]int8
-} /* _pthread_types.h:88:1 */
+}
 
 type _opaque_pthread_rwlock_t = struct {
 	__sig    int64
 	__opaque [192]int8
-} /* _pthread_types.h:93:1 */
+}
 
 type _opaque_pthread_rwlockattr_t = struct {
 	__sig    int64
 	__opaque [16]int8
-} /* _pthread_types.h:98:1 */
+}
 
 type _opaque_pthread_t = struct {
 	__sig           int64
 	__cleanup_stack uintptr
 	__opaque        [8176]int8
-} /* _pthread_types.h:103:1 */
+}
 
-// C11 Annex K
+type int8_t = int8
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type int16_t = int16
 
-// Copyright (c) 2000-2008 Apple Inc. All rights reserved.
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)types.h	8.3 (Berkeley) 1/5/94
+type int32_t = int32
 
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+type int64_t = int64
 
-// Basic integral types.  Omit the typedef if
-// not possible for a machine/compiler combination.
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type int8_t = int8 /* _int8_t.h:30:31 */
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type int16_t = int16 /* _int16_t.h:30:33 */
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type int32_t = int32 /* _int32_t.h:30:33 */
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type int64_t = int64 /* _int64_t.h:30:33 */
+type u_int8_t = uint8
 
-// Copyright (c) 2016 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_int8_t = uint8 /* _u_int8_t.h:30:33 */
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_int16_t = uint16 /* _u_int16_t.h:30:41 */
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_int32_t = uint32 /* _u_int32_t.h:30:33 */
-// Copyright (c) 2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_int64_t = uint64 /* _u_int64_t.h:30:33 */
+type u_int16_t = uint16
 
-type register_t = int64_t /* types.h:66:33 */
+type u_int32_t = uint32
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type u_int64_t = uint64
 
-type intptr_t = int64 /* _intptr_t.h:32:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type register_t = int64_t
 
-type uintptr_t = uint64 /* _uintptr_t.h:34:33 */
+type intptr_t = int64
 
-// These types are used for reserving the largest possible size.
-type user_addr_t = u_int64_t  /* types.h:77:33 */
-type user_size_t = u_int64_t  /* types.h:78:33 */
-type user_ssize_t = int64_t   /* types.h:79:33 */
-type user_long_t = int64_t    /* types.h:80:33 */
-type user_ulong_t = u_int64_t /* types.h:81:33 */
-type user_time_t = int64_t    /* types.h:82:33 */
-type user_off_t = int64_t     /* types.h:83:33 */
+type uintptr_t = uint64
 
-// This defines the size of syscall arguments after copying into the kernel:
-type syscall_arg_t = u_int64_t /* types.h:104:33 */
+type user_addr_t = u_int64_t
+type user_size_t = u_int64_t
+type user_ssize_t = int64_t
+type user_long_t = int64_t
+type user_ulong_t = u_int64_t
+type user_time_t = int64_t
+type user_off_t = int64_t
 
-type rsize_t = uint64 /* _rsize_t.h:31:32 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type errno_t = int32 /* _errno_t.h:30:32 */
+type syscall_arg_t = u_int64_t
 
-// Darwin extensions
+type rsize_t = uint64
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type ssize_t = int64   /* _ssize_t.h:31:33 */
-type uint64_t = uint64 /* stdint.h:98:25 */
+type errno_t = int32
 
-type int_least64_t = int64_t   /* stdint.h:110:25 */
-type uint_least64_t = uint64_t /* stdint.h:111:26 */
-type int_fast64_t = int64_t    /* stdint.h:112:25 */
-type uint_fast64_t = uint64_t  /* stdint.h:113:26 */
+type ssize_t = int64
+type uint64_t = uint64
 
-type uint32_t = uint32 /* stdint.h:172:25 */
+type int_least64_t = int64_t
+type uint_least64_t = uint64_t
+type int_fast64_t = int64_t
+type uint_fast64_t = uint64_t
 
-type int_least32_t = int32_t   /* stdint.h:184:25 */
-type uint_least32_t = uint32_t /* stdint.h:185:26 */
-type int_fast32_t = int32_t    /* stdint.h:186:25 */
-type uint_fast32_t = uint32_t  /* stdint.h:187:26 */
-type uint16_t = uint16         /* stdint.h:207:25 */
+type uint32_t = uint32
 
-type int_least16_t = int16_t   /* stdint.h:215:25 */
-type uint_least16_t = uint16_t /* stdint.h:216:26 */
-type int_fast16_t = int16_t    /* stdint.h:217:25 */
-type uint_fast16_t = uint16_t  /* stdint.h:218:26 */
-type uint8_t = uint8           /* stdint.h:226:24 */
+type int_least32_t = int32_t
+type uint_least32_t = uint32_t
+type int_fast32_t = int32_t
+type uint_fast32_t = uint32_t
+type uint16_t = uint16
 
-type int_least8_t = int8_t   /* stdint.h:232:24 */
-type uint_least8_t = uint8_t /* stdint.h:233:25 */
-type int_fast8_t = int8_t    /* stdint.h:234:24 */
-type uint_fast8_t = uint8_t  /* stdint.h:235:25 */
+type int_least16_t = int16_t
+type uint_least16_t = uint16_t
+type int_fast16_t = int16_t
+type uint_fast16_t = uint16_t
+type uint8_t = uint8
 
-// prevent glibc sys/types.h from defining conflicting types
+type int_least8_t = int8_t
+type uint_least8_t = uint8_t
+type int_fast8_t = int8_t
+type uint_fast8_t = uint8_t
 
-// C99 7.18.1.4 Integer types capable of holding object pointers.
+type intmax_t = int64
+type uintmax_t = uint64
 
-// C99 7.18.1.5 Greatest-width integer types.
-type intmax_t = int64   /* stdint.h:262:26 */
-type uintmax_t = uint64 /* stdint.h:263:26 */
-
-// C99 7.18.4 Macros for minimum-width integer constants.
-//
-// The standard requires that integer constant macros be defined for all the
-// minimum-width types defined above. As 8-, 16-, 32-, and 64-bit minimum-width
-// types are required, the corresponding integer constant macros are defined
-// here. This implementation also defines minimum-width types for every other
-// integer width that the target implements, so corresponding macros are
-// defined below, too.
-//
-// These macros are defined using the same successive-shrinking approach as
-// the type definitions above. It is likewise important that macros are defined
-// in order of decending width.
-//
-// Note that C++ should not check __STDC_CONSTANT_MACROS here, contrary to the
-// claims of the C standard (see C++ 18.3.1p2, [cstdint.syn]).
-
-// C99 7.18.2.1 Limits of exact-width integer types.
-// C99 7.18.2.2 Limits of minimum-width integer types.
-// C99 7.18.2.3 Limits of fastest minimum-width integer types.
-//
-// The presence of limit macros are completely optional in C99.  This
-// implementation defines limits for all of the types (exact- and
-// minimum-width) that it defines above, using the limits of the minimum-width
-// type for any types that do not have exact-width representations.
-//
-// As in the type definitions, this section takes an approach of
-// successive-shrinking to determine which limits to use for the standard (8,
-// 16, 32, 64) bit widths when they don't have exact representations. It is
-// therefore important that the definitions be kept in order of decending
-// widths.
-//
-// Note that C++ should not check __STDC_LIMIT_MACROS here, contrary to the
-// claims of the C standard (see C++ 18.3.1p2, [cstdint.syn]).
-
-// Some utility macros
-
-// C99 7.18.2.4 Limits of integer types capable of holding object pointers.
-// C99 7.18.3 Limits of other integer types.
-
-// ISO9899:2011 7.20 (C11 Annex K): Define RSIZE_MAX if __STDC_WANT_LIB_EXT1__
-// is enabled.
-
-// C99 7.18.2.5 Limits of greatest-width integer types.
-
-// C99 7.18.3 Limits of other integer types.
-
-// 7.18.4.2 Macros for greatest-width integer constants.
-
-// Copyright (c) 2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Collect the __ARM_ARCH_*__ compiler flags into something easier to use.
-
-// Generic byte swapping functions.
-
-func _OSSwapInt16(tls *libc.TLS, _data uint16_t) uint16_t { /* OSByteOrder.h:15:1: */
-	// Reduces to 'rev16' with clang
+func _OSSwapInt16(tls *libc.TLS, _data uint16_t) uint16_t {
 	return uint16_t(int32(_data)<<8 | int32(_data)>>8)
 }
 
-func _OSSwapInt32(tls *libc.TLS, _data uint32_t) uint32_t { /* OSByteOrder.h:25:1: */
+func _OSSwapInt32(tls *libc.TLS, _data uint32_t) uint32_t {
 	_data = libc.X__builtin_bswap32(tls, _data)
 
 	return _data
 }
 
-func _OSSwapInt64(tls *libc.TLS, _data uint64_t) uint64_t { /* OSByteOrder.h:41:1: */
+func _OSSwapInt64(tls *libc.TLS, _data uint64_t) uint64_t {
 	return libc.X__builtin_bswap64(tls, _data)
 }
 
-// Functions for byte reversed loads.
+type _OSUnalignedU16 = struct{ __val uint16_t }
 
-type _OSUnalignedU16 = struct{ __val uint16_t } /* OSByteOrder.h:64:1 */
+type _OSUnalignedU32 = struct{ __val uint32_t }
 
-type _OSUnalignedU32 = struct{ __val uint32_t } /* OSByteOrder.h:68:1 */
+type _OSUnalignedU64 = struct{ __val uint64_t }
 
-type _OSUnalignedU64 = struct{ __val uint64_t } /* OSByteOrder.h:72:1 */
+type u_char = uint8
 
-// Copyright (c) 2017 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_char = uint8 /* _u_char.h:30:25 */
-// Copyright (c) 2017 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_short = uint16 /* _u_short.h:30:25 */
-// Copyright (c) 2017 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type u_int = uint32  /* _u_int.h:30:25 */
-type u_long = uint64 /* types.h:88:33 */
-type ushort = uint16 /* types.h:91:33 */ // Sys V compatibility
-type uint = uint32   /* types.h:92:33 */ // Sys V compatibility
+type u_short = uint16
 
-type u_quad_t = u_int64_t /* types.h:95:33 */ // quads
-type quad_t = int64_t     /* types.h:96:33 */
-type qaddr_t = uintptr    /* types.h:97:16 */
+type u_int = uint32
+type u_long = uint64
+type ushort = uint16
+type uint = uint32
 
-// Copyright (c) 2017 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-type caddr_t = uintptr /* _caddr_t.h:30:14 */
+type u_quad_t = u_int64_t
+type quad_t = int64_t
+type qaddr_t = uintptr
 
-type daddr_t = int32_t /* types.h:101:33 */ // disk address
+type caddr_t = uintptr
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type daddr_t = int32_t
 
-type dev_t = int32 /* _dev_t.h:31:31 */ // device number
+type dev_t = int32
 
-type fixpt_t = u_int32_t /* types.h:105:33 */ // fixed point number
+type fixpt_t = u_int32_t
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type blkcnt_t = int64
 
-type blkcnt_t = int64 /* _blkcnt_t.h:31:34 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type blksize_t = int32
 
-type blksize_t = int32 /* _blksize_t.h:31:35 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type gid_t = uint32
 
-type gid_t = uint32 /* _gid_t.h:31:25 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type in_addr_t = uint32 /* _in_addr_t.h:31:25 */ // base type for internet address
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type in_port_t = uint16 /* _in_port_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type in_addr_t = uint32
 
-type ino_t = uint64 /* _ino_t.h:31:33 */ // inode number
+type in_port_t = uint16
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type ino_t = uint64
 
-type ino64_t = uint64 /* _ino64_t.h:31:33 */ // 64bit inode number
+type ino64_t = uint64
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type key_t = int32 /* _key_t.h:31:26 */ // IPC key (for Sys V IPC)
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type key_t = int32
 
-type mode_t = uint16 /* _mode_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type nlink_t = uint16 /* _nlink_t.h:31:27 */ // link count
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type mode_t = uint16
 
-type id_t = uint32 /* _id_t.h:31:25 */ // can hold pid_t, gid_t, or uid_t
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type nlink_t = uint16
 
-type pid_t = int32 /* _pid_t.h:31:31 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type id_t = uint32
 
-type off_t = int64 /* _off_t.h:31:33 */
+type pid_t = int32
 
-type segsz_t = int32_t /* types.h:125:33 */ // segment size
-type swblk_t = int32_t /* types.h:126:33 */ // swap offset
+type off_t = int64
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type segsz_t = int32_t
+type swblk_t = int32_t
 
-type uid_t = uint32 /* _uid_t.h:31:31 */
+type uid_t = uint32
 
-// Major, minor numbers, dev_t's.
+type clock_t = uint64
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type clock_t = uint64 /* _clock_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-type time_t = int64 /* _time_t.h:31:33 */
+type time_t = int64
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type useconds_t = uint32
 
-type useconds_t = uint32 /* _useconds_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type suseconds_t = int32
 
-type suseconds_t = int32 /* _suseconds_t.h:31:33 */
+type fd_set1 = struct{ fds_bits [32]int32 }
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type fd_set = fd_set1
 
-// This code is present here in order to maintain historical backward
-// compatability, and is intended to be removed at some point in the
-// future; please include <sys/select.h> instead.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// Select uses bit masks of file descriptors in longs.  These macros
-// manipulate such bit fields (the filesystem macros use chars).  The
-// extra protection here is to permit application redefinition above
-// the default size.
-
-type fd_set1 = struct{ fds_bits [32]int32 } /* _fd_def.h:50:9 */
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// This code is present here in order to maintain historical backward
-// compatability, and is intended to be removed at some point in the
-// future; please include <sys/select.h> instead.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// Select uses bit masks of file descriptors in longs.  These macros
-// manipulate such bit fields (the filesystem macros use chars).  The
-// extra protection here is to permit application redefinition above
-// the default size.
-
-type fd_set = fd_set1 /* _fd_def.h:52:3 */
-
-func X__darwin_check_fd_set(tls *libc.TLS, _a int32, _b uintptr) int32 { /* _fd_def.h:58:1: */
+func X__darwin_check_fd_set(tls *libc.TLS, _a int32, _b uintptr) int32 {
 	if uintptr_t(uintptr(unsafe.Pointer(&X__darwin_check_fd_set_overflow))) != uint64(0) {
 		return (*struct {
 			f func(*libc.TLS, int32, uintptr, int32) int32
@@ -4611,1337 +573,57 @@ func X__darwin_check_fd_set(tls *libc.TLS, _a int32, _b uintptr) int32 { /* _fd_
 	return int32(0)
 }
 
-// This inline avoids argument side-effect issues with FD_ISSET()
-func X__darwin_fd_isset(tls *libc.TLS, _fd int32, _p uintptr) int32 { /* _fd_def.h:80:1: */
+func X__darwin_fd_isset(tls *libc.TLS, _fd int32, _p uintptr) int32 {
 	if X__darwin_check_fd_set(tls, _fd, _p) != 0 {
-		return *(*int32)(unsafe.Pointer(_p + uintptr(uint64(_fd)/(uint64(unsafe.Sizeof(int32(0)))*uint64(8)))*4)) & int32(uint64(uint64(1))<<(uint64(_fd)%(uint64(unsafe.Sizeof(int32(0)))*uint64(8))))
+		return *(*int32)(unsafe.Pointer(_p + uintptr(uint64(_fd)/(uint64(unsafe.Sizeof(int32(0)))*uint64(8)))*4)) & int32(uint64(1)<<(uint64(_fd)%(uint64(unsafe.Sizeof(int32(0)))*uint64(8))))
 	}
 
 	return 0
 }
 
-func X__darwin_fd_set(tls *libc.TLS, _fd int32, _p uintptr) { /* _fd_def.h:90:1: */
+func X__darwin_fd_set(tls *libc.TLS, _fd int32, _p uintptr) {
 	if X__darwin_check_fd_set(tls, _fd, _p) != 0 {
-		*(*int32)(unsafe.Pointer(_p + uintptr(uint64(_fd)/(uint64(unsafe.Sizeof(int32(0)))*uint64(8)))*4)) |= int32(uint64(uint64(1)) << (uint64(_fd) % (uint64(unsafe.Sizeof(int32(0))) * uint64(8))))
+		*(*int32)(unsafe.Pointer(_p + uintptr(uint64(_fd)/(uint64(unsafe.Sizeof(int32(0)))*uint64(8)))*4)) |= int32(uint64(1) << (uint64(_fd) % (uint64(unsafe.Sizeof(int32(0))) * uint64(8))))
 	}
 }
 
-func X__darwin_fd_clr(tls *libc.TLS, _fd int32, _p uintptr) { /* _fd_def.h:98:1: */
+func X__darwin_fd_clr(tls *libc.TLS, _fd int32, _p uintptr) {
 	if X__darwin_check_fd_set(tls, _fd, _p) != 0 {
-		*(*int32)(unsafe.Pointer(_p + uintptr(uint64(_fd)/(uint64(unsafe.Sizeof(int32(0)))*uint64(8)))*4)) &= ^int32(uint64(uint64(1)) << (uint64(_fd) % (uint64(unsafe.Sizeof(int32(0))) * uint64(8))))
+		*(*int32)(unsafe.Pointer(_p + uintptr(uint64(_fd)/(uint64(unsafe.Sizeof(int32(0)))*uint64(8)))*4)) &= ^int32(uint64(1) << (uint64(_fd) % (uint64(unsafe.Sizeof(int32(0))) * uint64(8))))
 	}
 }
 
-// Use the built-in bzero function instead of the library version so that
-// we do not pollute the namespace or introduce prototype warnings.
+type fd_mask = int32
 
-type fd_mask = int32 /* types.h:189:25 */
+type pthread_attr_t = _opaque_pthread_attr_t
 
-// Select uses bit masks of file descriptors in longs.  These macros
-// manipulate such bit fields (the filesystem macros use chars).  The
-// extra protection here is to permit application redefinition above
-// the default size.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_cond_t = _opaque_pthread_cond_t
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_condattr_t = _opaque_pthread_condattr_t
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_mutex_t = _opaque_pthread_mutex_t
 
-type pthread_attr_t = _opaque_pthread_attr_t /* _pthread_attr_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_mutexattr_t = _opaque_pthread_mutexattr_t
 
-type pthread_cond_t = _opaque_pthread_cond_t /* _pthread_cond_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_once_t = _opaque_pthread_once_t
 
-type pthread_condattr_t = _opaque_pthread_condattr_t /* _pthread_condattr_t.h:31:37 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_rwlock_t = _opaque_pthread_rwlock_t
 
-type pthread_mutex_t = _opaque_pthread_mutex_t /* _pthread_mutex_t.h:31:34 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_rwlockattr_t = _opaque_pthread_rwlockattr_t
 
-type pthread_mutexattr_t = _opaque_pthread_mutexattr_t /* _pthread_mutexattr_t.h:31:38 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_t = uintptr
 
-type pthread_once_t = _opaque_pthread_once_t /* _pthread_once_t.h:31:33 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type pthread_key_t = uint64
 
-type pthread_rwlock_t = _opaque_pthread_rwlock_t /* _pthread_rwlock_t.h:31:35 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type fsblkcnt_t = uint32
 
-type pthread_rwlockattr_t = _opaque_pthread_rwlockattr_t /* _pthread_rwlockattr_t.h:31:39 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type pthread_t = uintptr /* _pthread_t.h:31:28 */
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type pthread_key_t = uint64 /* _pthread_key_t.h:31:32 */
-
-// statvfs and fstatvfs
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type fsblkcnt_t = uint32 /* _fsblkcnt_t.h:31:41 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type fsfilcnt_t = uint32 /* _fsfilcnt_t.h:31:41 */
-
-// Copyright (c) 2000-2014 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// -
-// Copyright (c) 1982, 1986, 1989, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)stat.h	8.9 (Berkeley) 8/17/94
-
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// [XSI] The timespec structure may be defined as described in <time.h>
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type fsfilcnt_t = uint32
 
 type timespec = struct {
 	tv_sec  int64
 	tv_nsec int64
-} /* _timespec.h:33:1 */
+}
 
-// [XSI] The blkcnt_t, blksize_t, dev_t, ino_t, mode_t, nlink_t, uid_t,
-// gid_t, off_t, and time_t types shall be defined as described in
-// <sys/types.h>.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// XXX So deprecated, it would make your head spin
-//
-// The old stat structure.  In fact, this is not used by the kernel at all,
-// and should not be used by user space, and should be removed from this
-// header file entirely (along with the unused cvtstat() prototype in
-// vnode_internal.h).
 type ostat = struct {
 	st_dev       uint16
 	_            [6]byte
@@ -5969,19 +651,7 @@ type ostat = struct {
 	st_blocks  int32
 	st_flags   uint32
 	st_gen     uint32
-} /* stat.h:110:1 */
-
-// This structure is used as the second parameter to the fstat64(),
-// lstat64(), and stat64() functions, and for struct stat when
-// __DARWIN_64_BIT_INO_T is set. __DARWIN_STRUCT_STAT64 is defined
-// above, depending on whether we use struct timespec or the direct
-// components.
-//
-// This is simillar to stat except for 64bit inode number
-// number instead of 32bit ino_t and the addition of create(birth) time.
-
-// [XSI] This structure is used as the second parameter to the fstat(),
-// lstat(), and stat() functions.
+}
 
 type stat = struct {
 	st_dev       dev_t
@@ -6015,701 +685,18 @@ type stat = struct {
 	st_gen     uint32
 	st_lspare  int32
 	st_qspare  [2]int64
-} /* stat.h:182:1 */
+}
 
-type filesec_t = uintptr /* _filesec_t.h:31:25 */
+type filesec_t = uintptr
 
-// Copyright (c) 2000-2008 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995, 1997 Apple Computer, Inc. All Rights Reserved
-// Copyright (c) 1982, 1986, 1989, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)file.h	8.3 (Berkeley) 1/9/95
-
-// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2008 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// Copyright (c) 1982, 1986, 1991, 1993, 1994
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)types.h	8.4 (Berkeley) 1/21/94
-
-// Copyright (c) 2000-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// -
-// Copyright (c) 1983, 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)fcntl.h	8.3 (Berkeley) 1/21/94
-
-// This file includes the definitions for open and fcntl
-// described by POSIX for <fcntl.h>; it also includes
-// related kernel definitions.
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// We should not be exporting size_t here.  Temporary for gcc bootstrapping.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// File status flags: these are used by open(2), fcntl(2).
-// They are also used (indirectly) in the kernel file structure f_flags,
-// which is a superset of the open/fcntl flags.  Open flags and f_flags
-// are inter-convertible using OFLAGS(fflags) and FFLAGS(oflags).
-// Open/fcntl flags begin with O_; kernel-internal flags begin with F.
-// open-only flags
-
-// Kernel encoding of open mode; separate read and write bits that are
-// independently testable: 1 greater than the above.
-//
-// XXX
-// FREAD and FWRITE are excluded from the #ifdef KERNEL so that TIOCFLUSH,
-// which was documented to use FREAD/FWRITE, continues to work.
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-//      O_DSYNC         0x00400000      /* synch I/O data integrity */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Descriptor value for the current working directory
-
-// Flags for the at functions
-
-// Data Protection Flags
-
-// The O_* flags used to have only F* names, which were used in the kernel
-// and by fcntl.  We retain the F* names for the kernel f_flags field
-// and for backward compatibility for fcntl.
-
-// Flags used for copyfile(2)
-
-// Constants used for fcntl(2)
-
-// command values
-// 46,47 used to be F_READBOOTSTRAP and F_WRITEBOOTSTRAP
-
-// should not be used (i.e. its ok to temporaily create cached pages)
-
-// See F_DUPFD_CLOEXEC below for 67
-
-// may be broken into smaller chunks with throttling in between
-
-// FS-specific fcntl()'s numbers begin at 0x00010000 and go up
-
-// file descriptor flags (F_GETFD, F_SETFD)
-
-// record locking flags (F_GETLK, F_SETLK, F_SETLKW)
-
-// [XSI] The values used for l_whence shall be defined as described
-// in <unistd.h>
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// whence values for lseek(2)
-
-// [XSI] The symbolic names for file modes for use as values of mode_t
-// shall be defined as described in <sys/stat.h>
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// [XSI] The symbolic names for file modes for use as values of mode_t
-// shall be defined as described in <sys/stat.h>
-
-// allocate flags (F_PREALLOCATE)
-
-// Position Modes (fst_posmode) for F_PREALLOCATE
-
-// we can keep them in sync should we desire
-
-// Advisory file segment locking data type -
-// information passed to system by user
 type flock = struct {
 	l_start  off_t
 	l_len    off_t
 	l_pid    pid_t
 	l_type   int16
 	l_whence int16
-} /* fcntl.h:361:1 */
+}
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Advisory file segment locking with time out -
-// Information passed to system by user for F_SETLKWTIMEOUT
 type flocktimeout = struct {
 	fl struct {
 		l_start  off_t
@@ -6722,21 +709,14 @@ type flocktimeout = struct {
 		tv_sec  int64
 		tv_nsec int64
 	}
-} /* fcntl.h:376:1 */
-
-// advisory file read data type -
-// information passed by user to system
+}
 
 type radvisory = struct {
 	ra_offset off_t
 	ra_count  int32
 	_         [4]byte
-} /* fcntl.h:389:1 */
+}
 
-// detached code signatures data type -
-// information passed by user to system used by F_ADDSIGS and F_ADDFILESIGS.
-// F_ADDFILESIGS is a shortcut for files that contain their own signature and
-// doesn't require mapping of the file in order to load the signature.
 type fsignatures = struct {
 	fs_file_start       off_t
 	fs_blob_start       uintptr
@@ -6744,13 +724,9 @@ type fsignatures = struct {
 	fs_fsignatures_size size_t
 	fs_cdhash           [20]int8
 	fs_hash_type        int32
-} /* fcntl.h:402:9 */
+}
 
-// detached code signatures data type -
-// information passed by user to system used by F_ADDSIGS and F_ADDFILESIGS.
-// F_ADDFILESIGS is a shortcut for files that contain their own signature and
-// doesn't require mapping of the file in order to load the signature.
-type fsignatures_t = fsignatures /* fcntl.h:412:3 */
+type fsignatures_t = fsignatures
 
 type fsupplement = struct {
 	fs_file_start off_t
@@ -6758,55 +734,25 @@ type fsupplement = struct {
 	fs_blob_size  size_t
 	fs_orig_fd    int32
 	_             [4]byte
-} /* fcntl.h:414:9 */
+}
 
-type fsupplement_t = fsupplement /* fcntl.h:419:3 */
+type fsupplement_t = fsupplement
 
-// DYLD needs to check if the object is allowed to be combined
-// into the main binary. This is done between the code signature
-// is loaded and dyld is doing all the work to process the LOAD commands.
-//
-// While this could be done in F_ADDFILESIGS.* family the hook into
-// the MAC module doesn't say no when LV isn't enabled and then that
-// is cached on the vnode, and the MAC module never gets change once
-// a process that library validation enabled.
 type fchecklv = struct {
 	lv_file_start         off_t
 	lv_error_message_size size_t
 	lv_error_message      uintptr
-} /* fcntl.h:433:9 */
+}
 
-// DYLD needs to check if the object is allowed to be combined
-// into the main binary. This is done between the code signature
-// is loaded and dyld is doing all the work to process the LOAD commands.
-//
-// While this could be done in F_ADDFILESIGS.* family the hook into
-// the MAC module doesn't say no when LV isn't enabled and then that
-// is cached on the vnode, and the MAC module never gets change once
-// a process that library validation enabled.
-type fchecklv_t = fchecklv /* fcntl.h:437:3 */
+type fchecklv_t = fchecklv
 
-// At this time F_GETSIGSINFO can only indicate platformness.
-//  As additional requestable information is defined, new keys will be added and the
-//  fgetsigsinfo_t structure will be lengthened to add space for the additional information
-
-// fgetsigsinfo_t used by F_GETSIGSINFO command
 type fgetsigsinfo = struct {
 	fg_file_start      off_t
 	fg_info_request    int32
 	fg_sig_is_platform int32
-} /* fcntl.h:447:9 */
+}
 
-// At this time F_GETSIGSINFO can only indicate platformness.
-//  As additional requestable information is defined, new keys will be added and the
-//  fgetsigsinfo_t structure will be lengthened to add space for the additional information
-
-// fgetsigsinfo_t used by F_GETSIGSINFO command
-type fgetsigsinfo_t = fgetsigsinfo /* fcntl.h:451:3 */
-
-// lock operations for flock(2)
-
-// fstore_t type used by F_PREALLOCATE command
+type fgetsigsinfo_t = fgetsigsinfo
 
 type fstore = struct {
 	fst_flags      uint32
@@ -6814,1414 +760,74 @@ type fstore = struct {
 	fst_offset     off_t
 	fst_length     off_t
 	fst_bytesalloc off_t
-} /* fcntl.h:462:9 */
+}
 
-// lock operations for flock(2)
+type fstore_t = fstore
 
-// fstore_t type used by F_PREALLOCATE command
-
-type fstore_t = fstore /* fcntl.h:468:3 */
-
-// fpunchhole_t used by F_PUNCHHOLE
 type fpunchhole = struct {
 	fp_flags  uint32
 	reserved  uint32
 	fp_offset off_t
 	fp_length off_t
-} /* fcntl.h:471:9 */
+}
 
-// fpunchhole_t used by F_PUNCHHOLE
-type fpunchhole_t = fpunchhole /* fcntl.h:476:3 */
+type fpunchhole_t = fpunchhole
 
-// factive_file_trim_t used by F_TRIM_ACTIVE_FILE
 type ftrimactivefile = struct {
 	fta_offset off_t
 	fta_length off_t
-} /* fcntl.h:479:9 */
+}
 
-// factive_file_trim_t used by F_TRIM_ACTIVE_FILE
-type ftrimactivefile_t = ftrimactivefile /* fcntl.h:482:3 */
+type ftrimactivefile_t = ftrimactivefile
 
-// fspecread_t used by F_SPECULATIVE_READ
 type fspecread = struct {
 	fsr_flags  uint32
 	reserved   uint32
 	fsr_offset off_t
 	fsr_length off_t
-} /* fcntl.h:485:9 */
+}
 
-// fspecread_t used by F_SPECULATIVE_READ
-type fspecread_t = fspecread /* fcntl.h:490:3 */
-
-// fbootstraptransfer_t used by F_READBOOTSTRAP and F_WRITEBOOTSTRAP commands
+type fspecread_t = fspecread
 
 type fbootstraptransfer = struct {
 	fbt_offset off_t
 	fbt_length size_t
 	fbt_buffer uintptr
-} /* fcntl.h:494:9 */
+}
 
-// fbootstraptransfer_t used by F_READBOOTSTRAP and F_WRITEBOOTSTRAP commands
-
-type fbootstraptransfer_t = fbootstraptransfer /* fcntl.h:498:3 */
-
-// For F_LOG2PHYS this information is passed back to user
-// Currently only devoffset is returned - that is the VOP_BMAP
-// result - the disk device address corresponding to the
-// current file offset (likely set with an lseek).
-//
-// The flags could hold an indication of whether the # of
-// contiguous bytes reflects the true extent length on disk,
-// or is an advisory value that indicates there is at least that
-// many bytes contiguous.  For some filesystems it might be too
-// inefficient to provide anything beyond the advisory value.
-// Flags and contiguous bytes return values are not yet implemented.
-// For them the fcntl will nedd to switch from using BMAP to CMAP
-// and a per filesystem type flag will be needed to interpret the
-// contiguous bytes count result from CMAP.
-//
-// F_LOG2PHYS_EXT is a variant of F_LOG2PHYS that uses a passed in
-// file offset and length instead of the current file offset.
-// F_LOG2PHYS_EXT operates on the same structure as F_LOG2PHYS, but
-// treats it as an in/out.
+type fbootstraptransfer_t = fbootstraptransfer
 
 type log2phys = struct {
 	l2p_flags       uint32
 	_               [4]byte
 	l2p_contigbytes off_t
 	l2p_devoffset   off_t
-} /* fcntl.h:524:1 */
+}
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type filesec_property_t = uint32 /* fcntl.h:558:3 */
-
-// Copyright (c) 2000-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// Copyright (c) 1989, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)unistd.h	8.2 (Berkeley) 1/7/94
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Although we have saved user/group IDs, we do not use them in setuid
-// as described in POSIX 1003.1, because the feature does not work for
-// root.  We use the saved IDs in seteuid/setegid, which are not currently
-// part of the POSIX 1003.1 specification.
-
-// execution-time symbolic constants
-// may disable terminal special characters
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// access function
-
-// Extended access functions.
-// Note that we depend on these matching the definitions in sys/kauth.h,
-// but with the bits shifted left by 8.
-
-// whence values for lseek(2)
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// whence values for lseek(2)
-
-// whence values for lseek(2); renamed by POSIX 1003.1
+type filesec_property_t = uint32
 
 type accessx_descriptor = struct {
 	ad_name_offset uint32
 	ad_flags       int32
 	ad_pad         [2]int32
-} /* unistd.h:132:1 */
+}
 
-type kauth_cred_t = uintptr /* file.h:78:22 */
-type posix_cred_t = uintptr /* file.h:80:27 */
+type kauth_cred_t = uintptr
+type posix_cred_t = uintptr
 
-// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995, 1997 Apple Computer, Inc. All Rights Reserved
-// -
-// Copyright (c) 1982, 1986, 1989, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)param.h	8.3 (Berkeley) 4/4/95
-
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2008 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// Copyright (c) 1982, 1986, 1991, 1993, 1994
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)types.h	8.4 (Berkeley) 1/21/94
-
-// Machine-independent constants (some used in following include files).
-// Redefined constants are from POSIX 1003.1 limits file.
-//
-// MAXCOMLEN should be >= sizeof(ac_comm) (see <acct.h>)
-// MAXLOGNAME should be >= UT_NAMESIZE (see <utmp.h>)
-// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-//	$NetBSD: syslimits.h,v 1.15 1997/06/25 00:48:09 lukem Exp $
-
-// Copyright (c) 1988, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)syslimits.h	8.1 (Berkeley) 6/2/93
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// max bytes for an exec function
-
-// Note: CHILD_MAX *must* be less than hard_maxproc, which is set at
-// compile time; you *cannot* set it higher than the hard limit!!
-
-// = ((PRIO_MAX - PRIO_MIN) / 2) + 1
-// range: 0 - 39 [(2 * NZERO) - 1]
-// 0 is not actually used
-
-// Machine type dependent parameters.
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-
-// Copyright (c) 2000-2010 Apple Inc. All rights reserved.
-// -
-// Copyright (c) 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)param.h	8.1 (Berkeley) 4/4/95
-
-// Machine dependent constants for ARM
-
-// Copyright (c) 2006-2007 Apple Inc. All rights reserved.
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-
-// Round p (pointer or byte index) up to a correctly-aligned value for all
-// data types (int, long, ...).   The result is unsigned int and must be
-// cast to any desired pointer type.
-
-// Round p (pointer or byte index) up to a correctly-aligned value for all
-// data types (int, long, ...).   The result is unsigned int and must be
-// cast to any desired pointer type.
-
-// Constants related to network buffer management.
-// MCLBYTES must be no larger than CLBYTES (the software page size), and,
-// on machines that exchange pages of input or output buffers with mbuf
-// clusters (MAPPED_MBUFS), MCLBYTES must also be an integral multiple
-// of the hardware page size.
-
-// Some macros for units conversion
-// Core clicks (NeXT_page_size bytes) to segments and vice versa
-
-// Core clicks (4096 bytes) to disk blocks
-
-// clicks to bytes
-
-// bytes to clicks
-
-// Map a ``block device block'' to a file system block.
-// This should be device dependent, and will be if we
-// add an entry to cdevsw/bdevsw for that purpose.
-// For now though just use DEV_BSIZE.
-
-// Macros to decode (and encode) processor status word.
-
-// More types and definitions used throughout the kernel.
-//===---- limits.h - Standard header for integer sizes --------------------===* *
-//  Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-//  See https://llvm.org/LICENSE.txt for license information.
-//  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-//
-// \*===----------------------------------------------------------------------===
-
-// The system's limits.h may, in turn, try to #include_next GCC's limits.h.
-//    Avert this #include_next madness.
-
-// System headers include a number of constants from POSIX in <limits.h>.
-//    Include it if we're hosted.
-
-// Many system headers try to "help us out" by defining these.  No really, we
-//    know how big each datatype is.
-
-// C90/99 5.2.4.2.1
-
-// C99 5.2.4.2.1: Added long long.
-//    C++11 18.3.3.2: same contents as the Standard C Library header <limits.h>.
-//
-
-// LONG_LONG_MIN/LONG_LONG_MAX/ULONG_LONG_MAX are a GNU extension.  It's too bad
-//    that we don't have something like #pragma poison that could be used to
-//    deprecate a macro - the code should just use LLONG_MAX and friends.
-//
-
-// Signals.
-// Copyright (c) 2000-2006 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// Copyright (c) 1982, 1986, 1989, 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)signal.h	8.2 (Berkeley) 1/21/94
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2009 Apple, Inc. All rights reserved.
-// Copyright (c) 1992 NeXT Computer, Inc.
-//
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-type sig_atomic_t = int32 /* signal.h:17:13 */
-
-// Language spec sez we must list exactly one parameter, even though we
-// actually supply three.  Ugh!
-// SIG_HOLD is chosen to avoid KERN_SIG_* values in <sys/signalvar.h>
-
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2017 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2004-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// @OSF_COPYRIGHT@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type sig_atomic_t = int32
 
 type __darwin_arm_exception_state = struct {
 	__exception uint32
 	__fsr       uint32
 	__far       uint32
-} /* _structs.h:41:1 */
+}
 
 type __darwin_arm_exception_state64 = struct {
 	__far       uint64
 	__esr       uint32
 	__exception uint32
-} /* _structs.h:59:1 */
+}
 
 type __darwin_arm_thread_state = struct {
 	__r    [13]uint32
@@ -8229,12 +835,7 @@ type __darwin_arm_thread_state = struct {
 	__lr   uint32
 	__pc   uint32
 	__cpsr uint32
-} /* _structs.h:77:1 */
-
-// By default, the pointer fields in the arm_thread_state64_t structure are
-// opaque on the arm64e architecture and require the use of accessor macros.
-// This mode can also be enabled on the arm64 architecture by building with
-// -D__DARWIN_OPAQUE_ARM_THREAD_STATE64=1.
+}
 
 type __darwin_arm_thread_state64 = struct {
 	__x    [29]uint64
@@ -8244,26 +845,12 @@ type __darwin_arm_thread_state64 = struct {
 	__pc   uint64
 	__cpsr uint32
 	__pad  uint32
-} /* _structs.h:136:1 */
-
-// Accessor macros for arm_thread_state64_t pointer fields
-
-// Return pc field of arm_thread_state64_t as a data pointer value
-// Return pc field of arm_thread_state64_t as a function pointer
-// Set pc field of arm_thread_state64_t to a function pointer
-// Return lr field of arm_thread_state64_t as a data pointer value
-// Return lr field of arm_thread_state64_t as a function pointer
-// Set lr field of arm_thread_state64_t to a function pointer
-// Return sp field of arm_thread_state64_t as a data pointer value
-// Set sp field of arm_thread_state64_t to a data pointer value
-// Return fp field of arm_thread_state64_t as a data pointer value
-// Set fp field of arm_thread_state64_t to a data pointer value
-// Strip ptr auth bits from pc, lr, sp and fp field of arm_thread_state64_t
+}
 
 type __darwin_arm_vfp_state = struct {
 	__r     [64]uint32
 	__fpscr uint32
-} /* _structs.h:433:1 */
+}
 
 type __darwin_arm_neon_state64 = struct {
 	__v [32]struct {
@@ -8272,7 +859,7 @@ type __darwin_arm_neon_state64 = struct {
 	}
 	__fpsr uint32
 	__fpcr uint32
-} /* _structs.h:452:1 */
+}
 
 type __darwin_arm_neon_state = struct {
 	__v [16]struct {
@@ -8281,20 +868,16 @@ type __darwin_arm_neon_state = struct {
 	}
 	__fpsr uint32
 	__fpcr uint32
-} /* _structs.h:459:1 */
+}
 
-type __arm_pagein_state = struct{ __pagein_error int32 } /* _structs.h:523:1 */
-
-// Debug State
-
-// ARM's arm_debug_state is ARM64's arm_legacy_debug_state
+type __arm_pagein_state = struct{ __pagein_error int32 }
 
 type __arm_legacy_debug_state = struct {
 	__bvr [16]uint32
 	__bcr [16]uint32
 	__wvr [16]uint32
 	__wcr [16]uint32
-} /* _structs.h:560:1 */
+}
 
 type __darwin_arm_debug_state32 = struct {
 	__bvr       [16]uint32
@@ -8302,7 +885,7 @@ type __darwin_arm_debug_state32 = struct {
 	__wvr       [16]uint32
 	__wcr       [16]uint32
 	__mdscr_el1 uint64
-} /* _structs.h:583:1 */
+}
 
 type __darwin_arm_debug_state64 = struct {
 	__bvr       [16]uint64
@@ -8310,9 +893,9 @@ type __darwin_arm_debug_state64 = struct {
 	__wvr       [16]uint64
 	__wcr       [16]uint64
 	__mdscr_el1 uint64
-} /* _structs.h:593:1 */
+}
 
-type __darwin_arm_cpmu_state64 = struct{ __ctrs [16]uint64 } /* _structs.h:625:1 */
+type __darwin_arm_cpmu_state64 = struct{ __ctrs [16]uint64 }
 
 type __darwin_mcontext32 = struct {
 	__es struct {
@@ -8331,7 +914,7 @@ type __darwin_mcontext32 = struct {
 		__r     [64]uint32
 		__fpscr uint32
 	}
-} /* _mcontext.h:41:1 */
+}
 
 type __darwin_mcontext64 = struct {
 	__es struct {
@@ -8356,354 +939,18 @@ type __darwin_mcontext64 = struct {
 		__fpsr uint32
 		__fpcr uint32
 	}
-} /* _mcontext.h:64:1 */
+}
 
-type mcontext_t = uintptr /* _mcontext.h:85:33 */
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Structure used in sigaltstack call.
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type mcontext_t = uintptr
 
 type __darwin_sigaltstack = struct {
 	ss_sp    uintptr
 	ss_size  uint64
 	ss_flags int32
 	_        [4]byte
-} /* _sigaltstack.h:42:1 */
+}
 
-type stack_t = __darwin_sigaltstack /* _sigaltstack.h:48:33 */ // [???] signal stack
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Structure used in sigaltstack call.
+type stack_t = __darwin_sigaltstack
 
 type __darwin_ucontext = struct {
 	uc_onstack int32
@@ -8717,144 +964,17 @@ type __darwin_ucontext = struct {
 	uc_link     uintptr
 	uc_mcsize   uint64
 	uc_mcontext uintptr
-} /* _ucontext.h:43:1 */
+}
 
-// user context
-type ucontext_t = __darwin_ucontext /* _ucontext.h:57:33 */ // [???] user context
+type ucontext_t = __darwin_ucontext
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type sigset_t = uint32 /* _sigset_t.h:31:41 */
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type sigset_t = uint32
 
 type sigval = struct {
 	_         [0]uint64
 	sival_int int32
 	_         [4]byte
-} /* signal.h:158:1 */
+}
 
 type sigevent = struct {
 	sigev_notify int32
@@ -8866,7 +986,7 @@ type sigevent = struct {
 	}
 	sigev_notify_function   uintptr
 	sigev_notify_attributes uintptr
-} /* signal.h:168:1 */
+}
 
 type __siginfo = struct {
 	si_signo  int32
@@ -8883,784 +1003,46 @@ type __siginfo = struct {
 	}
 	si_band int64
 	__pad   [7]uint64
-} /* signal.h:177:9 */
+}
 
-type siginfo_t = __siginfo /* signal.h:188:3 */
+type siginfo_t = __siginfo
 
-// When the signal is SIGILL or SIGFPE, si_addr contains the address of
-// the faulting instruction.
-// When the signal is SIGSEGV or SIGBUS, si_addr contains the address of
-// the faulting memory reference. Although for x86 there are cases of SIGSEGV
-// for which si_addr cannot be determined and is NULL.
-// If the signal is SIGCHLD, the si_pid field will contain the child process ID,
-//  si_status contains the exit value or signal and
-//  si_uid contains the real user ID of the process that sent the signal.
+type __sigaction_u = struct{ __sa_handler uintptr }
 
-// Values for si_code
-
-// Codes for SIGILL
-
-// Codes for SIGFPE
-
-// Codes for SIGSEGV
-
-// Codes for SIGBUS
-
-// Codes for SIGTRAP
-
-// Codes for SIGCHLD
-
-// Codes for SIGPOLL
-
-// union for signal handlers
-type __sigaction_u = struct{ __sa_handler uintptr } /* signal.h:269:1 */
-
-// Signal vector template for Kernel user boundary
 type __sigaction = struct {
 	__sigaction_u struct{ __sa_handler uintptr }
 	sa_tramp      uintptr
 	sa_mask       sigset_t
 	sa_flags      int32
-} /* signal.h:276:1 */
+}
 
-// Signal vector "template" used in sigaction call.
 type sigaction = struct {
 	__sigaction_u struct{ __sa_handler uintptr }
 	sa_mask       sigset_t
 	sa_flags      int32
-} /* signal.h:286:1 */
+}
 
-// if SA_SIGINFO is set, sa_sigaction is to be used instead of sa_handler.
+type sig_t = uintptr
 
-// This will provide 64bit register set in a 32bit user address space
-
-// the following are the only bits we support from user space, the
-// rest are for kernel use only.
-
-// Flags for sigprocmask:
-
-// POSIX 1003.1b required values.
-
-type sig_t = uintptr /* signal.h:331:14 */ // type of signal function
-
-// Structure used in sigaltstack call.
-
-// 4.3 compatibility:
-// Signal vector "template" used in sigvec call.
 type sigvec = struct {
 	sv_handler uintptr
 	sv_mask    int32
 	sv_flags   int32
-} /* signal.h:348:1 */
+}
 
-// Structure used in sigstack call.
 type sigstack = struct {
 	ss_sp      uintptr
 	ss_onstack int32
 	_          [4]byte
-} /* signal.h:367:1 */
-
-// Darwin extensions
-
-// Copyright (c) 2000-2005 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1992, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)select.h	8.2 (Berkeley) 1/4/94
-
-// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// [XSI] The <sys/select.h> header shall define the fd_set type as a structure.
-// The timespec structure shall be defined as described in <time.h>
-// The <sys/select.h> header shall define the timeval structure.
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+}
 
 type timeval = struct {
 	tv_sec  int64
 	tv_usec int32
 	_       [4]byte
-} /* _timeval.h:34:1 */
+}
 
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-
-type uuid_t = [16]uint8 /* _uuid_t.h:31:25 */
-
-// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-// Copyright (c) 1989, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)time.h	8.3 (Berkeley) 1/21/94
-
-// Copyright (c) 2004, 2008, 2009 Apple Inc. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright 1995 NeXT Computer, Inc. All rights reserved.
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-
-// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type uuid_t = [16]uint8
 
 type tm = struct {
 	tm_sec    int32
@@ -9675,127 +1057,10 @@ type tm = struct {
 	_         [4]byte
 	tm_gmtoff int64
 	tm_zone   uintptr
-} /* time.h:75:1 */
+}
 
-type clockid_t = uint32 /* time.h:172:3 */
+type clockid_t = uint32
 
-// Error codes
-
-// 11 was EAGAIN
-
-// math software
-
-// non-blocking and interrupt i/o
-
-// ipc/network software -- argument errors
-
-// ipc/network software -- operational errors
-
-// should be rearranged
-
-// quotas & mush
-
-// Network File System
-
-// Intelligent device errors
-
-// Program loading errors
-
-// This value is only discrete when compiling __DARWIN_UNIX03, or KERNEL
-
-// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// -
-// Copyright (c) 1983, 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)fcntl.h	8.3 (Berkeley) 1/21/94
-
-// #define hook __builtin_printf("TRC %s:%i:\n", __func__, __LINE__);
-
-// Size of the write buffer used by journal files in bytes.
-
-// The maximum pathname length supported by this VFS.
-
-// When using this VFS, the sqlite3_file* handles that SQLite uses are
-// actually pointers to instances of type VFSFile.
 type VFSFile1 = struct {
 	base        sqlite3_file
 	fsFile      uintptr
@@ -9805,135 +1070,16 @@ type VFSFile1 = struct {
 	nBuffer     int32
 	_           [4]byte
 	iBufferOfst sqlite3_int64
-} /* vfs.c:154:9 */
+}
 
-// Error codes
+type VFSFile = VFSFile1
 
-// 11 was EAGAIN
-
-// math software
-
-// non-blocking and interrupt i/o
-
-// ipc/network software -- argument errors
-
-// ipc/network software -- operational errors
-
-// should be rearranged
-
-// quotas & mush
-
-// Network File System
-
-// Intelligent device errors
-
-// Program loading errors
-
-// This value is only discrete when compiling __DARWIN_UNIX03, or KERNEL
-
-// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
-//
-// @APPLE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this
-// file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_LICENSE_HEADER_END@
-// Copyright (c) 2000-2013 Apple Inc. All rights reserved.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
-//
-// This file contains Original Code and/or Modifications of Original Code
-// as defined in and that are subject to the Apple Public Source License
-// Version 2.0 (the 'License'). You may not use this file except in
-// compliance with the License. The rights granted to you under the License
-// may not be used to create, or enable the creation or redistribution of,
-// unlawful or unlicensed copies of an Apple operating system, or to
-// circumvent, violate, or enable the circumvention or violation of, any
-// terms of an Apple operating system software license agreement.
-//
-// Please obtain a copy of the License at
-// http://www.opensource.apple.com/apsl/ and read it before using this file.
-//
-// The Original Code and all software distributed under the License are
-// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-// Please see the License for the specific language governing rights and
-// limitations under the License.
-//
-// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
-// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
-// -
-// Copyright (c) 1983, 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//	This product includes software developed by the University of
-//	California, Berkeley and its contributors.
-// 4. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)fcntl.h	8.3 (Berkeley) 1/21/94
-
-// #define hook __builtin_printf("TRC %s:%i:\n", __func__, __LINE__);
-
-// Size of the write buffer used by journal files in bytes.
-
-// The maximum pathname length supported by this VFS.
-
-// When using this VFS, the sqlite3_file* handles that SQLite uses are
-// actually pointers to instances of type VFSFile.
-type VFSFile = VFSFile1 /* vfs.c:154:24 */
-
-// Write directly to the file passed as the first argument. Even if the
-// file has a write-buffer (VFSFile.aBuffer), ignore it.
-func vfsDirectWrite(tls *libc.TLS, p uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 { /* vfs.c:169:12: */
+func vfsDirectWrite(tls *libc.TLS, p uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
-	var ofst off_t    // Return value from lseek()
-	var nWrite size_t // Return value from write()
+	var ofst off_t
+	var nWrite size_t
 
 	libc.X__builtin_printf(tls, ts, libc.VaList(bp, uintptr(unsafe.Pointer(&__func__)), 178))
 	libc.X__builtin_abort(tls)
@@ -9950,12 +1096,9 @@ func vfsDirectWrite(tls *libc.TLS, p uintptr, zBuf uintptr, iAmt int32, iOfst sq
 	return 0
 }
 
-var __func__ = *(*[15]int8)(unsafe.Pointer(ts + 13)) /* vfs.c:174:2 */
+var __func__ = *(*[15]int8)(unsafe.Pointer(ts + 13))
 
-// Flush the contents of the VFSFile.aBuffer buffer to disk. This is a
-// no-op if this particular file does not have a buffer (i.e. it is not
-// a journal file) or if the buffer is currently empty.
-func vfsFlushBuffer(tls *libc.TLS, p uintptr) int32 { /* vfs.c:197:12: */
+func vfsFlushBuffer(tls *libc.TLS, p uintptr) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -9969,10 +1112,9 @@ func vfsFlushBuffer(tls *libc.TLS, p uintptr) int32 { /* vfs.c:197:12: */
 	return rc
 }
 
-var __func__1 = *(*[15]int8)(unsafe.Pointer(ts + 28)) /* vfs.c:197:38 */
+var __func__1 = *(*[15]int8)(unsafe.Pointer(ts + 28))
 
-// Write data to a crash-file.
-func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 { /* vfs.c:267:12: */
+func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqlite_int64) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -9981,16 +1123,13 @@ func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqli
 	var p uintptr = pFile
 
 	if (*VFSFile)(unsafe.Pointer(p)).aBuffer != 0 {
-		var z uintptr = zBuf        // Pointer to remaining data to write
-		var n int32 = iAmt          // Number of bytes at z
-		var i sqlite3_int64 = iOfst // File offset to write to
+		var z uintptr = zBuf
+		var n int32 = iAmt
+		var i sqlite3_int64 = iOfst
 
 		for n > 0 {
-			var nCopy int32 // Number of bytes to copy into buffer
+			var nCopy int32
 
-			// If the buffer is full, or if this data is not being written directly
-			// following the data already buffered, flush the buffer. Flushing
-			// the buffer is a no-op if it is empty.
 			if (*VFSFile)(unsafe.Pointer(p)).nBuffer == 8192 || (*VFSFile)(unsafe.Pointer(p)).iBufferOfst+sqlite3_int64((*VFSFile)(unsafe.Pointer(p)).nBuffer) != i {
 				var rc int32 = vfsFlushBuffer(tls, p)
 				if rc != 0 {
@@ -10003,7 +1142,6 @@ func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqli
 			}
 			(*VFSFile)(unsafe.Pointer(p)).iBufferOfst = i - sqlite3_int64((*VFSFile)(unsafe.Pointer(p)).nBuffer)
 
-			// Copy as much data as possible into the buffer.
 			nCopy = 8192 - (*VFSFile)(unsafe.Pointer(p)).nBuffer
 			if nCopy > n {
 				nCopy = n
@@ -10022,16 +1160,13 @@ func vfsWrite(tls *libc.TLS, pFile uintptr, zBuf uintptr, iAmt int32, iOfst sqli
 	return 0
 }
 
-var __func__4 = *(*[9]int8)(unsafe.Pointer(ts + 97)) /* vfs.c:272:2 */
+var __func__4 = *(*[9]int8)(unsafe.Pointer(ts + 97))
 
-// Truncate a file. This is a no-op for this VFS (see header comments at
-// the top of the file).
-func vfsTruncate(tls *libc.TLS, pFile uintptr, size sqlite_int64) int32 { /* vfs.c:320:12: */
+func vfsTruncate(tls *libc.TLS, pFile uintptr, size sqlite_int64) int32 {
 	return 0
 }
 
-// Sync the contents of the file to the persistent media.
-func vfsSync(tls *libc.TLS, pFile uintptr, flags int32) int32 { /* vfs.c:330:12: */
+func vfsSync(tls *libc.TLS, pFile uintptr, flags int32) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -10054,51 +1189,40 @@ func vfsSync(tls *libc.TLS, pFile uintptr, flags int32) int32 { /* vfs.c:330:12:
 	}()
 }
 
-var __func__5 = *(*[8]int8)(unsafe.Pointer(ts + 106)) /* vfs.c:330:51 */
+var __func__5 = *(*[8]int8)(unsafe.Pointer(ts + 106))
 
-// Locking functions. The xLock() and xUnlock() methods are both no-ops.
-// The xCheckReservedLock() always indicates that no other process holds
-// a reserved lock on the database file. This ensures that if a hot-journal
-// file is found in the file-system it is rolled back.
-func vfsLock(tls *libc.TLS, pFile uintptr, eLock int32) int32 { /* vfs.c:375:12: */
+func vfsLock(tls *libc.TLS, pFile uintptr, eLock int32) int32 {
 	return 0
 }
 
-func vfsUnlock(tls *libc.TLS, pFile uintptr, eLock int32) int32 { /* vfs.c:378:12: */
+func vfsUnlock(tls *libc.TLS, pFile uintptr, eLock int32) int32 {
 	return 0
 }
 
-func vfsCheckReservedLock(tls *libc.TLS, pFile uintptr, pResOut uintptr) int32 { /* vfs.c:381:12: */
+func vfsCheckReservedLock(tls *libc.TLS, pFile uintptr, pResOut uintptr) int32 {
 	*(*int32)(unsafe.Pointer(pResOut)) = 0
 	return 0
 }
 
-// No xFileControl() verbs are implemented by this VFS.
-func vfsFileControl(tls *libc.TLS, pFile uintptr, op int32, pArg uintptr) int32 { /* vfs.c:389:12: */
+func vfsFileControl(tls *libc.TLS, pFile uintptr, op int32, pArg uintptr) int32 {
 	return 12
 }
 
-// The xSectorSize() and xDeviceCharacteristics() methods. These two
-// may return special values allowing SQLite to optimize file-system
-// access to some extent. But it is also safe to simply return 0.
-func vfsSectorSize(tls *libc.TLS, pFile uintptr) int32 { /* vfs.c:398:12: */
+func vfsSectorSize(tls *libc.TLS, pFile uintptr) int32 {
 	return 0
 }
 
-func vfsDeviceCharacteristics(tls *libc.TLS, pFile uintptr) int32 { /* vfs.c:401:12: */
+func vfsDeviceCharacteristics(tls *libc.TLS, pFile uintptr) int32 {
 	return 0
 }
 
-// Delete the file identified by argument zPath. If the dirSync parameter
-// is non-zero, then ensure the file-system modification to delete the
-// file has been synced to disk before returning.
-func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 { /* vfs.c:472:12: */
+func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 {
 	bp := tls.Alloc(4129)
 	defer tls.Free(4129)
 
 	libc.X__builtin_printf(tls, ts, libc.VaList(bp, uintptr(unsafe.Pointer(&__func__8)), 473))
 	libc.X__builtin_abort(tls)
-	var rc int32 // Return code
+	var rc int32
 
 	rc = libc.Xunlink(tls, zPath)
 	if rc != 0 && *(*int32)(unsafe.Pointer(libc.X__error(tls))) == 2 {
@@ -10106,19 +1230,15 @@ func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 
 	}
 
 	if rc == 0 && dirSync != 0 {
-		var dfd int32 // File descriptor open on directory
-		var i int32   // Iterator variable
-		// var zDir [4097]int8 at bp+32, 4097
-		// Name of directory containing file zPath
+		var dfd int32
+		var i int32
 
-		// Figure out the directory name from the path of the file deleted.
 		sqlite3.Xsqlite3_snprintf(tls, 4096, bp+32, ts+114, libc.VaList(bp+16, zPath))
 		*(*int8)(unsafe.Pointer(bp + 32 + 4096)) = int8(0)
-		for i = int32(libc.Xstrlen(tls, bp+32)); i > 1 && int32(*(*int8)(unsafe.Pointer(bp + 32 /* &zDir[0] */ + uintptr(i)))) != '/'; i++ {
+		for i = int32(libc.Xstrlen(tls, bp+32)); i > 1 && int32(*(*int8)(unsafe.Pointer(bp + 32 + uintptr(i)))) != '/'; i++ {
 		}
 		*(*int8)(unsafe.Pointer(bp + 32 + uintptr(i))) = int8(0)
 
-		// Open a file-descriptor on the directory. Sync. Close.
 		dfd = libc.Xopen(tls, bp+32, 0x0000, libc.VaList(bp+24, 0))
 		if dfd < 0 {
 			rc = -1
@@ -10135,110 +1255,83 @@ func vfsDelete(tls *libc.TLS, pVfs uintptr, zPath uintptr, dirSync int32) int32 
 	}()
 }
 
-var __func__8 = *(*[10]int8)(unsafe.Pointer(ts + 117)) /* vfs.c:472:72 */
+var __func__8 = *(*[10]int8)(unsafe.Pointer(ts + 117))
 
-// The following four VFS methods:
-//
-//	xDlOpen
-//	xDlError
-//	xDlSym
-//	xDlClose
-//
-// are supposed to implement the functionality needed by SQLite to load
-// extensions compiled as shared objects. This simple VFS does not support
-// this functionality, so the following functions are no-ops.
-func vfsDlOpen(tls *libc.TLS, pVfs uintptr, zPath uintptr) uintptr { /* vfs.c:583:13: */
+func vfsDlOpen(tls *libc.TLS, pVfs uintptr, zPath uintptr) uintptr {
 	return uintptr(0)
 }
 
-func vfsDlError(tls *libc.TLS, pVfs uintptr, nByte int32, zErrMsg uintptr) { /* vfs.c:586:13: */
+func vfsDlError(tls *libc.TLS, pVfs uintptr, nByte int32, zErrMsg uintptr) {
 	sqlite3.Xsqlite3_snprintf(tls, nByte, zErrMsg, ts+127, 0)
 	*(*int8)(unsafe.Pointer(zErrMsg + uintptr(nByte-1))) = int8(0)
 }
 
-func vfsDlSym(tls *libc.TLS, pVfs uintptr, pH uintptr, z uintptr) uintptr { /* vfs.c:590:13: */
+func vfsDlSym(tls *libc.TLS, pVfs uintptr, pH uintptr, z uintptr) uintptr {
 	return uintptr(0)
 }
 
-func vfsDlClose(tls *libc.TLS, pVfs uintptr, pHandle uintptr) { /* vfs.c:593:13: */
+func vfsDlClose(tls *libc.TLS, pVfs uintptr, pHandle uintptr) {
 	return
 }
 
-// Parameter zByte points to a buffer nByte bytes in size. Populate this
-// buffer with pseudo-random data.
-func vfsRandomness(tls *libc.TLS, pVfs uintptr, nByte int32, zByte uintptr) int32 { /* vfs.c:601:12: */
+func vfsRandomness(tls *libc.TLS, pVfs uintptr, nByte int32, zByte uintptr) int32 {
 	return 0
 }
 
-// Sleep for at least nMicro microseconds. Return the (approximate) number
-// of microseconds slept for.
-func vfsSleep(tls *libc.TLS, pVfs uintptr, nMicro int32) int32 { /* vfs.c:609:12: */
+func vfsSleep(tls *libc.TLS, pVfs uintptr, nMicro int32) int32 {
 	libc.Xsleep(tls, uint32(nMicro/1000000))
 	libc.Xusleep(tls, uint32(nMicro%1000000))
 	return nMicro
 }
 
-// Set *pTime to the current UTC time expressed as a Julian day. Return
-// SQLITE_OK if successful, or an error code otherwise.
-//
-//	http://en.wikipedia.org/wiki/Julian_day
-//
-// This implementation is not very good. The current time is rounded to
-// an integer number of seconds. Also, assuming time_t is a signed 32-bit
-// value, it will stop working some time in the year 2038 AD (the so-called
-// "year 2038" problem that afflicts systems that store time this way).
-func vfsCurrentTime(tls *libc.TLS, pVfs uintptr, pTime uintptr) int32 { /* vfs.c:626:12: */
+func vfsCurrentTime(tls *libc.TLS, pVfs uintptr, pTime uintptr) int32 {
 	var t time_t = libc.Xtime(tls, uintptr(0))
 	*(*float64)(unsafe.Pointer(pTime)) = float64(t)/86400.0 + 2440587.5
 	return 0
 }
 
-// This function returns a pointer to the VFS implemented in this file.
-// To make the VFS available to SQLite:
-//
-//	sqlite3_vfs_register(sqlite3_fsFS(), 0);
-func Xsqlite3_fsFS(tls *libc.TLS, zName uintptr, pAppData uintptr) uintptr { /* vfs.c:638:13: */
+func Xsqlite3_fsFS(tls *libc.TLS, zName uintptr, pAppData uintptr) uintptr {
 	var p uintptr = sqlite3.Xsqlite3_malloc(tls, int32(unsafe.Sizeof(sqlite3_vfs{})))
 	if !(p != 0) {
 		return uintptr(0)
 	}
 
 	*(*sqlite3_vfs)(unsafe.Pointer(p)) = sqlite3_vfs{
-		iVersion:   1,                               // iVersion
-		szOsFile:   int32(unsafe.Sizeof(VFSFile{})), // szOsFile
-		mxPathname: 4096,                            // pNext
-		zName:      zName,                           // zName
-		pAppData:   pAppData,                        // pAppData
+		iVersion:   1,
+		szOsFile:   int32(unsafe.Sizeof(VFSFile{})),
+		mxPathname: 4096,
+		zName:      zName,
+		pAppData:   pAppData,
 		xOpen: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, uintptr, int32, uintptr) int32
-		}{vfsOpen})), // xOpen
+		}{vfsOpen})),
 		xDelete: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, int32) int32
-		}{vfsDelete})), // xDelete
+		}{vfsDelete})),
 		xAccess: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32
-		}{vfsAccess})), // xAccess
+		}{vfsAccess})),
 		xFullPathname: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, int32, uintptr) int32
-		}{vfsFullPathname})), // xFullPathname
+		}{vfsFullPathname})),
 		xDlOpen: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr) uintptr
-		}{vfsDlOpen})), // xDlOpen
+		}{vfsDlOpen})),
 		xDlError: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, int32, uintptr)
-		}{vfsDlError})), // xDlError
+		}{vfsDlError})),
 		xDlSym: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr, uintptr) uintptr
-		}{vfsDlSym})), // xDlSym
+		}{vfsDlSym})),
 		xDlClose: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr)
-		}{vfsDlClose})), // xDlClose
+		}{vfsDlClose})),
 		xRandomness: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, int32, uintptr) int32
-		}{vfsRandomness})), // xRandomness
+		}{vfsRandomness})),
 		xSleep: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, int32) int32
-		}{vfsSleep})), // xSleep
+		}{vfsSleep})),
 		xCurrentTime: *(*uintptr)(unsafe.Pointer(&struct {
 			f func(*libc.TLS, uintptr, uintptr) int32
 		}{vfsCurrentTime}))}

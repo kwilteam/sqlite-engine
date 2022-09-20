@@ -23,1330 +23,1065 @@ var _ types.Size_t
 func main() { libc.Start(main1) }
 
 const (
-	BIG_ENDIAN                            = 4321                                                                                   // /usr/include/sys/_endian.h:70:1:
-	BUFSIZ                                = 1024                                                                                   // /usr/include/stdio.h:209:1:
-	BYTE_ORDER                            = 1234                                                                                   // /usr/include/sys/_endian.h:72:1:
-	CLOSE_RANGE_CLOEXEC                   = 4                                                                                      // /usr/include/sys/unistd.h:205:1:
-	DEFAULT_TIMEOUT                       = 10000                                                                                  // testdata/sqlite-src-3390300/mptest/mptest.c:93:1:
-	E2BIG                                 = 7                                                                                      // /usr/include/errno.h:57:1:
-	EACCES                                = 13                                                                                     // /usr/include/errno.h:64:1:
-	EADDRINUSE                            = 48                                                                                     // /usr/include/errno.h:112:1:
-	EADDRNOTAVAIL                         = 49                                                                                     // /usr/include/errno.h:113:1:
-	EAFNOSUPPORT                          = 47                                                                                     // /usr/include/errno.h:111:1:
-	EAGAIN                                = 35                                                                                     // /usr/include/errno.h:94:1:
-	EALREADY                              = 37                                                                                     // /usr/include/errno.h:98:1:
-	EAUTH                                 = 80                                                                                     // /usr/include/errno.h:161:1:
-	EBADF                                 = 9                                                                                      // /usr/include/errno.h:59:1:
-	EBADMSG                               = 89                                                                                     // /usr/include/errno.h:173:1:
-	EBADRPC                               = 72                                                                                     // /usr/include/errno.h:149:1:
-	EBUSY                                 = 16                                                                                     // /usr/include/errno.h:69:1:
-	ECANCELED                             = 85                                                                                     // /usr/include/errno.h:166:1:
-	ECAPMODE                              = 94                                                                                     // /usr/include/errno.h:180:1:
-	ECHILD                                = 10                                                                                     // /usr/include/errno.h:60:1:
-	ECONNABORTED                          = 53                                                                                     // /usr/include/errno.h:119:1:
-	ECONNREFUSED                          = 61                                                                                     // /usr/include/errno.h:127:1:
-	ECONNRESET                            = 54                                                                                     // /usr/include/errno.h:120:1:
-	EDEADLK                               = 11                                                                                     // /usr/include/errno.h:61:1:
-	EDESTADDRREQ                          = 39                                                                                     // /usr/include/errno.h:102:1:
-	EDOM                                  = 33                                                                                     // /usr/include/errno.h:90:1:
-	EDOOFUS                               = 88                                                                                     // /usr/include/errno.h:170:1:
-	EDQUOT                                = 69                                                                                     // /usr/include/errno.h:144:1:
-	EEXIST                                = 17                                                                                     // /usr/include/errno.h:70:1:
-	EFAULT                                = 14                                                                                     // /usr/include/errno.h:65:1:
-	EFBIG                                 = 27                                                                                     // /usr/include/errno.h:82:1:
-	EFTYPE                                = 79                                                                                     // /usr/include/errno.h:160:1:
-	EHOSTDOWN                             = 64                                                                                     // /usr/include/errno.h:135:1:
-	EHOSTUNREACH                          = 65                                                                                     // /usr/include/errno.h:136:1:
-	EIDRM                                 = 82                                                                                     // /usr/include/errno.h:163:1:
-	EILSEQ                                = 86                                                                                     // /usr/include/errno.h:167:1:
-	EINPROGRESS                           = 36                                                                                     // /usr/include/errno.h:97:1:
-	EINTEGRITY                            = 97                                                                                     // /usr/include/errno.h:183:1:
-	EINTR                                 = 4                                                                                      // /usr/include/errno.h:54:1:
-	EINVAL                                = 22                                                                                     // /usr/include/errno.h:75:1:
-	EIO                                   = 5                                                                                      // /usr/include/errno.h:55:1:
-	EISCONN                               = 56                                                                                     // /usr/include/errno.h:122:1:
-	EISDIR                                = 21                                                                                     // /usr/include/errno.h:74:1:
-	ELAST                                 = 97                                                                                     // /usr/include/errno.h:187:1:
-	ELOOP                                 = 62                                                                                     // /usr/include/errno.h:129:1:
-	EMFILE                                = 24                                                                                     // /usr/include/errno.h:77:1:
-	EMLINK                                = 31                                                                                     // /usr/include/errno.h:86:1:
-	EMSGSIZE                              = 40                                                                                     // /usr/include/errno.h:103:1:
-	EMULTIHOP                             = 90                                                                                     // /usr/include/errno.h:174:1:
-	ENAMETOOLONG                          = 63                                                                                     // /usr/include/errno.h:131:1:
-	ENEEDAUTH                             = 81                                                                                     // /usr/include/errno.h:162:1:
-	ENETDOWN                              = 50                                                                                     // /usr/include/errno.h:116:1:
-	ENETRESET                             = 52                                                                                     // /usr/include/errno.h:118:1:
-	ENETUNREACH                           = 51                                                                                     // /usr/include/errno.h:117:1:
-	ENFILE                                = 23                                                                                     // /usr/include/errno.h:76:1:
-	ENOATTR                               = 87                                                                                     // /usr/include/errno.h:168:1:
-	ENOBUFS                               = 55                                                                                     // /usr/include/errno.h:121:1:
-	ENODEV                                = 19                                                                                     // /usr/include/errno.h:72:1:
-	ENOENT                                = 2                                                                                      // /usr/include/errno.h:52:1:
-	ENOEXEC                               = 8                                                                                      // /usr/include/errno.h:58:1:
-	ENOLCK                                = 77                                                                                     // /usr/include/errno.h:156:1:
-	ENOLINK                               = 91                                                                                     // /usr/include/errno.h:175:1:
-	ENOMEM                                = 12                                                                                     // /usr/include/errno.h:63:1:
-	ENOMSG                                = 83                                                                                     // /usr/include/errno.h:164:1:
-	ENOPROTOOPT                           = 42                                                                                     // /usr/include/errno.h:105:1:
-	ENOSPC                                = 28                                                                                     // /usr/include/errno.h:83:1:
-	ENOSYS                                = 78                                                                                     // /usr/include/errno.h:157:1:
-	ENOTBLK                               = 15                                                                                     // /usr/include/errno.h:67:1:
-	ENOTCAPABLE                           = 93                                                                                     // /usr/include/errno.h:179:1:
-	ENOTCONN                              = 57                                                                                     // /usr/include/errno.h:123:1:
-	ENOTDIR                               = 20                                                                                     // /usr/include/errno.h:73:1:
-	ENOTEMPTY                             = 66                                                                                     // /usr/include/errno.h:138:1:
-	ENOTRECOVERABLE                       = 95                                                                                     // /usr/include/errno.h:181:1:
-	ENOTSOCK                              = 38                                                                                     // /usr/include/errno.h:101:1:
-	ENOTSUP                               = 45                                                                                     // /usr/include/errno.h:109:1:
-	ENOTTY                                = 25                                                                                     // /usr/include/errno.h:78:1:
-	ENXIO                                 = 6                                                                                      // /usr/include/errno.h:56:1:
-	EOF                                   = -1                                                                                     // /usr/include/stdio.h:210:1:
-	EOPNOTSUPP                            = 45                                                                                     // /usr/include/errno.h:108:1:
-	EOVERFLOW                             = 84                                                                                     // /usr/include/errno.h:165:1:
-	EOWNERDEAD                            = 96                                                                                     // /usr/include/errno.h:182:1:
-	EPERM                                 = 1                                                                                      // /usr/include/errno.h:51:1:
-	EPFNOSUPPORT                          = 46                                                                                     // /usr/include/errno.h:110:1:
-	EPIPE                                 = 32                                                                                     // /usr/include/errno.h:87:1:
-	EPROCLIM                              = 67                                                                                     // /usr/include/errno.h:142:1:
-	EPROCUNAVAIL                          = 76                                                                                     // /usr/include/errno.h:153:1:
-	EPROGMISMATCH                         = 75                                                                                     // /usr/include/errno.h:152:1:
-	EPROGUNAVAIL                          = 74                                                                                     // /usr/include/errno.h:151:1:
-	EPROTO                                = 92                                                                                     // /usr/include/errno.h:176:1:
-	EPROTONOSUPPORT                       = 43                                                                                     // /usr/include/errno.h:106:1:
-	EPROTOTYPE                            = 41                                                                                     // /usr/include/errno.h:104:1:
-	ERANGE                                = 34                                                                                     // /usr/include/errno.h:91:1:
-	EREMOTE                               = 71                                                                                     // /usr/include/errno.h:148:1:
-	EROFS                                 = 30                                                                                     // /usr/include/errno.h:85:1:
-	ERPCMISMATCH                          = 73                                                                                     // /usr/include/errno.h:150:1:
-	ESHUTDOWN                             = 58                                                                                     // /usr/include/errno.h:124:1:
-	ESOCKTNOSUPPORT                       = 44                                                                                     // /usr/include/errno.h:107:1:
-	ESPIPE                                = 29                                                                                     // /usr/include/errno.h:84:1:
-	ESRCH                                 = 3                                                                                      // /usr/include/errno.h:53:1:
-	ESTALE                                = 70                                                                                     // /usr/include/errno.h:147:1:
-	ETIMEDOUT                             = 60                                                                                     // /usr/include/errno.h:126:1:
-	ETOOMANYREFS                          = 59                                                                                     // /usr/include/errno.h:125:1:
-	ETXTBSY                               = 26                                                                                     // /usr/include/errno.h:80:1:
-	EUSERS                                = 68                                                                                     // /usr/include/errno.h:143:1:
-	EWOULDBLOCK                           = 35                                                                                     // /usr/include/errno.h:96:1:
-	EXDEV                                 = 18                                                                                     // /usr/include/errno.h:71:1:
-	EXIT_FAILURE                          = 1                                                                                      // /usr/include/stdlib.h:73:1:
-	EXIT_SUCCESS                          = 0                                                                                      // /usr/include/stdlib.h:74:1:
-	FD_SETSIZE                            = 1024                                                                                   // /usr/include/sys/select.h:61:1:
-	FILENAME_MAX                          = 1024                                                                                   // /usr/include/stdio.h:221:1:
-	FOPEN_MAX                             = 20                                                                                     // /usr/include/stdio.h:219:1:
-	FTS5_TOKENIZE_AUX                     = 0x0008                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:12782:1:
-	FTS5_TOKENIZE_DOCUMENT                = 0x0004                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:12781:1:
-	FTS5_TOKENIZE_PREFIX                  = 0x0002                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:12780:1:
-	FTS5_TOKENIZE_QUERY                   = 0x0001                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:12779:1:
-	FTS5_TOKEN_COLOCATED                  = 0x0001                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:12786:1:
-	FULLY_WITHIN                          = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10527:1:
-	F_LOCK                                = 1                                                                                      // /usr/include/unistd.h:85:1:
-	F_OK                                  = 0                                                                                      // /usr/include/sys/unistd.h:102:1:
-	F_TEST                                = 3                                                                                      // /usr/include/unistd.h:87:1:
-	F_TLOCK                               = 2                                                                                      // /usr/include/unistd.h:86:1:
-	F_ULOCK                               = 0                                                                                      // /usr/include/unistd.h:84:1:
-	HAVE_USLEEP                           = 1                                                                                      // <defines>:2:1:
-	LITTLE_ENDIAN                         = 1234                                                                                   // /usr/include/sys/_endian.h:69:1:
-	L_INCR                                = 1                                                                                      // /usr/include/sys/unistd.h:121:1:
-	L_SET                                 = 0                                                                                      // /usr/include/sys/unistd.h:120:1:
-	L_XTND                                = 2                                                                                      // /usr/include/sys/unistd.h:122:1:
-	L_ctermid                             = 1024                                                                                   // /usr/include/stdio.h:319:1:
-	L_cuserid                             = 17                                                                                     // /usr/include/stdio.h:315:1:
-	L_tmpnam                              = 1024                                                                                   // /usr/include/stdio.h:227:1:
-	MX_ARG                                = 2                                                                                      // testdata/sqlite-src-3390300/mptest/mptest.c:867:1:
-	NDEBUG                                = 1                                                                                      // <defines>:1:1:
-	NOT_WITHIN                            = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10525:1:
-	PARTLY_WITHIN                         = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10526:1:
-	PDP_ENDIAN                            = 3412                                                                                   // /usr/include/sys/_endian.h:71:1:
-	P_tmpdir                              = "/tmp/"                                                                                // /usr/include/stdio.h:225:1:
-	RAND_MAX                              = 0x7fffffff                                                                             // /usr/include/stdlib.h:80:1:
-	RFCENVG                               = 2048                                                                                   // /usr/include/sys/unistd.h:178:1:
-	RFCFDG                                = 4096                                                                                   // /usr/include/sys/unistd.h:179:1:
-	RFCNAMEG                              = 1024                                                                                   // /usr/include/sys/unistd.h:177:1:
-	RFENVG                                = 2                                                                                      // /usr/include/sys/unistd.h:171:1:
-	RFFDG                                 = 4                                                                                      // /usr/include/sys/unistd.h:172:1:
-	RFFLAGS                               = 2416930932                                                                             // /usr/include/sys/unistd.h:195:1:
-	RFHIGHPID                             = 262144                                                                                 // /usr/include/sys/unistd.h:184:1:
-	RFKERNELONLY                          = 268828672                                                                              // /usr/include/sys/unistd.h:198:1:
-	RFLINUXTHPN                           = 65536                                                                                  // /usr/include/sys/unistd.h:182:1:
-	RFMEM                                 = 32                                                                                     // /usr/include/sys/unistd.h:175:1:
-	RFNAMEG                               = 1                                                                                      // /usr/include/sys/unistd.h:170:1:
-	RFNOTEG                               = 8                                                                                      // /usr/include/sys/unistd.h:173:1:
-	RFNOWAIT                              = 64                                                                                     // /usr/include/sys/unistd.h:176:1:
-	RFPPWAIT                              = 2147483648                                                                             // /usr/include/sys/unistd.h:192:1:
-	RFPROC                                = 16                                                                                     // /usr/include/sys/unistd.h:174:1:
-	RFPROCDESC                            = 268435456                                                                              // /usr/include/sys/unistd.h:190:1:
-	RFSIGSHARE                            = 16384                                                                                  // /usr/include/sys/unistd.h:181:1:
-	RFSPAWN                               = 2147483648                                                                             // /usr/include/sys/unistd.h:194:1:
-	RFSTOPPED                             = 131072                                                                                 // /usr/include/sys/unistd.h:183:1:
-	RFTHREAD                              = 8192                                                                                   // /usr/include/sys/unistd.h:180:1:
-	RFTSIGMASK                            = 0xFF                                                                                   // /usr/include/sys/unistd.h:187:1:
-	RFTSIGSHIFT                           = 20                                                                                     // /usr/include/sys/unistd.h:186:1:
-	RFTSIGZMB                             = 524288                                                                                 // /usr/include/sys/unistd.h:185:1:
-	R_OK                                  = 0x04                                                                                   // /usr/include/sys/unistd.h:105:1:
-	SEEK_CUR                              = 1                                                                                      // /usr/include/stdio.h:234:1:
-	SEEK_DATA                             = 3                                                                                      // /usr/include/sys/unistd.h:114:1:
-	SEEK_END                              = 2                                                                                      // /usr/include/stdio.h:237:1:
-	SEEK_HOLE                             = 4                                                                                      // /usr/include/sys/unistd.h:115:1:
-	SEEK_SET                              = 0                                                                                      // /usr/include/stdio.h:231:1:
-	SQLITE3_H                             = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:34:1:
-	SQLITE3_TEXT                          = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4881:1:
-	SQLITE_ABORT                          = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:449:1:
-	SQLITE_ABORT_ROLLBACK                 = 516                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:551:1:
-	SQLITE_ACCESS_EXISTS                  = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1486:1:
-	SQLITE_ACCESS_READ                    = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1488:1:
-	SQLITE_ACCESS_READWRITE               = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1487:1:
-	SQLITE_ALTER_TABLE                    = 26                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3176:1:
-	SQLITE_ANALYZE                        = 28                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3178:1:
-	SQLITE_ANY                            = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:5339:1:
-	SQLITE_API                            = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:75:1:
-	SQLITE_APICALL                        = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:81:1:
-	SQLITE_ATTACH                         = 24                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3174:1:
-	SQLITE_AUTH                           = 23                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:468:1:
-	SQLITE_AUTH_USER                      = 279                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:567:1:
-	SQLITE_BLOB                           = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4874:1:
-	SQLITE_BUSY                           = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:450:1:
-	SQLITE_BUSY_RECOVERY                  = 261                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:533:1:
-	SQLITE_BUSY_SNAPSHOT                  = 517                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:534:1:
-	SQLITE_BUSY_TIMEOUT                   = 773                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:535:1:
-	SQLITE_CALLBACK                       = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:87:1:
-	SQLITE_CANTOPEN                       = 14                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:459:1:
-	SQLITE_CANTOPEN_CONVPATH              = 1038                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:539:1:
-	SQLITE_CANTOPEN_DIRTYWAL              = 1294                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:540:1:
-	SQLITE_CANTOPEN_FULLPATH              = 782                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:538:1:
-	SQLITE_CANTOPEN_ISDIR                 = 526                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:537:1:
-	SQLITE_CANTOPEN_NOTEMPDIR             = 270                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:536:1:
-	SQLITE_CANTOPEN_SYMLINK               = 1550                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:541:1:
-	SQLITE_CDECL                          = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:78:1:
-	SQLITE_CHANGESETAPPLY_INVERT          = 0x0002                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:11784:1:
-	SQLITE_CHANGESETAPPLY_NOSAVEPOINT     = 0x0001                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:11783:1:
-	SQLITE_CHANGESETSTART_INVERT          = 0x0002                                                                                 // testdata/sqlite-amalgamation-3390300/sqlite3.h:11099:1:
-	SQLITE_CHANGESET_ABORT                = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11880:1:
-	SQLITE_CHANGESET_CONFLICT             = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11843:1:
-	SQLITE_CHANGESET_CONSTRAINT           = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11844:1:
-	SQLITE_CHANGESET_DATA                 = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11841:1:
-	SQLITE_CHANGESET_FOREIGN_KEY          = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11845:1:
-	SQLITE_CHANGESET_NOTFOUND             = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11842:1:
-	SQLITE_CHANGESET_OMIT                 = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11878:1:
-	SQLITE_CHANGESET_REPLACE              = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:11879:1:
-	SQLITE_CHECKPOINT_FULL                = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9409:1:
-	SQLITE_CHECKPOINT_PASSIVE             = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9408:1:
-	SQLITE_CHECKPOINT_RESTART             = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9410:1:
-	SQLITE_CHECKPOINT_TRUNCATE            = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9411:1:
-	SQLITE_CONFIG_COVERING_INDEX_SCAN     = 20                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2107:1:
-	SQLITE_CONFIG_GETMALLOC               = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2092:1:
-	SQLITE_CONFIG_GETMUTEX                = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2098:1:
-	SQLITE_CONFIG_GETPCACHE               = 15                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2102:1:
-	SQLITE_CONFIG_GETPCACHE2              = 19                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2106:1:
-	SQLITE_CONFIG_HEAP                    = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2095:1:
-	SQLITE_CONFIG_LOG                     = 16                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2103:1:
-	SQLITE_CONFIG_LOOKASIDE               = 13                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2100:1:
-	SQLITE_CONFIG_MALLOC                  = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2091:1:
-	SQLITE_CONFIG_MEMDB_MAXSIZE           = 29                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2116:1:
-	SQLITE_CONFIG_MEMSTATUS               = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2096:1:
-	SQLITE_CONFIG_MMAP_SIZE               = 22                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2109:1:
-	SQLITE_CONFIG_MULTITHREAD             = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2089:1:
-	SQLITE_CONFIG_MUTEX                   = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2097:1:
-	SQLITE_CONFIG_PAGECACHE               = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2094:1:
-	SQLITE_CONFIG_PCACHE                  = 14                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2101:1:
-	SQLITE_CONFIG_PCACHE2                 = 18                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2105:1:
-	SQLITE_CONFIG_PCACHE_HDRSZ            = 24                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2111:1:
-	SQLITE_CONFIG_PMASZ                   = 25                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2112:1:
-	SQLITE_CONFIG_SCRATCH                 = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2093:1:
-	SQLITE_CONFIG_SERIALIZED              = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2090:1:
-	SQLITE_CONFIG_SINGLETHREAD            = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:2088:1:
-	SQLITE_CONFIG_SMALL_MALLOC            = 27                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2114:1:
-	SQLITE_CONFIG_SORTERREF_SIZE          = 28                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2115:1:
-	SQLITE_CONFIG_SQLLOG                  = 21                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2108:1:
-	SQLITE_CONFIG_STMTJRNL_SPILL          = 26                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2113:1:
-	SQLITE_CONFIG_URI                     = 17                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2104:1:
-	SQLITE_CONFIG_WIN32_HEAPSIZE          = 23                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:2110:1:
-	SQLITE_CONSTRAINT                     = 19                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:464:1:
-	SQLITE_CONSTRAINT_CHECK               = 275                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:552:1:
-	SQLITE_CONSTRAINT_COMMITHOOK          = 531                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:553:1:
-	SQLITE_CONSTRAINT_DATATYPE            = 3091                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:563:1:
-	SQLITE_CONSTRAINT_FOREIGNKEY          = 787                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:554:1:
-	SQLITE_CONSTRAINT_FUNCTION            = 1043                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:555:1:
-	SQLITE_CONSTRAINT_NOTNULL             = 1299                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:556:1:
-	SQLITE_CONSTRAINT_PINNED              = 2835                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:562:1:
-	SQLITE_CONSTRAINT_PRIMARYKEY          = 1555                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:557:1:
-	SQLITE_CONSTRAINT_ROWID               = 2579                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:561:1:
-	SQLITE_CONSTRAINT_TRIGGER             = 1811                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:558:1:
-	SQLITE_CONSTRAINT_UNIQUE              = 2067                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:559:1:
-	SQLITE_CONSTRAINT_VTAB                = 2323                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:560:1:
-	SQLITE_COPY                           = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3183:1:
-	SQLITE_CORE                           = 1                                                                                      // <defines>:4:1:
-	SQLITE_CORRUPT                        = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:456:1:
-	SQLITE_CORRUPT_INDEX                  = 779                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:544:1:
-	SQLITE_CORRUPT_SEQUENCE               = 523                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:543:1:
-	SQLITE_CORRUPT_VTAB                   = 267                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:542:1:
-	SQLITE_CREATE_INDEX                   = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3151:1:
-	SQLITE_CREATE_TABLE                   = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3152:1:
-	SQLITE_CREATE_TEMP_INDEX              = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3153:1:
-	SQLITE_CREATE_TEMP_TABLE              = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3154:1:
-	SQLITE_CREATE_TEMP_TRIGGER            = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3155:1:
-	SQLITE_CREATE_TEMP_VIEW               = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3156:1:
-	SQLITE_CREATE_TRIGGER                 = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3157:1:
-	SQLITE_CREATE_VIEW                    = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3158:1:
-	SQLITE_CREATE_VTABLE                  = 29                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3179:1:
-	SQLITE_DBCONFIG_DEFENSIVE             = 1010                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2409:1:
-	SQLITE_DBCONFIG_DQS_DDL               = 1014                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2413:1:
-	SQLITE_DBCONFIG_DQS_DML               = 1013                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2412:1:
-	SQLITE_DBCONFIG_ENABLE_FKEY           = 1002                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2401:1:
-	SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER = 1004                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2403:1:
-	SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION = 1005                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2404:1:
-	SQLITE_DBCONFIG_ENABLE_QPSG           = 1007                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2406:1:
-	SQLITE_DBCONFIG_ENABLE_TRIGGER        = 1003                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2402:1:
-	SQLITE_DBCONFIG_ENABLE_VIEW           = 1015                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2414:1:
-	SQLITE_DBCONFIG_LEGACY_ALTER_TABLE    = 1012                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2411:1:
-	SQLITE_DBCONFIG_LEGACY_FILE_FORMAT    = 1016                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2415:1:
-	SQLITE_DBCONFIG_LOOKASIDE             = 1001                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2400:1:
-	SQLITE_DBCONFIG_MAINDBNAME            = 1000                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2399:1:
-	SQLITE_DBCONFIG_MAX                   = 1017                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2417:1:
-	SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE      = 1006                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2405:1:
-	SQLITE_DBCONFIG_RESET_DATABASE        = 1009                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2408:1:
-	SQLITE_DBCONFIG_TRIGGER_EQP           = 1008                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2407:1:
-	SQLITE_DBCONFIG_TRUSTED_SCHEMA        = 1017                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2416:1:
-	SQLITE_DBCONFIG_WRITABLE_SCHEMA       = 1011                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:2410:1:
-	SQLITE_DBSTATUS_CACHE_HIT             = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8463:1:
-	SQLITE_DBSTATUS_CACHE_MISS            = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8464:1:
-	SQLITE_DBSTATUS_CACHE_SPILL           = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8468:1:
-	SQLITE_DBSTATUS_CACHE_USED            = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8457:1:
-	SQLITE_DBSTATUS_CACHE_USED_SHARED     = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8467:1:
-	SQLITE_DBSTATUS_CACHE_WRITE           = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8465:1:
-	SQLITE_DBSTATUS_DEFERRED_FKS          = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8466:1:
-	SQLITE_DBSTATUS_LOOKASIDE_HIT         = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8460:1:
-	SQLITE_DBSTATUS_LOOKASIDE_MISS_FULL   = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8462:1:
-	SQLITE_DBSTATUS_LOOKASIDE_MISS_SIZE   = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8461:1:
-	SQLITE_DBSTATUS_LOOKASIDE_USED        = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8456:1:
-	SQLITE_DBSTATUS_MAX                   = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8469:1:
-	SQLITE_DBSTATUS_SCHEMA_USED           = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8458:1:
-	SQLITE_DBSTATUS_STMT_USED             = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8459:1:
-	SQLITE_DELETE                         = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3159:1:
-	SQLITE_DENY                           = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3128:1:
-	SQLITE_DEPRECATED                     = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:106:1:
-	SQLITE_DESERIALIZE_FREEONCLOSE        = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10401:1:
-	SQLITE_DESERIALIZE_READONLY           = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10403:1:
-	SQLITE_DESERIALIZE_RESIZEABLE         = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10402:1:
-	SQLITE_DETACH                         = 25                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3175:1:
-	SQLITE_DETERMINISTIC                  = 0x000000800                                                                            // testdata/sqlite-amalgamation-3390300/sqlite3.h:5407:1:
-	SQLITE_DIRECTONLY                     = 0x000080000                                                                            // testdata/sqlite-amalgamation-3390300/sqlite3.h:5408:1:
-	SQLITE_DONE                           = 101                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:475:1:
-	SQLITE_DROP_INDEX                     = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3160:1:
-	SQLITE_DROP_TABLE                     = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3161:1:
-	SQLITE_DROP_TEMP_INDEX                = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3162:1:
-	SQLITE_DROP_TEMP_TABLE                = 13                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3163:1:
-	SQLITE_DROP_TEMP_TRIGGER              = 14                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3164:1:
-	SQLITE_DROP_TEMP_VIEW                 = 15                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3165:1:
-	SQLITE_DROP_TRIGGER                   = 16                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3166:1:
-	SQLITE_DROP_VIEW                      = 17                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3167:1:
-	SQLITE_DROP_VTABLE                    = 30                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3180:1:
-	SQLITE_EMPTY                          = 16                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:461:1:
-	SQLITE_ENABLE_COLUMN_METADATA         = 1                                                                                      // <defines>:5:1:
-	SQLITE_ENABLE_FTS5                    = 1                                                                                      // <defines>:6:1:
-	SQLITE_ENABLE_GEOPOLY                 = 1                                                                                      // <defines>:7:1:
-	SQLITE_ENABLE_MATH_FUNCTIONS          = 1                                                                                      // <defines>:8:1:
-	SQLITE_ENABLE_MEMORY_MANAGEMENT       = 1                                                                                      // <defines>:9:1:
-	SQLITE_ENABLE_OFFSET_SQL_FUNC         = 1                                                                                      // <defines>:10:1:
-	SQLITE_ENABLE_PREUPDATE_HOOK          = 1                                                                                      // <defines>:11:1:
-	SQLITE_ENABLE_RBU                     = 1                                                                                      // <defines>:12:1:
-	SQLITE_ENABLE_RTREE                   = 1                                                                                      // <defines>:13:1:
-	SQLITE_ENABLE_SESSION                 = 1                                                                                      // <defines>:14:1:
-	SQLITE_ENABLE_SNAPSHOT                = 1                                                                                      // <defines>:15:1:
-	SQLITE_ENABLE_STAT4                   = 1                                                                                      // <defines>:16:1:
-	SQLITE_ENABLE_UNLOCK_NOTIFY           = 1                                                                                      // <defines>:17:1:
-	SQLITE_ERROR                          = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:446:1:
-	SQLITE_ERROR_MISSING_COLLSEQ          = 257                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:495:1:
-	SQLITE_ERROR_RETRY                    = 513                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:496:1:
-	SQLITE_ERROR_SNAPSHOT                 = 769                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:497:1:
-	SQLITE_EXPERIMENTAL                   = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:107:1:
-	SQLITE_FAIL                           = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9823:1:
-	SQLITE_FCNTL_BEGIN_ATOMIC_WRITE       = 31                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1216:1:
-	SQLITE_FCNTL_BUSYHANDLER              = 15                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1201:1:
-	SQLITE_FCNTL_CHUNK_SIZE               = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1192:1:
-	SQLITE_FCNTL_CKPT_DONE                = 37                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1222:1:
-	SQLITE_FCNTL_CKPT_START               = 39                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1224:1:
-	SQLITE_FCNTL_CKSM_FILE                = 41                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1226:1:
-	SQLITE_FCNTL_COMMIT_ATOMIC_WRITE      = 32                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1217:1:
-	SQLITE_FCNTL_COMMIT_PHASETWO          = 22                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1207:1:
-	SQLITE_FCNTL_DATA_VERSION             = 35                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1220:1:
-	SQLITE_FCNTL_EXTERNAL_READER          = 40                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1225:1:
-	SQLITE_FCNTL_FILE_POINTER             = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1193:1:
-	SQLITE_FCNTL_GET_LOCKPROXYFILE        = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1188:1:
-	SQLITE_FCNTL_HAS_MOVED                = 20                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1205:1:
-	SQLITE_FCNTL_JOURNAL_POINTER          = 28                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1213:1:
-	SQLITE_FCNTL_LAST_ERRNO               = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1190:1:
-	SQLITE_FCNTL_LOCKSTATE                = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1187:1:
-	SQLITE_FCNTL_LOCK_TIMEOUT             = 34                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1219:1:
-	SQLITE_FCNTL_MMAP_SIZE                = 18                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1203:1:
-	SQLITE_FCNTL_OVERWRITE                = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1197:1:
-	SQLITE_FCNTL_PDB                      = 30                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1215:1:
-	SQLITE_FCNTL_PERSIST_WAL              = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1196:1:
-	SQLITE_FCNTL_POWERSAFE_OVERWRITE      = 13                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1199:1:
-	SQLITE_FCNTL_PRAGMA                   = 14                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1200:1:
-	SQLITE_FCNTL_RBU                      = 26                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1211:1:
-	SQLITE_FCNTL_RESERVE_BYTES            = 38                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1223:1:
-	SQLITE_FCNTL_ROLLBACK_ATOMIC_WRITE    = 33                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1218:1:
-	SQLITE_FCNTL_SET_LOCKPROXYFILE        = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1189:1:
-	SQLITE_FCNTL_SIZE_HINT                = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1191:1:
-	SQLITE_FCNTL_SIZE_LIMIT               = 36                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1221:1:
-	SQLITE_FCNTL_SYNC                     = 21                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1206:1:
-	SQLITE_FCNTL_SYNC_OMITTED             = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1194:1:
-	SQLITE_FCNTL_TEMPFILENAME             = 16                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1202:1:
-	SQLITE_FCNTL_TRACE                    = 19                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1204:1:
-	SQLITE_FCNTL_VFSNAME                  = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1198:1:
-	SQLITE_FCNTL_VFS_POINTER              = 27                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1212:1:
-	SQLITE_FCNTL_WAL_BLOCK                = 24                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1209:1:
-	SQLITE_FCNTL_WIN32_AV_RETRY           = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1195:1:
-	SQLITE_FCNTL_WIN32_GET_HANDLE         = 29                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1214:1:
-	SQLITE_FCNTL_WIN32_SET_HANDLE         = 23                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1208:1:
-	SQLITE_FCNTL_ZIPVFS                   = 25                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:1210:1:
-	SQLITE_FLOAT                          = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4873:1:
-	SQLITE_FORMAT                         = 24                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:469:1:
-	SQLITE_FULL                           = 13                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:458:1:
-	SQLITE_FUNCTION                       = 31                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3181:1:
-	SQLITE_GET_LOCKPROXYFILE              = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1229:1:
-	SQLITE_IGNORE                         = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:3129:1:
-	SQLITE_INDEX_CONSTRAINT_EQ            = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7200:1:
-	SQLITE_INDEX_CONSTRAINT_FUNCTION      = 150                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:7216:1:
-	SQLITE_INDEX_CONSTRAINT_GE            = 32                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7204:1:
-	SQLITE_INDEX_CONSTRAINT_GLOB          = 66                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7207:1:
-	SQLITE_INDEX_CONSTRAINT_GT            = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7201:1:
-	SQLITE_INDEX_CONSTRAINT_IS            = 72                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7213:1:
-	SQLITE_INDEX_CONSTRAINT_ISNOT         = 69                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7210:1:
-	SQLITE_INDEX_CONSTRAINT_ISNOTNULL     = 70                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7211:1:
-	SQLITE_INDEX_CONSTRAINT_ISNULL        = 71                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7212:1:
-	SQLITE_INDEX_CONSTRAINT_LE            = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7202:1:
-	SQLITE_INDEX_CONSTRAINT_LIKE          = 65                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7206:1:
-	SQLITE_INDEX_CONSTRAINT_LIMIT         = 73                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7214:1:
-	SQLITE_INDEX_CONSTRAINT_LT            = 16                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7203:1:
-	SQLITE_INDEX_CONSTRAINT_MATCH         = 64                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7205:1:
-	SQLITE_INDEX_CONSTRAINT_NE            = 68                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7209:1:
-	SQLITE_INDEX_CONSTRAINT_OFFSET        = 74                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7215:1:
-	SQLITE_INDEX_CONSTRAINT_REGEXP        = 67                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7208:1:
-	SQLITE_INDEX_SCAN_UNIQUE              = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7160:1:
-	SQLITE_INNOCUOUS                      = 0x000200000                                                                            // testdata/sqlite-amalgamation-3390300/sqlite3.h:5410:1:
-	SQLITE_INSERT                         = 18                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3168:1:
-	SQLITE_INTEGER                        = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4872:1:
-	SQLITE_INTERNAL                       = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:447:1:
-	SQLITE_INTERRUPT                      = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:454:1:
-	SQLITE_IOCAP_ATOMIC                   = 0x00000001                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:652:1:
-	SQLITE_IOCAP_ATOMIC16K                = 0x00000040                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:658:1:
-	SQLITE_IOCAP_ATOMIC1K                 = 0x00000004                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:654:1:
-	SQLITE_IOCAP_ATOMIC2K                 = 0x00000008                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:655:1:
-	SQLITE_IOCAP_ATOMIC32K                = 0x00000080                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:659:1:
-	SQLITE_IOCAP_ATOMIC4K                 = 0x00000010                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:656:1:
-	SQLITE_IOCAP_ATOMIC512                = 0x00000002                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:653:1:
-	SQLITE_IOCAP_ATOMIC64K                = 0x00000100                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:660:1:
-	SQLITE_IOCAP_ATOMIC8K                 = 0x00000020                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:657:1:
-	SQLITE_IOCAP_BATCH_ATOMIC             = 0x00004000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:666:1:
-	SQLITE_IOCAP_IMMUTABLE                = 0x00002000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:665:1:
-	SQLITE_IOCAP_POWERSAFE_OVERWRITE      = 0x00001000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:664:1:
-	SQLITE_IOCAP_SAFE_APPEND              = 0x00000200                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:661:1:
-	SQLITE_IOCAP_SEQUENTIAL               = 0x00000400                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:662:1:
-	SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN    = 0x00000800                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:663:1:
-	SQLITE_IOERR                          = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:455:1:
-	SQLITE_IOERR_ACCESS                   = 3338                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:510:1:
-	SQLITE_IOERR_AUTH                     = 7178                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:525:1:
-	SQLITE_IOERR_BEGIN_ATOMIC             = 7434                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:526:1:
-	SQLITE_IOERR_BLOCKED                  = 2826                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:508:1:
-	SQLITE_IOERR_CHECKRESERVEDLOCK        = 3594                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:511:1:
-	SQLITE_IOERR_CLOSE                    = 4106                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:513:1:
-	SQLITE_IOERR_COMMIT_ATOMIC            = 7690                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:527:1:
-	SQLITE_IOERR_CONVPATH                 = 6666                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:523:1:
-	SQLITE_IOERR_CORRUPTFS                = 8458                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:530:1:
-	SQLITE_IOERR_DATA                     = 8202                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:529:1:
-	SQLITE_IOERR_DELETE                   = 2570                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:507:1:
-	SQLITE_IOERR_DELETE_NOENT             = 5898                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:520:1:
-	SQLITE_IOERR_DIR_CLOSE                = 4362                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:514:1:
-	SQLITE_IOERR_DIR_FSYNC                = 1290                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:502:1:
-	SQLITE_IOERR_FSTAT                    = 1802                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:504:1:
-	SQLITE_IOERR_FSYNC                    = 1034                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:501:1:
-	SQLITE_IOERR_GETTEMPPATH              = 6410                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:522:1:
-	SQLITE_IOERR_LOCK                     = 3850                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:512:1:
-	SQLITE_IOERR_MMAP                     = 6154                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:521:1:
-	SQLITE_IOERR_NOMEM                    = 3082                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:509:1:
-	SQLITE_IOERR_RDLOCK                   = 2314                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:506:1:
-	SQLITE_IOERR_READ                     = 266                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:498:1:
-	SQLITE_IOERR_ROLLBACK_ATOMIC          = 7946                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:528:1:
-	SQLITE_IOERR_SEEK                     = 5642                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:519:1:
-	SQLITE_IOERR_SHMLOCK                  = 5130                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:517:1:
-	SQLITE_IOERR_SHMMAP                   = 5386                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:518:1:
-	SQLITE_IOERR_SHMOPEN                  = 4618                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:515:1:
-	SQLITE_IOERR_SHMSIZE                  = 4874                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:516:1:
-	SQLITE_IOERR_SHORT_READ               = 522                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:499:1:
-	SQLITE_IOERR_TRUNCATE                 = 1546                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:503:1:
-	SQLITE_IOERR_UNLOCK                   = 2058                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:505:1:
-	SQLITE_IOERR_VNODE                    = 6922                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:524:1:
-	SQLITE_IOERR_WRITE                    = 778                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:500:1:
-	SQLITE_LAST_ERRNO                     = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1231:1:
-	SQLITE_LIKE_DOESNT_MATCH_BLOBS        = 1                                                                                      // <defines>:18:1:
-	SQLITE_LIMIT_ATTACHED                 = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4008:1:
-	SQLITE_LIMIT_COLUMN                   = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4003:1:
-	SQLITE_LIMIT_COMPOUND_SELECT          = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4005:1:
-	SQLITE_LIMIT_EXPR_DEPTH               = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4004:1:
-	SQLITE_LIMIT_FUNCTION_ARG             = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4007:1:
-	SQLITE_LIMIT_LENGTH                   = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4001:1:
-	SQLITE_LIMIT_LIKE_PATTERN_LENGTH      = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4009:1:
-	SQLITE_LIMIT_SQL_LENGTH               = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4002:1:
-	SQLITE_LIMIT_TRIGGER_DEPTH            = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:4011:1:
-	SQLITE_LIMIT_VARIABLE_NUMBER          = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4010:1:
-	SQLITE_LIMIT_VDBE_OP                  = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4006:1:
-	SQLITE_LIMIT_WORKER_THREADS           = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:4012:1:
-	SQLITE_LOCKED                         = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:451:1:
-	SQLITE_LOCKED_SHAREDCACHE             = 262                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:531:1:
-	SQLITE_LOCKED_VTAB                    = 518                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:532:1:
-	SQLITE_LOCK_EXCLUSIVE                 = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:679:1:
-	SQLITE_LOCK_NONE                      = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:675:1:
-	SQLITE_LOCK_PENDING                   = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:678:1:
-	SQLITE_LOCK_RESERVED                  = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:677:1:
-	SQLITE_LOCK_SHARED                    = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:676:1:
-	SQLITE_MISMATCH                       = 20                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:465:1:
-	SQLITE_MISUSE                         = 21                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:466:1:
-	SQLITE_MUTEX_APPDEF                   = 1                                                                                      // <defines>:19:1:
-	SQLITE_MUTEX_FAST                     = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7884:1:
-	SQLITE_MUTEX_NOOP                     = 1                                                                                      // <defines>:20:1:
-	SQLITE_MUTEX_RECURSIVE                = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7885:1:
-	SQLITE_MUTEX_STATIC_APP1              = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7894:1:
-	SQLITE_MUTEX_STATIC_APP2              = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7895:1:
-	SQLITE_MUTEX_STATIC_APP3              = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7896:1:
-	SQLITE_MUTEX_STATIC_LRU               = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7891:1:
-	SQLITE_MUTEX_STATIC_LRU2              = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7892:1:
-	SQLITE_MUTEX_STATIC_MAIN              = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7886:1:
-	SQLITE_MUTEX_STATIC_MASTER            = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7902:1:
-	SQLITE_MUTEX_STATIC_MEM               = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7887:1:
-	SQLITE_MUTEX_STATIC_MEM2              = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7888:1:
-	SQLITE_MUTEX_STATIC_OPEN              = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7889:1:
-	SQLITE_MUTEX_STATIC_PMEM              = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7893:1:
-	SQLITE_MUTEX_STATIC_PRNG              = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7890:1:
-	SQLITE_MUTEX_STATIC_VFS1              = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7897:1:
-	SQLITE_MUTEX_STATIC_VFS2              = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7898:1:
-	SQLITE_MUTEX_STATIC_VFS3              = 13                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7899:1:
-	SQLITE_NOLFS                          = 22                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:467:1:
-	SQLITE_NOMEM                          = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:452:1:
-	SQLITE_NOTADB                         = 26                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:471:1:
-	SQLITE_NOTFOUND                       = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:457:1:
-	SQLITE_NOTICE                         = 27                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:472:1:
-	SQLITE_NOTICE_RECOVER_ROLLBACK        = 539                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:565:1:
-	SQLITE_NOTICE_RECOVER_WAL             = 283                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:564:1:
-	SQLITE_NULL                           = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4875:1:
-	SQLITE_OK                             = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:444:1:
-	SQLITE_OK_LOAD_PERMANENTLY            = 256                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:568:1:
-	SQLITE_OK_SYMLINK                     = 512                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:569:1:
-	SQLITE_OPEN_AUTOPROXY                 = 0x00000020                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:596:1:
-	SQLITE_OPEN_CREATE                    = 0x00000004                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:593:1:
-	SQLITE_OPEN_DELETEONCLOSE             = 0x00000008                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:594:1:
-	SQLITE_OPEN_EXCLUSIVE                 = 0x00000010                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:595:1:
-	SQLITE_OPEN_EXRESCODE                 = 0x02000000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:612:1:
-	SQLITE_OPEN_FULLMUTEX                 = 0x00010000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:607:1:
-	SQLITE_OPEN_MAIN_DB                   = 0x00000100                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:599:1:
-	SQLITE_OPEN_MAIN_JOURNAL              = 0x00000800                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:602:1:
-	SQLITE_OPEN_MASTER_JOURNAL            = 0x00004000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:616:1:
-	SQLITE_OPEN_MEMORY                    = 0x00000080                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:598:1:
-	SQLITE_OPEN_NOFOLLOW                  = 0x01000000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:611:1:
-	SQLITE_OPEN_NOMUTEX                   = 0x00008000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:606:1:
-	SQLITE_OPEN_PRIVATECACHE              = 0x00040000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:609:1:
-	SQLITE_OPEN_READONLY                  = 0x00000001                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:591:1:
-	SQLITE_OPEN_READWRITE                 = 0x00000002                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:592:1:
-	SQLITE_OPEN_SHAREDCACHE               = 0x00020000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:608:1:
-	SQLITE_OPEN_SUBJOURNAL                = 0x00002000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:604:1:
-	SQLITE_OPEN_SUPER_JOURNAL             = 0x00004000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:605:1:
-	SQLITE_OPEN_TEMP_DB                   = 0x00000200                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:600:1:
-	SQLITE_OPEN_TEMP_JOURNAL              = 0x00001000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:603:1:
-	SQLITE_OPEN_TRANSIENT_DB              = 0x00000400                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:601:1:
-	SQLITE_OPEN_URI                       = 0x00000040                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:597:1:
-	SQLITE_OPEN_WAL                       = 0x00080000                                                                             // testdata/sqlite-amalgamation-3390300/sqlite3.h:610:1:
-	SQLITE_OS_UNIX                        = 1                                                                                      // <defines>:23:1:
-	SQLITE_PERM                           = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:448:1:
-	SQLITE_PRAGMA                         = 19                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3169:1:
-	SQLITE_PREPARE_NORMALIZE              = 0x02                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:4050:1:
-	SQLITE_PREPARE_NO_VTAB                = 0x04                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:4051:1:
-	SQLITE_PREPARE_PERSISTENT             = 0x01                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:4049:1:
-	SQLITE_PROTOCOL                       = 15                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:460:1:
-	SQLITE_RANGE                          = 25                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:470:1:
-	SQLITE_READ                           = 20                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3170:1:
-	SQLITE_READONLY                       = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:453:1:
-	SQLITE_READONLY_CANTINIT              = 1288                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:549:1:
-	SQLITE_READONLY_CANTLOCK              = 520                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:546:1:
-	SQLITE_READONLY_DBMOVED               = 1032                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:548:1:
-	SQLITE_READONLY_DIRECTORY             = 1544                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:550:1:
-	SQLITE_READONLY_RECOVERY              = 264                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:545:1:
-	SQLITE_READONLY_ROLLBACK              = 776                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:547:1:
-	SQLITE_RECURSIVE                      = 33                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3184:1:
-	SQLITE_REINDEX                        = 27                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3177:1:
-	SQLITE_REPLACE                        = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9825:1:
-	SQLITE_ROLLBACK                       = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9821:1:
-	SQLITE_ROW                            = 100                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:474:1:
-	SQLITE_SAVEPOINT                      = 32                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3182:1:
-	SQLITE_SCANSTAT_EST                   = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9876:1:
-	SQLITE_SCANSTAT_EXPLAIN               = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9878:1:
-	SQLITE_SCANSTAT_NAME                  = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9877:1:
-	SQLITE_SCANSTAT_NLOOP                 = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9874:1:
-	SQLITE_SCANSTAT_NVISIT                = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9875:1:
-	SQLITE_SCANSTAT_SELECTID              = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9879:1:
-	SQLITE_SCHEMA                         = 17                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:462:1:
-	SQLITE_SELECT                         = 21                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3171:1:
-	SQLITE_SERIALIZE_NOCOPY               = 0x001                                                                                  // testdata/sqlite-amalgamation-3390300/sqlite3.h:10336:1:
-	SQLITE_SESSION_CONFIG_STRMSIZE        = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:12248:1:
-	SQLITE_SESSION_OBJCONFIG_SIZE         = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10649:1:
-	SQLITE_SET_LOCKPROXYFILE              = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1230:1:
-	SQLITE_SHM_EXCLUSIVE                  = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1515:1:
-	SQLITE_SHM_LOCK                       = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1513:1:
-	SQLITE_SHM_NLOCK                      = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1525:1:
-	SQLITE_SHM_SHARED                     = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1514:1:
-	SQLITE_SHM_UNLOCK                     = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:1512:1:
-	SQLITE_SOUNDEX                        = 1                                                                                      // <defines>:21:1:
-	SQLITE_SOURCE_ID                      = "2022-09-05 11:02:23 4635f4a69c8c2a8df242b384a992aea71224e39a2ccab42d8c0b0602f1e826e8" // testdata/sqlite-amalgamation-3390300/sqlite3.h:151:1:
-	SQLITE_STATUS_MALLOC_COUNT            = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8318:1:
-	SQLITE_STATUS_MALLOC_SIZE             = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8314:1:
-	SQLITE_STATUS_MEMORY_USED             = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8309:1:
-	SQLITE_STATUS_PAGECACHE_OVERFLOW      = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8311:1:
-	SQLITE_STATUS_PAGECACHE_SIZE          = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8316:1:
-	SQLITE_STATUS_PAGECACHE_USED          = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8310:1:
-	SQLITE_STATUS_PARSER_STACK            = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8315:1:
-	SQLITE_STATUS_SCRATCH_OVERFLOW        = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8313:1:
-	SQLITE_STATUS_SCRATCH_SIZE            = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8317:1:
-	SQLITE_STATUS_SCRATCH_USED            = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8312:1:
-	SQLITE_STDCALL                        = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:84:1:
-	SQLITE_STMTSTATUS_AUTOINDEX           = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8565:1:
-	SQLITE_STMTSTATUS_FILTER_HIT          = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8570:1:
-	SQLITE_STMTSTATUS_FILTER_MISS         = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8569:1:
-	SQLITE_STMTSTATUS_FULLSCAN_STEP       = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8563:1:
-	SQLITE_STMTSTATUS_MEMUSED             = 99                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8571:1:
-	SQLITE_STMTSTATUS_REPREPARE           = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8567:1:
-	SQLITE_STMTSTATUS_RUN                 = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8568:1:
-	SQLITE_STMTSTATUS_SORT                = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8564:1:
-	SQLITE_STMTSTATUS_VM_STEP             = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:8566:1:
-	SQLITE_SUBTYPE                        = 0x000100000                                                                            // testdata/sqlite-amalgamation-3390300/sqlite3.h:5409:1:
-	SQLITE_SYNC_DATAONLY                  = 0x00010                                                                                // testdata/sqlite-amalgamation-3390300/sqlite3.h:709:1:
-	SQLITE_SYNC_FULL                      = 0x00003                                                                                // testdata/sqlite-amalgamation-3390300/sqlite3.h:708:1:
-	SQLITE_SYNC_NORMAL                    = 0x00002                                                                                // testdata/sqlite-amalgamation-3390300/sqlite3.h:707:1:
-	SQLITE_SYSAPI                         = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:90:1:
-	SQLITE_TESTCTRL_ALWAYS                = 13                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7999:1:
-	SQLITE_TESTCTRL_ASSERT                = 12                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7998:1:
-	SQLITE_TESTCTRL_BENIGN_MALLOC_HOOKS   = 10                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7996:1:
-	SQLITE_TESTCTRL_BITVEC_TEST           = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7994:1:
-	SQLITE_TESTCTRL_BYTEORDER             = 22                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8010:1:
-	SQLITE_TESTCTRL_EXPLAIN_STMT          = 19                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8006:1:
-	SQLITE_TESTCTRL_EXTRA_SCHEMA_CHECKS   = 29                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8017:1:
-	SQLITE_TESTCTRL_FAULT_INSTALL         = 9                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7995:1:
-	SQLITE_TESTCTRL_FIRST                 = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7990:1:
-	SQLITE_TESTCTRL_IMPOSTER              = 25                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8013:1:
-	SQLITE_TESTCTRL_INTERNAL_FUNCTIONS    = 17                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8004:1:
-	SQLITE_TESTCTRL_ISINIT                = 23                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8011:1:
-	SQLITE_TESTCTRL_ISKEYWORD             = 16                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8002:1:
-	SQLITE_TESTCTRL_LAST                  = 33                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8022:1:
-	SQLITE_TESTCTRL_LOCALTIME_FAULT       = 18                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8005:1:
-	SQLITE_TESTCTRL_LOGEST                = 33                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8021:1:
-	SQLITE_TESTCTRL_NEVER_CORRUPT         = 20                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8008:1:
-	SQLITE_TESTCTRL_ONCE_RESET_THRESHOLD  = 19                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8007:1:
-	SQLITE_TESTCTRL_OPTIMIZATIONS         = 15                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8001:1:
-	SQLITE_TESTCTRL_PARSER_COVERAGE       = 26                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8014:1:
-	SQLITE_TESTCTRL_PENDING_BYTE          = 11                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:7997:1:
-	SQLITE_TESTCTRL_PRNG_RESET            = 7                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7993:1:
-	SQLITE_TESTCTRL_PRNG_RESTORE          = 6                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7992:1:
-	SQLITE_TESTCTRL_PRNG_SAVE             = 5                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:7991:1:
-	SQLITE_TESTCTRL_PRNG_SEED             = 28                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8016:1:
-	SQLITE_TESTCTRL_RESERVE               = 14                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8000:1:
-	SQLITE_TESTCTRL_RESULT_INTREAL        = 27                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8015:1:
-	SQLITE_TESTCTRL_SCRATCHMALLOC         = 17                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8003:1:
-	SQLITE_TESTCTRL_SEEK_COUNT            = 30                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8018:1:
-	SQLITE_TESTCTRL_SORTER_MMAP           = 24                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8012:1:
-	SQLITE_TESTCTRL_TRACEFLAGS            = 31                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8019:1:
-	SQLITE_TESTCTRL_TUNE                  = 32                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8020:1:
-	SQLITE_TESTCTRL_VDBE_COVERAGE         = 21                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:8009:1:
-	SQLITE_TEXT                           = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:4879:1:
-	SQLITE_THREADSAFE                     = 1                                                                                      // <defines>:22:1:
-	SQLITE_TOOBIG                         = 18                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:463:1:
-	SQLITE_TRACE_CLOSE                    = 0x08                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:3278:1:
-	SQLITE_TRACE_PROFILE                  = 0x02                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:3276:1:
-	SQLITE_TRACE_ROW                      = 0x04                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:3277:1:
-	SQLITE_TRACE_STMT                     = 0x01                                                                                   // testdata/sqlite-amalgamation-3390300/sqlite3.h:3275:1:
-	SQLITE_TRANSACTION                    = 22                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3172:1:
-	SQLITE_TXN_NONE                       = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:6390:1:
-	SQLITE_TXN_READ                       = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:6391:1:
-	SQLITE_TXN_WRITE                      = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:6392:1:
-	SQLITE_UPDATE                         = 23                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:3173:1:
-	SQLITE_UTF16                          = 4                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:5338:1:
-	SQLITE_UTF16BE                        = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:5337:1:
-	SQLITE_UTF16LE                        = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:5336:1:
-	SQLITE_UTF16_ALIGNED                  = 8                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:5340:1:
-	SQLITE_UTF8                           = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:5335:1:
-	SQLITE_VERSION                        = "3.39.3"                                                                               // testdata/sqlite-amalgamation-3390300/sqlite3.h:149:1:
-	SQLITE_VERSION_NUMBER                 = 3039003                                                                                // testdata/sqlite-amalgamation-3390300/sqlite3.h:150:1:
-	SQLITE_VTAB_CONSTRAINT_SUPPORT        = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9495:1:
-	SQLITE_VTAB_DIRECTONLY                = 3                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9497:1:
-	SQLITE_VTAB_INNOCUOUS                 = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:9496:1:
-	SQLITE_WARNING                        = 28                                                                                     // testdata/sqlite-amalgamation-3390300/sqlite3.h:473:1:
-	SQLITE_WARNING_AUTOINDEX              = 284                                                                                    // testdata/sqlite-amalgamation-3390300/sqlite3.h:566:1:
-	SQLITE_WIN32_DATA_DIRECTORY_TYPE      = 1                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:6239:1:
-	SQLITE_WIN32_TEMP_DIRECTORY_TYPE      = 2                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:6240:1:
-	STDERR_FILENO                         = 2                                                                                      // /usr/include/unistd.h:81:1:
-	STDIN_FILENO                          = 0                                                                                      // /usr/include/unistd.h:79:1:
-	STDOUT_FILENO                         = 1                                                                                      // /usr/include/unistd.h:80:1:
-	SWAPOFF_FORCE                         = 0x00000001                                                                             // /usr/include/sys/unistd.h:200:1:
-	TMP_MAX                               = 308915776                                                                              // /usr/include/stdio.h:228:1:
-	W_OK                                  = 0x02                                                                                   // /usr/include/sys/unistd.h:104:1:
-	X_OK                                  = 0x01                                                                                   // /usr/include/sys/unistd.h:103:1:
-	X_ACCMODE_T_DECLARED                  = 0                                                                                      // /usr/include/sys/types.h:166:1:
-	X_ASSERT_H_                           = 0                                                                                      // /usr/include/assert.h:61:1:
-	X_BIG_ENDIAN                          = 4321                                                                                   // /usr/include/sys/_endian.h:47:1:
-	X_BLKCNT_T_DECLARED                   = 0                                                                                      // /usr/include/sys/types.h:90:1:
-	X_BLKSIZE_T_DECLARED                  = 0                                                                                      // /usr/include/sys/types.h:81:1:
-	X_BYTE_ORDER                          = 1234                                                                                   // /usr/include/sys/_endian.h:40:1:
-	X_CACHED_RUNES                        = 256                                                                                    // /usr/include/runetype.h:44:1:
-	X_CAP_IOCTL_T_DECLARED                = 0                                                                                      // /usr/include/sys/types.h:243:1:
-	X_CAP_RIGHTS_T_DECLARED               = 0                                                                                      // /usr/include/sys/types.h:248:1:
-	X_CLOCKID_T_DECLARED                  = 0                                                                                      // /usr/include/sys/types.h:100:1:
-	X_CLOCK_T_DECLARED                    = 0                                                                                      // /usr/include/sys/types.h:95:1:
-	X_CRMASK                              = -256                                                                                   // /usr/include/runetype.h:45:1:
-	X_CS_PATH                             = 1                                                                                      // /usr/include/unistd.h:302:1:
-	X_CS_POSIX_V6_ILP32_OFF32_CFLAGS      = 2                                                                                      // /usr/include/unistd.h:306:1:
-	X_CS_POSIX_V6_ILP32_OFF32_LDFLAGS     = 3                                                                                      // /usr/include/unistd.h:307:1:
-	X_CS_POSIX_V6_ILP32_OFF32_LIBS        = 4                                                                                      // /usr/include/unistd.h:308:1:
-	X_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS     = 5                                                                                      // /usr/include/unistd.h:309:1:
-	X_CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS    = 6                                                                                      // /usr/include/unistd.h:310:1:
-	X_CS_POSIX_V6_ILP32_OFFBIG_LIBS       = 7                                                                                      // /usr/include/unistd.h:311:1:
-	X_CS_POSIX_V6_LP64_OFF64_CFLAGS       = 8                                                                                      // /usr/include/unistd.h:312:1:
-	X_CS_POSIX_V6_LP64_OFF64_LDFLAGS      = 9                                                                                      // /usr/include/unistd.h:313:1:
-	X_CS_POSIX_V6_LP64_OFF64_LIBS         = 10                                                                                     // /usr/include/unistd.h:314:1:
-	X_CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS     = 11                                                                                     // /usr/include/unistd.h:315:1:
-	X_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS    = 12                                                                                     // /usr/include/unistd.h:316:1:
-	X_CS_POSIX_V6_LPBIG_OFFBIG_LIBS       = 13                                                                                     // /usr/include/unistd.h:317:1:
-	X_CS_POSIX_V6_WIDTH_RESTRICTED_ENVS   = 14                                                                                     // /usr/include/unistd.h:318:1:
-	X_CTYPE_A                             = 0x00000100                                                                             // /usr/include/_ctype.h:50:1:
-	X_CTYPE_B                             = 0x00020000                                                                             // /usr/include/_ctype.h:59:1:
-	X_CTYPE_C                             = 0x00000200                                                                             // /usr/include/_ctype.h:51:1:
-	X_CTYPE_D                             = 0x00000400                                                                             // /usr/include/_ctype.h:52:1:
-	X_CTYPE_G                             = 0x00000800                                                                             // /usr/include/_ctype.h:53:1:
-	X_CTYPE_H_                            = 0                                                                                      // /usr/include/ctype.h:44:1:
-	X_CTYPE_I                             = 0x00080000                                                                             // /usr/include/_ctype.h:61:1:
-	X_CTYPE_L                             = 0x00001000                                                                             // /usr/include/_ctype.h:54:1:
-	X_CTYPE_N                             = 0x00400000                                                                             // /usr/include/_ctype.h:64:1:
-	X_CTYPE_P                             = 0x00002000                                                                             // /usr/include/_ctype.h:55:1:
-	X_CTYPE_Q                             = 0x00200000                                                                             // /usr/include/_ctype.h:63:1:
-	X_CTYPE_R                             = 0x00040000                                                                             // /usr/include/_ctype.h:60:1:
-	X_CTYPE_S                             = 0x00004000                                                                             // /usr/include/_ctype.h:56:1:
-	X_CTYPE_SW0                           = 0x20000000                                                                             // /usr/include/_ctype.h:65:1:
-	X_CTYPE_SW1                           = 0x40000000                                                                             // /usr/include/_ctype.h:66:1:
-	X_CTYPE_SW2                           = 0x80000000                                                                             // /usr/include/_ctype.h:67:1:
-	X_CTYPE_SW3                           = 0xc0000000                                                                             // /usr/include/_ctype.h:68:1:
-	X_CTYPE_SWM                           = 0xe0000000                                                                             // /usr/include/_ctype.h:69:1:
-	X_CTYPE_SWS                           = 30                                                                                     // /usr/include/_ctype.h:70:1:
-	X_CTYPE_T                             = 0x00100000                                                                             // /usr/include/_ctype.h:62:1:
-	X_CTYPE_U                             = 0x00008000                                                                             // /usr/include/_ctype.h:57:1:
-	X_CTYPE_X                             = 0x00010000                                                                             // /usr/include/_ctype.h:58:1:
-	X_DEV_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:108:1:
-	X_ERRNO_T_DEFINED                     = 0                                                                                      // /usr/include/errno.h:203:1:
-	X_FFLAGS_T_DECLARED                   = 0                                                                                      // /usr/include/sys/types.h:113:1:
-	X_FILE_OFFSET_BITS                    = 64                                                                                     // <builtin>:25:1:
-	X_FSBLKCNT_T_DECLARED                 = 0                                                                                      // /usr/include/sys/types.h:121:1:
-	X_FSTDIO                              = 0                                                                                      // /usr/include/stdio.h:82:1:
-	X_FTRUNCATE_DECLARED                  = 0                                                                                      // /usr/include/stdio.h:435:1:
-	X_FTS5_H                              = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:12282:1:
-	X_GETOPT_DECLARED                     = 0                                                                                      // /usr/include/unistd.h:378:1:
-	X_GID_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:126:1:
-	X_ID_T_DECLARED                       = 0                                                                                      // /usr/include/sys/types.h:141:1:
-	X_INO_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:146:1:
-	X_INT16_T_DECLARED                    = 0                                                                                      // /usr/include/sys/_stdint.h:42:1:
-	X_INT32_T_DECLARED                    = 0                                                                                      // /usr/include/sys/_stdint.h:47:1:
-	X_INT64_T_DECLARED                    = 0                                                                                      // /usr/include/sys/_stdint.h:52:1:
-	X_INT8_T_DECLARED                     = 0                                                                                      // /usr/include/sys/_stdint.h:37:1:
-	X_INTMAX_T_DECLARED                   = 0                                                                                      // /usr/include/sys/_stdint.h:85:1:
-	X_INTPTR_T_DECLARED                   = 0                                                                                      // /usr/include/sys/_stdint.h:77:1:
-	X_IN_ADDR_T_DECLARED                  = 0                                                                                      // /usr/include/sys/types.h:131:1:
-	X_IN_PORT_T_DECLARED                  = 0                                                                                      // /usr/include/sys/types.h:136:1:
-	X_IOFBF                               = 0                                                                                      // /usr/include/stdio.h:205:1:
-	X_IOLBF                               = 1                                                                                      // /usr/include/stdio.h:206:1:
-	X_IONBF                               = 2                                                                                      // /usr/include/stdio.h:207:1:
-	X_KEY_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:151:1:
-	X_LITTLE_ENDIAN                       = 1234                                                                                   // /usr/include/sys/_endian.h:46:1:
-	X_LOCALE_T_DEFINED                    = 0                                                                                      // /usr/include/xlocale/_strings.h:29:1:
-	X_LP64                                = 1                                                                                      // <predefined>:1:1:
-	X_LSEEK_DECLARED                      = 0                                                                                      // /usr/include/stdio.h:439:1:
-	X_LWPID_T_DECLARED                    = 0                                                                                      // /usr/include/sys/types.h:156:1:
-	X_MACHINE_ENDIAN_H_                   = 0                                                                                      // /usr/include/x86/endian.h:36:1:
-	X_MACHINE_STDARG_H_                   = 0                                                                                      // /usr/include/x86/stdarg.h:31:1:
-	X_MACHINE__LIMITS_H_                  = 0                                                                                      // /usr/include/x86/_limits.h:36:1:
-	X_MACHINE__TYPES_H_                   = 0                                                                                      // /usr/include/x86/_types.h:42:1:
-	X_MKDTEMP_DECLARED                    = 0                                                                                      // /usr/include/unistd.h:528:1:
-	X_MKNOD_DECLARED                      = 0                                                                                      // /usr/include/unistd.h:532:1:
-	X_MKSTEMP_DECLARED                    = 0                                                                                      // /usr/include/unistd.h:536:1:
-	X_MKTEMP_DECLARED                     = 0                                                                                      // /usr/include/unistd.h:541:1:
-	X_MMAP_DECLARED                       = 0                                                                                      // /usr/include/stdio.h:443:1:
-	X_MODE_T_DECLARED                     = 0                                                                                      // /usr/include/sys/types.h:161:1:
-	X_MQD_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:227:1:
-	X_NLINK_T_DECLARED                    = 0                                                                                      // /usr/include/sys/types.h:171:1:
-	X_Nonnull                             = 0                                                                                      // /usr/include/sys/cdefs.h:790:1:
-	X_Null_unspecified                    = 0                                                                                      // /usr/include/sys/cdefs.h:792:1:
-	X_Nullable                            = 0                                                                                      // /usr/include/sys/cdefs.h:791:1:
-	X_OFF64_T_DECLARED                    = 0                                                                                      // /usr/include/stdio.h:71:1:
-	X_OFF_T_DECLARED                      = 0                                                                                      // /usr/include/stdio.h:61:1:
-	X_OPTRESET_DECLARED                   = 0                                                                                      // /usr/include/unistd.h:592:1:
-	X_PC_ACL_EXTENDED                     = 59                                                                                     // /usr/include/sys/unistd.h:153:1:
-	X_PC_ACL_NFS4                         = 64                                                                                     // /usr/include/sys/unistd.h:158:1:
-	X_PC_ACL_PATH_MAX                     = 60                                                                                     // /usr/include/sys/unistd.h:154:1:
-	X_PC_ALLOC_SIZE_MIN                   = 10                                                                                     // /usr/include/sys/unistd.h:143:1:
-	X_PC_ASYNC_IO                         = 53                                                                                     // /usr/include/sys/unistd.h:137:1:
-	X_PC_CAP_PRESENT                      = 61                                                                                     // /usr/include/sys/unistd.h:155:1:
-	X_PC_CHOWN_RESTRICTED                 = 7                                                                                      // /usr/include/sys/unistd.h:132:1:
-	X_PC_FILESIZEBITS                     = 12                                                                                     // /usr/include/sys/unistd.h:144:1:
-	X_PC_INF_PRESENT                      = 62                                                                                     // /usr/include/sys/unistd.h:156:1:
-	X_PC_LINK_MAX                         = 1                                                                                      // /usr/include/sys/unistd.h:126:1:
-	X_PC_MAC_PRESENT                      = 63                                                                                     // /usr/include/sys/unistd.h:157:1:
-	X_PC_MAX_CANON                        = 2                                                                                      // /usr/include/sys/unistd.h:127:1:
-	X_PC_MAX_INPUT                        = 3                                                                                      // /usr/include/sys/unistd.h:128:1:
-	X_PC_MIN_HOLE_SIZE                    = 21                                                                                     // /usr/include/sys/unistd.h:162:1:
-	X_PC_NAME_MAX                         = 4                                                                                      // /usr/include/sys/unistd.h:129:1:
-	X_PC_NO_TRUNC                         = 8                                                                                      // /usr/include/sys/unistd.h:133:1:
-	X_PC_PATH_MAX                         = 5                                                                                      // /usr/include/sys/unistd.h:130:1:
-	X_PC_PIPE_BUF                         = 6                                                                                      // /usr/include/sys/unistd.h:131:1:
-	X_PC_PRIO_IO                          = 54                                                                                     // /usr/include/sys/unistd.h:138:1:
-	X_PC_REC_INCR_XFER_SIZE               = 14                                                                                     // /usr/include/sys/unistd.h:145:1:
-	X_PC_REC_MAX_XFER_SIZE                = 15                                                                                     // /usr/include/sys/unistd.h:146:1:
-	X_PC_REC_MIN_XFER_SIZE                = 16                                                                                     // /usr/include/sys/unistd.h:147:1:
-	X_PC_REC_XFER_ALIGN                   = 17                                                                                     // /usr/include/sys/unistd.h:148:1:
-	X_PC_SYMLINK_MAX                      = 18                                                                                     // /usr/include/sys/unistd.h:149:1:
-	X_PC_SYNC_IO                          = 55                                                                                     // /usr/include/sys/unistd.h:139:1:
-	X_PC_VDISABLE                         = 9                                                                                      // /usr/include/sys/unistd.h:134:1:
-	X_PDP_ENDIAN                          = 3412                                                                                   // /usr/include/sys/_endian.h:48:1:
-	X_PID_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:186:1:
-	X_POSIX2_CHAR_TERM                    = 1                                                                                      // /usr/include/unistd.h:127:1:
-	X_POSIX2_C_BIND                       = 200112                                                                                 // /usr/include/unistd.h:125:1:
-	X_POSIX2_C_DEV                        = -1                                                                                     // /usr/include/unistd.h:126:1:
-	X_POSIX2_FORT_DEV                     = -1                                                                                     // /usr/include/unistd.h:128:1:
-	X_POSIX2_FORT_RUN                     = 200112                                                                                 // /usr/include/unistd.h:129:1:
-	X_POSIX2_LOCALEDEF                    = -1                                                                                     // /usr/include/unistd.h:130:1:
-	X_POSIX2_PBS                          = -1                                                                                     // /usr/include/unistd.h:131:1:
-	X_POSIX2_PBS_ACCOUNTING               = -1                                                                                     // /usr/include/unistd.h:132:1:
-	X_POSIX2_PBS_CHECKPOINT               = -1                                                                                     // /usr/include/unistd.h:133:1:
-	X_POSIX2_PBS_LOCATE                   = -1                                                                                     // /usr/include/unistd.h:134:1:
-	X_POSIX2_PBS_MESSAGE                  = -1                                                                                     // /usr/include/unistd.h:135:1:
-	X_POSIX2_PBS_TRACK                    = -1                                                                                     // /usr/include/unistd.h:136:1:
-	X_POSIX2_SW_DEV                       = -1                                                                                     // /usr/include/unistd.h:137:1:
-	X_POSIX2_UPE                          = 200112                                                                                 // /usr/include/unistd.h:138:1:
-	X_POSIX2_VERSION                      = 199212                                                                                 // /usr/include/unistd.h:154:1:
-	X_POSIX_ADVISORY_INFO                 = 200112                                                                                 // /usr/include/sys/unistd.h:54:1:
-	X_POSIX_ASYNCHRONOUS_IO               = 200112                                                                                 // /usr/include/sys/unistd.h:55:1:
-	X_POSIX_BARRIERS                      = 200112                                                                                 // /usr/include/unistd.h:104:1:
-	X_POSIX_CHOWN_RESTRICTED              = 1                                                                                      // /usr/include/sys/unistd.h:56:1:
-	X_POSIX_CLOCK_SELECTION               = -1                                                                                     // /usr/include/sys/unistd.h:57:1:
-	X_POSIX_CPUTIME                       = 200112                                                                                 // /usr/include/unistd.h:105:1:
-	X_POSIX_FSYNC                         = 200112                                                                                 // /usr/include/sys/unistd.h:59:1:
-	X_POSIX_IPV6                          = 0                                                                                      // /usr/include/sys/unistd.h:60:1:
-	X_POSIX_JOB_CONTROL                   = 1                                                                                      // /usr/include/sys/unistd.h:61:1:
-	X_POSIX_MAPPED_FILES                  = 200112                                                                                 // /usr/include/sys/unistd.h:62:1:
-	X_POSIX_MEMLOCK                       = -1                                                                                     // /usr/include/sys/unistd.h:63:1:
-	X_POSIX_MEMLOCK_RANGE                 = 200112                                                                                 // /usr/include/sys/unistd.h:64:1:
-	X_POSIX_MEMORY_PROTECTION             = 200112                                                                                 // /usr/include/sys/unistd.h:65:1:
-	X_POSIX_MESSAGE_PASSING               = 200112                                                                                 // /usr/include/sys/unistd.h:66:1:
-	X_POSIX_MONOTONIC_CLOCK               = 200112                                                                                 // /usr/include/sys/unistd.h:67:1:
-	X_POSIX_NO_TRUNC                      = 1                                                                                      // /usr/include/sys/unistd.h:68:1:
-	X_POSIX_PRIORITIZED_IO                = -1                                                                                     // /usr/include/sys/unistd.h:69:1:
-	X_POSIX_PRIORITY_SCHEDULING           = 0                                                                                      // /usr/include/sys/unistd.h:70:1:
-	X_POSIX_RAW_SOCKETS                   = 200112                                                                                 // /usr/include/sys/unistd.h:71:1:
-	X_POSIX_READER_WRITER_LOCKS           = 200112                                                                                 // /usr/include/unistd.h:106:1:
-	X_POSIX_REALTIME_SIGNALS              = 200112                                                                                 // /usr/include/sys/unistd.h:72:1:
-	X_POSIX_REGEXP                        = 1                                                                                      // /usr/include/unistd.h:107:1:
-	X_POSIX_SEMAPHORES                    = 200112                                                                                 // /usr/include/sys/unistd.h:73:1:
-	X_POSIX_SHARED_MEMORY_OBJECTS         = 200112                                                                                 // /usr/include/sys/unistd.h:74:1:
-	X_POSIX_SHELL                         = 1                                                                                      // /usr/include/unistd.h:108:1:
-	X_POSIX_SPAWN                         = 200112                                                                                 // /usr/include/unistd.h:109:1:
-	X_POSIX_SPIN_LOCKS                    = 200112                                                                                 // /usr/include/unistd.h:110:1:
-	X_POSIX_SPORADIC_SERVER               = -1                                                                                     // /usr/include/sys/unistd.h:75:1:
-	X_POSIX_SYNCHRONIZED_IO               = -1                                                                                     // /usr/include/sys/unistd.h:76:1:
-	X_POSIX_THREADS                       = 200112                                                                                 // /usr/include/unistd.h:120:1:
-	X_POSIX_THREAD_ATTR_STACKADDR         = 200112                                                                                 // /usr/include/unistd.h:111:1:
-	X_POSIX_THREAD_ATTR_STACKSIZE         = 200112                                                                                 // /usr/include/unistd.h:112:1:
-	X_POSIX_THREAD_CPUTIME                = 200112                                                                                 // /usr/include/unistd.h:113:1:
-	X_POSIX_THREAD_PRIORITY_SCHEDULING    = 200112                                                                                 // /usr/include/unistd.h:116:1:
-	X_POSIX_THREAD_PRIO_INHERIT           = 200112                                                                                 // /usr/include/unistd.h:114:1:
-	X_POSIX_THREAD_PRIO_PROTECT           = 200112                                                                                 // /usr/include/unistd.h:115:1:
-	X_POSIX_THREAD_PROCESS_SHARED         = 200112                                                                                 // /usr/include/unistd.h:117:1:
-	X_POSIX_THREAD_SAFE_FUNCTIONS         = -1                                                                                     // /usr/include/unistd.h:118:1:
-	X_POSIX_THREAD_SPORADIC_SERVER        = -1                                                                                     // /usr/include/unistd.h:119:1:
-	X_POSIX_TIMEOUTS                      = 200112                                                                                 // /usr/include/sys/unistd.h:77:1:
-	X_POSIX_TIMERS                        = 200112                                                                                 // /usr/include/sys/unistd.h:78:1:
-	X_POSIX_TRACE                         = -1                                                                                     // /usr/include/unistd.h:121:1:
-	X_POSIX_TRACE_EVENT_FILTER            = -1                                                                                     // /usr/include/unistd.h:122:1:
-	X_POSIX_TRACE_INHERIT                 = -1                                                                                     // /usr/include/unistd.h:123:1:
-	X_POSIX_TRACE_LOG                     = -1                                                                                     // /usr/include/unistd.h:124:1:
-	X_POSIX_TYPED_MEMORY_OBJECTS          = -1                                                                                     // /usr/include/sys/unistd.h:79:1:
-	X_POSIX_VDISABLE                      = 0xff                                                                                   // /usr/include/sys/unistd.h:80:1:
-	X_POSIX_VERSION                       = 200112                                                                                 // /usr/include/sys/unistd.h:99:1:
-	X_PTHREAD_T_DECLARED                  = 0                                                                                      // /usr/include/sys/_pthreadtypes.h:68:1:
-	X_QUAD_HIGHWORD                       = 1                                                                                      // /usr/include/sys/_endian.h:55:1:
-	X_QUAD_LOWWORD                        = 0                                                                                      // /usr/include/sys/_endian.h:56:1:
-	X_RLIM_T_DECLARED                     = 0                                                                                      // /usr/include/sys/types.h:193:1:
-	X_RSIZE_T_DEFINED                     = 0                                                                                      // /usr/include/stdio.h:55:1:
-	X_RUNETYPE_H_                         = 0                                                                                      // /usr/include/runetype.h:39:1:
-	X_RUNE_MAGIC_1                        = "RuneMagi"                                                                             // /usr/include/runetype.h:87:1:
-	X_RUNE_T_DECLARED                     = 0                                                                                      // /usr/include/stdlib.h:47:1:
-	X_SC_2_CHAR_TERM                      = 20                                                                                     // /usr/include/unistd.h:184:1:
-	X_SC_2_C_BIND                         = 18                                                                                     // /usr/include/unistd.h:182:1:
-	X_SC_2_C_DEV                          = 19                                                                                     // /usr/include/unistd.h:183:1:
-	X_SC_2_FORT_DEV                       = 21                                                                                     // /usr/include/unistd.h:185:1:
-	X_SC_2_FORT_RUN                       = 22                                                                                     // /usr/include/unistd.h:186:1:
-	X_SC_2_LOCALEDEF                      = 23                                                                                     // /usr/include/unistd.h:187:1:
-	X_SC_2_PBS                            = 59                                                                                     // /usr/include/unistd.h:222:1:
-	X_SC_2_PBS_ACCOUNTING                 = 60                                                                                     // /usr/include/unistd.h:223:1:
-	X_SC_2_PBS_CHECKPOINT                 = 61                                                                                     // /usr/include/unistd.h:224:1:
-	X_SC_2_PBS_LOCATE                     = 62                                                                                     // /usr/include/unistd.h:225:1:
-	X_SC_2_PBS_MESSAGE                    = 63                                                                                     // /usr/include/unistd.h:226:1:
-	X_SC_2_PBS_TRACK                      = 64                                                                                     // /usr/include/unistd.h:227:1:
-	X_SC_2_SW_DEV                         = 24                                                                                     // /usr/include/unistd.h:188:1:
-	X_SC_2_UPE                            = 25                                                                                     // /usr/include/unistd.h:189:1:
-	X_SC_2_VERSION                        = 17                                                                                     // /usr/include/unistd.h:181:1:
-	X_SC_ADVISORY_INFO                    = 65                                                                                     // /usr/include/unistd.h:228:1:
-	X_SC_AIO_LISTIO_MAX                   = 42                                                                                     // /usr/include/unistd.h:208:1:
-	X_SC_AIO_MAX                          = 43                                                                                     // /usr/include/unistd.h:209:1:
-	X_SC_AIO_PRIO_DELTA_MAX               = 44                                                                                     // /usr/include/unistd.h:210:1:
-	X_SC_ARG_MAX                          = 1                                                                                      // /usr/include/unistd.h:165:1:
-	X_SC_ASYNCHRONOUS_IO                  = 28                                                                                     // /usr/include/unistd.h:194:1:
-	X_SC_ATEXIT_MAX                       = 107                                                                                    // /usr/include/unistd.h:276:1:
-	X_SC_BARRIERS                         = 66                                                                                     // /usr/include/unistd.h:229:1:
-	X_SC_BC_BASE_MAX                      = 9                                                                                      // /usr/include/unistd.h:173:1:
-	X_SC_BC_DIM_MAX                       = 10                                                                                     // /usr/include/unistd.h:174:1:
-	X_SC_BC_SCALE_MAX                     = 11                                                                                     // /usr/include/unistd.h:175:1:
-	X_SC_BC_STRING_MAX                    = 12                                                                                     // /usr/include/unistd.h:176:1:
-	X_SC_CHILD_MAX                        = 2                                                                                      // /usr/include/unistd.h:166:1:
-	X_SC_CLK_TCK                          = 3                                                                                      // /usr/include/unistd.h:167:1:
-	X_SC_CLOCK_SELECTION                  = 67                                                                                     // /usr/include/unistd.h:230:1:
-	X_SC_COLL_WEIGHTS_MAX                 = 13                                                                                     // /usr/include/unistd.h:177:1:
-	X_SC_CPUSET_SIZE                      = 122                                                                                    // /usr/include/unistd.h:294:1:
-	X_SC_CPUTIME                          = 68                                                                                     // /usr/include/unistd.h:231:1:
-	X_SC_DELAYTIMER_MAX                   = 45                                                                                     // /usr/include/unistd.h:211:1:
-	X_SC_EXPR_NEST_MAX                    = 14                                                                                     // /usr/include/unistd.h:178:1:
-	X_SC_FILE_LOCKING                     = 69                                                                                     // /usr/include/unistd.h:232:1:
-	X_SC_FSYNC                            = 38                                                                                     // /usr/include/unistd.h:204:1:
-	X_SC_GETGR_R_SIZE_MAX                 = 70                                                                                     // /usr/include/unistd.h:233:1:
-	X_SC_GETPW_R_SIZE_MAX                 = 71                                                                                     // /usr/include/unistd.h:234:1:
-	X_SC_HOST_NAME_MAX                    = 72                                                                                     // /usr/include/unistd.h:235:1:
-	X_SC_IOV_MAX                          = 56                                                                                     // /usr/include/unistd.h:277:1:
-	X_SC_IPV6                             = 118                                                                                    // /usr/include/unistd.h:270:1:
-	X_SC_JOB_CONTROL                      = 6                                                                                      // /usr/include/unistd.h:170:1:
-	X_SC_LINE_MAX                         = 15                                                                                     // /usr/include/unistd.h:179:1:
-	X_SC_LOGIN_NAME_MAX                   = 73                                                                                     // /usr/include/unistd.h:236:1:
-	X_SC_MAPPED_FILES                     = 29                                                                                     // /usr/include/unistd.h:195:1:
-	X_SC_MEMLOCK                          = 30                                                                                     // /usr/include/unistd.h:196:1:
-	X_SC_MEMLOCK_RANGE                    = 31                                                                                     // /usr/include/unistd.h:197:1:
-	X_SC_MEMORY_PROTECTION                = 32                                                                                     // /usr/include/unistd.h:198:1:
-	X_SC_MESSAGE_PASSING                  = 33                                                                                     // /usr/include/unistd.h:199:1:
-	X_SC_MONOTONIC_CLOCK                  = 74                                                                                     // /usr/include/unistd.h:237:1:
-	X_SC_MQ_OPEN_MAX                      = 46                                                                                     // /usr/include/unistd.h:212:1:
-	X_SC_MQ_PRIO_MAX                      = 75                                                                                     // /usr/include/unistd.h:238:1:
-	X_SC_NGROUPS_MAX                      = 4                                                                                      // /usr/include/unistd.h:168:1:
-	X_SC_NPROCESSORS_CONF                 = 57                                                                                     // /usr/include/unistd.h:292:1:
-	X_SC_NPROCESSORS_ONLN                 = 58                                                                                     // /usr/include/unistd.h:293:1:
-	X_SC_OPEN_MAX                         = 5                                                                                      // /usr/include/unistd.h:169:1:
-	X_SC_PAGESIZE                         = 47                                                                                     // /usr/include/unistd.h:213:1:
-	X_SC_PAGE_SIZE                        = 47                                                                                     // /usr/include/unistd.h:278:1:
-	X_SC_PHYS_PAGES                       = 121                                                                                    // /usr/include/unistd.h:298:1:
-	X_SC_PRIORITIZED_IO                   = 34                                                                                     // /usr/include/unistd.h:200:1:
-	X_SC_PRIORITY_SCHEDULING              = 35                                                                                     // /usr/include/unistd.h:201:1:
-	X_SC_RAW_SOCKETS                      = 119                                                                                    // /usr/include/unistd.h:271:1:
-	X_SC_READER_WRITER_LOCKS              = 76                                                                                     // /usr/include/unistd.h:239:1:
-	X_SC_REALTIME_SIGNALS                 = 36                                                                                     // /usr/include/unistd.h:202:1:
-	X_SC_REGEXP                           = 77                                                                                     // /usr/include/unistd.h:240:1:
-	X_SC_RE_DUP_MAX                       = 16                                                                                     // /usr/include/unistd.h:180:1:
-	X_SC_RTSIG_MAX                        = 48                                                                                     // /usr/include/unistd.h:214:1:
-	X_SC_SAVED_IDS                        = 7                                                                                      // /usr/include/unistd.h:171:1:
-	X_SC_SEMAPHORES                       = 37                                                                                     // /usr/include/unistd.h:203:1:
-	X_SC_SEM_NSEMS_MAX                    = 49                                                                                     // /usr/include/unistd.h:215:1:
-	X_SC_SEM_VALUE_MAX                    = 50                                                                                     // /usr/include/unistd.h:216:1:
-	X_SC_SHARED_MEMORY_OBJECTS            = 39                                                                                     // /usr/include/unistd.h:205:1:
-	X_SC_SHELL                            = 78                                                                                     // /usr/include/unistd.h:241:1:
-	X_SC_SIGQUEUE_MAX                     = 51                                                                                     // /usr/include/unistd.h:217:1:
-	X_SC_SPAWN                            = 79                                                                                     // /usr/include/unistd.h:242:1:
-	X_SC_SPIN_LOCKS                       = 80                                                                                     // /usr/include/unistd.h:243:1:
-	X_SC_SPORADIC_SERVER                  = 81                                                                                     // /usr/include/unistd.h:244:1:
-	X_SC_STREAM_MAX                       = 26                                                                                     // /usr/include/unistd.h:190:1:
-	X_SC_SYMLOOP_MAX                      = 120                                                                                    // /usr/include/unistd.h:272:1:
-	X_SC_SYNCHRONIZED_IO                  = 40                                                                                     // /usr/include/unistd.h:206:1:
-	X_SC_THREADS                          = 96                                                                                     // /usr/include/unistd.h:259:1:
-	X_SC_THREAD_ATTR_STACKADDR            = 82                                                                                     // /usr/include/unistd.h:245:1:
-	X_SC_THREAD_ATTR_STACKSIZE            = 83                                                                                     // /usr/include/unistd.h:246:1:
-	X_SC_THREAD_CPUTIME                   = 84                                                                                     // /usr/include/unistd.h:247:1:
-	X_SC_THREAD_DESTRUCTOR_ITERATIONS     = 85                                                                                     // /usr/include/unistd.h:248:1:
-	X_SC_THREAD_KEYS_MAX                  = 86                                                                                     // /usr/include/unistd.h:249:1:
-	X_SC_THREAD_PRIORITY_SCHEDULING       = 89                                                                                     // /usr/include/unistd.h:252:1:
-	X_SC_THREAD_PRIO_INHERIT              = 87                                                                                     // /usr/include/unistd.h:250:1:
-	X_SC_THREAD_PRIO_PROTECT              = 88                                                                                     // /usr/include/unistd.h:251:1:
-	X_SC_THREAD_PROCESS_SHARED            = 90                                                                                     // /usr/include/unistd.h:253:1:
-	X_SC_THREAD_SAFE_FUNCTIONS            = 91                                                                                     // /usr/include/unistd.h:254:1:
-	X_SC_THREAD_SPORADIC_SERVER           = 92                                                                                     // /usr/include/unistd.h:255:1:
-	X_SC_THREAD_STACK_MIN                 = 93                                                                                     // /usr/include/unistd.h:256:1:
-	X_SC_THREAD_THREADS_MAX               = 94                                                                                     // /usr/include/unistd.h:257:1:
-	X_SC_TIMEOUTS                         = 95                                                                                     // /usr/include/unistd.h:258:1:
-	X_SC_TIMERS                           = 41                                                                                     // /usr/include/unistd.h:207:1:
-	X_SC_TIMER_MAX                        = 52                                                                                     // /usr/include/unistd.h:218:1:
-	X_SC_TRACE                            = 97                                                                                     // /usr/include/unistd.h:260:1:
-	X_SC_TRACE_EVENT_FILTER               = 98                                                                                     // /usr/include/unistd.h:261:1:
-	X_SC_TRACE_INHERIT                    = 99                                                                                     // /usr/include/unistd.h:262:1:
-	X_SC_TRACE_LOG                        = 100                                                                                    // /usr/include/unistd.h:263:1:
-	X_SC_TTY_NAME_MAX                     = 101                                                                                    // /usr/include/unistd.h:264:1:
-	X_SC_TYPED_MEMORY_OBJECTS             = 102                                                                                    // /usr/include/unistd.h:265:1:
-	X_SC_TZNAME_MAX                       = 27                                                                                     // /usr/include/unistd.h:191:1:
-	X_SC_V6_ILP32_OFF32                   = 103                                                                                    // /usr/include/unistd.h:266:1:
-	X_SC_V6_ILP32_OFFBIG                  = 104                                                                                    // /usr/include/unistd.h:267:1:
-	X_SC_V6_LP64_OFF64                    = 105                                                                                    // /usr/include/unistd.h:268:1:
-	X_SC_V6_LPBIG_OFFBIG                  = 106                                                                                    // /usr/include/unistd.h:269:1:
-	X_SC_VERSION                          = 8                                                                                      // /usr/include/unistd.h:172:1:
-	X_SC_XOPEN_CRYPT                      = 108                                                                                    // /usr/include/unistd.h:279:1:
-	X_SC_XOPEN_ENH_I18N                   = 109                                                                                    // /usr/include/unistd.h:280:1:
-	X_SC_XOPEN_LEGACY                     = 110                                                                                    // /usr/include/unistd.h:281:1:
-	X_SC_XOPEN_REALTIME                   = 111                                                                                    // /usr/include/unistd.h:282:1:
-	X_SC_XOPEN_REALTIME_THREADS           = 112                                                                                    // /usr/include/unistd.h:283:1:
-	X_SC_XOPEN_SHM                        = 113                                                                                    // /usr/include/unistd.h:284:1:
-	X_SC_XOPEN_STREAMS                    = 114                                                                                    // /usr/include/unistd.h:285:1:
-	X_SC_XOPEN_UNIX                       = 115                                                                                    // /usr/include/unistd.h:286:1:
-	X_SC_XOPEN_VERSION                    = 116                                                                                    // /usr/include/unistd.h:287:1:
-	X_SC_XOPEN_XCU_VERSION                = 117                                                                                    // /usr/include/unistd.h:288:1:
-	X_SELECT_DECLARED                     = 0                                                                                      // /usr/include/sys/select.h:103:1:
-	X_SIGSET_T_DECLARED                   = 0                                                                                      // /usr/include/sys/select.h:50:1:
-	X_SIG_MAXSIG                          = 128                                                                                    // /usr/include/sys/_sigset.h:47:1:
-	X_SIG_WORDS                           = 4                                                                                      // /usr/include/sys/_sigset.h:46:1:
-	X_SIZE_T_DECLARED                     = 0                                                                                      // /usr/include/stdio.h:51:1:
-	X_SQLITE3RTREE_H_                     = 0                                                                                      // testdata/sqlite-amalgamation-3390300/sqlite3.h:10433:1:
-	X_SSIZE_T_DECLARED                    = 0                                                                                      // /usr/include/stdio.h:65:1:
-	X_STDFILE_DECLARED                    = 0                                                                                      // /usr/include/stdio.h:164:1:
-	X_STDIO_H_                            = 0                                                                                      // /usr/include/stdio.h:39:1:
-	X_STDLIB_H_                           = 0                                                                                      // /usr/include/stdlib.h:36:1:
-	X_STDSTREAM_DECLARED                  = 0                                                                                      // /usr/include/stdio.h:173:1:
-	X_STRINGS_H_                          = 0                                                                                      // /usr/include/strings.h:32:1:
-	X_STRING_H_                           = 0                                                                                      // /usr/include/string.h:36:1:
-	X_SUSECONDS_T_DECLARED                = 0                                                                                      // /usr/include/sys/types.h:212:1:
-	X_SWAB_DECLARED                       = 0                                                                                      // /usr/include/unistd.h:461:1:
-	X_SYS_CDEFS_H_                        = 0                                                                                      // /usr/include/sys/cdefs.h:39:1:
-	X_SYS_ERRNO_H_                        = 0                                                                                      // /usr/include/errno.h:41:1:
-	X_SYS_SELECT_H_                       = 0                                                                                      // /usr/include/sys/select.h:35:1:
-	X_SYS_TIMESPEC_H_                     = 0                                                                                      // /usr/include/sys/timespec.h:37:1:
-	X_SYS_TYPES_H_                        = 0                                                                                      // /usr/include/sys/types.h:41:1:
-	X_SYS_UNISTD_H_                       = 0                                                                                      // /usr/include/sys/unistd.h:36:1:
-	X_SYS__ENDIAN_H_                      = 0                                                                                      // /usr/include/sys/_endian.h:33:1:
-	X_SYS__PTHREADTYPES_H_                = 0                                                                                      // /usr/include/sys/_pthreadtypes.h:39:1:
-	X_SYS__SIGSET_H_                      = 0                                                                                      // /usr/include/sys/_sigset.h:41:1:
-	X_SYS__STDARG_H_                      = 0                                                                                      // /usr/include/sys/_stdarg.h:34:1:
-	X_SYS__STDINT_H_                      = 0                                                                                      // /usr/include/sys/_stdint.h:33:1:
-	X_SYS__TIMESPEC_H_                    = 0                                                                                      // /usr/include/sys/_timespec.h:37:1:
-	X_SYS__TIMEVAL_H_                     = 0                                                                                      // /usr/include/sys/_timeval.h:32:1:
-	X_SYS__TYPES_H_                       = 0                                                                                      // /usr/include/sys/_types.h:32:1:
-	X_TIMER_T_DECLARED                    = 0                                                                                      // /usr/include/sys/types.h:222:1:
-	X_TIME_T_DECLARED                     = 0                                                                                      // /usr/include/sys/types.h:217:1:
-	X_TRUNCATE_DECLARED                   = 0                                                                                      // /usr/include/stdio.h:447:1:
-	X_UID_T_DECLARED                      = 0                                                                                      // /usr/include/sys/types.h:234:1:
-	X_UINT16_T_DECLARED                   = 0                                                                                      // /usr/include/sys/_stdint.h:62:1:
-	X_UINT32_T_DECLARED                   = 0                                                                                      // /usr/include/sys/_stdint.h:67:1:
-	X_UINT64_T_DECLARED                   = 0                                                                                      // /usr/include/sys/_stdint.h:72:1:
-	X_UINT8_T_DECLARED                    = 0                                                                                      // /usr/include/sys/_stdint.h:57:1:
-	X_UINTMAX_T_DECLARED                  = 0                                                                                      // /usr/include/sys/_stdint.h:89:1:
-	X_UINTPTR_T_DECLARED                  = 0                                                                                      // /usr/include/sys/_stdint.h:81:1:
-	X_UNISTD_H_                           = 0                                                                                      // /usr/include/unistd.h:36:1:
-	X_USECONDS_T_DECLARED                 = 0                                                                                      // /usr/include/sys/types.h:239:1:
-	X_V6_ILP32_OFF32                      = -1                                                                                     // /usr/include/unistd.h:139:1:
-	X_V6_ILP32_OFFBIG                     = 0                                                                                      // /usr/include/unistd.h:140:1:
-	X_V6_LP64_OFF64                       = 0                                                                                      // /usr/include/unistd.h:141:1:
-	X_V6_LPBIG_OFFBIG                     = -1                                                                                     // /usr/include/unistd.h:142:1:
-	X_VA_LIST_DECLARED                    = 0                                                                                      // /usr/include/sys/_stdarg.h:40:3:
-	X_WCHAR_T_DECLARED                    = 0                                                                                      // /usr/include/stdlib.h:59:1:
-	X_XLOCALE_CTYPE_H                     = 0                                                                                      // /usr/include/xlocale/_ctype.h:40:1:
-	X_XLOCALE_RUN_FUNCTIONS_DEFINED       = 1                                                                                      // /usr/include/xlocale/_ctype.h:49:1:
-	X_XLOCALE_STRING1_H                   = 0                                                                                      // /usr/include/xlocale/_string.h:42:1:
-	X_XLOCALE_STRINGS1_H                  = 0                                                                                      // /usr/include/xlocale/_strings.h:40:1:
-	X_XOPEN_CRYPT                         = -1                                                                                     // /usr/include/unistd.h:145:1:
-	X_XOPEN_ENH_I18N                      = -1                                                                                     // /usr/include/unistd.h:146:1:
-	X_XOPEN_LEGACY                        = -1                                                                                     // /usr/include/unistd.h:147:1:
-	X_XOPEN_REALTIME                      = -1                                                                                     // /usr/include/unistd.h:148:1:
-	X_XOPEN_REALTIME_THREADS              = -1                                                                                     // /usr/include/unistd.h:149:1:
-	X_XOPEN_SHM                           = 1                                                                                      // /usr/include/sys/unistd.h:83:1:
-	X_XOPEN_STREAMS                       = -1                                                                                     // /usr/include/sys/unistd.h:84:1:
-	X_XOPEN_UNIX                          = -1                                                                                     // /usr/include/unistd.h:150:1:
-	Unix                                  = 1                                                                                      // <predefined>:340:1:
+	BIG_ENDIAN                            = 4321
+	BUFSIZ                                = 1024
+	BYTE_ORDER                            = 1234
+	CLOSE_RANGE_CLOEXEC                   = 4
+	DEFAULT_TIMEOUT                       = 10000
+	E2BIG                                 = 7
+	EACCES                                = 13
+	EADDRINUSE                            = 48
+	EADDRNOTAVAIL                         = 49
+	EAFNOSUPPORT                          = 47
+	EAGAIN                                = 35
+	EALREADY                              = 37
+	EAUTH                                 = 80
+	EBADF                                 = 9
+	EBADMSG                               = 89
+	EBADRPC                               = 72
+	EBUSY                                 = 16
+	ECANCELED                             = 85
+	ECAPMODE                              = 94
+	ECHILD                                = 10
+	ECONNABORTED                          = 53
+	ECONNREFUSED                          = 61
+	ECONNRESET                            = 54
+	EDEADLK                               = 11
+	EDESTADDRREQ                          = 39
+	EDOM                                  = 33
+	EDOOFUS                               = 88
+	EDQUOT                                = 69
+	EEXIST                                = 17
+	EFAULT                                = 14
+	EFBIG                                 = 27
+	EFTYPE                                = 79
+	EHOSTDOWN                             = 64
+	EHOSTUNREACH                          = 65
+	EIDRM                                 = 82
+	EILSEQ                                = 86
+	EINPROGRESS                           = 36
+	EINTEGRITY                            = 97
+	EINTR                                 = 4
+	EINVAL                                = 22
+	EIO                                   = 5
+	EISCONN                               = 56
+	EISDIR                                = 21
+	ELAST                                 = 97
+	ELOOP                                 = 62
+	EMFILE                                = 24
+	EMLINK                                = 31
+	EMSGSIZE                              = 40
+	EMULTIHOP                             = 90
+	ENAMETOOLONG                          = 63
+	ENEEDAUTH                             = 81
+	ENETDOWN                              = 50
+	ENETRESET                             = 52
+	ENETUNREACH                           = 51
+	ENFILE                                = 23
+	ENOATTR                               = 87
+	ENOBUFS                               = 55
+	ENODEV                                = 19
+	ENOENT                                = 2
+	ENOEXEC                               = 8
+	ENOLCK                                = 77
+	ENOLINK                               = 91
+	ENOMEM                                = 12
+	ENOMSG                                = 83
+	ENOPROTOOPT                           = 42
+	ENOSPC                                = 28
+	ENOSYS                                = 78
+	ENOTBLK                               = 15
+	ENOTCAPABLE                           = 93
+	ENOTCONN                              = 57
+	ENOTDIR                               = 20
+	ENOTEMPTY                             = 66
+	ENOTRECOVERABLE                       = 95
+	ENOTSOCK                              = 38
+	ENOTSUP                               = 45
+	ENOTTY                                = 25
+	ENXIO                                 = 6
+	EOF                                   = -1
+	EOPNOTSUPP                            = 45
+	EOVERFLOW                             = 84
+	EOWNERDEAD                            = 96
+	EPERM                                 = 1
+	EPFNOSUPPORT                          = 46
+	EPIPE                                 = 32
+	EPROCLIM                              = 67
+	EPROCUNAVAIL                          = 76
+	EPROGMISMATCH                         = 75
+	EPROGUNAVAIL                          = 74
+	EPROTO                                = 92
+	EPROTONOSUPPORT                       = 43
+	EPROTOTYPE                            = 41
+	ERANGE                                = 34
+	EREMOTE                               = 71
+	EROFS                                 = 30
+	ERPCMISMATCH                          = 73
+	ESHUTDOWN                             = 58
+	ESOCKTNOSUPPORT                       = 44
+	ESPIPE                                = 29
+	ESRCH                                 = 3
+	ESTALE                                = 70
+	ETIMEDOUT                             = 60
+	ETOOMANYREFS                          = 59
+	ETXTBSY                               = 26
+	EUSERS                                = 68
+	EWOULDBLOCK                           = 35
+	EXDEV                                 = 18
+	EXIT_FAILURE                          = 1
+	EXIT_SUCCESS                          = 0
+	FD_SETSIZE                            = 1024
+	FILENAME_MAX                          = 1024
+	FOPEN_MAX                             = 20
+	FTS5_TOKENIZE_AUX                     = 0x0008
+	FTS5_TOKENIZE_DOCUMENT                = 0x0004
+	FTS5_TOKENIZE_PREFIX                  = 0x0002
+	FTS5_TOKENIZE_QUERY                   = 0x0001
+	FTS5_TOKEN_COLOCATED                  = 0x0001
+	FULLY_WITHIN                          = 2
+	F_LOCK                                = 1
+	F_OK                                  = 0
+	F_TEST                                = 3
+	F_TLOCK                               = 2
+	F_ULOCK                               = 0
+	HAVE_USLEEP                           = 1
+	LITTLE_ENDIAN                         = 1234
+	L_INCR                                = 1
+	L_SET                                 = 0
+	L_XTND                                = 2
+	L_ctermid                             = 1024
+	L_cuserid                             = 17
+	L_tmpnam                              = 1024
+	MX_ARG                                = 2
+	NDEBUG                                = 1
+	NOT_WITHIN                            = 0
+	PARTLY_WITHIN                         = 1
+	PDP_ENDIAN                            = 3412
+	P_tmpdir                              = "/tmp/"
+	RAND_MAX                              = 0x7fffffff
+	RFCENVG                               = 2048
+	RFCFDG                                = 4096
+	RFCNAMEG                              = 1024
+	RFENVG                                = 2
+	RFFDG                                 = 4
+	RFFLAGS                               = 2416930932
+	RFHIGHPID                             = 262144
+	RFKERNELONLY                          = 268828672
+	RFLINUXTHPN                           = 65536
+	RFMEM                                 = 32
+	RFNAMEG                               = 1
+	RFNOTEG                               = 8
+	RFNOWAIT                              = 64
+	RFPPWAIT                              = 2147483648
+	RFPROC                                = 16
+	RFPROCDESC                            = 268435456
+	RFSIGSHARE                            = 16384
+	RFSPAWN                               = 2147483648
+	RFSTOPPED                             = 131072
+	RFTHREAD                              = 8192
+	RFTSIGMASK                            = 0xFF
+	RFTSIGSHIFT                           = 20
+	RFTSIGZMB                             = 524288
+	R_OK                                  = 0x04
+	SEEK_CUR                              = 1
+	SEEK_DATA                             = 3
+	SEEK_END                              = 2
+	SEEK_HOLE                             = 4
+	SEEK_SET                              = 0
+	SQLITE3_H                             = 0
+	SQLITE3_TEXT                          = 3
+	SQLITE_ABORT                          = 4
+	SQLITE_ABORT_ROLLBACK                 = 516
+	SQLITE_ACCESS_EXISTS                  = 0
+	SQLITE_ACCESS_READ                    = 2
+	SQLITE_ACCESS_READWRITE               = 1
+	SQLITE_ALTER_TABLE                    = 26
+	SQLITE_ANALYZE                        = 28
+	SQLITE_ANY                            = 5
+	SQLITE_API                            = 0
+	SQLITE_APICALL                        = 0
+	SQLITE_ATTACH                         = 24
+	SQLITE_AUTH                           = 23
+	SQLITE_AUTH_USER                      = 279
+	SQLITE_BLOB                           = 4
+	SQLITE_BUSY                           = 5
+	SQLITE_BUSY_RECOVERY                  = 261
+	SQLITE_BUSY_SNAPSHOT                  = 517
+	SQLITE_BUSY_TIMEOUT                   = 773
+	SQLITE_CALLBACK                       = 0
+	SQLITE_CANTOPEN                       = 14
+	SQLITE_CANTOPEN_CONVPATH              = 1038
+	SQLITE_CANTOPEN_DIRTYWAL              = 1294
+	SQLITE_CANTOPEN_FULLPATH              = 782
+	SQLITE_CANTOPEN_ISDIR                 = 526
+	SQLITE_CANTOPEN_NOTEMPDIR             = 270
+	SQLITE_CANTOPEN_SYMLINK               = 1550
+	SQLITE_CDECL                          = 0
+	SQLITE_CHANGESETAPPLY_INVERT          = 0x0002
+	SQLITE_CHANGESETAPPLY_NOSAVEPOINT     = 0x0001
+	SQLITE_CHANGESETSTART_INVERT          = 0x0002
+	SQLITE_CHANGESET_ABORT                = 2
+	SQLITE_CHANGESET_CONFLICT             = 3
+	SQLITE_CHANGESET_CONSTRAINT           = 4
+	SQLITE_CHANGESET_DATA                 = 1
+	SQLITE_CHANGESET_FOREIGN_KEY          = 5
+	SQLITE_CHANGESET_NOTFOUND             = 2
+	SQLITE_CHANGESET_OMIT                 = 0
+	SQLITE_CHANGESET_REPLACE              = 1
+	SQLITE_CHECKPOINT_FULL                = 1
+	SQLITE_CHECKPOINT_PASSIVE             = 0
+	SQLITE_CHECKPOINT_RESTART             = 2
+	SQLITE_CHECKPOINT_TRUNCATE            = 3
+	SQLITE_CONFIG_COVERING_INDEX_SCAN     = 20
+	SQLITE_CONFIG_GETMALLOC               = 5
+	SQLITE_CONFIG_GETMUTEX                = 11
+	SQLITE_CONFIG_GETPCACHE               = 15
+	SQLITE_CONFIG_GETPCACHE2              = 19
+	SQLITE_CONFIG_HEAP                    = 8
+	SQLITE_CONFIG_LOG                     = 16
+	SQLITE_CONFIG_LOOKASIDE               = 13
+	SQLITE_CONFIG_MALLOC                  = 4
+	SQLITE_CONFIG_MEMDB_MAXSIZE           = 29
+	SQLITE_CONFIG_MEMSTATUS               = 9
+	SQLITE_CONFIG_MMAP_SIZE               = 22
+	SQLITE_CONFIG_MULTITHREAD             = 2
+	SQLITE_CONFIG_MUTEX                   = 10
+	SQLITE_CONFIG_PAGECACHE               = 7
+	SQLITE_CONFIG_PCACHE                  = 14
+	SQLITE_CONFIG_PCACHE2                 = 18
+	SQLITE_CONFIG_PCACHE_HDRSZ            = 24
+	SQLITE_CONFIG_PMASZ                   = 25
+	SQLITE_CONFIG_SCRATCH                 = 6
+	SQLITE_CONFIG_SERIALIZED              = 3
+	SQLITE_CONFIG_SINGLETHREAD            = 1
+	SQLITE_CONFIG_SMALL_MALLOC            = 27
+	SQLITE_CONFIG_SORTERREF_SIZE          = 28
+	SQLITE_CONFIG_SQLLOG                  = 21
+	SQLITE_CONFIG_STMTJRNL_SPILL          = 26
+	SQLITE_CONFIG_URI                     = 17
+	SQLITE_CONFIG_WIN32_HEAPSIZE          = 23
+	SQLITE_CONSTRAINT                     = 19
+	SQLITE_CONSTRAINT_CHECK               = 275
+	SQLITE_CONSTRAINT_COMMITHOOK          = 531
+	SQLITE_CONSTRAINT_DATATYPE            = 3091
+	SQLITE_CONSTRAINT_FOREIGNKEY          = 787
+	SQLITE_CONSTRAINT_FUNCTION            = 1043
+	SQLITE_CONSTRAINT_NOTNULL             = 1299
+	SQLITE_CONSTRAINT_PINNED              = 2835
+	SQLITE_CONSTRAINT_PRIMARYKEY          = 1555
+	SQLITE_CONSTRAINT_ROWID               = 2579
+	SQLITE_CONSTRAINT_TRIGGER             = 1811
+	SQLITE_CONSTRAINT_UNIQUE              = 2067
+	SQLITE_CONSTRAINT_VTAB                = 2323
+	SQLITE_COPY                           = 0
+	SQLITE_CORE                           = 1
+	SQLITE_CORRUPT                        = 11
+	SQLITE_CORRUPT_INDEX                  = 779
+	SQLITE_CORRUPT_SEQUENCE               = 523
+	SQLITE_CORRUPT_VTAB                   = 267
+	SQLITE_CREATE_INDEX                   = 1
+	SQLITE_CREATE_TABLE                   = 2
+	SQLITE_CREATE_TEMP_INDEX              = 3
+	SQLITE_CREATE_TEMP_TABLE              = 4
+	SQLITE_CREATE_TEMP_TRIGGER            = 5
+	SQLITE_CREATE_TEMP_VIEW               = 6
+	SQLITE_CREATE_TRIGGER                 = 7
+	SQLITE_CREATE_VIEW                    = 8
+	SQLITE_CREATE_VTABLE                  = 29
+	SQLITE_DBCONFIG_DEFENSIVE             = 1010
+	SQLITE_DBCONFIG_DQS_DDL               = 1014
+	SQLITE_DBCONFIG_DQS_DML               = 1013
+	SQLITE_DBCONFIG_ENABLE_FKEY           = 1002
+	SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER = 1004
+	SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION = 1005
+	SQLITE_DBCONFIG_ENABLE_QPSG           = 1007
+	SQLITE_DBCONFIG_ENABLE_TRIGGER        = 1003
+	SQLITE_DBCONFIG_ENABLE_VIEW           = 1015
+	SQLITE_DBCONFIG_LEGACY_ALTER_TABLE    = 1012
+	SQLITE_DBCONFIG_LEGACY_FILE_FORMAT    = 1016
+	SQLITE_DBCONFIG_LOOKASIDE             = 1001
+	SQLITE_DBCONFIG_MAINDBNAME            = 1000
+	SQLITE_DBCONFIG_MAX                   = 1017
+	SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE      = 1006
+	SQLITE_DBCONFIG_RESET_DATABASE        = 1009
+	SQLITE_DBCONFIG_TRIGGER_EQP           = 1008
+	SQLITE_DBCONFIG_TRUSTED_SCHEMA        = 1017
+	SQLITE_DBCONFIG_WRITABLE_SCHEMA       = 1011
+	SQLITE_DBSTATUS_CACHE_HIT             = 7
+	SQLITE_DBSTATUS_CACHE_MISS            = 8
+	SQLITE_DBSTATUS_CACHE_SPILL           = 12
+	SQLITE_DBSTATUS_CACHE_USED            = 1
+	SQLITE_DBSTATUS_CACHE_USED_SHARED     = 11
+	SQLITE_DBSTATUS_CACHE_WRITE           = 9
+	SQLITE_DBSTATUS_DEFERRED_FKS          = 10
+	SQLITE_DBSTATUS_LOOKASIDE_HIT         = 4
+	SQLITE_DBSTATUS_LOOKASIDE_MISS_FULL   = 6
+	SQLITE_DBSTATUS_LOOKASIDE_MISS_SIZE   = 5
+	SQLITE_DBSTATUS_LOOKASIDE_USED        = 0
+	SQLITE_DBSTATUS_MAX                   = 12
+	SQLITE_DBSTATUS_SCHEMA_USED           = 2
+	SQLITE_DBSTATUS_STMT_USED             = 3
+	SQLITE_DELETE                         = 9
+	SQLITE_DENY                           = 1
+	SQLITE_DEPRECATED                     = 0
+	SQLITE_DESERIALIZE_FREEONCLOSE        = 1
+	SQLITE_DESERIALIZE_READONLY           = 4
+	SQLITE_DESERIALIZE_RESIZEABLE         = 2
+	SQLITE_DETACH                         = 25
+	SQLITE_DETERMINISTIC                  = 0x000000800
+	SQLITE_DIRECTONLY                     = 0x000080000
+	SQLITE_DONE                           = 101
+	SQLITE_DROP_INDEX                     = 10
+	SQLITE_DROP_TABLE                     = 11
+	SQLITE_DROP_TEMP_INDEX                = 12
+	SQLITE_DROP_TEMP_TABLE                = 13
+	SQLITE_DROP_TEMP_TRIGGER              = 14
+	SQLITE_DROP_TEMP_VIEW                 = 15
+	SQLITE_DROP_TRIGGER                   = 16
+	SQLITE_DROP_VIEW                      = 17
+	SQLITE_DROP_VTABLE                    = 30
+	SQLITE_EMPTY                          = 16
+	SQLITE_ENABLE_COLUMN_METADATA         = 1
+	SQLITE_ENABLE_FTS5                    = 1
+	SQLITE_ENABLE_GEOPOLY                 = 1
+	SQLITE_ENABLE_MATH_FUNCTIONS          = 1
+	SQLITE_ENABLE_MEMORY_MANAGEMENT       = 1
+	SQLITE_ENABLE_OFFSET_SQL_FUNC         = 1
+	SQLITE_ENABLE_PREUPDATE_HOOK          = 1
+	SQLITE_ENABLE_RBU                     = 1
+	SQLITE_ENABLE_RTREE                   = 1
+	SQLITE_ENABLE_SESSION                 = 1
+	SQLITE_ENABLE_SNAPSHOT                = 1
+	SQLITE_ENABLE_STAT4                   = 1
+	SQLITE_ENABLE_UNLOCK_NOTIFY           = 1
+	SQLITE_ERROR                          = 1
+	SQLITE_ERROR_MISSING_COLLSEQ          = 257
+	SQLITE_ERROR_RETRY                    = 513
+	SQLITE_ERROR_SNAPSHOT                 = 769
+	SQLITE_EXPERIMENTAL                   = 0
+	SQLITE_FAIL                           = 3
+	SQLITE_FCNTL_BEGIN_ATOMIC_WRITE       = 31
+	SQLITE_FCNTL_BUSYHANDLER              = 15
+	SQLITE_FCNTL_CHUNK_SIZE               = 6
+	SQLITE_FCNTL_CKPT_DONE                = 37
+	SQLITE_FCNTL_CKPT_START               = 39
+	SQLITE_FCNTL_CKSM_FILE                = 41
+	SQLITE_FCNTL_COMMIT_ATOMIC_WRITE      = 32
+	SQLITE_FCNTL_COMMIT_PHASETWO          = 22
+	SQLITE_FCNTL_DATA_VERSION             = 35
+	SQLITE_FCNTL_EXTERNAL_READER          = 40
+	SQLITE_FCNTL_FILE_POINTER             = 7
+	SQLITE_FCNTL_GET_LOCKPROXYFILE        = 2
+	SQLITE_FCNTL_HAS_MOVED                = 20
+	SQLITE_FCNTL_JOURNAL_POINTER          = 28
+	SQLITE_FCNTL_LAST_ERRNO               = 4
+	SQLITE_FCNTL_LOCKSTATE                = 1
+	SQLITE_FCNTL_LOCK_TIMEOUT             = 34
+	SQLITE_FCNTL_MMAP_SIZE                = 18
+	SQLITE_FCNTL_OVERWRITE                = 11
+	SQLITE_FCNTL_PDB                      = 30
+	SQLITE_FCNTL_PERSIST_WAL              = 10
+	SQLITE_FCNTL_POWERSAFE_OVERWRITE      = 13
+	SQLITE_FCNTL_PRAGMA                   = 14
+	SQLITE_FCNTL_RBU                      = 26
+	SQLITE_FCNTL_RESERVE_BYTES            = 38
+	SQLITE_FCNTL_ROLLBACK_ATOMIC_WRITE    = 33
+	SQLITE_FCNTL_SET_LOCKPROXYFILE        = 3
+	SQLITE_FCNTL_SIZE_HINT                = 5
+	SQLITE_FCNTL_SIZE_LIMIT               = 36
+	SQLITE_FCNTL_SYNC                     = 21
+	SQLITE_FCNTL_SYNC_OMITTED             = 8
+	SQLITE_FCNTL_TEMPFILENAME             = 16
+	SQLITE_FCNTL_TRACE                    = 19
+	SQLITE_FCNTL_VFSNAME                  = 12
+	SQLITE_FCNTL_VFS_POINTER              = 27
+	SQLITE_FCNTL_WAL_BLOCK                = 24
+	SQLITE_FCNTL_WIN32_AV_RETRY           = 9
+	SQLITE_FCNTL_WIN32_GET_HANDLE         = 29
+	SQLITE_FCNTL_WIN32_SET_HANDLE         = 23
+	SQLITE_FCNTL_ZIPVFS                   = 25
+	SQLITE_FLOAT                          = 2
+	SQLITE_FORMAT                         = 24
+	SQLITE_FULL                           = 13
+	SQLITE_FUNCTION                       = 31
+	SQLITE_GET_LOCKPROXYFILE              = 2
+	SQLITE_IGNORE                         = 2
+	SQLITE_INDEX_CONSTRAINT_EQ            = 2
+	SQLITE_INDEX_CONSTRAINT_FUNCTION      = 150
+	SQLITE_INDEX_CONSTRAINT_GE            = 32
+	SQLITE_INDEX_CONSTRAINT_GLOB          = 66
+	SQLITE_INDEX_CONSTRAINT_GT            = 4
+	SQLITE_INDEX_CONSTRAINT_IS            = 72
+	SQLITE_INDEX_CONSTRAINT_ISNOT         = 69
+	SQLITE_INDEX_CONSTRAINT_ISNOTNULL     = 70
+	SQLITE_INDEX_CONSTRAINT_ISNULL        = 71
+	SQLITE_INDEX_CONSTRAINT_LE            = 8
+	SQLITE_INDEX_CONSTRAINT_LIKE          = 65
+	SQLITE_INDEX_CONSTRAINT_LIMIT         = 73
+	SQLITE_INDEX_CONSTRAINT_LT            = 16
+	SQLITE_INDEX_CONSTRAINT_MATCH         = 64
+	SQLITE_INDEX_CONSTRAINT_NE            = 68
+	SQLITE_INDEX_CONSTRAINT_OFFSET        = 74
+	SQLITE_INDEX_CONSTRAINT_REGEXP        = 67
+	SQLITE_INDEX_SCAN_UNIQUE              = 1
+	SQLITE_INNOCUOUS                      = 0x000200000
+	SQLITE_INSERT                         = 18
+	SQLITE_INTEGER                        = 1
+	SQLITE_INTERNAL                       = 2
+	SQLITE_INTERRUPT                      = 9
+	SQLITE_IOCAP_ATOMIC                   = 0x00000001
+	SQLITE_IOCAP_ATOMIC16K                = 0x00000040
+	SQLITE_IOCAP_ATOMIC1K                 = 0x00000004
+	SQLITE_IOCAP_ATOMIC2K                 = 0x00000008
+	SQLITE_IOCAP_ATOMIC32K                = 0x00000080
+	SQLITE_IOCAP_ATOMIC4K                 = 0x00000010
+	SQLITE_IOCAP_ATOMIC512                = 0x00000002
+	SQLITE_IOCAP_ATOMIC64K                = 0x00000100
+	SQLITE_IOCAP_ATOMIC8K                 = 0x00000020
+	SQLITE_IOCAP_BATCH_ATOMIC             = 0x00004000
+	SQLITE_IOCAP_IMMUTABLE                = 0x00002000
+	SQLITE_IOCAP_POWERSAFE_OVERWRITE      = 0x00001000
+	SQLITE_IOCAP_SAFE_APPEND              = 0x00000200
+	SQLITE_IOCAP_SEQUENTIAL               = 0x00000400
+	SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN    = 0x00000800
+	SQLITE_IOERR                          = 10
+	SQLITE_IOERR_ACCESS                   = 3338
+	SQLITE_IOERR_AUTH                     = 7178
+	SQLITE_IOERR_BEGIN_ATOMIC             = 7434
+	SQLITE_IOERR_BLOCKED                  = 2826
+	SQLITE_IOERR_CHECKRESERVEDLOCK        = 3594
+	SQLITE_IOERR_CLOSE                    = 4106
+	SQLITE_IOERR_COMMIT_ATOMIC            = 7690
+	SQLITE_IOERR_CONVPATH                 = 6666
+	SQLITE_IOERR_CORRUPTFS                = 8458
+	SQLITE_IOERR_DATA                     = 8202
+	SQLITE_IOERR_DELETE                   = 2570
+	SQLITE_IOERR_DELETE_NOENT             = 5898
+	SQLITE_IOERR_DIR_CLOSE                = 4362
+	SQLITE_IOERR_DIR_FSYNC                = 1290
+	SQLITE_IOERR_FSTAT                    = 1802
+	SQLITE_IOERR_FSYNC                    = 1034
+	SQLITE_IOERR_GETTEMPPATH              = 6410
+	SQLITE_IOERR_LOCK                     = 3850
+	SQLITE_IOERR_MMAP                     = 6154
+	SQLITE_IOERR_NOMEM                    = 3082
+	SQLITE_IOERR_RDLOCK                   = 2314
+	SQLITE_IOERR_READ                     = 266
+	SQLITE_IOERR_ROLLBACK_ATOMIC          = 7946
+	SQLITE_IOERR_SEEK                     = 5642
+	SQLITE_IOERR_SHMLOCK                  = 5130
+	SQLITE_IOERR_SHMMAP                   = 5386
+	SQLITE_IOERR_SHMOPEN                  = 4618
+	SQLITE_IOERR_SHMSIZE                  = 4874
+	SQLITE_IOERR_SHORT_READ               = 522
+	SQLITE_IOERR_TRUNCATE                 = 1546
+	SQLITE_IOERR_UNLOCK                   = 2058
+	SQLITE_IOERR_VNODE                    = 6922
+	SQLITE_IOERR_WRITE                    = 778
+	SQLITE_LAST_ERRNO                     = 4
+	SQLITE_LIKE_DOESNT_MATCH_BLOBS        = 1
+	SQLITE_LIMIT_ATTACHED                 = 7
+	SQLITE_LIMIT_COLUMN                   = 2
+	SQLITE_LIMIT_COMPOUND_SELECT          = 4
+	SQLITE_LIMIT_EXPR_DEPTH               = 3
+	SQLITE_LIMIT_FUNCTION_ARG             = 6
+	SQLITE_LIMIT_LENGTH                   = 0
+	SQLITE_LIMIT_LIKE_PATTERN_LENGTH      = 8
+	SQLITE_LIMIT_SQL_LENGTH               = 1
+	SQLITE_LIMIT_TRIGGER_DEPTH            = 10
+	SQLITE_LIMIT_VARIABLE_NUMBER          = 9
+	SQLITE_LIMIT_VDBE_OP                  = 5
+	SQLITE_LIMIT_WORKER_THREADS           = 11
+	SQLITE_LOCKED                         = 6
+	SQLITE_LOCKED_SHAREDCACHE             = 262
+	SQLITE_LOCKED_VTAB                    = 518
+	SQLITE_LOCK_EXCLUSIVE                 = 4
+	SQLITE_LOCK_NONE                      = 0
+	SQLITE_LOCK_PENDING                   = 3
+	SQLITE_LOCK_RESERVED                  = 2
+	SQLITE_LOCK_SHARED                    = 1
+	SQLITE_MISMATCH                       = 20
+	SQLITE_MISUSE                         = 21
+	SQLITE_MUTEX_APPDEF                   = 1
+	SQLITE_MUTEX_FAST                     = 0
+	SQLITE_MUTEX_NOOP                     = 1
+	SQLITE_MUTEX_RECURSIVE                = 1
+	SQLITE_MUTEX_STATIC_APP1              = 8
+	SQLITE_MUTEX_STATIC_APP2              = 9
+	SQLITE_MUTEX_STATIC_APP3              = 10
+	SQLITE_MUTEX_STATIC_LRU               = 6
+	SQLITE_MUTEX_STATIC_LRU2              = 7
+	SQLITE_MUTEX_STATIC_MAIN              = 2
+	SQLITE_MUTEX_STATIC_MASTER            = 2
+	SQLITE_MUTEX_STATIC_MEM               = 3
+	SQLITE_MUTEX_STATIC_MEM2              = 4
+	SQLITE_MUTEX_STATIC_OPEN              = 4
+	SQLITE_MUTEX_STATIC_PMEM              = 7
+	SQLITE_MUTEX_STATIC_PRNG              = 5
+	SQLITE_MUTEX_STATIC_VFS1              = 11
+	SQLITE_MUTEX_STATIC_VFS2              = 12
+	SQLITE_MUTEX_STATIC_VFS3              = 13
+	SQLITE_NOLFS                          = 22
+	SQLITE_NOMEM                          = 7
+	SQLITE_NOTADB                         = 26
+	SQLITE_NOTFOUND                       = 12
+	SQLITE_NOTICE                         = 27
+	SQLITE_NOTICE_RECOVER_ROLLBACK        = 539
+	SQLITE_NOTICE_RECOVER_WAL             = 283
+	SQLITE_NULL                           = 5
+	SQLITE_OK                             = 0
+	SQLITE_OK_LOAD_PERMANENTLY            = 256
+	SQLITE_OK_SYMLINK                     = 512
+	SQLITE_OPEN_AUTOPROXY                 = 0x00000020
+	SQLITE_OPEN_CREATE                    = 0x00000004
+	SQLITE_OPEN_DELETEONCLOSE             = 0x00000008
+	SQLITE_OPEN_EXCLUSIVE                 = 0x00000010
+	SQLITE_OPEN_EXRESCODE                 = 0x02000000
+	SQLITE_OPEN_FULLMUTEX                 = 0x00010000
+	SQLITE_OPEN_MAIN_DB                   = 0x00000100
+	SQLITE_OPEN_MAIN_JOURNAL              = 0x00000800
+	SQLITE_OPEN_MASTER_JOURNAL            = 0x00004000
+	SQLITE_OPEN_MEMORY                    = 0x00000080
+	SQLITE_OPEN_NOFOLLOW                  = 0x01000000
+	SQLITE_OPEN_NOMUTEX                   = 0x00008000
+	SQLITE_OPEN_PRIVATECACHE              = 0x00040000
+	SQLITE_OPEN_READONLY                  = 0x00000001
+	SQLITE_OPEN_READWRITE                 = 0x00000002
+	SQLITE_OPEN_SHAREDCACHE               = 0x00020000
+	SQLITE_OPEN_SUBJOURNAL                = 0x00002000
+	SQLITE_OPEN_SUPER_JOURNAL             = 0x00004000
+	SQLITE_OPEN_TEMP_DB                   = 0x00000200
+	SQLITE_OPEN_TEMP_JOURNAL              = 0x00001000
+	SQLITE_OPEN_TRANSIENT_DB              = 0x00000400
+	SQLITE_OPEN_URI                       = 0x00000040
+	SQLITE_OPEN_WAL                       = 0x00080000
+	SQLITE_OS_UNIX                        = 1
+	SQLITE_PERM                           = 3
+	SQLITE_PRAGMA                         = 19
+	SQLITE_PREPARE_NORMALIZE              = 0x02
+	SQLITE_PREPARE_NO_VTAB                = 0x04
+	SQLITE_PREPARE_PERSISTENT             = 0x01
+	SQLITE_PROTOCOL                       = 15
+	SQLITE_RANGE                          = 25
+	SQLITE_READ                           = 20
+	SQLITE_READONLY                       = 8
+	SQLITE_READONLY_CANTINIT              = 1288
+	SQLITE_READONLY_CANTLOCK              = 520
+	SQLITE_READONLY_DBMOVED               = 1032
+	SQLITE_READONLY_DIRECTORY             = 1544
+	SQLITE_READONLY_RECOVERY              = 264
+	SQLITE_READONLY_ROLLBACK              = 776
+	SQLITE_RECURSIVE                      = 33
+	SQLITE_REINDEX                        = 27
+	SQLITE_REPLACE                        = 5
+	SQLITE_ROLLBACK                       = 1
+	SQLITE_ROW                            = 100
+	SQLITE_SAVEPOINT                      = 32
+	SQLITE_SCANSTAT_EST                   = 2
+	SQLITE_SCANSTAT_EXPLAIN               = 4
+	SQLITE_SCANSTAT_NAME                  = 3
+	SQLITE_SCANSTAT_NLOOP                 = 0
+	SQLITE_SCANSTAT_NVISIT                = 1
+	SQLITE_SCANSTAT_SELECTID              = 5
+	SQLITE_SCHEMA                         = 17
+	SQLITE_SELECT                         = 21
+	SQLITE_SERIALIZE_NOCOPY               = 0x001
+	SQLITE_SESSION_CONFIG_STRMSIZE        = 1
+	SQLITE_SESSION_OBJCONFIG_SIZE         = 1
+	SQLITE_SET_LOCKPROXYFILE              = 3
+	SQLITE_SHM_EXCLUSIVE                  = 8
+	SQLITE_SHM_LOCK                       = 2
+	SQLITE_SHM_NLOCK                      = 8
+	SQLITE_SHM_SHARED                     = 4
+	SQLITE_SHM_UNLOCK                     = 1
+	SQLITE_SOUNDEX                        = 1
+	SQLITE_SOURCE_ID                      = "2022-09-05 11:02:23 4635f4a69c8c2a8df242b384a992aea71224e39a2ccab42d8c0b0602f1e826e8"
+	SQLITE_STATUS_MALLOC_COUNT            = 9
+	SQLITE_STATUS_MALLOC_SIZE             = 5
+	SQLITE_STATUS_MEMORY_USED             = 0
+	SQLITE_STATUS_PAGECACHE_OVERFLOW      = 2
+	SQLITE_STATUS_PAGECACHE_SIZE          = 7
+	SQLITE_STATUS_PAGECACHE_USED          = 1
+	SQLITE_STATUS_PARSER_STACK            = 6
+	SQLITE_STATUS_SCRATCH_OVERFLOW        = 4
+	SQLITE_STATUS_SCRATCH_SIZE            = 8
+	SQLITE_STATUS_SCRATCH_USED            = 3
+	SQLITE_STDCALL                        = 0
+	SQLITE_STMTSTATUS_AUTOINDEX           = 3
+	SQLITE_STMTSTATUS_FILTER_HIT          = 8
+	SQLITE_STMTSTATUS_FILTER_MISS         = 7
+	SQLITE_STMTSTATUS_FULLSCAN_STEP       = 1
+	SQLITE_STMTSTATUS_MEMUSED             = 99
+	SQLITE_STMTSTATUS_REPREPARE           = 5
+	SQLITE_STMTSTATUS_RUN                 = 6
+	SQLITE_STMTSTATUS_SORT                = 2
+	SQLITE_STMTSTATUS_VM_STEP             = 4
+	SQLITE_SUBTYPE                        = 0x000100000
+	SQLITE_SYNC_DATAONLY                  = 0x00010
+	SQLITE_SYNC_FULL                      = 0x00003
+	SQLITE_SYNC_NORMAL                    = 0x00002
+	SQLITE_SYSAPI                         = 0
+	SQLITE_TESTCTRL_ALWAYS                = 13
+	SQLITE_TESTCTRL_ASSERT                = 12
+	SQLITE_TESTCTRL_BENIGN_MALLOC_HOOKS   = 10
+	SQLITE_TESTCTRL_BITVEC_TEST           = 8
+	SQLITE_TESTCTRL_BYTEORDER             = 22
+	SQLITE_TESTCTRL_EXPLAIN_STMT          = 19
+	SQLITE_TESTCTRL_EXTRA_SCHEMA_CHECKS   = 29
+	SQLITE_TESTCTRL_FAULT_INSTALL         = 9
+	SQLITE_TESTCTRL_FIRST                 = 5
+	SQLITE_TESTCTRL_IMPOSTER              = 25
+	SQLITE_TESTCTRL_INTERNAL_FUNCTIONS    = 17
+	SQLITE_TESTCTRL_ISINIT                = 23
+	SQLITE_TESTCTRL_ISKEYWORD             = 16
+	SQLITE_TESTCTRL_LAST                  = 33
+	SQLITE_TESTCTRL_LOCALTIME_FAULT       = 18
+	SQLITE_TESTCTRL_LOGEST                = 33
+	SQLITE_TESTCTRL_NEVER_CORRUPT         = 20
+	SQLITE_TESTCTRL_ONCE_RESET_THRESHOLD  = 19
+	SQLITE_TESTCTRL_OPTIMIZATIONS         = 15
+	SQLITE_TESTCTRL_PARSER_COVERAGE       = 26
+	SQLITE_TESTCTRL_PENDING_BYTE          = 11
+	SQLITE_TESTCTRL_PRNG_RESET            = 7
+	SQLITE_TESTCTRL_PRNG_RESTORE          = 6
+	SQLITE_TESTCTRL_PRNG_SAVE             = 5
+	SQLITE_TESTCTRL_PRNG_SEED             = 28
+	SQLITE_TESTCTRL_RESERVE               = 14
+	SQLITE_TESTCTRL_RESULT_INTREAL        = 27
+	SQLITE_TESTCTRL_SCRATCHMALLOC         = 17
+	SQLITE_TESTCTRL_SEEK_COUNT            = 30
+	SQLITE_TESTCTRL_SORTER_MMAP           = 24
+	SQLITE_TESTCTRL_TRACEFLAGS            = 31
+	SQLITE_TESTCTRL_TUNE                  = 32
+	SQLITE_TESTCTRL_VDBE_COVERAGE         = 21
+	SQLITE_TEXT                           = 3
+	SQLITE_THREADSAFE                     = 1
+	SQLITE_TOOBIG                         = 18
+	SQLITE_TRACE_CLOSE                    = 0x08
+	SQLITE_TRACE_PROFILE                  = 0x02
+	SQLITE_TRACE_ROW                      = 0x04
+	SQLITE_TRACE_STMT                     = 0x01
+	SQLITE_TRANSACTION                    = 22
+	SQLITE_TXN_NONE                       = 0
+	SQLITE_TXN_READ                       = 1
+	SQLITE_TXN_WRITE                      = 2
+	SQLITE_UPDATE                         = 23
+	SQLITE_UTF16                          = 4
+	SQLITE_UTF16BE                        = 3
+	SQLITE_UTF16LE                        = 2
+	SQLITE_UTF16_ALIGNED                  = 8
+	SQLITE_UTF8                           = 1
+	SQLITE_VERSION                        = "3.39.3"
+	SQLITE_VERSION_NUMBER                 = 3039003
+	SQLITE_VTAB_CONSTRAINT_SUPPORT        = 1
+	SQLITE_VTAB_DIRECTONLY                = 3
+	SQLITE_VTAB_INNOCUOUS                 = 2
+	SQLITE_WARNING                        = 28
+	SQLITE_WARNING_AUTOINDEX              = 284
+	SQLITE_WIN32_DATA_DIRECTORY_TYPE      = 1
+	SQLITE_WIN32_TEMP_DIRECTORY_TYPE      = 2
+	STDERR_FILENO                         = 2
+	STDIN_FILENO                          = 0
+	STDOUT_FILENO                         = 1
+	SWAPOFF_FORCE                         = 0x00000001
+	TMP_MAX                               = 308915776
+	W_OK                                  = 0x02
+	X_OK                                  = 0x01
+	X_ACCMODE_T_DECLARED                  = 0
+	X_ASSERT_H_                           = 0
+	X_BIG_ENDIAN                          = 4321
+	X_BLKCNT_T_DECLARED                   = 0
+	X_BLKSIZE_T_DECLARED                  = 0
+	X_BYTE_ORDER                          = 1234
+	X_CACHED_RUNES                        = 256
+	X_CAP_IOCTL_T_DECLARED                = 0
+	X_CAP_RIGHTS_T_DECLARED               = 0
+	X_CLOCKID_T_DECLARED                  = 0
+	X_CLOCK_T_DECLARED                    = 0
+	X_CRMASK                              = -256
+	X_CS_PATH                             = 1
+	X_CS_POSIX_V6_ILP32_OFF32_CFLAGS      = 2
+	X_CS_POSIX_V6_ILP32_OFF32_LDFLAGS     = 3
+	X_CS_POSIX_V6_ILP32_OFF32_LIBS        = 4
+	X_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS     = 5
+	X_CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS    = 6
+	X_CS_POSIX_V6_ILP32_OFFBIG_LIBS       = 7
+	X_CS_POSIX_V6_LP64_OFF64_CFLAGS       = 8
+	X_CS_POSIX_V6_LP64_OFF64_LDFLAGS      = 9
+	X_CS_POSIX_V6_LP64_OFF64_LIBS         = 10
+	X_CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS     = 11
+	X_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS    = 12
+	X_CS_POSIX_V6_LPBIG_OFFBIG_LIBS       = 13
+	X_CS_POSIX_V6_WIDTH_RESTRICTED_ENVS   = 14
+	X_CTYPE_A                             = 0x00000100
+	X_CTYPE_B                             = 0x00020000
+	X_CTYPE_C                             = 0x00000200
+	X_CTYPE_D                             = 0x00000400
+	X_CTYPE_G                             = 0x00000800
+	X_CTYPE_H_                            = 0
+	X_CTYPE_I                             = 0x00080000
+	X_CTYPE_L                             = 0x00001000
+	X_CTYPE_N                             = 0x00400000
+	X_CTYPE_P                             = 0x00002000
+	X_CTYPE_Q                             = 0x00200000
+	X_CTYPE_R                             = 0x00040000
+	X_CTYPE_S                             = 0x00004000
+	X_CTYPE_SW0                           = 0x20000000
+	X_CTYPE_SW1                           = 0x40000000
+	X_CTYPE_SW2                           = 0x80000000
+	X_CTYPE_SW3                           = 0xc0000000
+	X_CTYPE_SWM                           = 0xe0000000
+	X_CTYPE_SWS                           = 30
+	X_CTYPE_T                             = 0x00100000
+	X_CTYPE_U                             = 0x00008000
+	X_CTYPE_X                             = 0x00010000
+	X_DEV_T_DECLARED                      = 0
+	X_ERRNO_T_DEFINED                     = 0
+	X_FFLAGS_T_DECLARED                   = 0
+	X_FILE_OFFSET_BITS                    = 64
+	X_FSBLKCNT_T_DECLARED                 = 0
+	X_FSTDIO                              = 0
+	X_FTRUNCATE_DECLARED                  = 0
+	X_FTS5_H                              = 0
+	X_GETOPT_DECLARED                     = 0
+	X_GID_T_DECLARED                      = 0
+	X_ID_T_DECLARED                       = 0
+	X_INO_T_DECLARED                      = 0
+	X_INT16_T_DECLARED                    = 0
+	X_INT32_T_DECLARED                    = 0
+	X_INT64_T_DECLARED                    = 0
+	X_INT8_T_DECLARED                     = 0
+	X_INTMAX_T_DECLARED                   = 0
+	X_INTPTR_T_DECLARED                   = 0
+	X_IN_ADDR_T_DECLARED                  = 0
+	X_IN_PORT_T_DECLARED                  = 0
+	X_IOFBF                               = 0
+	X_IOLBF                               = 1
+	X_IONBF                               = 2
+	X_KEY_T_DECLARED                      = 0
+	X_LITTLE_ENDIAN                       = 1234
+	X_LOCALE_T_DEFINED                    = 0
+	X_LP64                                = 1
+	X_LSEEK_DECLARED                      = 0
+	X_LWPID_T_DECLARED                    = 0
+	X_MACHINE_ENDIAN_H_                   = 0
+	X_MACHINE_STDARG_H_                   = 0
+	X_MACHINE__LIMITS_H_                  = 0
+	X_MACHINE__TYPES_H_                   = 0
+	X_MKDTEMP_DECLARED                    = 0
+	X_MKNOD_DECLARED                      = 0
+	X_MKSTEMP_DECLARED                    = 0
+	X_MKTEMP_DECLARED                     = 0
+	X_MMAP_DECLARED                       = 0
+	X_MODE_T_DECLARED                     = 0
+	X_MQD_T_DECLARED                      = 0
+	X_NLINK_T_DECLARED                    = 0
+	X_Nonnull                             = 0
+	X_Null_unspecified                    = 0
+	X_Nullable                            = 0
+	X_OFF64_T_DECLARED                    = 0
+	X_OFF_T_DECLARED                      = 0
+	X_OPTRESET_DECLARED                   = 0
+	X_PC_ACL_EXTENDED                     = 59
+	X_PC_ACL_NFS4                         = 64
+	X_PC_ACL_PATH_MAX                     = 60
+	X_PC_ALLOC_SIZE_MIN                   = 10
+	X_PC_ASYNC_IO                         = 53
+	X_PC_CAP_PRESENT                      = 61
+	X_PC_CHOWN_RESTRICTED                 = 7
+	X_PC_FILESIZEBITS                     = 12
+	X_PC_INF_PRESENT                      = 62
+	X_PC_LINK_MAX                         = 1
+	X_PC_MAC_PRESENT                      = 63
+	X_PC_MAX_CANON                        = 2
+	X_PC_MAX_INPUT                        = 3
+	X_PC_MIN_HOLE_SIZE                    = 21
+	X_PC_NAME_MAX                         = 4
+	X_PC_NO_TRUNC                         = 8
+	X_PC_PATH_MAX                         = 5
+	X_PC_PIPE_BUF                         = 6
+	X_PC_PRIO_IO                          = 54
+	X_PC_REC_INCR_XFER_SIZE               = 14
+	X_PC_REC_MAX_XFER_SIZE                = 15
+	X_PC_REC_MIN_XFER_SIZE                = 16
+	X_PC_REC_XFER_ALIGN                   = 17
+	X_PC_SYMLINK_MAX                      = 18
+	X_PC_SYNC_IO                          = 55
+	X_PC_VDISABLE                         = 9
+	X_PDP_ENDIAN                          = 3412
+	X_PID_T_DECLARED                      = 0
+	X_POSIX2_CHAR_TERM                    = 1
+	X_POSIX2_C_BIND                       = 200112
+	X_POSIX2_C_DEV                        = -1
+	X_POSIX2_FORT_DEV                     = -1
+	X_POSIX2_FORT_RUN                     = 200112
+	X_POSIX2_LOCALEDEF                    = -1
+	X_POSIX2_PBS                          = -1
+	X_POSIX2_PBS_ACCOUNTING               = -1
+	X_POSIX2_PBS_CHECKPOINT               = -1
+	X_POSIX2_PBS_LOCATE                   = -1
+	X_POSIX2_PBS_MESSAGE                  = -1
+	X_POSIX2_PBS_TRACK                    = -1
+	X_POSIX2_SW_DEV                       = -1
+	X_POSIX2_UPE                          = 200112
+	X_POSIX2_VERSION                      = 199212
+	X_POSIX_ADVISORY_INFO                 = 200112
+	X_POSIX_ASYNCHRONOUS_IO               = 200112
+	X_POSIX_BARRIERS                      = 200112
+	X_POSIX_CHOWN_RESTRICTED              = 1
+	X_POSIX_CLOCK_SELECTION               = -1
+	X_POSIX_CPUTIME                       = 200112
+	X_POSIX_FSYNC                         = 200112
+	X_POSIX_IPV6                          = 0
+	X_POSIX_JOB_CONTROL                   = 1
+	X_POSIX_MAPPED_FILES                  = 200112
+	X_POSIX_MEMLOCK                       = -1
+	X_POSIX_MEMLOCK_RANGE                 = 200112
+	X_POSIX_MEMORY_PROTECTION             = 200112
+	X_POSIX_MESSAGE_PASSING               = 200112
+	X_POSIX_MONOTONIC_CLOCK               = 200112
+	X_POSIX_NO_TRUNC                      = 1
+	X_POSIX_PRIORITIZED_IO                = -1
+	X_POSIX_PRIORITY_SCHEDULING           = 0
+	X_POSIX_RAW_SOCKETS                   = 200112
+	X_POSIX_READER_WRITER_LOCKS           = 200112
+	X_POSIX_REALTIME_SIGNALS              = 200112
+	X_POSIX_REGEXP                        = 1
+	X_POSIX_SEMAPHORES                    = 200112
+	X_POSIX_SHARED_MEMORY_OBJECTS         = 200112
+	X_POSIX_SHELL                         = 1
+	X_POSIX_SPAWN                         = 200112
+	X_POSIX_SPIN_LOCKS                    = 200112
+	X_POSIX_SPORADIC_SERVER               = -1
+	X_POSIX_SYNCHRONIZED_IO               = -1
+	X_POSIX_THREADS                       = 200112
+	X_POSIX_THREAD_ATTR_STACKADDR         = 200112
+	X_POSIX_THREAD_ATTR_STACKSIZE         = 200112
+	X_POSIX_THREAD_CPUTIME                = 200112
+	X_POSIX_THREAD_PRIORITY_SCHEDULING    = 200112
+	X_POSIX_THREAD_PRIO_INHERIT           = 200112
+	X_POSIX_THREAD_PRIO_PROTECT           = 200112
+	X_POSIX_THREAD_PROCESS_SHARED         = 200112
+	X_POSIX_THREAD_SAFE_FUNCTIONS         = -1
+	X_POSIX_THREAD_SPORADIC_SERVER        = -1
+	X_POSIX_TIMEOUTS                      = 200112
+	X_POSIX_TIMERS                        = 200112
+	X_POSIX_TRACE                         = -1
+	X_POSIX_TRACE_EVENT_FILTER            = -1
+	X_POSIX_TRACE_INHERIT                 = -1
+	X_POSIX_TRACE_LOG                     = -1
+	X_POSIX_TYPED_MEMORY_OBJECTS          = -1
+	X_POSIX_VDISABLE                      = 0xff
+	X_POSIX_VERSION                       = 200112
+	X_PTHREAD_T_DECLARED                  = 0
+	X_QUAD_HIGHWORD                       = 1
+	X_QUAD_LOWWORD                        = 0
+	X_RLIM_T_DECLARED                     = 0
+	X_RSIZE_T_DEFINED                     = 0
+	X_RUNETYPE_H_                         = 0
+	X_RUNE_MAGIC_1                        = "RuneMagi"
+	X_RUNE_T_DECLARED                     = 0
+	X_SC_2_CHAR_TERM                      = 20
+	X_SC_2_C_BIND                         = 18
+	X_SC_2_C_DEV                          = 19
+	X_SC_2_FORT_DEV                       = 21
+	X_SC_2_FORT_RUN                       = 22
+	X_SC_2_LOCALEDEF                      = 23
+	X_SC_2_PBS                            = 59
+	X_SC_2_PBS_ACCOUNTING                 = 60
+	X_SC_2_PBS_CHECKPOINT                 = 61
+	X_SC_2_PBS_LOCATE                     = 62
+	X_SC_2_PBS_MESSAGE                    = 63
+	X_SC_2_PBS_TRACK                      = 64
+	X_SC_2_SW_DEV                         = 24
+	X_SC_2_UPE                            = 25
+	X_SC_2_VERSION                        = 17
+	X_SC_ADVISORY_INFO                    = 65
+	X_SC_AIO_LISTIO_MAX                   = 42
+	X_SC_AIO_MAX                          = 43
+	X_SC_AIO_PRIO_DELTA_MAX               = 44
+	X_SC_ARG_MAX                          = 1
+	X_SC_ASYNCHRONOUS_IO                  = 28
+	X_SC_ATEXIT_MAX                       = 107
+	X_SC_BARRIERS                         = 66
+	X_SC_BC_BASE_MAX                      = 9
+	X_SC_BC_DIM_MAX                       = 10
+	X_SC_BC_SCALE_MAX                     = 11
+	X_SC_BC_STRING_MAX                    = 12
+	X_SC_CHILD_MAX                        = 2
+	X_SC_CLK_TCK                          = 3
+	X_SC_CLOCK_SELECTION                  = 67
+	X_SC_COLL_WEIGHTS_MAX                 = 13
+	X_SC_CPUSET_SIZE                      = 122
+	X_SC_CPUTIME                          = 68
+	X_SC_DELAYTIMER_MAX                   = 45
+	X_SC_EXPR_NEST_MAX                    = 14
+	X_SC_FILE_LOCKING                     = 69
+	X_SC_FSYNC                            = 38
+	X_SC_GETGR_R_SIZE_MAX                 = 70
+	X_SC_GETPW_R_SIZE_MAX                 = 71
+	X_SC_HOST_NAME_MAX                    = 72
+	X_SC_IOV_MAX                          = 56
+	X_SC_IPV6                             = 118
+	X_SC_JOB_CONTROL                      = 6
+	X_SC_LINE_MAX                         = 15
+	X_SC_LOGIN_NAME_MAX                   = 73
+	X_SC_MAPPED_FILES                     = 29
+	X_SC_MEMLOCK                          = 30
+	X_SC_MEMLOCK_RANGE                    = 31
+	X_SC_MEMORY_PROTECTION                = 32
+	X_SC_MESSAGE_PASSING                  = 33
+	X_SC_MONOTONIC_CLOCK                  = 74
+	X_SC_MQ_OPEN_MAX                      = 46
+	X_SC_MQ_PRIO_MAX                      = 75
+	X_SC_NGROUPS_MAX                      = 4
+	X_SC_NPROCESSORS_CONF                 = 57
+	X_SC_NPROCESSORS_ONLN                 = 58
+	X_SC_OPEN_MAX                         = 5
+	X_SC_PAGESIZE                         = 47
+	X_SC_PAGE_SIZE                        = 47
+	X_SC_PHYS_PAGES                       = 121
+	X_SC_PRIORITIZED_IO                   = 34
+	X_SC_PRIORITY_SCHEDULING              = 35
+	X_SC_RAW_SOCKETS                      = 119
+	X_SC_READER_WRITER_LOCKS              = 76
+	X_SC_REALTIME_SIGNALS                 = 36
+	X_SC_REGEXP                           = 77
+	X_SC_RE_DUP_MAX                       = 16
+	X_SC_RTSIG_MAX                        = 48
+	X_SC_SAVED_IDS                        = 7
+	X_SC_SEMAPHORES                       = 37
+	X_SC_SEM_NSEMS_MAX                    = 49
+	X_SC_SEM_VALUE_MAX                    = 50
+	X_SC_SHARED_MEMORY_OBJECTS            = 39
+	X_SC_SHELL                            = 78
+	X_SC_SIGQUEUE_MAX                     = 51
+	X_SC_SPAWN                            = 79
+	X_SC_SPIN_LOCKS                       = 80
+	X_SC_SPORADIC_SERVER                  = 81
+	X_SC_STREAM_MAX                       = 26
+	X_SC_SYMLOOP_MAX                      = 120
+	X_SC_SYNCHRONIZED_IO                  = 40
+	X_SC_THREADS                          = 96
+	X_SC_THREAD_ATTR_STACKADDR            = 82
+	X_SC_THREAD_ATTR_STACKSIZE            = 83
+	X_SC_THREAD_CPUTIME                   = 84
+	X_SC_THREAD_DESTRUCTOR_ITERATIONS     = 85
+	X_SC_THREAD_KEYS_MAX                  = 86
+	X_SC_THREAD_PRIORITY_SCHEDULING       = 89
+	X_SC_THREAD_PRIO_INHERIT              = 87
+	X_SC_THREAD_PRIO_PROTECT              = 88
+	X_SC_THREAD_PROCESS_SHARED            = 90
+	X_SC_THREAD_SAFE_FUNCTIONS            = 91
+	X_SC_THREAD_SPORADIC_SERVER           = 92
+	X_SC_THREAD_STACK_MIN                 = 93
+	X_SC_THREAD_THREADS_MAX               = 94
+	X_SC_TIMEOUTS                         = 95
+	X_SC_TIMERS                           = 41
+	X_SC_TIMER_MAX                        = 52
+	X_SC_TRACE                            = 97
+	X_SC_TRACE_EVENT_FILTER               = 98
+	X_SC_TRACE_INHERIT                    = 99
+	X_SC_TRACE_LOG                        = 100
+	X_SC_TTY_NAME_MAX                     = 101
+	X_SC_TYPED_MEMORY_OBJECTS             = 102
+	X_SC_TZNAME_MAX                       = 27
+	X_SC_V6_ILP32_OFF32                   = 103
+	X_SC_V6_ILP32_OFFBIG                  = 104
+	X_SC_V6_LP64_OFF64                    = 105
+	X_SC_V6_LPBIG_OFFBIG                  = 106
+	X_SC_VERSION                          = 8
+	X_SC_XOPEN_CRYPT                      = 108
+	X_SC_XOPEN_ENH_I18N                   = 109
+	X_SC_XOPEN_LEGACY                     = 110
+	X_SC_XOPEN_REALTIME                   = 111
+	X_SC_XOPEN_REALTIME_THREADS           = 112
+	X_SC_XOPEN_SHM                        = 113
+	X_SC_XOPEN_STREAMS                    = 114
+	X_SC_XOPEN_UNIX                       = 115
+	X_SC_XOPEN_VERSION                    = 116
+	X_SC_XOPEN_XCU_VERSION                = 117
+	X_SELECT_DECLARED                     = 0
+	X_SIGSET_T_DECLARED                   = 0
+	X_SIG_MAXSIG                          = 128
+	X_SIG_WORDS                           = 4
+	X_SIZE_T_DECLARED                     = 0
+	X_SQLITE3RTREE_H_                     = 0
+	X_SSIZE_T_DECLARED                    = 0
+	X_STDFILE_DECLARED                    = 0
+	X_STDIO_H_                            = 0
+	X_STDLIB_H_                           = 0
+	X_STDSTREAM_DECLARED                  = 0
+	X_STRINGS_H_                          = 0
+	X_STRING_H_                           = 0
+	X_SUSECONDS_T_DECLARED                = 0
+	X_SWAB_DECLARED                       = 0
+	X_SYS_CDEFS_H_                        = 0
+	X_SYS_ERRNO_H_                        = 0
+	X_SYS_SELECT_H_                       = 0
+	X_SYS_TIMESPEC_H_                     = 0
+	X_SYS_TYPES_H_                        = 0
+	X_SYS_UNISTD_H_                       = 0
+	X_SYS__ENDIAN_H_                      = 0
+	X_SYS__PTHREADTYPES_H_                = 0
+	X_SYS__SIGSET_H_                      = 0
+	X_SYS__STDARG_H_                      = 0
+	X_SYS__STDINT_H_                      = 0
+	X_SYS__TIMESPEC_H_                    = 0
+	X_SYS__TIMEVAL_H_                     = 0
+	X_SYS__TYPES_H_                       = 0
+	X_TIMER_T_DECLARED                    = 0
+	X_TIME_T_DECLARED                     = 0
+	X_TRUNCATE_DECLARED                   = 0
+	X_UID_T_DECLARED                      = 0
+	X_UINT16_T_DECLARED                   = 0
+	X_UINT32_T_DECLARED                   = 0
+	X_UINT64_T_DECLARED                   = 0
+	X_UINT8_T_DECLARED                    = 0
+	X_UINTMAX_T_DECLARED                  = 0
+	X_UINTPTR_T_DECLARED                  = 0
+	X_UNISTD_H_                           = 0
+	X_USECONDS_T_DECLARED                 = 0
+	X_V6_ILP32_OFF32                      = -1
+	X_V6_ILP32_OFFBIG                     = 0
+	X_V6_LP64_OFF64                       = 0
+	X_V6_LPBIG_OFFBIG                     = -1
+	X_VA_LIST_DECLARED                    = 0
+	X_WCHAR_T_DECLARED                    = 0
+	X_XLOCALE_CTYPE_H                     = 0
+	X_XLOCALE_RUN_FUNCTIONS_DEFINED       = 1
+	X_XLOCALE_STRING1_H                   = 0
+	X_XLOCALE_STRINGS1_H                  = 0
+	X_XOPEN_CRYPT                         = -1
+	X_XOPEN_ENH_I18N                      = -1
+	X_XOPEN_LEGACY                        = -1
+	X_XOPEN_REALTIME                      = -1
+	X_XOPEN_REALTIME_THREADS              = -1
+	X_XOPEN_SHM                           = 1
+	X_XOPEN_STREAMS                       = -1
+	X_XOPEN_UNIX                          = -1
+	Unix                                  = 1
 )
 
-type ptrdiff_t = int64 /* <builtin>:3:26 */
+type ptrdiff_t = int64
 
-type size_t = uint64 /* <builtin>:9:23 */
+type size_t = uint64
 
-type wchar_t = int32 /* <builtin>:15:24 */ // compatibility w/GNU headers
+type wchar_t = int32
 
-// When the following macro is defined, the system uses 64-bit inode numbers.
-// Programs can use this to avoid including <sys/param.h>, with its associated
-// namespace pollution.
+type va_list = uintptr
 
-type va_list = uintptr /* /usr/include/sys/_stdarg.h:41:27 */
+type sqlite_int64 = int64
+type sqlite_uint64 = uint64
+type sqlite3_int64 = sqlite_int64
+type sqlite3_uint64 = sqlite_uint64
 
-// CAPI3REF: 64-Bit Integer Types
-// KEYWORDS: sqlite_int64 sqlite_uint64
-//
-// Because there is no cross-platform way to specify 64-bit integer types
-// SQLite includes typedefs for 64-bit signed and unsigned integers.
-//
-// The sqlite3_int64 and sqlite3_uint64 are the preferred type definitions.
-// The sqlite_int64 and sqlite_uint64 types are supported for backwards
-// compatibility only.
-//
-// ^The sqlite3_int64 and sqlite_int64 types can store integer values
-// between -9223372036854775808 and +9223372036854775807 inclusive.  ^The
-// sqlite3_uint64 and sqlite_uint64 types can store integer values
-// between 0 and +18446744073709551615 inclusive.
-type sqlite_int64 = int64           /* testdata/sqlite-amalgamation-3390300/sqlite3.h:301:25 */
-type sqlite_uint64 = uint64         /* testdata/sqlite-amalgamation-3390300/sqlite3.h:302:34 */
-type sqlite3_int64 = sqlite_int64   /* testdata/sqlite-amalgamation-3390300/sqlite3.h:304:22 */
-type sqlite3_uint64 = sqlite_uint64 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:305:23 */
+type sqlite3_callback = uintptr
 
-// The type for a callback function.
-// This is legacy and deprecated.  It is included for historical
-// compatibility and is not documented.
-type sqlite3_callback = uintptr /* testdata/sqlite-amalgamation-3390300/sqlite3.h:361:13 */
+type sqlite3_file1 = struct{ pMethods uintptr }
 
-// CAPI3REF: Result Codes
-// KEYWORDS: {result code definitions}
-//
-// Many SQLite functions return an integer result code from the set shown
-// here in order to indicate success or failure.
-//
-// New error codes may be added in future versions of SQLite.
-//
-// See also: [extended result code definitions]
-// beginning-of-error-codes
-// end-of-error-codes
-
-// CAPI3REF: Extended Result Codes
-// KEYWORDS: {extended result code definitions}
-//
-// In its default configuration, SQLite API routines return one of 30 integer
-// [result codes].  However, experience has shown that many of
-// these result codes are too coarse-grained.  They do not provide as
-// much information about problems as programmers might like.  In an effort to
-// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
-// and later) include
-// support for additional result codes that provide more detailed information
-// about errors. These [extended result codes] are enabled or disabled
-// on a per database connection basis using the
-// [sqlite3_extended_result_codes()] API.  Or, the extended code for
-// the most recent error can be obtained using
-// [sqlite3_extended_errcode()].
-
-// CAPI3REF: Flags For File Open Operations
-//
-// These bit values are intended for use in the
-// 3rd parameter to the [sqlite3_open_v2()] interface and
-// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
-//
-// Only those flags marked as "Ok for sqlite3_open_v2()" may be
-// used as the third argument to the [sqlite3_open_v2()] interface.
-// The other flags have historically been ignored by sqlite3_open_v2(),
-// though future versions of SQLite might change so that an error is
-// raised if any of the disallowed bits are passed into sqlite3_open_v2().
-// Applications should not depend on the historical behavior.
-//
-// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
-// [sqlite3_open_v2()] does *not* cause the underlying database file
-// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
-// [sqlite3_open_v2()] has historically be a no-op and might become an
-// error in future versions of SQLite.
-
-// Reserved:                         0x00F00000
-// Legacy compatibility:
-
-// CAPI3REF: Device Characteristics
-//
-// The xDeviceCharacteristics method of the [sqlite3_io_methods]
-// object returns an integer which is a vector of these
-// bit values expressing I/O characteristics of the mass storage
-// device that holds the file that the [sqlite3_io_methods]
-// refers to.
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
-// after reboot following a crash or power loss, the only bytes in a
-// file that were written at the application level might have changed
-// and that adjacent bytes, even bytes within the same sector are
-// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
-// flag indicates that a file cannot be deleted when open.  The
-// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
-// read-only media and cannot be changed even by processes with
-// elevated privileges.
-//
-// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
-// filesystem supports doing multiple write operations atomically when those
-// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
-// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
-
-// CAPI3REF: File Locking Levels
-//
-// SQLite uses one of these integer values as the second
-// argument to calls it makes to the xLock() and xUnlock() methods
-// of an [sqlite3_io_methods] object.
-
-// CAPI3REF: Synchronization Type Flags
-//
-// When SQLite invokes the xSync() method of an
-// [sqlite3_io_methods] object it uses a combination of
-// these integer values as the second argument.
-//
-// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-// sync operation only needs to flush data to mass storage.  Inode
-// information need not be flushed. If the lower four bits of the flag
-// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
-// If the lower four bits equal SQLITE_SYNC_FULL, that means
-// to use Mac OS X style fullsync instead of fsync().
-//
-// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
-// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
-// settings.  The [synchronous pragma] determines when calls to the
-// xSync VFS method occur and applies uniformly across all platforms.
-// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
-// energetic or rigorous or forceful the sync operations are and
-// only make a difference on Mac OSX for the default SQLite code.
-// (Third-party VFS implementations might also make the distinction
-// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
-// operating systems natively supported by SQLite, only Mac OSX
-// cares about the difference.)
-
-// CAPI3REF: OS Interface Open File Handle
-//
-// An [sqlite3_file] object represents an open file in the
-// [sqlite3_vfs | OS interface layer].  Individual OS interface
-// implementations will
-// want to subclass this object by appending additional fields
-// for their own use.  The pMethods entry is a pointer to an
-// [sqlite3_io_methods] object that defines methods for performing
-// I/O operations on the open file.
-type sqlite3_file1 = struct{ pMethods uintptr } /* testdata/sqlite-amalgamation-3390300/sqlite3.h:722:9 */
-
-// CAPI3REF: Result Codes
-// KEYWORDS: {result code definitions}
-//
-// Many SQLite functions return an integer result code from the set shown
-// here in order to indicate success or failure.
-//
-// New error codes may be added in future versions of SQLite.
-//
-// See also: [extended result code definitions]
-// beginning-of-error-codes
-// end-of-error-codes
-
-// CAPI3REF: Extended Result Codes
-// KEYWORDS: {extended result code definitions}
-//
-// In its default configuration, SQLite API routines return one of 30 integer
-// [result codes].  However, experience has shown that many of
-// these result codes are too coarse-grained.  They do not provide as
-// much information about problems as programmers might like.  In an effort to
-// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
-// and later) include
-// support for additional result codes that provide more detailed information
-// about errors. These [extended result codes] are enabled or disabled
-// on a per database connection basis using the
-// [sqlite3_extended_result_codes()] API.  Or, the extended code for
-// the most recent error can be obtained using
-// [sqlite3_extended_errcode()].
-
-// CAPI3REF: Flags For File Open Operations
-//
-// These bit values are intended for use in the
-// 3rd parameter to the [sqlite3_open_v2()] interface and
-// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
-//
-// Only those flags marked as "Ok for sqlite3_open_v2()" may be
-// used as the third argument to the [sqlite3_open_v2()] interface.
-// The other flags have historically been ignored by sqlite3_open_v2(),
-// though future versions of SQLite might change so that an error is
-// raised if any of the disallowed bits are passed into sqlite3_open_v2().
-// Applications should not depend on the historical behavior.
-//
-// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
-// [sqlite3_open_v2()] does *not* cause the underlying database file
-// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
-// [sqlite3_open_v2()] has historically be a no-op and might become an
-// error in future versions of SQLite.
-
-// Reserved:                         0x00F00000
-// Legacy compatibility:
-
-// CAPI3REF: Device Characteristics
-//
-// The xDeviceCharacteristics method of the [sqlite3_io_methods]
-// object returns an integer which is a vector of these
-// bit values expressing I/O characteristics of the mass storage
-// device that holds the file that the [sqlite3_io_methods]
-// refers to.
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
-// after reboot following a crash or power loss, the only bytes in a
-// file that were written at the application level might have changed
-// and that adjacent bytes, even bytes within the same sector are
-// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
-// flag indicates that a file cannot be deleted when open.  The
-// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
-// read-only media and cannot be changed even by processes with
-// elevated privileges.
-//
-// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
-// filesystem supports doing multiple write operations atomically when those
-// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
-// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
-
-// CAPI3REF: File Locking Levels
-//
-// SQLite uses one of these integer values as the second
-// argument to calls it makes to the xLock() and xUnlock() methods
-// of an [sqlite3_io_methods] object.
-
-// CAPI3REF: Synchronization Type Flags
-//
-// When SQLite invokes the xSync() method of an
-// [sqlite3_io_methods] object it uses a combination of
-// these integer values as the second argument.
-//
-// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-// sync operation only needs to flush data to mass storage.  Inode
-// information need not be flushed. If the lower four bits of the flag
-// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
-// If the lower four bits equal SQLITE_SYNC_FULL, that means
-// to use Mac OS X style fullsync instead of fsync().
-//
-// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
-// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
-// settings.  The [synchronous pragma] determines when calls to the
-// xSync VFS method occur and applies uniformly across all platforms.
-// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
-// energetic or rigorous or forceful the sync operations are and
-// only make a difference on Mac OSX for the default SQLite code.
-// (Third-party VFS implementations might also make the distinction
-// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
-// operating systems natively supported by SQLite, only Mac OSX
-// cares about the difference.)
-
-// CAPI3REF: OS Interface Open File Handle
-//
-// An [sqlite3_file] object represents an open file in the
-// [sqlite3_vfs | OS interface layer].  Individual OS interface
-// implementations will
-// want to subclass this object by appending additional fields
-// for their own use.  The pMethods entry is a pointer to an
-// [sqlite3_io_methods] object that defines methods for performing
-// I/O operations on the open file.
-type sqlite3_file = sqlite3_file1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:722:29 */
+type sqlite3_file = sqlite3_file1
 type sqlite3_io_methods1 = struct {
 	iVersion               int32
 	_                      [4]byte
@@ -1368,269 +1103,10 @@ type sqlite3_io_methods1 = struct {
 	xShmUnmap              uintptr
 	xFetch                 uintptr
 	xUnfetch               uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:722:9 */
+}
 
-// CAPI3REF: OS Interface File Virtual Methods Object
-//
-// Every file opened by the [sqlite3_vfs.xOpen] method populates an
-// [sqlite3_file] object (or, more commonly, a subclass of the
-// [sqlite3_file] object) with a pointer to an instance of this object.
-// This object defines the methods used to perform various operations
-// against the open file represented by the [sqlite3_file] object.
-//
-// If the [sqlite3_vfs.xOpen] method sets the sqlite3_file.pMethods element
-// to a non-NULL pointer, then the sqlite3_io_methods.xClose method
-// may be invoked even if the [sqlite3_vfs.xOpen] reported that it failed.  The
-// only way to prevent a call to xClose following a failed [sqlite3_vfs.xOpen]
-// is for the [sqlite3_vfs.xOpen] to set the sqlite3_file.pMethods element
-// to NULL.
-//
-// The flags argument to xSync may be one of [SQLITE_SYNC_NORMAL] or
-// [SQLITE_SYNC_FULL].  The first choice is the normal fsync().
-// The second choice is a Mac OS X style fullsync.  The [SQLITE_SYNC_DATAONLY]
-// flag may be ORed in to indicate that only the data of the file
-// and not its inode needs to be synced.
-//
-// The integer values to xLock() and xUnlock() are one of
-// <ul>
-// <li> [SQLITE_LOCK_NONE],
-// <li> [SQLITE_LOCK_SHARED],
-// <li> [SQLITE_LOCK_RESERVED],
-// <li> [SQLITE_LOCK_PENDING], or
-// <li> [SQLITE_LOCK_EXCLUSIVE].
-// </ul>
-// xLock() increases the lock. xUnlock() decreases the lock.
-// The xCheckReservedLock() method checks whether any database connection,
-// either in this process or in some other process, is holding a RESERVED,
-// PENDING, or EXCLUSIVE lock on the file.  It returns true
-// if such a lock exists and false otherwise.
-//
-// The xFileControl() method is a generic interface that allows custom
-// VFS implementations to directly control an open file using the
-// [sqlite3_file_control()] interface.  The second "op" argument is an
-// integer opcode.  The third argument is a generic pointer intended to
-// point to a structure that may contain arguments or space in which to
-// write return values.  Potential uses for xFileControl() might be
-// functions to enable blocking locks with timeouts, to change the
-// locking strategy (for example to use dot-file locks), to inquire
-// about the status of a lock, or to break stale locks.  The SQLite
-// core reserves all opcodes less than 100 for its own use.
-// A [file control opcodes | list of opcodes] less than 100 is available.
-// Applications that define a custom xFileControl method should use opcodes
-// greater than 100 to avoid conflicts.  VFS implementations should
-// return [SQLITE_NOTFOUND] for file control opcodes that they do not
-// recognize.
-//
-// The xSectorSize() method returns the sector size of the
-// device that underlies the file.  The sector size is the
-// minimum write that can be performed without disturbing
-// other bytes in the file.  The xDeviceCharacteristics()
-// method returns a bit vector describing behaviors of the
-// underlying device:
-//
-// <ul>
-// <li> [SQLITE_IOCAP_ATOMIC]
-// <li> [SQLITE_IOCAP_ATOMIC512]
-// <li> [SQLITE_IOCAP_ATOMIC1K]
-// <li> [SQLITE_IOCAP_ATOMIC2K]
-// <li> [SQLITE_IOCAP_ATOMIC4K]
-// <li> [SQLITE_IOCAP_ATOMIC8K]
-// <li> [SQLITE_IOCAP_ATOMIC16K]
-// <li> [SQLITE_IOCAP_ATOMIC32K]
-// <li> [SQLITE_IOCAP_ATOMIC64K]
-// <li> [SQLITE_IOCAP_SAFE_APPEND]
-// <li> [SQLITE_IOCAP_SEQUENTIAL]
-// <li> [SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN]
-// <li> [SQLITE_IOCAP_POWERSAFE_OVERWRITE]
-// <li> [SQLITE_IOCAP_IMMUTABLE]
-// <li> [SQLITE_IOCAP_BATCH_ATOMIC]
-// </ul>
-//
-// The SQLITE_IOCAP_ATOMIC property means that all writes of
-// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
-// mean that writes of blocks that are nnn bytes in size and
-// are aligned to an address which is an integer multiple of
-// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
-// that when data is appended to a file, the data is appended
-// first then the size of the file is extended, never the other
-// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
-// information is written to disk in the same order as calls
-// to xWrite().
-//
-// If xRead() returns SQLITE_IOERR_SHORT_READ it must also fill
-// in the unread portions of the buffer with zeros.  A VFS that
-// fails to zero-fill short reads might seem to work.  However,
-// failure to zero-fill short reads will eventually lead to
-// database corruption.
-type sqlite3_io_methods = sqlite3_io_methods1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:821:35 */
+type sqlite3_io_methods = sqlite3_io_methods1
 
-// CAPI3REF: OS Interface Object
-//
-// An instance of the sqlite3_vfs object defines the interface between
-// the SQLite core and the underlying operating system.  The "vfs"
-// in the name of the object stands for "virtual file system".  See
-// the [VFS | VFS documentation] for further information.
-//
-// The VFS interface is sometimes extended by adding new methods onto
-// the end.  Each time such an extension occurs, the iVersion field
-// is incremented.  The iVersion value started out as 1 in
-// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
-// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
-// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
-// may be appended to the sqlite3_vfs object and the iVersion value
-// may increase again in future versions of SQLite.
-// Note that due to an oversight, the structure
-// of the sqlite3_vfs object changed in the transition from
-// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
-// and yet the iVersion field was not increased.
-//
-// The szOsFile field is the size of the subclassed [sqlite3_file]
-// structure used by this VFS.  mxPathname is the maximum length of
-// a pathname in this VFS.
-//
-// Registered sqlite3_vfs objects are kept on a linked list formed by
-// the pNext pointer.  The [sqlite3_vfs_register()]
-// and [sqlite3_vfs_unregister()] interfaces manage this list
-// in a thread-safe way.  The [sqlite3_vfs_find()] interface
-// searches the list.  Neither the application code nor the VFS
-// implementation should use the pNext pointer.
-//
-// The pNext field is the only field in the sqlite3_vfs
-// structure that SQLite will ever modify.  SQLite will only access
-// or modify this field while holding a particular static mutex.
-// The application should never modify anything within the sqlite3_vfs
-// object once the object has been registered.
-//
-// The zName field holds the name of the VFS module.  The name must
-// be unique across all VFS modules.
-//
-// [[sqlite3_vfs.xOpen]]
-// ^SQLite guarantees that the zFilename parameter to xOpen
-// is either a NULL pointer or string obtained
-// from xFullPathname() with an optional suffix added.
-// ^If a suffix is added to the zFilename parameter, it will
-// consist of a single "-" character followed by no more than
-// 11 alphanumeric and/or "-" characters.
-// ^SQLite further guarantees that
-// the string will be valid and unchanged until xClose() is
-// called. Because of the previous sentence,
-// the [sqlite3_file] can safely store a pointer to the
-// filename if it needs to remember the filename for some reason.
-// If the zFilename parameter to xOpen is a NULL pointer then xOpen
-// must invent its own temporary name for the file.  ^Whenever the
-// xFilename parameter is NULL it will also be the case that the
-// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
-//
-// The flags argument to xOpen() includes all bits set in
-// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
-// or [sqlite3_open16()] is used, then flags includes at least
-// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
-// If xOpen() opens a file read-only then it sets *pOutFlags to
-// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
-//
-// ^(SQLite will also add one of the following flags to the xOpen()
-// call, depending on the object being opened:
-//
-// <ul>
-// <li>  [SQLITE_OPEN_MAIN_DB]
-// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
-// <li>  [SQLITE_OPEN_TEMP_DB]
-// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
-// <li>  [SQLITE_OPEN_TRANSIENT_DB]
-// <li>  [SQLITE_OPEN_SUBJOURNAL]
-// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
-// <li>  [SQLITE_OPEN_WAL]
-// </ul>)^
-//
-// The file I/O implementation can use the object type flags to
-// change the way it deals with files.  For example, an application
-// that does not care about crash recovery or rollback might make
-// the open of a journal file a no-op.  Writes to this journal would
-// also be no-ops, and any attempt to read the journal would return
-// SQLITE_IOERR.  Or the implementation might recognize that a database
-// file will be doing page-aligned sector reads and writes in a random
-// order and set up its I/O subsystem accordingly.
-//
-// SQLite might also add one of the following flags to the xOpen method:
-//
-// <ul>
-// <li> [SQLITE_OPEN_DELETEONCLOSE]
-// <li> [SQLITE_OPEN_EXCLUSIVE]
-// </ul>
-//
-// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
-// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
-// will be set for TEMP databases and their journals, transient
-// databases, and subjournals.
-//
-// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
-// with the [SQLITE_OPEN_CREATE] flag, which are both directly
-// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
-// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
-// SQLITE_OPEN_CREATE, is used to indicate that file should always
-// be created, and that it is an error if it already exists.
-// It is <i>not</i> used to indicate the file should be opened
-// for exclusive access.
-//
-// ^At least szOsFile bytes of memory are allocated by SQLite
-// to hold the [sqlite3_file] structure passed as the third
-// argument to xOpen.  The xOpen method does not have to
-// allocate the structure; it should just fill it in.  Note that
-// the xOpen method must set the sqlite3_file.pMethods to either
-// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
-// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
-// element will be valid after xOpen returns regardless of the success
-// or failure of the xOpen call.
-//
-// [[sqlite3_vfs.xAccess]]
-// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
-// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
-// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
-// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
-// flag is never actually used and is not implemented in the built-in
-// VFSes of SQLite.  The file is named by the second argument and can be a
-// directory. The xAccess method returns [SQLITE_OK] on success or some
-// non-zero error code if there is an I/O error or if the name of
-// the file given in the second argument is illegal.  If SQLITE_OK
-// is returned, then non-zero or zero is written into *pResOut to indicate
-// whether or not the file is accessible.
-//
-// ^SQLite will always allocate at least mxPathname+1 bytes for the
-// output buffer xFullPathname.  The exact size of the output buffer
-// is also passed as a parameter to both  methods. If the output buffer
-// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
-// handled as a fatal error by SQLite, vfs implementations should endeavor
-// to prevent this by setting mxPathname to a sufficiently large value.
-//
-// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
-// interfaces are not strictly a part of the filesystem, but they are
-// included in the VFS structure for completeness.
-// The xRandomness() function attempts to return nBytes bytes
-// of good-quality randomness into zOut.  The return value is
-// the actual number of bytes of randomness obtained.
-// The xSleep() method causes the calling thread to sleep for at
-// least the number of microseconds given.  ^The xCurrentTime()
-// method returns a Julian Day Number for the current date and time as
-// a floating point value.
-// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
-// Day Number multiplied by 86400000 (the number of milliseconds in
-// a 24-hour day).
-// ^SQLite will use the xCurrentTimeInt64() method to get the current
-// date and time if that method is available (if iVersion is 2 or
-// greater and the function pointer is not NULL) and will fall back
-// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
-//
-// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
-// are not used by the SQLite core.  These optional interfaces are provided
-// by some VFSes to facilitate testing of the VFS code. By overriding
-// system calls with functions under its control, a test program can
-// simulate faults and error conditions that would otherwise be difficult
-// or impossible to induce.  The set of system calls that can be overridden
-// varies from one VFS to another, and from one version of the same VFS to the
-// next.  Applications that use these interfaces must be prepared for any
-// or all of these interfaces to be NULL or for their behavior to change
-// from one release to the next.  Applications must not attempt to access
-// any of these methods if the iVersion of the VFS is less than 3.
 type sqlite3_vfs1 = struct {
 	iVersion          int32
 	szOsFile          int32
@@ -1655,239 +1131,11 @@ type sqlite3_vfs1 = struct {
 	xSetSystemCall    uintptr
 	xGetSystemCall    uintptr
 	xNextSystemCall   uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:1425:9 */
+}
 
-// CAPI3REF: OS Interface Object
-//
-// An instance of the sqlite3_vfs object defines the interface between
-// the SQLite core and the underlying operating system.  The "vfs"
-// in the name of the object stands for "virtual file system".  See
-// the [VFS | VFS documentation] for further information.
-//
-// The VFS interface is sometimes extended by adding new methods onto
-// the end.  Each time such an extension occurs, the iVersion field
-// is incremented.  The iVersion value started out as 1 in
-// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
-// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
-// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
-// may be appended to the sqlite3_vfs object and the iVersion value
-// may increase again in future versions of SQLite.
-// Note that due to an oversight, the structure
-// of the sqlite3_vfs object changed in the transition from
-// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
-// and yet the iVersion field was not increased.
-//
-// The szOsFile field is the size of the subclassed [sqlite3_file]
-// structure used by this VFS.  mxPathname is the maximum length of
-// a pathname in this VFS.
-//
-// Registered sqlite3_vfs objects are kept on a linked list formed by
-// the pNext pointer.  The [sqlite3_vfs_register()]
-// and [sqlite3_vfs_unregister()] interfaces manage this list
-// in a thread-safe way.  The [sqlite3_vfs_find()] interface
-// searches the list.  Neither the application code nor the VFS
-// implementation should use the pNext pointer.
-//
-// The pNext field is the only field in the sqlite3_vfs
-// structure that SQLite will ever modify.  SQLite will only access
-// or modify this field while holding a particular static mutex.
-// The application should never modify anything within the sqlite3_vfs
-// object once the object has been registered.
-//
-// The zName field holds the name of the VFS module.  The name must
-// be unique across all VFS modules.
-//
-// [[sqlite3_vfs.xOpen]]
-// ^SQLite guarantees that the zFilename parameter to xOpen
-// is either a NULL pointer or string obtained
-// from xFullPathname() with an optional suffix added.
-// ^If a suffix is added to the zFilename parameter, it will
-// consist of a single "-" character followed by no more than
-// 11 alphanumeric and/or "-" characters.
-// ^SQLite further guarantees that
-// the string will be valid and unchanged until xClose() is
-// called. Because of the previous sentence,
-// the [sqlite3_file] can safely store a pointer to the
-// filename if it needs to remember the filename for some reason.
-// If the zFilename parameter to xOpen is a NULL pointer then xOpen
-// must invent its own temporary name for the file.  ^Whenever the
-// xFilename parameter is NULL it will also be the case that the
-// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
-//
-// The flags argument to xOpen() includes all bits set in
-// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
-// or [sqlite3_open16()] is used, then flags includes at least
-// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
-// If xOpen() opens a file read-only then it sets *pOutFlags to
-// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
-//
-// ^(SQLite will also add one of the following flags to the xOpen()
-// call, depending on the object being opened:
-//
-// <ul>
-// <li>  [SQLITE_OPEN_MAIN_DB]
-// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
-// <li>  [SQLITE_OPEN_TEMP_DB]
-// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
-// <li>  [SQLITE_OPEN_TRANSIENT_DB]
-// <li>  [SQLITE_OPEN_SUBJOURNAL]
-// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
-// <li>  [SQLITE_OPEN_WAL]
-// </ul>)^
-//
-// The file I/O implementation can use the object type flags to
-// change the way it deals with files.  For example, an application
-// that does not care about crash recovery or rollback might make
-// the open of a journal file a no-op.  Writes to this journal would
-// also be no-ops, and any attempt to read the journal would return
-// SQLITE_IOERR.  Or the implementation might recognize that a database
-// file will be doing page-aligned sector reads and writes in a random
-// order and set up its I/O subsystem accordingly.
-//
-// SQLite might also add one of the following flags to the xOpen method:
-//
-// <ul>
-// <li> [SQLITE_OPEN_DELETEONCLOSE]
-// <li> [SQLITE_OPEN_EXCLUSIVE]
-// </ul>
-//
-// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
-// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
-// will be set for TEMP databases and their journals, transient
-// databases, and subjournals.
-//
-// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
-// with the [SQLITE_OPEN_CREATE] flag, which are both directly
-// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
-// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
-// SQLITE_OPEN_CREATE, is used to indicate that file should always
-// be created, and that it is an error if it already exists.
-// It is <i>not</i> used to indicate the file should be opened
-// for exclusive access.
-//
-// ^At least szOsFile bytes of memory are allocated by SQLite
-// to hold the [sqlite3_file] structure passed as the third
-// argument to xOpen.  The xOpen method does not have to
-// allocate the structure; it should just fill it in.  Note that
-// the xOpen method must set the sqlite3_file.pMethods to either
-// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
-// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
-// element will be valid after xOpen returns regardless of the success
-// or failure of the xOpen call.
-//
-// [[sqlite3_vfs.xAccess]]
-// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
-// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
-// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
-// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
-// flag is never actually used and is not implemented in the built-in
-// VFSes of SQLite.  The file is named by the second argument and can be a
-// directory. The xAccess method returns [SQLITE_OK] on success or some
-// non-zero error code if there is an I/O error or if the name of
-// the file given in the second argument is illegal.  If SQLITE_OK
-// is returned, then non-zero or zero is written into *pResOut to indicate
-// whether or not the file is accessible.
-//
-// ^SQLite will always allocate at least mxPathname+1 bytes for the
-// output buffer xFullPathname.  The exact size of the output buffer
-// is also passed as a parameter to both  methods. If the output buffer
-// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
-// handled as a fatal error by SQLite, vfs implementations should endeavor
-// to prevent this by setting mxPathname to a sufficiently large value.
-//
-// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
-// interfaces are not strictly a part of the filesystem, but they are
-// included in the VFS structure for completeness.
-// The xRandomness() function attempts to return nBytes bytes
-// of good-quality randomness into zOut.  The return value is
-// the actual number of bytes of randomness obtained.
-// The xSleep() method causes the calling thread to sleep for at
-// least the number of microseconds given.  ^The xCurrentTime()
-// method returns a Julian Day Number for the current date and time as
-// a floating point value.
-// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
-// Day Number multiplied by 86400000 (the number of milliseconds in
-// a 24-hour day).
-// ^SQLite will use the xCurrentTimeInt64() method to get the current
-// date and time if that method is available (if iVersion is 2 or
-// greater and the function pointer is not NULL) and will fall back
-// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
-//
-// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
-// are not used by the SQLite core.  These optional interfaces are provided
-// by some VFSes to facilitate testing of the VFS code. By overriding
-// system calls with functions under its control, a test program can
-// simulate faults and error conditions that would otherwise be difficult
-// or impossible to induce.  The set of system calls that can be overridden
-// varies from one VFS to another, and from one version of the same VFS to the
-// next.  Applications that use these interfaces must be prepared for any
-// or all of these interfaces to be NULL or for their behavior to change
-// from one release to the next.  Applications must not attempt to access
-// any of these methods if the iVersion of the VFS is less than 3.
-type sqlite3_vfs = sqlite3_vfs1    /* testdata/sqlite-amalgamation-3390300/sqlite3.h:1425:28 */
-type sqlite3_syscall_ptr = uintptr /* testdata/sqlite-amalgamation-3390300/sqlite3.h:1426:14 */
+type sqlite3_vfs = sqlite3_vfs1
+type sqlite3_syscall_ptr = uintptr
 
-// CAPI3REF: Memory Allocation Routines
-//
-// An instance of this object defines the interface between SQLite
-// and low-level memory allocation routines.
-//
-// This object is used in only one place in the SQLite interface.
-// A pointer to an instance of this object is the argument to
-// [sqlite3_config()] when the configuration option is
-// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
-// By creating an instance of this object
-// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
-// during configuration, an application can specify an alternative
-// memory allocation subsystem for SQLite to use for all of its
-// dynamic memory needs.
-//
-// Note that SQLite comes with several [built-in memory allocators]
-// that are perfectly adequate for the overwhelming majority of applications
-// and that this object is only useful to a tiny minority of applications
-// with specialized memory allocation requirements.  This object is
-// also used during testing of SQLite in order to specify an alternative
-// memory allocator that simulates memory out-of-memory conditions in
-// order to verify that SQLite recovers gracefully from such
-// conditions.
-//
-// The xMalloc, xRealloc, and xFree methods must work like the
-// malloc(), realloc() and free() functions from the standard C library.
-// ^SQLite guarantees that the second argument to
-// xRealloc is always a value returned by a prior call to xRoundup.
-//
-// xSize should return the allocated size of a memory allocation
-// previously obtained from xMalloc or xRealloc.  The allocated size
-// is always at least as big as the requested size but may be larger.
-//
-// The xRoundup method returns what would be the allocated size of
-// a memory allocation given a particular requested size.  Most memory
-// allocators round up memory allocations at least to the next multiple
-// of 8.  Some allocators round up to a larger multiple or to a power of 2.
-// Every memory allocation request coming in through [sqlite3_malloc()]
-// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
-// that causes the corresponding memory allocation to fail.
-//
-// The xInit method initializes the memory allocator.  For example,
-// it might allocate any required mutexes or initialize internal data
-// structures.  The xShutdown method is invoked (indirectly) by
-// [sqlite3_shutdown()] and should deallocate any resources acquired
-// by xInit.  The pAppData pointer is used as the only parameter to
-// xInit and xShutdown.
-//
-// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
-// the xInit method, so the xInit method need not be threadsafe.  The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  For all other methods, SQLite
-// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
-// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
-// it is by default) and so the methods are automatically serialized.
-// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
-// methods must be threadsafe or else make their own arrangements for
-// serialization.
-//
-// SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
 type sqlite3_mem_methods1 = struct {
 	xMalloc   uintptr
 	xFree     uintptr
@@ -1897,109 +1145,20 @@ type sqlite3_mem_methods1 = struct {
 	xInit     uintptr
 	xShutdown uintptr
 	pAppData  uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:1723:9 */
+}
 
-// CAPI3REF: Memory Allocation Routines
-//
-// An instance of this object defines the interface between SQLite
-// and low-level memory allocation routines.
-//
-// This object is used in only one place in the SQLite interface.
-// A pointer to an instance of this object is the argument to
-// [sqlite3_config()] when the configuration option is
-// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
-// By creating an instance of this object
-// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
-// during configuration, an application can specify an alternative
-// memory allocation subsystem for SQLite to use for all of its
-// dynamic memory needs.
-//
-// Note that SQLite comes with several [built-in memory allocators]
-// that are perfectly adequate for the overwhelming majority of applications
-// and that this object is only useful to a tiny minority of applications
-// with specialized memory allocation requirements.  This object is
-// also used during testing of SQLite in order to specify an alternative
-// memory allocator that simulates memory out-of-memory conditions in
-// order to verify that SQLite recovers gracefully from such
-// conditions.
-//
-// The xMalloc, xRealloc, and xFree methods must work like the
-// malloc(), realloc() and free() functions from the standard C library.
-// ^SQLite guarantees that the second argument to
-// xRealloc is always a value returned by a prior call to xRoundup.
-//
-// xSize should return the allocated size of a memory allocation
-// previously obtained from xMalloc or xRealloc.  The allocated size
-// is always at least as big as the requested size but may be larger.
-//
-// The xRoundup method returns what would be the allocated size of
-// a memory allocation given a particular requested size.  Most memory
-// allocators round up memory allocations at least to the next multiple
-// of 8.  Some allocators round up to a larger multiple or to a power of 2.
-// Every memory allocation request coming in through [sqlite3_malloc()]
-// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
-// that causes the corresponding memory allocation to fail.
-//
-// The xInit method initializes the memory allocator.  For example,
-// it might allocate any required mutexes or initialize internal data
-// structures.  The xShutdown method is invoked (indirectly) by
-// [sqlite3_shutdown()] and should deallocate any resources acquired
-// by xInit.  The pAppData pointer is used as the only parameter to
-// xInit and xShutdown.
-//
-// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
-// the xInit method, so the xInit method need not be threadsafe.  The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  For all other methods, SQLite
-// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
-// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
-// it is by default) and so the methods are automatically serialized.
-// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
-// methods must be threadsafe or else make their own arrangements for
-// serialization.
-//
-// SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-type sqlite3_mem_methods = sqlite3_mem_methods1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:1723:36 */
+type sqlite3_mem_methods = sqlite3_mem_methods1
 
-// CAPI3REF: Constants Defining Special Destructor Behavior
-//
-// These are special values for the destructor that is passed in as the
-// final argument to routines like [sqlite3_result_blob()].  ^If the destructor
-// argument is SQLITE_STATIC, it means that the content pointer is constant
-// and will never change.  It does not need to be destroyed.  ^The
-// SQLITE_TRANSIENT value means that the content will likely change in
-// the near future and that SQLite should make its own private copy of
-// the content before returning.
-//
-// The typedef is necessary to work around problems in certain
-// C++ compilers.
-type sqlite3_destructor_type = uintptr /* testdata/sqlite-amalgamation-3390300/sqlite3.h:5753:14 */
+type sqlite3_destructor_type = uintptr
 
-// The interface to the virtual-table mechanism is currently considered
-// to be experimental.  The interface might change in incompatible ways.
-// If this is a problem for you, do not use the interface at this time.
-//
-// When the virtual-table mechanism stabilizes, we will declare the
-// interface fixed, support it indefinitely, and remove this comment.
-
-// Structures used by the virtual table interface
 type sqlite3_vtab1 = struct {
 	pModule uintptr
 	nRef    int32
 	_       [4]byte
 	zErrMsg uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6960:9 */
+}
 
-// The interface to the virtual-table mechanism is currently considered
-// to be experimental.  The interface might change in incompatible ways.
-// If this is a problem for you, do not use the interface at this time.
-//
-// When the virtual-table mechanism stabilizes, we will declare the
-// interface fixed, support it indefinitely, and remove this comment.
-
-// Structures used by the virtual table interface
-type sqlite3_vtab = sqlite3_vtab1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6960:29 */
+type sqlite3_vtab = sqlite3_vtab1
 type sqlite3_index_info1 = struct {
 	nConstraint      int32
 	_                [4]byte
@@ -2018,12 +1177,12 @@ type sqlite3_index_info1 = struct {
 	idxFlags         int32
 	_                [4]byte
 	colUsed          sqlite3_uint64
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6961:9 */
+}
 
-type sqlite3_index_info = sqlite3_index_info1       /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6961:35 */
-type sqlite3_vtab_cursor1 = struct{ pVtab uintptr } /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6962:9 */
+type sqlite3_index_info = sqlite3_index_info1
+type sqlite3_vtab_cursor1 = struct{ pVtab uintptr }
 
-type sqlite3_vtab_cursor = sqlite3_vtab_cursor1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6962:36 */
+type sqlite3_vtab_cursor = sqlite3_vtab_cursor1
 type sqlite3_module1 = struct {
 	iVersion      int32
 	_             [4]byte
@@ -2050,395 +1209,30 @@ type sqlite3_module1 = struct {
 	xRelease      uintptr
 	xRollbackTo   uintptr
 	xShadowName   uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6960:9 */
+}
 
-type sqlite3_module = sqlite3_module1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6963:31 */
+type sqlite3_module = sqlite3_module1
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_constraint = struct {
 	iColumn     int32
 	op          uint8
 	usable      uint8
 	_           [2]byte
 	iTermOffset int32
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6961:9 */
+}
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_orderby = struct {
 	iColumn int32
 	desc    uint8
 	_       [3]byte
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6961:9 */
+}
 
-// CAPI3REF: Virtual Table Indexing Information
-// KEYWORDS: sqlite3_index_info
-//
-// The sqlite3_index_info structure and its substructures is used as part
-// of the [virtual table] interface to
-// pass information into and receive the reply from the [xBestIndex]
-// method of a [virtual table module].  The fields under **Inputs** are the
-// inputs to xBestIndex and are read-only.  xBestIndex inserts its
-// results into the **Outputs** fields.
-//
-// ^(The aConstraint[] array records WHERE clause constraints of the form:
-//
-// <blockquote>column OP expr</blockquote>
-//
-// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
-// stored in aConstraint[].op using one of the
-// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
-// ^(The index of the column is stored in
-// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
-// expr on the right-hand side can be evaluated (and thus the constraint
-// is usable) and false if it cannot.)^
-//
-// ^The optimizer automatically inverts terms of the form "expr OP column"
-// and makes other simplifications to the WHERE clause in an attempt to
-// get as many WHERE clause terms into the form shown above as possible.
-// ^The aConstraint[] array only reports WHERE clause terms that are
-// relevant to the particular virtual table being queried.
-//
-// ^Information about the ORDER BY clause is stored in aOrderBy[].
-// ^Each term of aOrderBy records a column of the ORDER BY clause.
-//
-// The colUsed field indicates which columns of the virtual table may be
-// required by the current scan. Virtual table columns are numbered from
-// zero in the order in which they appear within the CREATE TABLE statement
-// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
-// the corresponding bit is set within the colUsed mask if the column may be
-// required by SQLite. If the table has at least 64 columns and any column
-// to the right of the first 63 is required, then bit 63 of colUsed is also
-// set. In other words, column iCol may be required if the expression
-// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
-// non-zero.
-//
-// The [xBestIndex] method must fill aConstraintUsage[] with information
-// about what parameters to pass to xFilter.  ^If argvIndex>0 then
-// the right-hand side of the corresponding aConstraint[] is evaluated
-// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
-// is true, then the constraint is assumed to be fully handled by the
-// virtual table and might not be checked again by the byte code.)^ ^(The
-// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
-// is left in its default setting of false, the constraint will always be
-// checked separately in byte code.  If the omit flag is change to true, then
-// the constraint may or may not be checked in byte code.  In other words,
-// when the omit flag is true there is no guarantee that the constraint will
-// not be checked again using byte code.)^
-//
-// ^The idxNum and idxPtr values are recorded and passed into the
-// [xFilter] method.
-// ^[sqlite3_free()] is used to free idxPtr if and only if
-// needToFreeIdxPtr is true.
-//
-// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
-// the correct order to satisfy the ORDER BY clause so that no separate
-// sorting step is required.
-//
-// ^The estimatedCost value is an estimate of the cost of a particular
-// strategy. A cost of N indicates that the cost of the strategy is similar
-// to a linear scan of an SQLite table with N rows. A cost of log(N)
-// indicates that the expense of the operation is similar to that of a
-// binary search on a unique indexed field of an SQLite table with N rows.
-//
-// ^The estimatedRows value is an estimate of the number of rows that
-// will be returned by the strategy.
-//
-// The xBestIndex method may optionally populate the idxFlags field with a
-// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
-// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
-// assumes that the strategy may visit at most one row.
-//
-// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
-// SQLite also assumes that if a call to the xUpdate() method is made as
-// part of the same statement to delete or update a virtual table row and the
-// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
-// any database changes. In other words, if the xUpdate() returns
-// SQLITE_CONSTRAINT, the database contents must be exactly as they were
-// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
-// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
-// the xUpdate method are automatically rolled back by SQLite.
-//
-// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
-// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
-// If a virtual table extension is
-// used with an SQLite version earlier than 3.8.2, the results of attempting
-// to read or write the estimatedRows field are undefined (but are likely
-// to include crashing the application). The estimatedRows field should
-// therefore only be used if [sqlite3_libversion_number()] returns a
-// value greater than or equal to 3008002. Similarly, the idxFlags field
-// was added for [version 3.9.0] ([dateof:3.9.0]).
-// It may therefore only be used if
-// sqlite3_libversion_number() returns a value greater than or equal to
-// 3009000.
 type sqlite3_index_constraint_usage = struct {
 	argvIndex int32
 	omit      uint8
 	_         [3]byte
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:6961:9 */
+}
 
-// CAPI3REF: Mutex Methods Object
-//
-// An instance of this structure defines the low-level routines
-// used to allocate and use mutexes.
-//
-// Usually, the default mutex implementations provided by SQLite are
-// sufficient, however the application has the option of substituting a custom
-// implementation for specialized deployments or systems for which SQLite
-// does not provide a suitable implementation. In this case, the application
-// creates and populates an instance of this structure to pass
-// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
-// Additionally, an instance of this structure can be used as an
-// output variable when querying the system for the current mutex
-// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
-//
-// ^The xMutexInit method defined by this structure is invoked as
-// part of system initialization by the sqlite3_initialize() function.
-// ^The xMutexInit routine is called by SQLite exactly once for each
-// effective call to [sqlite3_initialize()].
-//
-// ^The xMutexEnd method defined by this structure is invoked as
-// part of system shutdown by the sqlite3_shutdown() function. The
-// implementation of this method is expected to release all outstanding
-// resources obtained by the mutex methods implementation, especially
-// those obtained by the xMutexInit method.  ^The xMutexEnd()
-// interface is invoked exactly once for each call to [sqlite3_shutdown()].
-//
-// ^(The remaining seven methods defined by this structure (xMutexAlloc,
-// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
-// xMutexNotheld) implement the following interfaces (respectively):
-//
-// <ul>
-//
-//	<li>  [sqlite3_mutex_alloc()] </li>
-//	<li>  [sqlite3_mutex_free()] </li>
-//	<li>  [sqlite3_mutex_enter()] </li>
-//	<li>  [sqlite3_mutex_try()] </li>
-//	<li>  [sqlite3_mutex_leave()] </li>
-//	<li>  [sqlite3_mutex_held()] </li>
-//	<li>  [sqlite3_mutex_notheld()] </li>
-//
-// </ul>)^
-//
-// The only difference is that the public sqlite3_XXX functions enumerated
-// above silently ignore any invocations that pass a NULL pointer instead
-// of a valid mutex handle. The implementations of the methods defined
-// by this structure are not required to handle this case. The results
-// of passing a NULL pointer instead of a valid mutex handle are undefined
-// (i.e. it is acceptable to provide an implementation that segfaults if
-// it is passed a NULL pointer).
-//
-// The xMutexInit() method must be threadsafe.  It must be harmless to
-// invoke xMutexInit() multiple times within the same process and without
-// intervening calls to xMutexEnd().  Second and subsequent calls to
-// xMutexInit() must be no-ops.
-//
-// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
-// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
-// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
-// memory allocation for a fast or recursive mutex.
-//
-// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
-// called, but only if the prior call to xMutexInit returned SQLITE_OK.
-// If xMutexInit fails in any way, it is expected to clean up after itself
-// prior to returning.
 type sqlite3_mutex_methods1 = struct {
 	xMutexInit    uintptr
 	xMutexEnd     uintptr
@@ -2449,259 +1243,17 @@ type sqlite3_mutex_methods1 = struct {
 	xMutexLeave   uintptr
 	xMutexHeld    uintptr
 	xMutexNotheld uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:7827:9 */
+}
 
-// CAPI3REF: Mutex Methods Object
-//
-// An instance of this structure defines the low-level routines
-// used to allocate and use mutexes.
-//
-// Usually, the default mutex implementations provided by SQLite are
-// sufficient, however the application has the option of substituting a custom
-// implementation for specialized deployments or systems for which SQLite
-// does not provide a suitable implementation. In this case, the application
-// creates and populates an instance of this structure to pass
-// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
-// Additionally, an instance of this structure can be used as an
-// output variable when querying the system for the current mutex
-// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
-//
-// ^The xMutexInit method defined by this structure is invoked as
-// part of system initialization by the sqlite3_initialize() function.
-// ^The xMutexInit routine is called by SQLite exactly once for each
-// effective call to [sqlite3_initialize()].
-//
-// ^The xMutexEnd method defined by this structure is invoked as
-// part of system shutdown by the sqlite3_shutdown() function. The
-// implementation of this method is expected to release all outstanding
-// resources obtained by the mutex methods implementation, especially
-// those obtained by the xMutexInit method.  ^The xMutexEnd()
-// interface is invoked exactly once for each call to [sqlite3_shutdown()].
-//
-// ^(The remaining seven methods defined by this structure (xMutexAlloc,
-// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
-// xMutexNotheld) implement the following interfaces (respectively):
-//
-// <ul>
-//
-//	<li>  [sqlite3_mutex_alloc()] </li>
-//	<li>  [sqlite3_mutex_free()] </li>
-//	<li>  [sqlite3_mutex_enter()] </li>
-//	<li>  [sqlite3_mutex_try()] </li>
-//	<li>  [sqlite3_mutex_leave()] </li>
-//	<li>  [sqlite3_mutex_held()] </li>
-//	<li>  [sqlite3_mutex_notheld()] </li>
-//
-// </ul>)^
-//
-// The only difference is that the public sqlite3_XXX functions enumerated
-// above silently ignore any invocations that pass a NULL pointer instead
-// of a valid mutex handle. The implementations of the methods defined
-// by this structure are not required to handle this case. The results
-// of passing a NULL pointer instead of a valid mutex handle are undefined
-// (i.e. it is acceptable to provide an implementation that segfaults if
-// it is passed a NULL pointer).
-//
-// The xMutexInit() method must be threadsafe.  It must be harmless to
-// invoke xMutexInit() multiple times within the same process and without
-// intervening calls to xMutexEnd().  Second and subsequent calls to
-// xMutexInit() must be no-ops.
-//
-// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
-// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
-// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
-// memory allocation for a fast or recursive mutex.
-//
-// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
-// called, but only if the prior call to xMutexInit returned SQLITE_OK.
-// If xMutexInit fails in any way, it is expected to clean up after itself
-// prior to returning.
-type sqlite3_mutex_methods = sqlite3_mutex_methods1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:7827:38 */
+type sqlite3_mutex_methods = sqlite3_mutex_methods1
 
-// CAPI3REF: Custom Page Cache Object
-//
-// The sqlite3_pcache_page object represents a single page in the
-// page cache.  The page cache will allocate instances of this
-// object.  Various methods of the page cache use pointers to instances
-// of this object as parameters or as their return value.
-//
-// See [sqlite3_pcache_methods2] for additional information.
 type sqlite3_pcache_page1 = struct {
 	pBuf   uintptr
 	pExtra uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:8596:9 */
+}
 
-// CAPI3REF: Custom Page Cache Object
-//
-// The sqlite3_pcache_page object represents a single page in the
-// page cache.  The page cache will allocate instances of this
-// object.  Various methods of the page cache use pointers to instances
-// of this object as parameters or as their return value.
-//
-// See [sqlite3_pcache_methods2] for additional information.
-type sqlite3_pcache_page = sqlite3_pcache_page1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:8596:36 */
+type sqlite3_pcache_page = sqlite3_pcache_page1
 
-// CAPI3REF: Application Defined Page Cache.
-// KEYWORDS: {page cache}
-//
-// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
-// register an alternative page cache implementation by passing in an
-// instance of the sqlite3_pcache_methods2 structure.)^
-// In many applications, most of the heap memory allocated by
-// SQLite is used for the page cache.
-// By implementing a
-// custom page cache using this API, an application can better control
-// the amount of memory consumed by SQLite, the way in which
-// that memory is allocated and released, and the policies used to
-// determine exactly which parts of a database file are cached and for
-// how long.
-//
-// The alternative page cache mechanism is an
-// extreme measure that is only needed by the most demanding applications.
-// The built-in page cache is recommended for most uses.
-//
-// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
-// internal buffer by SQLite within the call to [sqlite3_config].  Hence
-// the application may discard the parameter after the call to
-// [sqlite3_config()] returns.)^
-//
-// [[the xInit() page cache method]]
-// ^(The xInit() method is called once for each effective
-// call to [sqlite3_initialize()])^
-// (usually only once during the lifetime of the process). ^(The xInit()
-// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
-// The intent of the xInit() method is to set up global data structures
-// required by the custom page cache implementation.
-// ^(If the xInit() method is NULL, then the
-// built-in default page cache is used instead of the application defined
-// page cache.)^
-//
-// [[the xShutdown() page cache method]]
-// ^The xShutdown() method is called by [sqlite3_shutdown()].
-// It can be used to clean up
-// any outstanding resources before process shutdown, if required.
-// ^The xShutdown() method may be NULL.
-//
-// ^SQLite automatically serializes calls to the xInit method,
-// so the xInit method need not be threadsafe.  ^The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  All other methods must be threadsafe
-// in multithreaded applications.
-//
-// ^SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-//
-// [[the xCreate() page cache methods]]
-// ^SQLite invokes the xCreate() method to construct a new cache instance.
-// SQLite will typically create one cache instance for each open database file,
-// though this is not guaranteed. ^The
-// first parameter, szPage, is the size in bytes of the pages that must
-// be allocated by the cache.  ^szPage will always a power of two.  ^The
-// second parameter szExtra is a number of bytes of extra storage
-// associated with each page cache entry.  ^The szExtra parameter will
-// a number less than 250.  SQLite will use the
-// extra szExtra bytes on each page to store metadata about the underlying
-// database page on disk.  The value passed into szExtra depends
-// on the SQLite version, the target platform, and how SQLite was compiled.
-// ^The third argument to xCreate(), bPurgeable, is true if the cache being
-// created will be used to cache database pages of a file stored on disk, or
-// false if it is used for an in-memory database. The cache implementation
-// does not have to do anything special based with the value of bPurgeable;
-// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
-// never invoke xUnpin() except to deliberately delete a page.
-// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
-// false will always have the "discard" flag set to true.
-// ^Hence, a cache created with bPurgeable false will
-// never contain any unpinned pages.
-//
-// [[the xCachesize() page cache method]]
-// ^(The xCachesize() method may be called at any time by SQLite to set the
-// suggested maximum cache-size (number of pages stored by) the cache
-// instance passed as the first argument. This is the value configured using
-// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
-// parameter, the implementation is not required to do anything with this
-// value; it is advisory only.
-//
-// [[the xPagecount() page cache methods]]
-// The xPagecount() method must return the number of pages currently
-// stored in the cache, both pinned and unpinned.
-//
-// [[the xFetch() page cache methods]]
-// The xFetch() method locates a page in the cache and returns a pointer to
-// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
-// The pBuf element of the returned sqlite3_pcache_page object will be a
-// pointer to a buffer of szPage bytes used to store the content of a
-// single database page.  The pExtra element of sqlite3_pcache_page will be
-// a pointer to the szExtra bytes of extra storage that SQLite has requested
-// for each entry in the page cache.
-//
-// The page to be fetched is determined by the key. ^The minimum key value
-// is 1.  After it has been retrieved using xFetch, the page is considered
-// to be "pinned".
-//
-// If the requested page is already in the page cache, then the page cache
-// implementation must return a pointer to the page buffer with its content
-// intact.  If the requested page is not already in the cache, then the
-// cache implementation should use the value of the createFlag
-// parameter to help it determined what action to take:
-//
-// <table border=1 width=85% align=center>
-// <tr><th> createFlag <th> Behavior when page is not already in cache
-// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
-// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
-//
-//	Otherwise return NULL.
-//
-// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
-//
-//	NULL if allocating a new page is effectively impossible.
-//
-// </table>
-//
-// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
-// will only use a createFlag of 2 after a prior call with a createFlag of 1
-// failed.)^  In between the xFetch() calls, SQLite may
-// attempt to unpin one or more cache pages by spilling the content of
-// pinned pages to disk and synching the operating system disk cache.
-//
-// [[the xUnpin() page cache method]]
-// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
-// as its second argument.  If the third parameter, discard, is non-zero,
-// then the page must be evicted from the cache.
-// ^If the discard parameter is
-// zero, then the page may be discarded or retained at the discretion of
-// page cache implementation. ^The page cache implementation
-// may choose to evict unpinned pages at any time.
-//
-// The cache must not perform any reference counting. A single
-// call to xUnpin() unpins the page regardless of the number of prior calls
-// to xFetch().
-//
-// [[the xRekey() page cache methods]]
-// The xRekey() method is used to change the key value associated with the
-// page passed as the second argument. If the cache
-// previously contains an entry associated with newKey, it must be
-// discarded. ^Any prior cache entry associated with newKey is guaranteed not
-// to be pinned.
-//
-// When SQLite calls the xTruncate() method, the cache must discard all
-// existing cache entries with page numbers (keys) greater than or equal
-// to the value of the iLimit parameter passed to xTruncate(). If any
-// of these pages are pinned, they are implicitly unpinned, meaning that
-// they can be safely discarded.
-//
-// [[the xDestroy() page cache method]]
-// ^The xDestroy() method is used to delete a cache allocated by xCreate().
-// All resources associated with the specified cache should be freed. ^After
-// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
-// handle invalid, and will not use it with any other sqlite3_pcache_methods2
-// functions.
-//
-// [[the xShrink() page cache method]]
-// ^SQLite invokes the xShrink() method when it wants the page cache to
-// free up as much of heap memory as possible.  The page cache implementation
-// is not obligated to free any memory, but well-behaved implementations should
-// do their best.
 type sqlite3_pcache_methods21 = struct {
 	iVersion   int32
 	_          [4]byte
@@ -2717,174 +1269,10 @@ type sqlite3_pcache_methods21 = struct {
 	xTruncate  uintptr
 	xDestroy   uintptr
 	xShrink    uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:8761:9 */
+}
 
-// CAPI3REF: Application Defined Page Cache.
-// KEYWORDS: {page cache}
-//
-// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
-// register an alternative page cache implementation by passing in an
-// instance of the sqlite3_pcache_methods2 structure.)^
-// In many applications, most of the heap memory allocated by
-// SQLite is used for the page cache.
-// By implementing a
-// custom page cache using this API, an application can better control
-// the amount of memory consumed by SQLite, the way in which
-// that memory is allocated and released, and the policies used to
-// determine exactly which parts of a database file are cached and for
-// how long.
-//
-// The alternative page cache mechanism is an
-// extreme measure that is only needed by the most demanding applications.
-// The built-in page cache is recommended for most uses.
-//
-// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
-// internal buffer by SQLite within the call to [sqlite3_config].  Hence
-// the application may discard the parameter after the call to
-// [sqlite3_config()] returns.)^
-//
-// [[the xInit() page cache method]]
-// ^(The xInit() method is called once for each effective
-// call to [sqlite3_initialize()])^
-// (usually only once during the lifetime of the process). ^(The xInit()
-// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
-// The intent of the xInit() method is to set up global data structures
-// required by the custom page cache implementation.
-// ^(If the xInit() method is NULL, then the
-// built-in default page cache is used instead of the application defined
-// page cache.)^
-//
-// [[the xShutdown() page cache method]]
-// ^The xShutdown() method is called by [sqlite3_shutdown()].
-// It can be used to clean up
-// any outstanding resources before process shutdown, if required.
-// ^The xShutdown() method may be NULL.
-//
-// ^SQLite automatically serializes calls to the xInit method,
-// so the xInit method need not be threadsafe.  ^The
-// xShutdown method is only called from [sqlite3_shutdown()] so it does
-// not need to be threadsafe either.  All other methods must be threadsafe
-// in multithreaded applications.
-//
-// ^SQLite will never invoke xInit() more than once without an intervening
-// call to xShutdown().
-//
-// [[the xCreate() page cache methods]]
-// ^SQLite invokes the xCreate() method to construct a new cache instance.
-// SQLite will typically create one cache instance for each open database file,
-// though this is not guaranteed. ^The
-// first parameter, szPage, is the size in bytes of the pages that must
-// be allocated by the cache.  ^szPage will always a power of two.  ^The
-// second parameter szExtra is a number of bytes of extra storage
-// associated with each page cache entry.  ^The szExtra parameter will
-// a number less than 250.  SQLite will use the
-// extra szExtra bytes on each page to store metadata about the underlying
-// database page on disk.  The value passed into szExtra depends
-// on the SQLite version, the target platform, and how SQLite was compiled.
-// ^The third argument to xCreate(), bPurgeable, is true if the cache being
-// created will be used to cache database pages of a file stored on disk, or
-// false if it is used for an in-memory database. The cache implementation
-// does not have to do anything special based with the value of bPurgeable;
-// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
-// never invoke xUnpin() except to deliberately delete a page.
-// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
-// false will always have the "discard" flag set to true.
-// ^Hence, a cache created with bPurgeable false will
-// never contain any unpinned pages.
-//
-// [[the xCachesize() page cache method]]
-// ^(The xCachesize() method may be called at any time by SQLite to set the
-// suggested maximum cache-size (number of pages stored by) the cache
-// instance passed as the first argument. This is the value configured using
-// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
-// parameter, the implementation is not required to do anything with this
-// value; it is advisory only.
-//
-// [[the xPagecount() page cache methods]]
-// The xPagecount() method must return the number of pages currently
-// stored in the cache, both pinned and unpinned.
-//
-// [[the xFetch() page cache methods]]
-// The xFetch() method locates a page in the cache and returns a pointer to
-// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
-// The pBuf element of the returned sqlite3_pcache_page object will be a
-// pointer to a buffer of szPage bytes used to store the content of a
-// single database page.  The pExtra element of sqlite3_pcache_page will be
-// a pointer to the szExtra bytes of extra storage that SQLite has requested
-// for each entry in the page cache.
-//
-// The page to be fetched is determined by the key. ^The minimum key value
-// is 1.  After it has been retrieved using xFetch, the page is considered
-// to be "pinned".
-//
-// If the requested page is already in the page cache, then the page cache
-// implementation must return a pointer to the page buffer with its content
-// intact.  If the requested page is not already in the cache, then the
-// cache implementation should use the value of the createFlag
-// parameter to help it determined what action to take:
-//
-// <table border=1 width=85% align=center>
-// <tr><th> createFlag <th> Behavior when page is not already in cache
-// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
-// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
-//
-//	Otherwise return NULL.
-//
-// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
-//
-//	NULL if allocating a new page is effectively impossible.
-//
-// </table>
-//
-// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
-// will only use a createFlag of 2 after a prior call with a createFlag of 1
-// failed.)^  In between the xFetch() calls, SQLite may
-// attempt to unpin one or more cache pages by spilling the content of
-// pinned pages to disk and synching the operating system disk cache.
-//
-// [[the xUnpin() page cache method]]
-// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
-// as its second argument.  If the third parameter, discard, is non-zero,
-// then the page must be evicted from the cache.
-// ^If the discard parameter is
-// zero, then the page may be discarded or retained at the discretion of
-// page cache implementation. ^The page cache implementation
-// may choose to evict unpinned pages at any time.
-//
-// The cache must not perform any reference counting. A single
-// call to xUnpin() unpins the page regardless of the number of prior calls
-// to xFetch().
-//
-// [[the xRekey() page cache methods]]
-// The xRekey() method is used to change the key value associated with the
-// page passed as the second argument. If the cache
-// previously contains an entry associated with newKey, it must be
-// discarded. ^Any prior cache entry associated with newKey is guaranteed not
-// to be pinned.
-//
-// When SQLite calls the xTruncate() method, the cache must discard all
-// existing cache entries with page numbers (keys) greater than or equal
-// to the value of the iLimit parameter passed to xTruncate(). If any
-// of these pages are pinned, they are implicitly unpinned, meaning that
-// they can be safely discarded.
-//
-// [[the xDestroy() page cache method]]
-// ^The xDestroy() method is used to delete a cache allocated by xCreate().
-// All resources associated with the specified cache should be freed. ^After
-// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
-// handle invalid, and will not use it with any other sqlite3_pcache_methods2
-// functions.
-//
-// [[the xShrink() page cache method]]
-// ^SQLite invokes the xShrink() method when it wants the page cache to
-// free up as much of heap memory as possible.  The page cache implementation
-// is not obligated to free any memory, but well-behaved implementations should
-// do their best.
-type sqlite3_pcache_methods2 = sqlite3_pcache_methods21 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:8761:40 */
+type sqlite3_pcache_methods2 = sqlite3_pcache_methods21
 
-// This is the obsolete pcache_methods object that has now been replaced
-// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
-// retained in the header file for backwards compatibility only.
 type sqlite3_pcache_methods1 = struct {
 	pArg       uintptr
 	xInit      uintptr
@@ -2897,87 +1285,13 @@ type sqlite3_pcache_methods1 = struct {
 	xRekey     uintptr
 	xTruncate  uintptr
 	xDestroy   uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:8784:9 */
+}
 
-// This is the obsolete pcache_methods object that has now been replaced
-// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
-// retained in the header file for backwards compatibility only.
-type sqlite3_pcache_methods = sqlite3_pcache_methods1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:8784:39 */
+type sqlite3_pcache_methods = sqlite3_pcache_methods1
 
-// CAPI3REF: Database Snapshot
-// KEYWORDS: {snapshot} {sqlite3_snapshot}
-//
-// An instance of the snapshot object records the state of a [WAL mode]
-// database for some specific point in history.
-//
-// In [WAL mode], multiple [database connections] that are open on the
-// same database file can each be reading a different historical version
-// of the database file.  When a [database connection] begins a read
-// transaction, that connection sees an unchanging copy of the database
-// as it existed for the point in time when the transaction first started.
-// Subsequent changes to the database from other connections are not seen
-// by the reader until a new read transaction is started.
-//
-// The sqlite3_snapshot object records state information about an historical
-// version of the database file so that it is possible to later open a new read
-// transaction that sees that historical version of the database rather than
-// the most recent version.
-type sqlite3_snapshot1 = struct{ hidden [48]uint8 } /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10109:9 */
+type sqlite3_snapshot1 = struct{ hidden [48]uint8 }
 
-// CAPI3REF: Database Snapshot
-// KEYWORDS: {snapshot} {sqlite3_snapshot}
-//
-// An instance of the snapshot object records the state of a [WAL mode]
-// database for some specific point in history.
-//
-// In [WAL mode], multiple [database connections] that are open on the
-// same database file can each be reading a different historical version
-// of the database file.  When a [database connection] begins a read
-// transaction, that connection sees an unchanging copy of the database
-// as it existed for the point in time when the transaction first started.
-// Subsequent changes to the database from other connections are not seen
-// by the reader until a new read transaction is started.
-//
-// The sqlite3_snapshot object records state information about an historical
-// version of the database file so that it is possible to later open a new read
-// transaction that sees that historical version of the database rather than
-// the most recent version.
-type sqlite3_snapshot = sqlite3_snapshot1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10111:3 */
-
-// CAPI3REF: Flags for sqlite3_deserialize()
-//
-// The following are allowed values for 6th argument (the F argument) to
-// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
-//
-// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
-// in the P argument is held in memory obtained from [sqlite3_malloc64()]
-// and that SQLite should take ownership of this memory and automatically
-// free it when it has finished using it.  Without this flag, the caller
-// is responsible for freeing any dynamically allocated memory.
-//
-// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
-// grow the size of the database using calls to [sqlite3_realloc64()].  This
-// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
-// Without this flag, the deserialized database cannot increase in size beyond
-// the number of bytes specified by the M parameter.
-//
-// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
-// should be treated as read-only.
-
-// Undo the hack that converts floating point types to integer for
-// builds on processors without floating point support.
-
-//******* Begin file sqlite3rtree.h ********
-// 2010 August 30
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
+type sqlite3_snapshot = sqlite3_snapshot1
 
 type sqlite3_rtree_geometry1 = struct {
 	pContext uintptr
@@ -2986,44 +1300,9 @@ type sqlite3_rtree_geometry1 = struct {
 	aParam   uintptr
 	pUser    uintptr
 	xDelUser uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10440:9 */
+}
 
-// CAPI3REF: Flags for sqlite3_deserialize()
-//
-// The following are allowed values for 6th argument (the F argument) to
-// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
-//
-// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
-// in the P argument is held in memory obtained from [sqlite3_malloc64()]
-// and that SQLite should take ownership of this memory and automatically
-// free it when it has finished using it.  Without this flag, the caller
-// is responsible for freeing any dynamically allocated memory.
-//
-// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
-// grow the size of the database using calls to [sqlite3_realloc64()].  This
-// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
-// Without this flag, the deserialized database cannot increase in size beyond
-// the number of bytes specified by the M parameter.
-//
-// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
-// should be treated as read-only.
-
-// Undo the hack that converts floating point types to integer for
-// builds on processors without floating point support.
-
-//******* Begin file sqlite3rtree.h ********
-// 2010 August 30
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-
-type sqlite3_rtree_geometry = sqlite3_rtree_geometry1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10440:39 */
+type sqlite3_rtree_geometry = sqlite3_rtree_geometry1
 type sqlite3_rtree_query_info1 = struct {
 	pContext      uintptr
 	nParam        int32
@@ -3043,43 +1322,11 @@ type sqlite3_rtree_query_info1 = struct {
 	eWithin       int32
 	rScore        sqlite3_rtree_dbl
 	apSqlParam    uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10441:9 */
+}
 
-type sqlite3_rtree_query_info = sqlite3_rtree_query_info1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10441:41 */
+type sqlite3_rtree_query_info = sqlite3_rtree_query_info1
 
-// The double-precision datatype used by RTree depends on the
-// SQLITE_RTREE_INT_ONLY compile-time option.
-type sqlite3_rtree_dbl = float64 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:10449:18 */
-
-// CAPI3REF: Values for sqlite3session_config().
-
-// Make sure we can call this stuff from C++.
-
-//******* End of sqlite3session.h ********
-//******* Begin file fts5.h ********
-// 2014 May 31
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// Interfaces to extend FTS5. Using the interfaces defined in this file,
-// FTS5 may be extended with:
-//
-//     * custom tokenizers, and
-//     * custom auxiliary functions.
-
-// ************************************************************************
-//
-// CUSTOM AUXILIARY FUNCTIONS
-//
-// Virtual table implementations may overload SQL functions by implementing
-// the sqlite3_module.xFindFunction() method.
+type sqlite3_rtree_dbl = float64
 
 type Fts5ExtensionApi1 = struct {
 	iVersion           int32
@@ -3103,270 +1350,50 @@ type Fts5ExtensionApi1 = struct {
 	xPhraseNext        uintptr
 	xPhraseFirstColumn uintptr
 	xPhraseNextColumn  uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12296:9 */
+}
 
-// CAPI3REF: Values for sqlite3session_config().
-
-// Make sure we can call this stuff from C++.
-
-//******* End of sqlite3session.h ********
-//******* Begin file fts5.h ********
-// 2014 May 31
-//
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
-//
-//
-// Interfaces to extend FTS5. Using the interfaces defined in this file,
-// FTS5 may be extended with:
-//
-//     * custom tokenizers, and
-//     * custom auxiliary functions.
-
-// ************************************************************************
-//
-// CUSTOM AUXILIARY FUNCTIONS
-//
-// Virtual table implementations may overload SQL functions by implementing
-// the sqlite3_module.xFindFunction() method.
-
-type Fts5ExtensionApi = Fts5ExtensionApi1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12296:33 */
+type Fts5ExtensionApi = Fts5ExtensionApi1
 type Fts5PhraseIter1 = struct {
 	a uintptr
 	b uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12298:9 */
+}
 
-type Fts5PhraseIter = Fts5PhraseIter1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12298:31 */
+type Fts5PhraseIter = Fts5PhraseIter1
 
-type fts5_extension_function = uintptr /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12300:14 */
+type fts5_extension_function = uintptr
 type fts5_tokenizer1 = struct {
 	xCreate   uintptr
 	xDelete   uintptr
 	xTokenize uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12759:9 */
+}
 
-type fts5_tokenizer = fts5_tokenizer1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12759:31 */
+type fts5_tokenizer = fts5_tokenizer1
 
-// Flags that may be passed as the third argument to xTokenize()
-
-// Flags that may be passed by the tokenizer implementation back to FTS5
-// as the third argument to the supplied xToken callback.
-
-//
-// END OF CUSTOM TOKENIZERS
-//
-
-// ************************************************************************
-//
-// FTS5 EXTENSION REGISTRATION API
 type fts5_api1 = struct {
 	iVersion         int32
 	_                [4]byte
 	xCreateTokenizer uintptr
 	xFindTokenizer   uintptr
 	xCreateFunction  uintptr
-} /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12795:9 */
+}
 
-// Flags that may be passed as the third argument to xTokenize()
+type fts5_api = fts5_api1
 
-// Flags that may be passed by the tokenizer implementation back to FTS5
-// as the third argument to the supplied xToken callback.
+type fpos_t = int64
 
-//
-// END OF CUSTOM TOKENIZERS
-//
+type rsize_t = size_t
 
-// ************************************************************************
-//
-// FTS5 EXTENSION REGISTRATION API
-type fts5_api = fts5_api1 /* testdata/sqlite-amalgamation-3390300/sqlite3.h:12795:25 */
+type off_t = int64
+type ssize_t = int64
 
-//
-// END OF REGISTRATION API
-//
+type off64_t = int64
 
-//******* End of fts5.h ********
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Chris Torek.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)stdio.h	8.5 (Berkeley) 4/29/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2003 Marcel Moolenaar
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-//
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-// OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-// IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-// THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-type fpos_t = int64 /* /usr/include/stdio.h:47:18 */
-
-type rsize_t = size_t /* /usr/include/stdio.h:56:16 */
-
-type off_t = int64   /* /usr/include/stdio.h:62:18 */
-type ssize_t = int64 /* /usr/include/stdio.h:66:19 */
-
-type off64_t = int64 /* /usr/include/stdio.h:72:19 */
-
-// NB: to fit things in six character monocase externals, the stdio
-// code uses the prefix `__s' for stdio objects, typically followed
-// by a three-character attempt at a mnemonic.
-
-// stdio buffers
 type __sbuf = struct {
 	_base uintptr
 	_size int32
 	_     [4]byte
-} /* /usr/include/stdio.h:91:1 */
+}
 
-// stdio state variables.
-//
-// The following always hold:
-//
-//	if (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),
-//		_lbfsize is -_bf._size, else _lbfsize is 0
-//	if _flags&__SRD, _w is 0
-//	if _flags&__SWR, _r is 0
-//
-// This ensures that the getc and putc macros (or inline functions) never
-// try to write or read from a file that is in `read' or `write' mode.
-// (Moreover, they can, and do, automatically switch from read mode to
-// write mode, and back, on "r+" and "w+" files.)
-//
-// _lbfsize is used only to make the inline line-buffered output stream
-// code as compact as possible.
-//
-// _ub, _up, and _ur are used when ungetc() pushes back more characters
-// than fit in the current _bf, or when ungetc() pushes back a character
-// that does not match the previous one in _bf.  When this happens,
-// _ub._base becomes non-nil (i.e., a stream has ungetc() data iff
-// _ub._base!=NULL) and _up and _ur save the current values of _p and _r.
-//
-// Certain members of __sFILE are accessed directly via macros or
-// inline functions.  To preserve ABI compat, these members must not
-// be disturbed.  These members are marked below with (*).
 type __sFILE = struct {
 	_p     uintptr
 	_r     int32
@@ -3413,548 +1440,173 @@ type __sFILE = struct {
 	}
 	_flags2 int32
 	_       [4]byte
-} /* /usr/include/stdio.h:124:1 */
+}
 
-type FILE = __sFILE /* /usr/include/stdio.h:165:24 */
+type FILE = __sFILE
 type cookie_io_functions_t = struct {
 	read  uintptr
 	write uintptr
 	seek  uintptr
 	close uintptr
-} /* /usr/include/stdio.h:428:3 */
+}
 type pthread_once = struct {
 	state int32
 	_     [4]byte
 	mutex pthread_mutex_t
-} /* /usr/include/sys/_pthreadtypes.h:52:1 */
+}
 
-// Primitive system data type definitions required by P1003.1c.
-//
-// Note that P1003.1c specifies that there are no defined comparison
-// or assignment operators for the types pthread_attr_t, pthread_cond_t,
-// pthread_condattr_t, pthread_mutex_t, pthread_mutexattr_t.
-type pthread_t = uintptr             /* /usr/include/sys/_pthreadtypes.h:67:26 */
-type pthread_attr_t = uintptr        /* /usr/include/sys/_pthreadtypes.h:70:30 */
-type pthread_mutex_t = uintptr       /* /usr/include/sys/_pthreadtypes.h:71:31 */
-type pthread_mutexattr_t = uintptr   /* /usr/include/sys/_pthreadtypes.h:72:35 */
-type pthread_cond_t = uintptr        /* /usr/include/sys/_pthreadtypes.h:73:30 */
-type pthread_condattr_t = uintptr    /* /usr/include/sys/_pthreadtypes.h:74:34 */
-type pthread_key_t = int32           /* /usr/include/sys/_pthreadtypes.h:75:20 */
-type pthread_once_t = pthread_once   /* /usr/include/sys/_pthreadtypes.h:76:30 */
-type pthread_rwlock_t = uintptr      /* /usr/include/sys/_pthreadtypes.h:77:32 */
-type pthread_rwlockattr_t = uintptr  /* /usr/include/sys/_pthreadtypes.h:78:35 */
-type pthread_barrier_t = uintptr     /* /usr/include/sys/_pthreadtypes.h:79:33 */
-type pthread_barrierattr_t = uintptr /* /usr/include/sys/_pthreadtypes.h:80:36 */
-type pthread_spinlock_t = uintptr    /* /usr/include/sys/_pthreadtypes.h:81:33 */
+type pthread_t = uintptr
+type pthread_attr_t = uintptr
+type pthread_mutex_t = uintptr
+type pthread_mutexattr_t = uintptr
+type pthread_cond_t = uintptr
+type pthread_condattr_t = uintptr
+type pthread_key_t = int32
+type pthread_once_t = pthread_once
+type pthread_rwlock_t = uintptr
+type pthread_rwlockattr_t = uintptr
+type pthread_barrier_t = uintptr
+type pthread_barrierattr_t = uintptr
+type pthread_spinlock_t = uintptr
 
-// Additional type definitions:
-//
-// Note that P1003.1c reserves the prefixes pthread_ and PTHREAD_ for
-// use in header symbols.
-type pthread_addr_t = uintptr         /* /usr/include/sys/_pthreadtypes.h:89:14 */
-type pthread_startroutine_t = uintptr /* /usr/include/sys/_pthreadtypes.h:90:14 */
+type pthread_addr_t = uintptr
+type pthread_startroutine_t = uintptr
 
-type u_char = uint8   /* /usr/include/sys/types.h:52:23 */
-type u_short = uint16 /* /usr/include/sys/types.h:53:24 */
-type u_int = uint32   /* /usr/include/sys/types.h:54:22 */
-type u_long = uint64  /* /usr/include/sys/types.h:55:23 */
-type ushort = uint16  /* /usr/include/sys/types.h:57:24 */ // Sys V compatibility
-type uint = uint32    /* /usr/include/sys/types.h:58:22 */ // Sys V compatibility
+type u_char = uint8
+type u_short = uint16
+type u_int = uint32
+type u_long = uint64
+type ushort = uint16
+type uint = uint32
 
-// XXX POSIX sized integrals that should appear only in <sys/stdint.h>.
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2011 David E. O'Brien <obrien@FreeBSD.org>
-// Copyright (c) 2001 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
+type int8_t = int8
 
-type int8_t = int8 /* /usr/include/sys/_stdint.h:36:19 */
+type int16_t = int16
 
-type int16_t = int16 /* /usr/include/sys/_stdint.h:41:20 */
+type int32_t = int32
 
-type int32_t = int32 /* /usr/include/sys/_stdint.h:46:20 */
+type int64_t = int64
 
-type int64_t = int64 /* /usr/include/sys/_stdint.h:51:20 */
+type uint8_t = uint8
 
-type uint8_t = uint8 /* /usr/include/sys/_stdint.h:56:20 */
+type uint16_t = uint16
 
-type uint16_t = uint16 /* /usr/include/sys/_stdint.h:61:21 */
+type uint32_t = uint32
 
-type uint32_t = uint32 /* /usr/include/sys/_stdint.h:66:21 */
+type uint64_t = uint64
 
-type uint64_t = uint64 /* /usr/include/sys/_stdint.h:71:21 */
+type intptr_t = int64
+type uintptr_t = uint64
+type intmax_t = int64
+type uintmax_t = uint64
 
-type intptr_t = int64   /* /usr/include/sys/_stdint.h:76:21 */
-type uintptr_t = uint64 /* /usr/include/sys/_stdint.h:80:22 */
-type intmax_t = int64   /* /usr/include/sys/_stdint.h:84:21 */
-type uintmax_t = uint64 /* /usr/include/sys/_stdint.h:88:22 */
+type u_int8_t = uint8
+type u_int16_t = uint16
+type u_int32_t = uint32
+type u_int64_t = uint64
 
-type u_int8_t = uint8   /* /usr/include/sys/types.h:67:19 */ // unsigned integrals (deprecated)
-type u_int16_t = uint16 /* /usr/include/sys/types.h:68:20 */
-type u_int32_t = uint32 /* /usr/include/sys/types.h:69:20 */
-type u_int64_t = uint64 /* /usr/include/sys/types.h:70:20 */
+type u_quad_t = uint64
+type quad_t = int64
+type qaddr_t = uintptr
 
-type u_quad_t = uint64 /* /usr/include/sys/types.h:72:20 */ // quads (deprecated)
-type quad_t = int64    /* /usr/include/sys/types.h:73:19 */
-type qaddr_t = uintptr /* /usr/include/sys/types.h:74:16 */
+type caddr_t = uintptr
+type c_caddr_t = uintptr
 
-type caddr_t = uintptr   /* /usr/include/sys/types.h:76:14 */ // core address
-type c_caddr_t = uintptr /* /usr/include/sys/types.h:77:20 */ // core address, pointer to const
+type blksize_t = int32
 
-type blksize_t = int32 /* /usr/include/sys/types.h:80:21 */
+type cpuwhich_t = int32
+type cpulevel_t = int32
+type cpusetid_t = int32
 
-type cpuwhich_t = int32 /* /usr/include/sys/types.h:84:22 */
-type cpulevel_t = int32 /* /usr/include/sys/types.h:85:22 */
-type cpusetid_t = int32 /* /usr/include/sys/types.h:86:22 */
+type blkcnt_t = int64
 
-type blkcnt_t = int64 /* /usr/include/sys/types.h:89:20 */
+type clock_t = int32
 
-type clock_t = int32 /* /usr/include/sys/types.h:94:19 */
+type clockid_t = int32
 
-type clockid_t = int32 /* /usr/include/sys/types.h:99:21 */
+type critical_t = int64
+type daddr_t = int64
 
-type critical_t = int64 /* /usr/include/sys/types.h:103:22 */ // Critical section value
-type daddr_t = int64    /* /usr/include/sys/types.h:104:19 */ // disk address
+type dev_t = uint64
 
-type dev_t = uint64 /* /usr/include/sys/types.h:107:18 */ // device number or struct cdev
+type fflags_t = uint32
 
-type fflags_t = uint32 /* /usr/include/sys/types.h:112:20 */ // file flags
+type fixpt_t = uint32
 
-type fixpt_t = uint32 /* /usr/include/sys/types.h:116:19 */ // fixed point number
+type fsblkcnt_t = uint64
+type fsfilcnt_t = uint64
 
-type fsblkcnt_t = uint64 /* /usr/include/sys/types.h:119:22 */
-type fsfilcnt_t = uint64 /* /usr/include/sys/types.h:120:22 */
+type gid_t = uint32
 
-type gid_t = uint32 /* /usr/include/sys/types.h:125:18 */ // group id
+type in_addr_t = uint32
 
-type in_addr_t = uint32 /* /usr/include/sys/types.h:130:20 */ // base type for internet address
+type in_port_t = uint16
 
-type in_port_t = uint16 /* /usr/include/sys/types.h:135:20 */
+type id_t = int64
 
-type id_t = int64 /* /usr/include/sys/types.h:140:17 */ // can hold a uid_t or pid_t
+type ino_t = uint64
 
-type ino_t = uint64 /* /usr/include/sys/types.h:145:18 */ // inode number
+type key_t = int64
 
-type key_t = int64 /* /usr/include/sys/types.h:150:18 */ // IPC key (for Sys V IPC)
+type lwpid_t = int32
 
-type lwpid_t = int32 /* /usr/include/sys/types.h:155:19 */ // Thread ID (a.k.a. LWP)
+type mode_t = uint16
 
-type mode_t = uint16 /* /usr/include/sys/types.h:160:18 */ // permissions
+type accmode_t = int32
 
-type accmode_t = int32 /* /usr/include/sys/types.h:165:21 */ // access permissions
+type nlink_t = uint64
 
-type nlink_t = uint64 /* /usr/include/sys/types.h:170:19 */ // link count
+type pid_t = int32
 
-type pid_t = int32 /* /usr/include/sys/types.h:185:18 */ // process id
+type register_t = int64
 
-type register_t = int64 /* /usr/include/sys/types.h:189:22 */
+type rlim_t = int64
 
-type rlim_t = int64 /* /usr/include/sys/types.h:192:18 */ // resource limit
+type sbintime_t = int64
 
-type sbintime_t = int64 /* /usr/include/sys/types.h:196:19 */
+type segsz_t = int64
 
-type segsz_t = int64 /* /usr/include/sys/types.h:198:19 */ // segment size (in pages)
+type suseconds_t = int64
 
-type suseconds_t = int64 /* /usr/include/sys/types.h:211:23 */ // microseconds (signed)
+type time_t = int64
 
-type time_t = int64 /* /usr/include/sys/types.h:216:18 */
+type timer_t = uintptr
 
-type timer_t = uintptr /* /usr/include/sys/types.h:221:19 */
+type mqd_t = uintptr
 
-type mqd_t = uintptr /* /usr/include/sys/types.h:226:17 */
+type u_register_t = uint64
 
-type u_register_t = uint64 /* /usr/include/sys/types.h:230:24 */
+type uid_t = uint32
 
-type uid_t = uint32 /* /usr/include/sys/types.h:233:18 */ // user id
+type useconds_t = uint32
 
-type useconds_t = uint32 /* /usr/include/sys/types.h:238:22 */ // microseconds (unsigned)
+type cap_ioctl_t = uint64
 
-type cap_ioctl_t = uint64 /* /usr/include/sys/types.h:244:23 */
+type kpaddr_t = uint64
+type kvaddr_t = uint64
+type ksize_t = uint64
+type kssize_t = int64
 
-// Types suitable for exporting physical addresses, virtual addresses
-// (pointers), and memory object sizes from the kernel independent of native
-// word size.  These should be used in place of vm_paddr_t, (u)intptr_t, and
-// size_t in structs which contain such types that are shared with userspace.
-type kpaddr_t = uint64 /* /usr/include/sys/types.h:260:20 */
-type kvaddr_t = uint64 /* /usr/include/sys/types.h:261:20 */
-type ksize_t = uint64  /* /usr/include/sys/types.h:262:20 */
-type kssize_t = int64  /* /usr/include/sys/types.h:263:19 */
+type vm_offset_t = uint64
+type vm_ooffset_t = uint64
+type vm_paddr_t = uint64
+type vm_pindex_t = uint64
+type vm_size_t = uint64
 
-type vm_offset_t = uint64  /* /usr/include/sys/types.h:265:23 */
-type vm_ooffset_t = uint64 /* /usr/include/sys/types.h:266:20 */
-type vm_paddr_t = uint64   /* /usr/include/sys/types.h:267:22 */
-type vm_pindex_t = uint64  /* /usr/include/sys/types.h:268:20 */
-type vm_size_t = uint64    /* /usr/include/sys/types.h:269:21 */
+type rman_res_t = uint64
 
-type rman_res_t = uint64 /* /usr/include/sys/types.h:271:25 */
+type __sigset = struct{ __bits [4]uint32 }
 
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1992, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1982, 1986, 1989, 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-// (c) UNIX System Laboratories, Inc.
-// All or some portions of this file are derived from material licensed
-// to the University of California by American Telephone and Telegraph
-// Co. or Unix System Laboratories, Inc. and are reproduced herein with
-// the permission of UNIX System Laboratories, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)signal.h	8.4 (Berkeley) 5/4/95
-// $FreeBSD$
-
-// sigset_t macros.
-
-type __sigset = struct{ __bits [4]uint32 } /* /usr/include/sys/_sigset.h:53:9 */
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// Structure returned by gettimeofday(2) system call, and used in other calls.
 type timeval = struct {
 	tv_sec  time_t
 	tv_usec suseconds_t
-} /* /usr/include/sys/_timeval.h:49:1 */
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1982, 1986, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)time.h	8.5 (Berkeley) 5/4/95
-// from: FreeBSD: src/sys/sys/time.h,v 1.43 2000/03/20 14:09:05 phk Exp
-//	$FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1982, 1986, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)time.h	8.5 (Berkeley) 5/4/95
-// from: FreeBSD: src/sys/sys/time.h,v 1.43 2000/03/20 14:09:05 phk Exp
-//	$FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
+}
 
 type timespec = struct {
 	tv_sec  time_t
 	tv_nsec int64
-} /* /usr/include/sys/_timespec.h:46:1 */
+}
 
-// Structure defined by POSIX.1b to be like a itimerval, but with
-// timespecs. Used in the timer_*() system calls.
 type itimerspec = struct {
 	it_interval struct {
 		tv_sec  time_t
@@ -3964,351 +1616,57 @@ type itimerspec = struct {
 		tv_sec  time_t
 		tv_nsec int64
 	}
-} /* /usr/include/sys/timespec.h:60:1 */
+}
 
-type fd_mask = uint64 /* /usr/include/sys/select.h:46:19 */
+type fd_mask = uint64
 
-type sigset_t = __sigset /* /usr/include/sys/select.h:51:20 */
+type sigset_t = __sigset
 
-// Select uses bit masks of file descriptors in longs.  These macros
-// manipulate such bit fields (the filesystem macros use chars).
-// FD_SETSIZE may be defined by the user, but the default here should
-// be enough for most uses.
+type fd_set1 = struct{ __fds_bits [16]uint64 }
 
-type fd_set1 = struct{ __fds_bits [16]uint64 } /* /usr/include/sys/select.h:73:9 */
-
-// Select uses bit masks of file descriptors in longs.  These macros
-// manipulate such bit fields (the filesystem macros use chars).
-// FD_SETSIZE may be defined by the user, but the default here should
-// be enough for most uses.
-
-type fd_set = fd_set1 /* /usr/include/sys/select.h:75:3 */ // select(2)
+type fd_set = fd_set1
 
 type crypt_data = struct {
 	initialized int32
 	__buf       [256]int8
-} /* /usr/include/unistd.h:489:1 */
+}
 
-// 11 was EAGAIN
+type errno_t = int32
 
-// math software
-
-// non-blocking and interrupt i/o
-
-// ipc/network software -- argument errors
-
-// ipc/network software -- operational errors
-
-// should be rearranged
-
-// quotas & mush
-
-// Network File System
-
-// ISO/IEC 9899:2011 K.3.2.2
-type errno_t = int32 /* /usr/include/errno.h:204:13 */
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1990, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)stdlib.h	8.5 (Berkeley) 5/19/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2003 Marcel Moolenaar
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-//
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-// OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-// IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-// THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-type rune_t = int32 /* /usr/include/stdlib.h:46:18 */
+type rune_t = int32
 
 type div_t = struct {
 	quot int32
 	rem  int32
-} /* /usr/include/stdlib.h:66:3 */
+}
 
 type ldiv_t = struct {
 	quot int64
 	rem  int64
-} /* /usr/include/stdlib.h:71:3 */
+}
 
-// Functions added in C99 which we make conditionally available in the
-// BSD^C89 namespace if the compiler supports `long long'.
-// The #if test is more complicated than it ought to be because
-// __BSD_VISIBLE implies __ISO_C_VISIBLE == 1999 *even if* `long long'
-// is not supported in the compilation environment (which therefore means
-// that it can't really be ISO C99).
-//
-// (The only other extension made by C99 in thie header is _Exit().)
-// LONGLONG
 type lldiv_t = struct {
 	quot int64
 	rem  int64
-} /* /usr/include/stdlib.h:142:3 */ // getsubopt(3) external variable
+}
 
-// K.3.6
-type constraint_handler_t = uintptr /* /usr/include/stdlib.h:349:14 */
+type constraint_handler_t = uintptr
 
-// -
-// Copyright (c) 2011, 2012 The FreeBSD Foundation
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
+type locale_t = uintptr
 
-type locale_t = uintptr /* /usr/include/xlocale/_strings.h:30:25 */
-
-// Use inline functions if we are allowed to and the compiler supports them.
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Paul Borman at Krystal Technologies.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)runetype.h	8.1 (Berkeley) 6/2/93
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-3-Clause
-//
-// Copyright (c) 1991, 1993
-//	The Regents of the University of California.  All rights reserved.
-//
-// This code is derived from software contributed to Berkeley by
-// Berkeley Software Design, Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the University nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
-// $FreeBSD$
-
-// -
-// SPDX-License-Identifier: BSD-2-Clause-FreeBSD
-//
-// Copyright (c) 2002 Mike Barcroft <mike@FreeBSD.org>
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
-// $FreeBSD$
-
-// The lower 8 bits of runetype[] contain the digit value of the rune.
 type _RuneEntry = struct {
 	__min   int32
 	__max   int32
 	__map   int32
 	_       [4]byte
 	__types uintptr
-} /* /usr/include/runetype.h:55:3 */
+}
 
 type _RuneRange = struct {
 	__nranges int32
 	_         [4]byte
 	__ranges  uintptr
-} /* /usr/include/runetype.h:60:3 */
+}
 
 type _RuneLocale = struct {
 	__magic        [8]int8
@@ -4326,17 +1684,16 @@ type _RuneLocale = struct {
 	__variable     uintptr
 	__variable_len int32
 	_              [4]byte
-} /* /usr/include/runetype.h:85:3 */
+}
 
-func __getCurrentRuneLocale(tls *libc.TLS) uintptr { /* /usr/include/runetype.h:95:35: */
-
+func __getCurrentRuneLocale(tls *libc.TLS) uintptr {
 	if libc.X_ThreadRuneLocale != 0 {
 		return libc.X_ThreadRuneLocale
 	}
 	return libc.X_CurrentRuneLocale
 }
 
-func __maskrune(tls *libc.TLS, _c int32, _f uint64) int32 { /* /usr/include/_ctype.h:100:1: */
+func __maskrune(tls *libc.TLS, _c int32, _f uint64) int32 {
 	return int32(func() uint64 {
 		if _c < 0 || _c >= int32(1)<<8 {
 			return libc.X___runetype(tls, _c)
@@ -4345,22 +1702,20 @@ func __maskrune(tls *libc.TLS, _c int32, _f uint64) int32 { /* /usr/include/_cty
 	}() & _f)
 }
 
-func __sbmaskrune(tls *libc.TLS, _c int32, _f uint64) int32 { /* /usr/include/_ctype.h:107:1: */
+func __sbmaskrune(tls *libc.TLS, _c int32, _f uint64) int32 {
 	if _c < 0 || _c >= libc.X__mb_sb_limit {
 		return 0
 	}
 	return int32(*(*uint64)(unsafe.Pointer(__getCurrentRuneLocale(tls) + 64 + uintptr(_c)*8)) & _f)
 }
 
-func __sbistype(tls *libc.TLS, _c int32, _f uint64) int32 { /* /usr/include/_ctype.h:120:1: */
+func __sbistype(tls *libc.TLS, _c int32, _f uint64) int32 {
 	return libc.BoolInt32(!!(__sbmaskrune(tls, _c, _f) != 0))
 }
 
-func __sbmaskrune_l(tls *libc.TLS, __c int32, __f uint64, __loc locale_t) int32 { /* /usr/include/xlocale/_ctype.h:103:1: */
+func __sbmaskrune_l(tls *libc.TLS, __c int32, __f uint64, __loc locale_t) int32 {
 	bp := tls.Alloc(4)
 	defer tls.Free(4)
-
-	// var __limit int32 at bp, 4
 
 	var runes uintptr = libc.X__runes_for_locale(tls, __loc, bp)
 	if __c < 0 || __c >= *(*int32)(unsafe.Pointer(bp)) {
@@ -4369,27 +1724,10 @@ func __sbmaskrune_l(tls *libc.TLS, __c int32, __f uint64, __loc locale_t) int32 
 	return int32(*(*uint64)(unsafe.Pointer(runes + 64 + uintptr(__c)*8)) & __f)
 }
 
-func __sbistype_l(tls *libc.TLS, __c int32, __f uint64, __loc locale_t) int32 { /* /usr/include/xlocale/_ctype.h:112:1: */
+func __sbistype_l(tls *libc.TLS, __c int32, __f uint64, __loc locale_t) int32 {
 	return libc.BoolInt32(!!(__sbmaskrune_l(tls, __c, __f, __loc) != 0))
 }
 
-// POSIX.1-2001 specifies _tolower() and _toupper() to be macros equivalent to
-// tolower() and toupper() respectively, minus extra checking to ensure that
-// the argument is a lower or uppercase letter respectively.  We've chosen to
-// implement these macros with the same error checking as tolower() and
-// toupper() since this doesn't violate the specification itself, only its
-// intent.  We purposely leave _tolower() and _toupper() undocumented to
-// discourage their use.
-//
-// XXX isascii() and toascii() should similarly be undocumented.
-
-// The suffix to append to the child command lines, if any
-
-// The directory separator character(s)
-
-// Mark a parameter as unused to suppress compiler warnings
-
-// Global data
 type Global = struct {
 	argv0            uintptr
 	zVfs             uintptr
@@ -4408,31 +1746,11 @@ type Global = struct {
 	nTest            int32
 	iTimeout         int32
 	bSync            int32
-} /* testdata/sqlite-src-3390300/mptest/mptest.c:72:8 */
+}
 
-// POSIX.1-2001 specifies _tolower() and _toupper() to be macros equivalent to
-// tolower() and toupper() respectively, minus extra checking to ensure that
-// the argument is a lower or uppercase letter respectively.  We've chosen to
-// implement these macros with the same error checking as tolower() and
-// toupper() since this doesn't violate the specification itself, only its
-// intent.  We purposely leave _tolower() and _toupper() undocumented to
-// discourage their use.
-//
-// XXX isascii() and toascii() should similarly be undocumented.
+var g Global
 
-// The suffix to append to the child command lines, if any
-
-// The directory separator character(s)
-
-// Mark a parameter as unused to suppress compiler warnings
-
-// Global data
-var g Global /* testdata/sqlite-src-3390300/mptest/mptest.c:90:3: */
-
-// Default timeout
-
-// Print a message adding zPrefix[] to the beginning of every line.
-func printWithPrefix(tls *libc.TLS, pOut uintptr, zPrefix uintptr, zMsg uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:98:13: */
+func printWithPrefix(tls *libc.TLS, pOut uintptr, zPrefix uintptr, zMsg uintptr) {
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
@@ -4448,8 +1766,7 @@ func printWithPrefix(tls *libc.TLS, pOut uintptr, zPrefix uintptr, zMsg uintptr)
 	}
 }
 
-// Compare two pointers to strings, where the pointers might be NULL.
-func safe_strcmp(tls *libc.TLS, a uintptr, b uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:111:12: */
+func safe_strcmp(tls *libc.TLS, a uintptr, b uintptr) int32 {
 	if a == b {
 		return 0
 	}
@@ -4462,23 +1779,7 @@ func safe_strcmp(tls *libc.TLS, a uintptr, b uintptr) int32 { /* testdata/sqlite
 	return libc.Xstrcmp(tls, a, b)
 }
 
-// Return TRUE if string z[] matches glob pattern zGlob[].
-// Return FALSE if the pattern does not match.
-//
-// Globbing rules:
-//
-//	 '*'       Matches any sequence of zero or more characters.
-//
-//	 '?'       Matches exactly one character.
-//
-//	[...]      Matches one character from the enclosed list of
-//	           characters.
-//
-//	[^...]     Matches one character not in the enclosed list.
-//
-//	 '#'       Matches any sequence of one or more digits with an
-//	           optional + or - sign in front
-func strglob(tls *libc.TLS, zGlob uintptr, z uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:136:5: */
+func strglob(tls *libc.TLS, zGlob uintptr, z uintptr) int32 {
 	var c int32
 	var c2 int32
 	var invert int32
@@ -4572,22 +1873,19 @@ func strglob(tls *libc.TLS, zGlob uintptr, z uintptr) int32 { /* testdata/sqlite
 	return libc.Bool32(int32(*(*int8)(unsafe.Pointer(z))) == 0)
 }
 
-// Close output stream pOut if it is not stdout or stderr
-func maybeClose(tls *libc.TLS, pOut uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:208:13: */
+func maybeClose(tls *libc.TLS, pOut uintptr) {
 	if pOut != libc.X__stdoutp && pOut != libc.X__stderrp {
 		libc.Xfclose(tls, pOut)
 	}
 }
 
-// Print an error message
-func errorMessage(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:215:13: */
+func errorMessage(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	bp := tls.Alloc(38)
 	defer tls.Free(38)
 
 	var ap va_list
 	_ = ap
 	var zMsg uintptr
-	// var zPrefix [30]int8 at bp+8, 30
 
 	ap = va
 	zMsg = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
@@ -4605,15 +1903,13 @@ func errorMessage(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqli
 	g.nError++
 }
 
-// Print an error message and then quit.
-func fatalError(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:241:13: */
+func fatalError(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	bp := tls.Alloc(38)
 	defer tls.Free(38)
 
 	var ap va_list
 	_ = ap
 	var zMsg uintptr
-	// var zPrefix [30]int8 at bp+8, 30
 
 	ap = va
 	zMsg = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
@@ -4642,15 +1938,13 @@ func fatalError(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite
 	libc.Xexit(tls, 1)
 }
 
-// Print a log message
-func logMessage(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:276:13: */
+func logMessage(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	bp := tls.Alloc(38)
 	defer tls.Free(38)
 
 	var ap va_list
 	_ = ap
 	var zMsg uintptr
-	// var zPrefix [30]int8 at bp+8, 30
 
 	ap = va
 	zMsg = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
@@ -4663,8 +1957,7 @@ func logMessage(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite
 	sqlite3.Xsqlite3_free(tls, zMsg)
 }
 
-// Return the length of a string omitting trailing whitespace
-func clipLength(tls *libc.TLS, z uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:294:12: */
+func clipLength(tls *libc.TLS, z uintptr) int32 {
 	var n int32 = int32(libc.Xstrlen(tls, z))
 	for n > 0 && __sbistype(tls, int32(uint8(*(*int8)(unsafe.Pointer(z + uintptr(n-1))))), uint64(X_CTYPE_S)) != 0 {
 		n--
@@ -4672,23 +1965,21 @@ func clipLength(tls *libc.TLS, z uintptr) int32 { /* testdata/sqlite-src-3390300
 	return n
 }
 
-// Auxiliary SQL function to return the name of the VFS
-func vfsNameFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:303:13: */
+func vfsNameFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) {
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
 	var db uintptr = sqlite3.Xsqlite3_context_db_handle(tls, context)
-	*(*uintptr)(unsafe.Pointer(bp /* zVfs */)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp)) = uintptr(0)
 	_ = argc
 	_ = argv
 	sqlite3.Xsqlite3_file_control(tls, db, ts+65, SQLITE_FCNTL_VFSNAME, bp)
 	if *(*uintptr)(unsafe.Pointer(bp)) != 0 {
-		sqlite3.Xsqlite3_result_text(tls, context, *(*uintptr)(unsafe.Pointer(bp /* zVfs */)), -1, *(*uintptr)(unsafe.Pointer(&struct{ f func(*libc.TLS, uintptr) }{sqlite3.Xsqlite3_free})))
+		sqlite3.Xsqlite3_result_text(tls, context, *(*uintptr)(unsafe.Pointer(bp)), -1, *(*uintptr)(unsafe.Pointer(&struct{ f func(*libc.TLS, uintptr) }{sqlite3.Xsqlite3_free})))
 	}
 }
 
-// Busy handler with a g.iTimeout-millisecond timeout
-func busyHandler(tls *libc.TLS, pCD uintptr, count int32) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:321:12: */
+func busyHandler(tls *libc.TLS, pCD uintptr, count int32) int32 {
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -4703,8 +1994,7 @@ func busyHandler(tls *libc.TLS, pCD uintptr, count int32) int32 { /* testdata/sq
 	return 1
 }
 
-// SQL Trace callback
-func sqlTraceCallback(tls *libc.TLS, NotUsed1 uintptr, zSql uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:334:13: */
+func sqlTraceCallback(tls *libc.TLS, NotUsed1 uintptr, zSql uintptr) {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -4712,8 +2002,7 @@ func sqlTraceCallback(tls *libc.TLS, NotUsed1 uintptr, zSql uintptr) { /* testda
 	logMessage(tls, ts+89, libc.VaList(bp, clipLength(tls, zSql), zSql))
 }
 
-// SQL error log callback
-func sqlErrorCallback(tls *libc.TLS, pArg uintptr, iErrCode int32, zMsg uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:342:13: */
+func sqlErrorCallback(tls *libc.TLS, pArg uintptr, iErrCode int32, zMsg uintptr) {
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
@@ -4734,8 +2023,7 @@ func sqlErrorCallback(tls *libc.TLS, pArg uintptr, iErrCode int32, zMsg uintptr)
 	}
 }
 
-// Prepare an SQL statement.  Issue a fatal error if unable.
-func prepareSql(tls *libc.TLS, zFormat uintptr, va uintptr) uintptr { /* testdata/sqlite-src-3390300/mptest/mptest.c:357:21: */
+func prepareSql(tls *libc.TLS, zFormat uintptr, va uintptr) uintptr {
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
@@ -4743,21 +2031,20 @@ func prepareSql(tls *libc.TLS, zFormat uintptr, va uintptr) uintptr { /* testdat
 	_ = ap
 	var zSql uintptr
 	var rc int32
-	*(*uintptr)(unsafe.Pointer(bp + 16 /* pStmt */)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp + 16)) = uintptr(0)
 	ap = va
 	zSql = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
 	_ = ap
 	rc = sqlite3.Xsqlite3_prepare_v2(tls, g.db, zSql, -1, bp+16, uintptr(0))
 	if rc != SQLITE_OK {
-		sqlite3.Xsqlite3_finalize(tls, *(*uintptr)(unsafe.Pointer(bp + 16 /* pStmt */)))
+		sqlite3.Xsqlite3_finalize(tls, *(*uintptr)(unsafe.Pointer(bp + 16)))
 		fatalError(tls, ts+122, libc.VaList(bp, sqlite3.Xsqlite3_errmsg(tls, g.db), zSql))
 	}
 	sqlite3.Xsqlite3_free(tls, zSql)
-	return *(*uintptr)(unsafe.Pointer(bp + 16 /* pStmt */))
+	return *(*uintptr)(unsafe.Pointer(bp + 16))
 }
 
-// Run arbitrary SQL.  Issue a fatal error on failure.
-func runSql(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:377:13: */
+func runSql(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -4775,8 +2062,7 @@ func runSql(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/sqlite-src
 	sqlite3.Xsqlite3_free(tls, zSql)
 }
 
-// Try to run arbitrary SQL.  Return success code.
-func trySql(tls *libc.TLS, zFormat uintptr, va uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:394:12: */
+func trySql(tls *libc.TLS, zFormat uintptr, va uintptr) int32 {
 	var ap va_list
 	_ = ap
 	var zSql uintptr
@@ -4789,26 +2075,22 @@ func trySql(tls *libc.TLS, zFormat uintptr, va uintptr) int32 { /* testdata/sqli
 	return rc
 }
 
-// Structure for holding an arbitrary length string
 type String1 = struct {
 	z      uintptr
 	n      int32
 	nAlloc int32
-} /* testdata/sqlite-src-3390300/mptest/mptest.c:408:9 */
+}
 
-// Structure for holding an arbitrary length string
-type String = String1 /* testdata/sqlite-src-3390300/mptest/mptest.c:408:23 */
+type String = String1
 
-// Free a string
-func stringFree(tls *libc.TLS, p uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:416:13: */
+func stringFree(tls *libc.TLS, p uintptr) {
 	if (*String)(unsafe.Pointer(p)).z != 0 {
 		sqlite3.Xsqlite3_free(tls, (*String)(unsafe.Pointer(p)).z)
 	}
 	libc.Xmemset(tls, p, 0, uint64(unsafe.Sizeof(String{})))
 }
 
-// Append n bytes of text to a string.  If n<0 append the entire string.
-func stringAppend(tls *libc.TLS, p uintptr, z uintptr, n int32) { /* testdata/sqlite-src-3390300/mptest/mptest.c:422:13: */
+func stringAppend(tls *libc.TLS, p uintptr, z uintptr, n int32) {
 	if n < 0 {
 		n = int32(libc.Xstrlen(tls, z))
 	}
@@ -4826,8 +2108,7 @@ func stringAppend(tls *libc.TLS, p uintptr, z uintptr, n int32) { /* testdata/sq
 	*(*int8)(unsafe.Pointer((*String)(unsafe.Pointer(p)).z + uintptr((*String)(unsafe.Pointer(p)).n))) = int8(0)
 }
 
-// Reset a string to an empty string
-func stringReset(tls *libc.TLS, p uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:437:13: */
+func stringReset(tls *libc.TLS, p uintptr) {
 	if (*String)(unsafe.Pointer(p)).z == uintptr(0) {
 		stringAppend(tls, p, ts+143, 1)
 	}
@@ -4835,8 +2116,7 @@ func stringReset(tls *libc.TLS, p uintptr) { /* testdata/sqlite-src-3390300/mpte
 	*(*int8)(unsafe.Pointer((*String)(unsafe.Pointer(p)).z)) = int8(0)
 }
 
-// Append a new token onto the end of the string
-func stringAppendTerm(tls *libc.TLS, p uintptr, z uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:444:13: */
+func stringAppendTerm(tls *libc.TLS, p uintptr, z uintptr) {
 	var i int32
 	if (*String)(unsafe.Pointer(p)).n != 0 {
 		stringAppend(tls, p, ts+143, 1)
@@ -4867,8 +2147,7 @@ func stringAppendTerm(tls *libc.TLS, p uintptr, z uintptr) { /* testdata/sqlite-
 	stringAppend(tls, p, ts+149, 1)
 }
 
-// Callback function for evalSql()
-func evalCallback(tls *libc.TLS, pCData uintptr, argc int32, argv uintptr, azCol uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:474:12: */
+func evalCallback(tls *libc.TLS, pCData uintptr, argc int32, argv uintptr, azCol uintptr) int32 {
 	var p uintptr = pCData
 	var i int32
 	_ = azCol
@@ -4878,9 +2157,7 @@ func evalCallback(tls *libc.TLS, pCData uintptr, argc int32, argv uintptr, azCol
 	return 0
 }
 
-// Run arbitrary SQL and record the results in an output string
-// given by the first parameter.
-func evalSql(tls *libc.TLS, p uintptr, zFormat uintptr, va uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:486:12: */
+func evalSql(tls *libc.TLS, p uintptr, zFormat uintptr, va uintptr) int32 {
 	bp := tls.Alloc(46)
 	defer tls.Free(46)
 
@@ -4888,59 +2165,52 @@ func evalSql(tls *libc.TLS, p uintptr, zFormat uintptr, va uintptr) int32 { /* t
 	_ = ap
 	var zSql uintptr
 	var rc int32
-	*(*uintptr)(unsafe.Pointer(bp + 8 /* zErrMsg */)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp + 8)) = uintptr(0)
 	ap = va
 	zSql = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
 	_ = ap
 
 	rc = sqlite3.Xsqlite3_exec(tls, g.db, zSql, *(*uintptr)(unsafe.Pointer(&struct {
 		f func(*libc.TLS, uintptr, int32, uintptr, uintptr) int32
-	}{evalCallback})), p, bp+8 /* &zErrMsg */)
+	}{evalCallback})), p, bp+8)
 	sqlite3.Xsqlite3_free(tls, zSql)
 	if rc != 0 {
-		// var zErr [30]int8 at bp+16, 30
-
 		sqlite3.Xsqlite3_snprintf(tls, int32(unsafe.Sizeof([30]int8{})), bp+16, ts+151, libc.VaList(bp, rc))
 		stringAppendTerm(tls, p, bp+16)
 		if *(*uintptr)(unsafe.Pointer(bp + 8)) != 0 {
-			stringAppendTerm(tls, p, *(*uintptr)(unsafe.Pointer(bp + 8 /* zErrMsg */)))
-			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 8 /* zErrMsg */)))
+			stringAppendTerm(tls, p, *(*uintptr)(unsafe.Pointer(bp + 8)))
+			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 8)))
 		}
 	}
 	return rc
 }
 
-// Auxiliary SQL function to recursively evaluate SQL.
-func evalFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:512:13: */
+func evalFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) {
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
 	var db uintptr = sqlite3.Xsqlite3_context_db_handle(tls, context)
 	var zSql uintptr = sqlite3.Xsqlite3_value_text(tls, *(*uintptr)(unsafe.Pointer(argv)))
-	// var res String at bp, 16
 
-	*(*uintptr)(unsafe.Pointer(bp + 16 /* zErrMsg */)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp + 16)) = uintptr(0)
 	var rc int32
 	_ = argc
 	libc.Xmemset(tls, bp, 0, uint64(unsafe.Sizeof(String{})))
 	rc = sqlite3.Xsqlite3_exec(tls, db, zSql, *(*uintptr)(unsafe.Pointer(&struct {
 		f func(*libc.TLS, uintptr, int32, uintptr, uintptr) int32
-	}{evalCallback})), bp /* &res */, bp+16 /* &zErrMsg */)
+	}{evalCallback})), bp, bp+16)
 	if *(*uintptr)(unsafe.Pointer(bp + 16)) != 0 {
-		sqlite3.Xsqlite3_result_error(tls, context, *(*uintptr)(unsafe.Pointer(bp + 16 /* zErrMsg */)), -1)
-		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 16 /* zErrMsg */)))
+		sqlite3.Xsqlite3_result_error(tls, context, *(*uintptr)(unsafe.Pointer(bp + 16)), -1)
+		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 16)))
 	} else if rc != 0 {
 		sqlite3.Xsqlite3_result_error_code(tls, context, rc)
 	} else {
-		sqlite3.Xsqlite3_result_text(tls, context, (*String)(unsafe.Pointer(bp /* &res */)).z, -1, libc.UintptrFromInt32(-1))
+		sqlite3.Xsqlite3_result_text(tls, context, (*String)(unsafe.Pointer(bp)).z, -1, libc.UintptrFromInt32(-1))
 	}
 	stringFree(tls, bp)
 }
 
-// Look up the next task for client iClient in the database.
-// Return the task script and the task number and mark that
-// task as being under way.
-func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr, pzTaskName uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:541:12: */
+func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr, pzTaskName uintptr) int32 {
 	bp := tls.Alloc(80)
 	defer tls.Free(80)
 
@@ -4977,7 +2247,6 @@ func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr
 			return SQLITE_DONE
 		}
 		pStmt = prepareSql(tls,
-
 			ts+346, libc.VaList(bp+40, iClient))
 		rc = sqlite3.Xsqlite3_step(tls, pStmt)
 		if rc == SQLITE_ROW {
@@ -4988,7 +2257,6 @@ func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr
 			*(*uintptr)(unsafe.Pointer(pzTaskName)) = sqlite3.Xsqlite3_mprintf(tls, ts+438, libc.VaList(bp+48, sqlite3.Xsqlite3_column_text(tls, pStmt, 2)))
 			sqlite3.Xsqlite3_finalize(tls, pStmt)
 			runSql(tls,
-
 				ts+441, libc.VaList(bp+56, taskId))
 			g.iTimeout = DEFAULT_TIMEOUT
 			runSql(tls, ts+326, 0)
@@ -5016,14 +2284,11 @@ func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr
 	return int32(0)
 }
 
-// Mark a script as having finished.   Remove the CLIENT table entry
-// if bShutdown is true.
-func finishScript(tls *libc.TLS, iClient int32, taskId int32, bShutdown int32) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:623:12: */
+func finishScript(tls *libc.TLS, iClient int32, taskId int32, bShutdown int32) int32 {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
 	runSql(tls,
-
 		ts+620, libc.VaList(bp, taskId))
 	if bShutdown != 0 {
 		runSql(tls, ts+295, libc.VaList(bp+8, iClient))
@@ -5031,10 +2296,7 @@ func finishScript(tls *libc.TLS, iClient int32, taskId int32, bShutdown int32) i
 	return SQLITE_OK
 }
 
-// Start up a client process for iClient, if it is not already
-// running.  If the client is already running, then this routine
-// is a no-op.
-func startClient(tls *libc.TLS, iClient int32) { /* testdata/sqlite-src-3390300/mptest/mptest.c:638:13: */
+func startClient(tls *libc.TLS, iClient int32) {
 	bp := tls.Alloc(96)
 	defer tls.Free(96)
 
@@ -5065,8 +2327,7 @@ func startClient(tls *libc.TLS, iClient int32) { /* testdata/sqlite-src-3390300/
 	}
 }
 
-// Read the entire content of a file into memory
-func readFile(tls *libc.TLS, zFilename uintptr) uintptr { /* testdata/sqlite-src-3390300/mptest/mptest.c:684:13: */
+func readFile(tls *libc.TLS, zFilename uintptr) uintptr {
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -5086,8 +2347,7 @@ func readFile(tls *libc.TLS, zFilename uintptr) uintptr { /* testdata/sqlite-src
 	return z
 }
 
-// Return the length of the next token.
-func tokenLength(tls *libc.TLS, z uintptr, pnLine uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:704:12: */
+func tokenLength(tls *libc.TLS, z uintptr, pnLine uintptr) int32 {
 	var n int32 = 0
 	if __sbistype(tls, int32(uint8(*(*int8)(unsafe.Pointer(z)))), uint64(X_CTYPE_S)) != 0 || int32(*(*int8)(unsafe.Pointer(z))) == '/' && int32(*(*int8)(unsafe.Pointer(z + 1))) == '*' {
 		var inC int32 = 0
@@ -5142,8 +2402,7 @@ func tokenLength(tls *libc.TLS, z uintptr, pnLine uintptr) int32 { /* testdata/s
 	return n
 }
 
-// Copy a single token into a string buffer.
-func extractToken(tls *libc.TLS, zIn uintptr, nIn int32, zOut uintptr, nOut int32) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:749:12: */
+func extractToken(tls *libc.TLS, zIn uintptr, nIn int32, zOut uintptr, nOut int32) int32 {
 	var i int32
 	if nIn <= 0 {
 		*(*int8)(unsafe.Pointer(zOut)) = int8(0)
@@ -5156,8 +2415,7 @@ func extractToken(tls *libc.TLS, zIn uintptr, nIn int32, zOut uintptr, nOut int3
 	return i
 }
 
-// Find the number of characters up to the start of the next "--end" token.
-func findEnd(tls *libc.TLS, z uintptr, pnLine uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:763:12: */
+func findEnd(tls *libc.TLS, z uintptr, pnLine uintptr) int32 {
 	var n int32 = 0
 	for *(*int8)(unsafe.Pointer(z + uintptr(n))) != 0 && (libc.Xstrncmp(tls, z+uintptr(n), ts+896, uint64(5)) != 0 || !(__sbistype(tls, int32(uint8(*(*int8)(unsafe.Pointer(z + uintptr(n+5))))), uint64(X_CTYPE_S)) != 0)) {
 		n = n + tokenLength(tls, z+uintptr(n), pnLine)
@@ -5165,10 +2423,7 @@ func findEnd(tls *libc.TLS, z uintptr, pnLine uintptr) int32 { /* testdata/sqlit
 	return n
 }
 
-// Find the number of characters up to the first character past the
-// of the next "--endif"  or "--else" token. Nested --if commands are
-// also skipped.
-func findEndif(tls *libc.TLS, z uintptr, stopAtElse int32, pnLine uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:776:12: */
+func findEndif(tls *libc.TLS, z uintptr, stopAtElse int32, pnLine uintptr) int32 {
 	var n int32 = 0
 	for *(*int8)(unsafe.Pointer(z + uintptr(n))) != 0 {
 		var len int32 = tokenLength(tls, z+uintptr(n), pnLine)
@@ -5186,8 +2441,7 @@ func findEndif(tls *libc.TLS, z uintptr, stopAtElse int32, pnLine uintptr) int32
 	return n
 }
 
-// Wait for a client process to complete all its tasks
-func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:798:13: */
+func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uintptr) {
 	bp := tls.Alloc(32)
 	defer tls.Free(32)
 
@@ -5195,12 +2449,10 @@ func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uint
 	var rc int32
 	if iClient > 0 {
 		pStmt = prepareSql(tls,
-
 			ts+922,
 			libc.VaList(bp, iClient))
 	} else {
 		pStmt = prepareSql(tls,
-
 			ts+1018, 0)
 	}
 	g.iTimeout = 0
@@ -5214,7 +2466,7 @@ func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uint
 	g.iTimeout = DEFAULT_TIMEOUT
 	if rc != SQLITE_DONE {
 		if zErrPrefix == uintptr(0) {
-			zErrPrefix = ts + 1099 /* "" */
+			zErrPrefix = ts + 1099
 		}
 		if iClient > 0 {
 			errorMessage(tls, ts+1100, libc.VaList(bp+8, zErrPrefix, iClient))
@@ -5224,8 +2476,7 @@ func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uint
 	}
 }
 
-// Return a pointer to the tail of a filename
-func filenameTail(tls *libc.TLS, z uintptr) uintptr { /* testdata/sqlite-src-3390300/mptest/mptest.c:836:13: */
+func filenameTail(tls *libc.TLS, z uintptr) uintptr {
 	var i int32
 	var j int32
 	for i = libc.AssignInt32(&j, 0); *(*int8)(unsafe.Pointer(z + uintptr(i))) != 0; i++ {
@@ -5236,8 +2487,7 @@ func filenameTail(tls *libc.TLS, z uintptr) uintptr { /* testdata/sqlite-src-339
 	return z + uintptr(j)
 }
 
-// Interpret zArg as a boolean value.  Return either 0 or 1.
-func booleanValue(tls *libc.TLS, zArg uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:845:12: */
+func booleanValue(tls *libc.TLS, zArg uintptr) int32 {
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -5260,22 +2510,17 @@ func booleanValue(tls *libc.TLS, zArg uintptr) int32 { /* testdata/sqlite-src-33
 	return 0
 }
 
-// This routine exists as a convenient place to set a debugger
-// breakpoint.
-func test_breakpoint(tls *libc.TLS) { /* testdata/sqlite-src-3390300/mptest/mptest.c:864:13: */
+func test_breakpoint(tls *libc.TLS) {
 	atomic.AddInt32(&cnt, 1)
 }
 
-var cnt int32 = 0 /* testdata/sqlite-src-3390300/mptest/mptest.c:864:56 */
+var cnt int32 = 0
 
-// Maximum number of arguments to a --command
-
-// Run a script.
-func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFilename uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:872:13: */
+func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFilename uintptr) {
 	bp := tls.Alloc(1610)
 	defer tls.Free(1610)
 
-	*(*int32)(unsafe.Pointer(bp + 376 /* lineno */)) = 1
+	*(*int32)(unsafe.Pointer(bp + 376)) = 1
 	var prevLine int32 = 1
 	var ii int32 = 0
 	var iBegin int32 = 0
@@ -5284,18 +2529,11 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 	var j int32
 	var len int32
 	var nArg int32
-	// var sResult String at bp+360, 16
-
-	// var zCmd [30]int8 at bp+380, 30
-
-	// var zError [1000]int8 at bp+610, 1000
-
-	// var azArg [2][100]int8 at bp+410, 200
 
 	libc.Xmemset(tls, bp+360, 0, uint64(unsafe.Sizeof(String{})))
 	stringReset(tls, bp+360)
 	for libc.AssignInt32(&c, int32(*(*int8)(unsafe.Pointer(zScript + uintptr(ii))))) != 0 {
-		prevLine = *(*int32)(unsafe.Pointer(bp + 376 /* lineno */))
+		prevLine = *(*int32)(unsafe.Pointer(bp + 376))
 		len = tokenLength(tls, zScript+uintptr(ii), bp+376)
 		if __sbistype(tls, int32(uint8(c)), uint64(X_CTYPE_S)) != 0 || c == '/' && int32(*(*int8)(unsafe.Pointer(zScript + uintptr(ii+1)))) == '*' {
 			ii = ii + len
@@ -5306,7 +2544,6 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			continue
 		}
 
-		// Run any prior SQL before processing the new --command
 		if ii > iBegin {
 			var zSql uintptr = sqlite3.Xsqlite3_mprintf(tls, ts+1202, libc.VaList(bp, ii-iBegin, zScript+uintptr(iBegin)))
 			evalSql(tls, bp+360, zSql, 0)
@@ -5314,7 +2551,6 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			iBegin = ii + len
 		}
 
-		// Parse the --command
 		if g.iTrace >= 2 {
 			logMessage(tls, ts+1202, libc.VaList(bp+16, len, zScript+uintptr(ii)))
 		}
@@ -5333,56 +2569,25 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			*(*int8)(unsafe.Pointer(bp + 410 + uintptr(libc.PostIncInt32(&j, 1))*100)) = int8(0)
 		}
 
-		//  --sleep N
-		//
-		// Pause for N milliseconds
 		if libc.Xstrcmp(tls, bp+380, ts+1207) == 0 {
 			sqlite3.Xsqlite3_sleep(tls, libc.Xatoi(tls, bp+410))
-		} else
-
-		//   --exit N
-		//
-		// Exit this process.  If N>0 then exit without shutting down
-		// SQLite.  (In other words, simulate a crash.)
-		if libc.Xstrcmp(tls, bp+380, ts+1213) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1213) == 0 {
 			var rc int32 = libc.Xatoi(tls, bp+410)
 			finishScript(tls, iClient, taskId, 1)
 			if rc == 0 {
 				sqlite3.Xsqlite3_close(tls, g.db)
 			}
 			libc.Xexit(tls, rc)
-		} else
-
-		//   --testcase NAME
-		//
-		// Begin a new test case.  Announce in the log that the test case
-		// has begun.
-		if libc.Xstrcmp(tls, bp+380, ts+1218) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1218) == 0 {
 			if g.iTrace == 1 {
 				logMessage(tls, ts+1202, libc.VaList(bp+32, len-1, zScript+uintptr(ii)))
 			}
 			stringReset(tls, bp+360)
-		} else
-
-		//   --finish
-		//
-		// Mark the current task as having finished, even if it is not.
-		// This can be used in conjunction with --exit to simulate a crash.
-		if libc.Xstrcmp(tls, bp+380, ts+1227) == 0 && iClient > 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1227) == 0 && iClient > 0 {
 			finishScript(tls, iClient, taskId, 1)
-		} else
-
-		//  --reset
-		//
-		// Reset accumulated results back to an empty string
-		if libc.Xstrcmp(tls, bp+380, ts+1234) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1234) == 0 {
 			stringReset(tls, bp+360)
-		} else
-
-		//  --match ANSWER...
-		//
-		// Check to see if output matches ANSWER.  Report an error if not.
-		if libc.Xstrcmp(tls, bp+380, ts+1240) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1240) == 0 {
 			var jj int32
 			var zAns uintptr = zScript + uintptr(ii)
 			for jj = 7; jj < len-1 && __sbistype(tls, int32(uint8(*(*int8)(unsafe.Pointer(zAns + uintptr(jj))))), uint64(X_CTYPE_S)) != 0; jj++ {
@@ -5390,18 +2595,11 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			zAns += uintptr(jj)
 			if len-jj-1 != (*String)(unsafe.Pointer(bp+360)).n || libc.Xstrncmp(tls, (*String)(unsafe.Pointer(bp+360)).z, zAns, uint64(len-jj-1)) != 0 {
 				errorMessage(tls, ts+1246,
-					libc.VaList(bp+48, prevLine, zFilename, len-jj-1, zAns, (*String)(unsafe.Pointer(bp+360 /* &sResult */)).z))
+					libc.VaList(bp+48, prevLine, zFilename, len-jj-1, zAns, (*String)(unsafe.Pointer(bp+360)).z))
 			}
 			g.nTest++
 			stringReset(tls, bp+360)
-		} else
-
-		//  --glob ANSWER...
-		//  --notglob ANSWER....
-		//
-		// Check to see if output does or does not match the glob pattern
-		// ANSWER.
-		if libc.Xstrcmp(tls, bp+380, ts+1291) == 0 || libc.Xstrcmp(tls, bp+380, ts+1296) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1291) == 0 || libc.Xstrcmp(tls, bp+380, ts+1296) == 0 {
 			var jj int32
 			var zAns uintptr = zScript + uintptr(ii)
 			var zCopy uintptr
@@ -5412,24 +2610,14 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			zCopy = sqlite3.Xsqlite3_mprintf(tls, ts+1202, libc.VaList(bp+88, len-jj-1, zAns))
 			if libc.Bool32(sqlite3.Xsqlite3_strglob(tls, zCopy, (*String)(unsafe.Pointer(bp+360)).z) == 0)^isGlob != 0 {
 				errorMessage(tls, ts+1304,
-					libc.VaList(bp+104, prevLine, zFilename, zCopy, (*String)(unsafe.Pointer(bp+360 /* &sResult */)).z))
+					libc.VaList(bp+104, prevLine, zFilename, zCopy, (*String)(unsafe.Pointer(bp+360)).z))
 			}
 			sqlite3.Xsqlite3_free(tls, zCopy)
 			g.nTest++
 			stringReset(tls, bp+360)
-		} else
-
-		//  --output
-		//
-		// Output the result of the previous SQL.
-		if libc.Xstrcmp(tls, bp+380, ts+1347) == 0 {
-			logMessage(tls, ts+438, libc.VaList(bp+136, (*String)(unsafe.Pointer(bp+360 /* &sResult */)).z))
-		} else
-
-		//  --source FILENAME
-		//
-		// Run a subscript from a separate file.
-		if libc.Xstrcmp(tls, bp+380, ts+1354) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1347) == 0 {
+			logMessage(tls, ts+438, libc.VaList(bp+136, (*String)(unsafe.Pointer(bp+360)).z))
+		} else if libc.Xstrcmp(tls, bp+380, ts+1354) == 0 {
 			var zNewFile uintptr
 			var zNewScript uintptr
 			var zToDel uintptr = uintptr(0)
@@ -5452,22 +2640,12 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 				logMessage(tls, ts+1388, libc.VaList(bp+176, zNewFile))
 			}
 			sqlite3.Xsqlite3_free(tls, zToDel)
-		} else
-
-		//  --print MESSAGE....
-		//
-		// Output the remainder of the line to the log file
-		if libc.Xstrcmp(tls, bp+380, ts+1405) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1405) == 0 {
 			var jj int32
 			for jj = 7; jj < len && __sbistype(tls, int32(uint8(*(*int8)(unsafe.Pointer(zScript + uintptr(ii+jj))))), uint64(X_CTYPE_S)) != 0; jj++ {
 			}
 			logMessage(tls, ts+1202, libc.VaList(bp+184, len-jj, zScript+uintptr(ii)+uintptr(jj)))
-		} else
-
-		//  --if EXPR
-		//
-		// Skip forward to the next matching --endif or --else if EXPR is false.
-		if libc.Xstrcmp(tls, bp+380, ts+1411) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1411) == 0 {
 			var jj int32
 			var rc int32
 			var pStmt uintptr
@@ -5479,40 +2657,15 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 				ii = ii + findEndif(tls, zScript+uintptr(ii)+uintptr(len), 1, bp+376)
 			}
 			sqlite3.Xsqlite3_finalize(tls, pStmt)
-		} else
-
-		//  --else
-		//
-		// This command can only be encountered if currently inside an --if that
-		// is true.  Skip forward to the next matching --endif.
-		if libc.Xstrcmp(tls, bp+380, ts+1426) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1426) == 0 {
 			ii = ii + findEndif(tls, zScript+uintptr(ii)+uintptr(len), 0, bp+376)
-		} else
-
-		//  --endif
-		//
-		// This command can only be encountered if currently inside an --if that
-		// is true or an --else of a false if.  This is a no-op.
-		if libc.Xstrcmp(tls, bp+380, ts+1431) == 0 {
-			// no-op
-		} else
-
-		//  --start CLIENT
-		//
-		// Start up the given client.
-		if libc.Xstrcmp(tls, bp+380, ts+1437) == 0 && iClient == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1431) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1437) == 0 && iClient == 0 {
 			var iNewClient int32 = libc.Xatoi(tls, bp+410)
 			if iNewClient > 0 {
 				startClient(tls, iNewClient)
 			}
-		} else
-
-		//  --wait CLIENT TIMEOUT
-		//
-		// Wait until all tasks complete for the given client.  If CLIENT is
-		// "all" then wait for all clients to complete.  Wait no longer than
-		// TIMEOUT milliseconds (default 10,000)
-		if libc.Xstrcmp(tls, bp+380, ts+1443) == 0 && iClient == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1443) == 0 && iClient == 0 {
 			var iTimeout int32
 			if nArg >= 2 {
 				iTimeout = libc.Xatoi(tls, bp+410+1*100)
@@ -5522,15 +2675,7 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			sqlite3.Xsqlite3_snprintf(tls, int32(unsafe.Sizeof([1000]int8{})), bp+610, ts+1448,
 				libc.VaList(bp+216, prevLine, zFilename))
 			waitForClient(tls, libc.Xatoi(tls, bp+410), iTimeout, bp+610)
-		} else
-
-		//  --task CLIENT
-		//     <task-content-here>
-		//  --end
-		//
-		// Assign work to a client.  Start the client if it is not running
-		// already.
-		if libc.Xstrcmp(tls, bp+380, ts+1463) == 0 && iClient == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1463) == 0 && iClient == 0 {
 			var iTarget int32 = libc.Xatoi(tls, bp+410)
 			var iEnd int32
 			var zTask uintptr
@@ -5555,20 +2700,9 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			iEnd = iEnd + tokenLength(tls, zScript+uintptr(ii)+uintptr(len)+uintptr(iEnd), bp+376)
 			len = len + iEnd
 			iBegin = ii + len
-		} else
-
-		//  --breakpoint
-		//
-		// This command calls "test_breakpoint()" which is a routine provided
-		// as a convenient place to set a debugger breakpoint.
-		if libc.Xstrcmp(tls, bp+380, ts+1567) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1567) == 0 {
 			test_breakpoint(tls)
-		} else
-
-		//  --show-sql-errors BOOLEAN
-		//
-		// Turn display of SQL errors on and off.
-		if libc.Xstrcmp(tls, bp+380, ts+1578) == 0 {
+		} else if libc.Xstrcmp(tls, bp+380, ts+1578) == 0 {
 			g.bIgnoreSqlErrors = func() int32 {
 				if nArg >= 1 {
 					return libc.BoolInt32(!(booleanValue(tls, bp+410) != 0))
@@ -5589,13 +2723,7 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 	stringFree(tls, bp+360)
 }
 
-// Look for a command-line option.  If present, return a pointer.
-// Return NULL if missing.
-//
-// hasArg==0 means the option is a flag.  It is either present or not.
-// hasArg==1 means the option has an argument.  Return a pointer to the
-// argument.
-func findOption(tls *libc.TLS, azArg uintptr, pnArg uintptr, zOption uintptr, hasArg int32) uintptr { /* testdata/sqlite-src-3390300/mptest/mptest.c:1201:13: */
+func findOption(tls *libc.TLS, azArg uintptr, pnArg uintptr, zOption uintptr, hasArg int32) uintptr {
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -5640,8 +2768,7 @@ func findOption(tls *libc.TLS, azArg uintptr, pnArg uintptr, zOption uintptr, ha
 	return zReturn
 }
 
-// Print a usage message for the program and exit
-func usage(tls *libc.TLS, argv0 uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:1241:13: */
+func usage(tls *libc.TLS, argv0 uintptr) {
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -5654,13 +2781,11 @@ func usage(tls *libc.TLS, argv0 uintptr) { /* testdata/sqlite-src-3390300/mptest
 	}
 	libc.Xfprintf(tls, libc.X__stderrp, ts+1678, libc.VaList(bp, zTail))
 	libc.Xfprintf(tls, libc.X__stderrp,
-
 		ts+1717, 0)
 	libc.Xexit(tls, 1)
 }
 
-// Report on unrecognized arguments
-func unrecognizedArguments(tls *libc.TLS, argv0 uintptr, nArg int32, azArg uintptr) { /* testdata/sqlite-src-3390300/mptest/mptest.c:1265:13: */
+func unrecognizedArguments(tls *libc.TLS, argv0 uintptr, nArg int32, azArg uintptr) {
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -5673,20 +2798,16 @@ func unrecognizedArguments(tls *libc.TLS, argv0 uintptr, nArg int32, azArg uintp
 	libc.Xexit(tls, 1)
 }
 
-func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/sqlite-src-3390300/mptest/mptest.c:1279:18: */
+func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
 	bp := tls.Alloc(264)
 	defer tls.Free(264)
 
 	var zClient uintptr
 	var iClient int32
-	// var n int32 at bp+232, 4
 
 	var i int32
 	var openFlags int32 = SQLITE_OPEN_READWRITE
 	var rc int32
-	// var zScript uintptr at bp+240, 8
-
-	// var taskId int32 at bp+248, 4
 
 	var zTrace uintptr
 	var zCOption uintptr
@@ -5694,7 +2815,7 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/sqlite-s
 	var zNRep uintptr
 	var nRep int32 = 1
 	var iRep int32
-	var iTmout int32 = 0 // Default: no timeout
+	var iTmout int32 = 0
 	var zTmout uintptr
 
 	g.argv0 = *(*uintptr)(unsafe.Pointer(argv))
@@ -5708,12 +2829,11 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/sqlite-s
 	}
 	if libc.Xstrcmp(tls, sqlite3.Xsqlite3_sourceid(tls), ts+2330) != 0 {
 		libc.Xfprintf(tls, libc.X__stderrp,
-
 			ts+2415,
 			libc.VaList(bp, sqlite3.Xsqlite3_sourceid(tls), ts+2330))
 		libc.Xexit(tls, 1)
 	}
-	*(*int32)(unsafe.Pointer(bp + 232 /* n */)) = argc - 2
+	*(*int32)(unsafe.Pointer(bp + 232)) = argc - 2
 	sqlite3.Xsqlite3_snprintf(tls, int32(unsafe.Sizeof([32]int8{})), uintptr(unsafe.Pointer(&g))+64, ts+2475, libc.VaList(bp+16, libc.Xgetpid(tls)))
 	zJMode = findOption(tls, argv+uintptr(2)*8, bp+232, ts+2487, 1)
 	zNRep = findOption(tls, argv+uintptr(2)*8, bp+232, ts+2499, 1)
@@ -5781,9 +2901,9 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/sqlite-s
 				libc.Xprintf(tls, ts+2735,
 					libc.VaList(bp+88, func() uintptr {
 						if nTry > 5 {
-							return ts + 2764 /* "still " */
+							return ts + 2764
 						}
-						return ts + 1099 /* "" */
+						return ts + 1099
 					}(), g.zDbFile))
 			}
 			rc = libc.Xunlink(tls, g.zDbFile)
@@ -5831,26 +2951,26 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/sqlite-s
 	}
 	if iClient > 0 {
 		if *(*int32)(unsafe.Pointer(bp + 232)) > 0 {
-			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232 /* n */)), argv+uintptr(2)*8)
+			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232)), argv+uintptr(2)*8)
 		}
 		if g.iTrace != 0 {
 			logMessage(tls, ts+2889, 0)
 		}
 		for 1 != 0 {
-			*(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)) = uintptr(0)
+			*(*uintptr)(unsafe.Pointer(bp + 256)) = uintptr(0)
 			rc = startScript(tls, iClient, bp+240, bp+248, bp+256)
 			if rc == SQLITE_DONE {
 				break
 			}
 			if g.iTrace != 0 {
-				logMessage(tls, ts+2902, libc.VaList(bp+136, *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)), *(*int32)(unsafe.Pointer(bp + 248 /* taskId */))))
+				logMessage(tls, ts+2902, libc.VaList(bp+136, *(*uintptr)(unsafe.Pointer(bp + 256)), *(*int32)(unsafe.Pointer(bp + 248))))
 			}
-			runScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248 /* taskId */)), *(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)), *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)))
+			runScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248)), *(*uintptr)(unsafe.Pointer(bp + 240)), *(*uintptr)(unsafe.Pointer(bp + 256)))
 			if g.iTrace != 0 {
-				logMessage(tls, ts+2916, libc.VaList(bp+152, *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)), *(*int32)(unsafe.Pointer(bp + 248 /* taskId */))))
+				logMessage(tls, ts+2916, libc.VaList(bp+152, *(*uintptr)(unsafe.Pointer(bp + 256)), *(*int32)(unsafe.Pointer(bp + 248))))
 			}
-			finishScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248 /* taskId */)), 0)
-			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)))
+			finishScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248)), 0)
+			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 256)))
 			sqlite3.Xsqlite3_sleep(tls, 10)
 		}
 		if g.iTrace != 0 {
@@ -5863,22 +2983,21 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/sqlite-s
 			fatalError(tls, ts+2939, 0)
 		}
 		if *(*int32)(unsafe.Pointer(bp + 232)) > 1 {
-			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232 /* n */)), argv+uintptr(2)*8)
+			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232)), argv+uintptr(2)*8)
 		}
 		runSql(tls,
-
 			ts+2963, 0)
-		*(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)) = readFile(tls, *(*uintptr)(unsafe.Pointer(argv + 2*8)))
+		*(*uintptr)(unsafe.Pointer(bp + 240)) = readFile(tls, *(*uintptr)(unsafe.Pointer(argv + 2*8)))
 		for iRep = 1; iRep <= nRep; iRep++ {
 			if g.iTrace != 0 {
 				logMessage(tls, ts+3399, libc.VaList(bp+168, *(*uintptr)(unsafe.Pointer(argv + 2*8)), iRep))
 			}
-			runScript(tls, 0, 0, *(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)), *(*uintptr)(unsafe.Pointer(argv + 2*8)))
+			runScript(tls, 0, 0, *(*uintptr)(unsafe.Pointer(bp + 240)), *(*uintptr)(unsafe.Pointer(argv + 2*8)))
 			if g.iTrace != 0 {
 				logMessage(tls, ts+3427, libc.VaList(bp+184, *(*uintptr)(unsafe.Pointer(argv + 2*8)), iRep))
 			}
 		}
-		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)))
+		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 240)))
 		waitForClient(tls, 0, 2000, ts+3453)
 		trySql(tls, ts+3473, 0)
 		sqlite3.Xsqlite3_sleep(tls, 10)

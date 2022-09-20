@@ -1,4 +1,4 @@
-until unconvert -fastmath . &> /dev/null
+until unconvert -fastmath -all ./...
 do
-	unconvert -fastmath -apply . &> /dev/null
+	unconvert -fastmath -apply -all ./...
 done
