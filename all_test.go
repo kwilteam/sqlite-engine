@@ -884,13 +884,6 @@ func TestConcurrentProcesses(t *testing.T) {
 		t.Skip("skipping test in short mode")
 	}
 
-	// The current riscv64 board seems too slow for the hardcoded timeouts.
-	// Same goes for freebsd/arm{,64} in qemu.
-	switch fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH) {
-	case "linux/riscv64", "freebsd/arm", "freebsd/arm64":
-		t.Skip("skipping test")
-	}
-
 	dir, err := os.MkdirTemp("", "sqlite-test-")
 	if err != nil {
 		t.Fatal(err)
@@ -961,7 +954,7 @@ outer:
 		}
 
 		fmt.Printf("exec: %s db %s\n", filepath.FromSlash(bin), script)
-		out, err := exec.Command(filepath.FromSlash(bin), "db", "--timeout", "60000", script).CombinedOutput()
+		out, err := exec.Command(filepath.FromSlash(bin), "db", "--timeout", "6000000", script).CombinedOutput()
 		if err != nil {
 			t.Fatalf("%s\n%v", out, err)
 		}
