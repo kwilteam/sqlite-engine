@@ -3846,9 +3846,7 @@ const (
 	RUSAGE_SELF = 0
 
 	RUSAGE_CHILDREN = -1
-)
 
-const (
 	RUSAGE_THREAD = 1
 )
 

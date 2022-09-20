@@ -94,11 +94,15 @@ darwin_arm64:
 	go generate 2>&1 | tee log-generate
 	go test -c -o /dev/null
 
-# 3900x/VBox
+# 3900x/qemu
 freebsd_amd64:
 	@echo "Should be executed only on freebsd/amd64."
 	go generate 2>&1 | tee log-generate
 	go test -c -o /dev/null
+
+freebsd_arm64:
+	go run addport.go freebsd_amd64 freebsd_arm64
+	GOOS=freebsd GOARCH=arm64 go test -c -o /dev/null
 
 # 3900x/qemu
 freebsd_386:
