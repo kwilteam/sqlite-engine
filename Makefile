@@ -31,7 +31,7 @@ uncomment:
 	uncomment -v -gofmt libtest/sqlite*.go internal/mptest/main*.go internal/testfixture/testfixture*.go speedtest1/main*.go vfs/vfs*.go
 	uncomment -v -gofmt -keep-godoc lib/sqlite*.go
 
-# $ go install modernc.org/uncomment@latest
+# $ go install github.com/mdempsky/unconvert@latest
 unconvert:
 	./unconvert.sh && echo ok || echo fail
 

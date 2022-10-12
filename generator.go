@@ -253,12 +253,12 @@ var (
 		sz       int
 		dev      bool
 	}{
-		{sqliteDir, "https://www.sqlite.org/2022/sqlite-amalgamation-3390300.zip", 2457, false},
-		{sqliteSrcDir, "https://www.sqlite.org/2022/sqlite-src-3390300.zip", 12814, false},
+		{sqliteDir, "https://www.sqlite.org/2022/sqlite-amalgamation-3390400.zip", 2457, false},
+		{sqliteSrcDir, "https://www.sqlite.org/2022/sqlite-src-3390400.zip", 12814, false},
 	}
 
-	sqliteDir    = filepath.FromSlash("testdata/sqlite-amalgamation-3390300")
-	sqliteSrcDir = filepath.FromSlash("testdata/sqlite-src-3390300")
+	sqliteDir    = filepath.FromSlash("testdata/sqlite-amalgamation-3390400")
+	sqliteSrcDir = filepath.FromSlash("testdata/sqlite-src-3390400")
 )
 
 func download() {
