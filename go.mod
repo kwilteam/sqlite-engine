@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/mattn/go-sqlite3 v1.14.15
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
-	modernc.org/ccgo/v3 v3.16.10
+	modernc.org/ccgo/v3 v3.16.11
 	modernc.org/libc v1.20.3
 	modernc.org/mathutil v1.5.0
 	modernc.org/tcl v1.15.0
