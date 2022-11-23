@@ -3,6 +3,7 @@ module modernc.org/sqlite
 go 1.17
 
 require (
+	github.com/google/pprof v0.0.0-20221118152302-e6195bd50e26
 	github.com/mattn/go-sqlite3 v1.14.15
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
 	modernc.org/ccgo/v3 v3.16.13

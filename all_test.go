@@ -23,6 +23,7 @@ import (
 	"regexp"
 	"runtime"
 	"runtime/debug"
+	"runtime/pprof"
 	"strconv"
 	"strings"
 	"sync"
@@ -30,6 +31,7 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/google/pprof/profile"
 	"modernc.org/libc"
 	"modernc.org/mathutil"
 	sqlite3 "modernc.org/sqlite/lib"
@@ -148,6 +150,75 @@ func tempDB(t testing.TB) (string, *sql.DB) {
 	}
 
 	return dir, db
+}
+
+// https://gitlab.com/cznic/sqlite/issues/118
+func TestIssue118(t *testing.T) {
+	// Many iterations generate enough objects to ensure pprof
+	// profile captures the samples that we are seeking below
+	for i := 0; i < 10000; i++ {
+		func() {
+			db, err := sql.Open("sqlite", ":memory:")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer db.Close()
+			if _, err := db.Exec(`CREATE TABLE t1(v TEXT)`); err != nil {
+				t.Fatal(err)
+			}
+			var val []byte
+			if _, err := db.Exec(`INSERT INTO t1(v) VALUES(?)`, val); err != nil {
+				t.Fatal(err)
+			}
+			var count int
+			err = db.QueryRow("SELECT MAX(_ROWID_) FROM t1").Scan(&count)
+			if err != nil || count <= 0 {
+				t.Fatalf("Query failure: %d, %s", count, err)
+			}
+		}()
+	}
+
+	// Dump & read heap sample
+	var buf bytes.Buffer
+	if err := pprof.Lookup("heap").WriteTo(&buf, 0); err != nil {
+		t.Fatalf("Error dumping heap profile: %s", err)
+	}
+	heapProfile, err := profile.Parse(&buf)
+	if err != nil {
+		t.Fatalf("Error parsing heap profile: %s", err)
+	}
+
+	// Profile.SampleType indexes map into Sample.Values below. We are
+	// looking for "inuse_*" values, and skip the "alloc_*" ones
+	inUseIndexes := make([]int, 0, 2)
+	for i, t := range heapProfile.SampleType {
+		if strings.HasPrefix(t.Type, "inuse_") {
+			inUseIndexes = append(inUseIndexes, i)
+		}
+	}
+
+	// Look for samples from "libc.NewTLS" and insure that they have nothing in-use
+	for _, sample := range heapProfile.Sample {
+		isInUse := false
+		for _, idx := range inUseIndexes {
+			isInUse = isInUse || sample.Value[idx] > 0
+		}
+		if !isInUse {
+			continue
+		}
+
+		isNewTLS := false
+		sampleStack := []string{}
+		for _, location := range sample.Location {
+			for _, line := range location.Line {
+				sampleStack = append(sampleStack, fmt.Sprintf("%s (%s:%d)", line.Function.Name, line.Function.Filename, line.Line))
+				isNewTLS = isNewTLS || strings.Contains(line.Function.Name, "libc.NewTLS")
+			}
+		}
+		if isNewTLS {
+			t.Errorf("Memory leak via libc.NewTLS:\n%s\n", strings.Join(sampleStack, "\n"))
+		}
+	}
 }
 
 // https://gitlab.com/cznic/sqlite/issues/100
