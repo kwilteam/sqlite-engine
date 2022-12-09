@@ -2376,7 +2376,12 @@ func TestIssue65(t *testing.T) {
 
 	testIssue65(t, db, true)
 
-	if db, err = sql.Open("sqlite", filepath.Join(tempDir, "testissue65b.sqlite")+"?_pragma=busy_timeout%3d10000"); err != nil {
+	// go1.20rc1, linux/ppc64le VM
+	// 10000 FAIL
+	// 20000 PASS, FAIL
+	// 40000 FAIL
+	// 80000 PASS, PASS
+	if db, err = sql.Open("sqlite", filepath.Join(tempDir, "testissue65b.sqlite")+"?_pragma=busy_timeout%3d80000"); err != nil {
 		t.Fatalf("Failed to open database: %v", err)
 	}
 
