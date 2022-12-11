@@ -34,3 +34,7 @@ func TestIssue65CGo(t *testing.T) {
 
 	testIssue65(t, db, false)
 }
+
+func BenchmarkConcurrentCGo(b *testing.B) {
+	benchmarkConcurrent(b, "sqlite3")
+}

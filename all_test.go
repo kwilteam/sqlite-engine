@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 	"unsafe"
@@ -2778,5 +2779,254 @@ func TestVFS(t *testing.T) {
 	t.Log(b)
 	if g, e := fmt.Sprint(b), "[123 xyz abc def]"; g != e {
 		t.Fatalf("got %q, expected %q", g, e)
+	}
+}
+
+// y = 2^n, except for n < 0 y = 0.
+func exp(n int) int {
+	if n < 0 {
+		return 0
+	}
+
+	return 1 << n
+}
+
+func BenchmarkConcurrent(b *testing.B) {
+	benchmarkConcurrent(b, "sqlite")
+}
+
+func benchmarkConcurrent(b *testing.B, drv string) {
+	for _, mode := range []string{"reads", "writes"} {
+		for _, writers := range []int{0, 1, 10, 100, 100} {
+			for _, readers := range []int{0, 1, 10, 100, 100} {
+				if mode == "reads" && readers == 0 || mode == "writes" && writers == 0 {
+					continue
+				}
+
+				tag := fmt.Sprintf("%s readers %d writers %d %s", mode, readers, writers, drv)
+				b.Run(tag, func(b *testing.B) { c := &concurrentBenchmark{}; c.run(b, readers, writers, drv, mode) })
+			}
+		}
+	}
+}
+
+// The code for concurrentBenchmark is derived from/heavily inspired by
+// original code available at
+//
+//	https://github.com/kalafut/go-sqlite-bench
+//
+// MIT License
+//
+// Copyright (c) 2022 Jim Kalafut
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+type concurrentBenchmark struct {
+	b     *testing.B
+	drv   string
+	fn    string
+	start chan struct{}
+	stop  chan struct{}
+	wg    sync.WaitGroup
+
+	reads   int32
+	records int32
+	writes  int32
+}
+
+func (c *concurrentBenchmark) run(b *testing.B, readers, writers int, drv, mode string) {
+	c.b = b
+	c.drv = drv
+	b.ReportAllocs()
+	dir := b.TempDir()
+	fn := filepath.Join(dir, "test.db")
+	c.makeDB(fn)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		b.StopTimer()
+		c.start = make(chan struct{})
+		c.stop = make(chan struct{})
+		c.makeReaders(readers)
+		c.makeWriters(writers)
+		time.AfterFunc(time.Second, func() { close(c.stop) })
+		b.StartTimer()
+		close(c.start)
+		c.wg.Wait()
+	}
+	switch mode {
+	case "reads":
+		b.ReportMetric(float64(c.reads), "reads/s")
+	case "writes":
+		b.ReportMetric(float64(c.writes), "writes/s")
+	}
+}
+
+func (c *concurrentBenchmark) randString(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = byte(65 + rand.Intn(26))
+	}
+	return string(b)
+}
+
+func (c *concurrentBenchmark) mustExec(db *sql.DB, sql string, args ...interface{}) {
+	var err error
+	for i := 0; i < 100; i++ {
+		if _, err = db.Exec(sql, args...); err != nil {
+			if c.retry(err) {
+				continue
+			}
+
+			c.b.Fatalf("%s %v: %v", sql, args, err)
+		}
+
+		return
+	}
+	c.b.Fatalf("%s %v: %v", sql, args, err)
+}
+
+func (c *concurrentBenchmark) makeDB(fn string) {
+	const quota = 1e6
+	c.fn = fn
+	db := c.makeConn()
+
+	defer db.Close()
+
+	c.mustExec(db, "CREATE TABLE foo (id INTEGER NOT NULL PRIMARY KEY, name TEXT)")
+	tx, err := db.Begin()
+	if err != nil {
+		c.b.Fatal(err)
+	}
+
+	stmt, err := tx.Prepare("INSERT INTO FOO(name) VALUES($1)")
+	if err != nil {
+		c.b.Fatal(err)
+	}
+
+	for i := int32(0); i < quota; i++ {
+		if _, err = stmt.Exec(c.randString(30)); err != nil {
+			c.b.Fatal(err)
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		c.b.Fatal(err)
+	}
+
+	c.records = quota
+}
+
+func (c *concurrentBenchmark) makeConn() *sql.DB {
+	db, err := sql.Open(c.drv, c.fn)
+	if err != nil {
+		c.b.Fatal(err)
+	}
+
+	db.SetMaxOpenConns(0)
+	c.mustExec(db, "PRAGMA busy_timeout=10000")
+	c.mustExec(db, "PRAGMA synchronous=NORMAL")
+	c.mustExec(db, "PRAGMA journal_mode=WAL")
+	return db
+}
+
+func (c *concurrentBenchmark) retry(err error) bool {
+	s := strings.ToLower(err.Error())
+	return strings.Contains(s, "lock") || strings.Contains(s, "busy")
+}
+
+func (c *concurrentBenchmark) makeReaders(n int) {
+	c.wg.Add(n)
+	for i := 0; i < n; i++ {
+		go func() {
+			db := c.makeConn()
+
+			defer func() {
+				db.Close()
+				c.wg.Done()
+			}()
+
+			<-c.start
+
+			for i := 1; ; i++ {
+				select {
+				case <-c.stop:
+					return
+				default:
+				}
+
+				recs := atomic.LoadInt32(&c.records)
+				id := recs * int32(i) % recs
+				rows, err := db.Query("SELECT * FROM foo WHERE id=$1", id)
+				if err != nil {
+					if c.retry(err) {
+						continue
+					}
+
+					c.b.Fatal(err)
+				}
+
+				for rows.Next() {
+					var id int
+					var name string
+					err = rows.Scan(&id, &name)
+					if err != nil {
+						c.b.Fatal(err)
+					}
+				}
+				atomic.AddInt32(&c.reads, 1)
+			}
+
+		}()
+	}
+}
+
+func (c *concurrentBenchmark) makeWriters(n int) {
+	c.wg.Add(n)
+	for i := 0; i < n; i++ {
+		go func() {
+			db := c.makeConn()
+
+			defer func() {
+				db.Close()
+				c.wg.Done()
+			}()
+
+			<-c.start
+
+			for {
+				select {
+				case <-c.stop:
+					return
+				default:
+				}
+
+				if _, err := db.Exec("INSERT INTO FOO(name) VALUES($1)", c.randString(30)); err != nil {
+					if c.retry(err) {
+						continue
+					}
+
+					c.b.Fatal(err)
+				}
+
+				atomic.AddInt32(&c.records, 1)
+				atomic.AddInt32(&c.writes, 1)
+			}
+
+		}()
 	}
 }
