@@ -164,6 +164,7 @@ var (
 		"-DHAVE_USLEEP",
 		"-DLONGDOUBLE_TYPE=double",
 		"-DSQLITE_CORE",
+		"-DSQLITE_DEFAULT_MEMSTATUS=0",
 		"-DSQLITE_ENABLE_COLUMN_METADATA",
 		"-DSQLITE_ENABLE_FTS5",
 		"-DSQLITE_ENABLE_GEOPOLY",
@@ -208,8 +209,8 @@ var (
 		"-DHAVE_USLEEP",
 		"-DLONGDOUBLE_TYPE=double",
 		"-DSQLITE_CKSUMVFS_STATIC",
-		"-DSQLITE_CORE",                   // testfixture
-		"-DSQLITE_DEFAULT_MEMSTATUS=0",    // bug reported https://sqlite.org/forum/info/d8dfd4771689be35, fixed in https://sqlite.org/src/info/3c5e63c22ffbfeb6
+		"-DSQLITE_CORE", // testfixture
+		"-DSQLITE_DEFAULT_MEMSTATUS=1",
 		"-DSQLITE_DEFAULT_PAGE_SIZE=1024", // testfixture, hardcoded. See file_pages in autovacuum.test.
 		"-DSQLITE_ENABLE_BYTECODE_VTAB",   // testfixture
 		"-DSQLITE_ENABLE_COLUMN_METADATA",
@@ -264,12 +265,12 @@ var (
 		sz       int
 		dev      bool
 	}{
-		{sqliteDir, "https://www.sqlite.org/2022/sqlite-amalgamation-3400000.zip", 2457, false},
-		{sqliteSrcDir, "https://www.sqlite.org/2022/sqlite-src-3400000.zip", 12814, false},
+		{sqliteDir, "https://www.sqlite.org/2022/sqlite-amalgamation-3400100.zip", 2457, false},
+		{sqliteSrcDir, "https://www.sqlite.org/2022/sqlite-src-3400100.zip", 12814, false},
 	}
 
-	sqliteDir    = filepath.FromSlash("testdata/sqlite-amalgamation-3400000")
-	sqliteSrcDir = filepath.FromSlash("testdata/sqlite-src-3400000")
+	sqliteDir    = filepath.FromSlash("testdata/sqlite-amalgamation-3400100")
+	sqliteSrcDir = filepath.FromSlash("testdata/sqlite-src-3400100")
 )
 
 func download() {

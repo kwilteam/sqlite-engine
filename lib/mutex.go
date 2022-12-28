@@ -69,23 +69,81 @@ var (
 	mutexVFS1   mutex
 	mutexVFS2   mutex
 	mutexVFS3   mutex
+
+	MutexCounters = libc.NewPerfCounter([]string{
+		"enter-fast",
+		"enter-recursive",
+		"enter-recursive-loop",
+		"try-fast",
+		"try-recursive",
+	})
+	MutexEnterCallers = libc.NewStackCapture(4)
+
+	mutexes mutexPool
 )
 
+type mutexPool struct {
+	sync.Mutex
+	a        []*[256]mutex
+	freeList []int
+}
+
+func (m *mutexPool) alloc(recursive bool) uintptr {
+	m.Lock()
+
+	defer m.Unlock()
+
+	n := len(m.freeList)
+	if n == 0 {
+		outer := len(m.a) << 8
+		m.a = append(m.a, &[256]mutex{})
+		for i := 0; i < 256; i++ {
+			m.freeList = append(m.freeList, outer+i)
+		}
+		n = len(m.freeList)
+	}
+	ix := m.freeList[n-1]
+	outer := ix >> 8
+	inner := ix & 255
+	m.freeList = m.freeList[:n-1]
+	p := &m.a[outer][inner]
+	p.poolIndex = ix
+	p.recursive = recursive
+	return uintptr(unsafe.Pointer(p))
+}
+
+func (m *mutexPool) free(p uintptr) {
+	ix := (*mutex)(unsafe.Pointer(p)).poolIndex
+	*(*mutex)(unsafe.Pointer(p)) = mutex{}
+	m.Lock()
+
+	defer m.Unlock()
+
+	m.freeList = append(m.freeList, ix)
+}
+
 type mutex struct {
+	sync.Mutex
+	wait sync.Mutex
+
+	poolIndex int
+
 	cnt int32
 	id  int32
-	sync.Mutex
-	wait      sync.Mutex
+
 	recursive bool
 }
 
 func (m *mutex) enter(id int32) {
+	// MutexEnterCallers.Record()
 	if !m.recursive {
+		// MutexCounters.Inc(0)
 		m.Lock()
 		m.id = id
 		return
 	}
 
+	// MutexCounters.Inc(1)
 	for {
 		m.Lock()
 		switch m.id {
@@ -101,6 +159,7 @@ func (m *mutex) enter(id int32) {
 			return
 		}
 
+		// MutexCounters.Inc(2)
 		m.Unlock()
 		m.wait.Lock()
 		//lint:ignore SA2001 TODO report staticcheck issue
@@ -110,9 +169,11 @@ func (m *mutex) enter(id int32) {
 
 func (m *mutex) try(id int32) int32 {
 	if !m.recursive {
+		// MutexCounters.Inc(3)
 		return SQLITE_BUSY
 	}
 
+	// MutexCounters.Inc(4)
 	m.Lock()
 	switch m.id {
 	case 0:
@@ -216,11 +277,9 @@ func mutexAlloc(tls *libc.TLS, typ int32) uintptr {
 	}()
 	switch typ {
 	case SQLITE_MUTEX_FAST:
-		return libc.Xcalloc(tls, 1, types.Size_t(unsafe.Sizeof(mutex{})))
+		return mutexes.alloc(false)
 	case SQLITE_MUTEX_RECURSIVE:
-		p := libc.Xcalloc(tls, 1, types.Size_t(unsafe.Sizeof(mutex{})))
-		(*mutex)(unsafe.Pointer(p)).recursive = true
-		return p
+		return mutexes.alloc(true)
 	case SQLITE_MUTEX_STATIC_MASTER:
 		return uintptr(unsafe.Pointer(&mutexMaster))
 	case SQLITE_MUTEX_STATIC_MEM:
@@ -251,7 +310,7 @@ func mutexAlloc(tls *libc.TLS, typ int32) uintptr {
 }
 
 // void (*xMutexFree)(sqlite3_mutex *);
-func mutexFree(tls *libc.TLS, m uintptr) { libc.Xfree(tls, m) }
+func mutexFree(tls *libc.TLS, m uintptr) { mutexes.free(m) }
 
 // The sqlite3_mutex_enter() and sqlite3_mutex_try() routines attempt to enter
 // a mutex. If another thread is already within the mutex,

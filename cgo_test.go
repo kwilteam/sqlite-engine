@@ -36,5 +36,5 @@ func TestIssue65CGo(t *testing.T) {
 }
 
 func BenchmarkConcurrentCGo(b *testing.B) {
-	benchmarkConcurrent(b, "sqlite3")
+	benchmarkConcurrent(b, "sqlite3", []string{"sql", "drv"})
 }

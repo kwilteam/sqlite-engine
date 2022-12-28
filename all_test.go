@@ -13,6 +13,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/url"
 	"os"
@@ -2792,19 +2793,21 @@ func exp(n int) int {
 }
 
 func BenchmarkConcurrent(b *testing.B) {
-	benchmarkConcurrent(b, "sqlite")
+	benchmarkConcurrent(b, "sqlite", []string{"sql", "drv"})
 }
 
-func benchmarkConcurrent(b *testing.B, drv string) {
-	for _, mode := range []string{"reads", "writes"} {
-		for _, writers := range []int{0, 1, 10, 100, 100} {
-			for _, readers := range []int{0, 1, 10, 100, 100} {
-				if mode == "reads" && readers == 0 || mode == "writes" && writers == 0 {
-					continue
-				}
+func benchmarkConcurrent(b *testing.B, drv string, modes []string) {
+	for _, mode := range modes {
+		for _, measurement := range []string{"reads", "writes"} {
+			for _, writers := range []int{0, 1, 10, 100, 100} {
+				for _, readers := range []int{0, 1, 10, 100, 100} {
+					if measurement == "reads" && readers == 0 || measurement == "writes" && writers == 0 {
+						continue
+					}
 
-				tag := fmt.Sprintf("%s readers %d writers %d %s", mode, readers, writers, drv)
-				b.Run(tag, func(b *testing.B) { c := &concurrentBenchmark{}; c.run(b, readers, writers, drv, mode) })
+					tag := fmt.Sprintf("%s %s readers %d writers %d %s", mode, measurement, readers, writers, drv)
+					b.Run(tag, func(b *testing.B) { c := &concurrentBenchmark{}; c.run(b, readers, writers, drv, measurement, mode) })
+				}
 			}
 		}
 	}
@@ -2849,31 +2852,41 @@ type concurrentBenchmark struct {
 	writes  int32
 }
 
-func (c *concurrentBenchmark) run(b *testing.B, readers, writers int, drv, mode string) {
+func (c *concurrentBenchmark) run(b *testing.B, readers, writers int, drv, measurement, mode string) {
 	c.b = b
 	c.drv = drv
 	b.ReportAllocs()
 	dir := b.TempDir()
 	fn := filepath.Join(dir, "test.db")
+	sqlite3.MutexCounters.Disable()
+	sqlite3.MutexEnterCallers.Disable()
 	c.makeDB(fn)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
 		c.start = make(chan struct{})
 		c.stop = make(chan struct{})
-		c.makeReaders(readers)
-		c.makeWriters(writers)
+		sqlite3.MutexCounters.Disable()
+		sqlite3.MutexEnterCallers.Disable()
+		c.makeReaders(readers, mode)
+		c.makeWriters(writers, mode)
+		sqlite3.MutexCounters.Clear()
+		sqlite3.MutexCounters.Enable()
+		sqlite3.MutexEnterCallers.Clear()
+		//sqlite3.MutexEnterCallers.Enable()
 		time.AfterFunc(time.Second, func() { close(c.stop) })
 		b.StartTimer()
 		close(c.start)
 		c.wg.Wait()
 	}
-	switch mode {
+	switch measurement {
 	case "reads":
 		b.ReportMetric(float64(c.reads), "reads/s")
 	case "writes":
 		b.ReportMetric(float64(c.writes), "writes/s")
 	}
+	// b.Log(sqlite3.MutexCounters)
+	// b.Log(sqlite3.MutexEnterCallers)
 }
 
 func (c *concurrentBenchmark) randString(n int) string {
@@ -2884,30 +2897,46 @@ func (c *concurrentBenchmark) randString(n int) string {
 	return string(b)
 }
 
-func (c *concurrentBenchmark) mustExec(db *sql.DB, sql string, args ...interface{}) {
+func (c *concurrentBenchmark) mustExecSQL(db *sql.DB, sql string) {
 	var err error
 	for i := 0; i < 100; i++ {
-		if _, err = db.Exec(sql, args...); err != nil {
+		if _, err = db.Exec(sql); err != nil {
 			if c.retry(err) {
 				continue
 			}
 
-			c.b.Fatalf("%s %v: %v", sql, args, err)
+			c.b.Fatalf("%s: %v", sql, err)
 		}
 
 		return
 	}
-	c.b.Fatalf("%s %v: %v", sql, args, err)
+	c.b.Fatalf("%s: %v", sql, err)
+}
+
+func (c *concurrentBenchmark) mustExecDrv(db driver.Conn, sql string) {
+	var err error
+	for i := 0; i < 100; i++ {
+		if _, err = db.(driver.Execer).Exec(sql, nil); err != nil {
+			if c.retry(err) {
+				continue
+			}
+
+			c.b.Fatalf("%s: %v", sql, err)
+		}
+
+		return
+	}
+	c.b.Fatalf("%s: %v", sql, err)
 }
 
 func (c *concurrentBenchmark) makeDB(fn string) {
 	const quota = 1e6
 	c.fn = fn
-	db := c.makeConn()
+	db := c.makeSQLConn()
 
 	defer db.Close()
 
-	c.mustExec(db, "CREATE TABLE foo (id INTEGER NOT NULL PRIMARY KEY, name TEXT)")
+	c.mustExecSQL(db, "CREATE TABLE foo (id INTEGER NOT NULL PRIMARY KEY, name TEXT)")
 	tx, err := db.Begin()
 	if err != nil {
 		c.b.Fatal(err)
@@ -2929,19 +2958,56 @@ func (c *concurrentBenchmark) makeDB(fn string) {
 	}
 
 	c.records = quota
+
+	// Warm the cache.
+	rows, err := db.Query("SELECT * FROM foo")
+	if err != nil {
+		c.b.Fatal(err)
+	}
+
+	for rows.Next() {
+		var id int
+		var name string
+		err = rows.Scan(&id, &name)
+		if err != nil {
+			c.b.Fatal(err)
+		}
+	}
 }
 
-func (c *concurrentBenchmark) makeConn() *sql.DB {
+func (c *concurrentBenchmark) makeSQLConn() *sql.DB {
 	db, err := sql.Open(c.drv, c.fn)
 	if err != nil {
 		c.b.Fatal(err)
 	}
 
 	db.SetMaxOpenConns(0)
-	c.mustExec(db, "PRAGMA busy_timeout=10000")
-	c.mustExec(db, "PRAGMA synchronous=NORMAL")
-	c.mustExec(db, "PRAGMA journal_mode=WAL")
+	c.mustExecSQL(db, "PRAGMA busy_timeout=10000")
+	c.mustExecSQL(db, "PRAGMA synchronous=NORMAL")
+	c.mustExecSQL(db, "PRAGMA journal_mode=WAL")
 	return db
+}
+
+func (c *concurrentBenchmark) makeDrvConn() driver.Conn {
+	db, err := sql.Open(c.drv, c.fn)
+	if err != nil {
+		c.b.Fatal(err)
+	}
+
+	drv := db.Driver()
+	if err := db.Close(); err != nil {
+		c.b.Fatal(err)
+	}
+
+	conn, err := drv.Open(c.fn)
+	if err != nil {
+		c.b.Fatal(err)
+	}
+
+	c.mustExecDrv(conn, "PRAGMA busy_timeout=10000")
+	c.mustExecDrv(conn, "PRAGMA synchronous=NORMAL")
+	c.mustExecDrv(conn, "PRAGMA journal_mode=WAL")
+	return conn
 }
 
 func (c *concurrentBenchmark) retry(err error) bool {
@@ -2949,84 +3015,188 @@ func (c *concurrentBenchmark) retry(err error) bool {
 	return strings.Contains(s, "lock") || strings.Contains(s, "busy")
 }
 
-func (c *concurrentBenchmark) makeReaders(n int) {
+func (c *concurrentBenchmark) makeReaders(n int, mode string) {
+	var wait sync.WaitGroup
+	wait.Add(n)
 	c.wg.Add(n)
 	for i := 0; i < n; i++ {
-		go func() {
-			db := c.makeConn()
+		switch mode {
+		case "sql":
+			go func() {
+				db := c.makeSQLConn()
 
-			defer func() {
-				db.Close()
-				c.wg.Done()
-			}()
+				defer func() {
+					db.Close()
+					c.wg.Done()
+				}()
 
-			<-c.start
+				wait.Done()
+				<-c.start
 
-			for i := 1; ; i++ {
-				select {
-				case <-c.stop:
-					return
-				default:
-				}
-
-				recs := atomic.LoadInt32(&c.records)
-				id := recs * int32(i) % recs
-				rows, err := db.Query("SELECT * FROM foo WHERE id=$1", id)
-				if err != nil {
-					if c.retry(err) {
-						continue
+				for i := 1; ; i++ {
+					select {
+					case <-c.stop:
+						return
+					default:
 					}
 
-					c.b.Fatal(err)
-				}
-
-				for rows.Next() {
-					var id int
-					var name string
-					err = rows.Scan(&id, &name)
+					recs := atomic.LoadInt32(&c.records)
+					id := recs * int32(i) % recs
+					rows, err := db.Query("SELECT * FROM foo WHERE id=$1", id)
 					if err != nil {
+						if c.retry(err) {
+							continue
+						}
+
 						c.b.Fatal(err)
 					}
-				}
-				atomic.AddInt32(&c.reads, 1)
-			}
 
-		}()
-	}
-}
-
-func (c *concurrentBenchmark) makeWriters(n int) {
-	c.wg.Add(n)
-	for i := 0; i < n; i++ {
-		go func() {
-			db := c.makeConn()
-
-			defer func() {
-				db.Close()
-				c.wg.Done()
-			}()
-
-			<-c.start
-
-			for {
-				select {
-				case <-c.stop:
-					return
-				default:
-				}
-
-				if _, err := db.Exec("INSERT INTO FOO(name) VALUES($1)", c.randString(30)); err != nil {
-					if c.retry(err) {
-						continue
+					for rows.Next() {
+						var id int
+						var name string
+						err = rows.Scan(&id, &name)
+						if err != nil {
+							c.b.Fatal(err)
+						}
+					}
+					if err := rows.Close(); err != nil {
+						c.b.Fatal(err)
 					}
 
-					c.b.Fatal(err)
+					atomic.AddInt32(&c.reads, 1)
 				}
 
-				atomic.AddInt32(&c.records, 1)
-				atomic.AddInt32(&c.writes, 1)
-			}
+			}()
+		case "drv":
+			go func() {
+				conn := c.makeDrvConn()
 
-		}()
+				defer func() {
+					conn.Close()
+					c.wg.Done()
+				}()
+
+				q := conn.(driver.Queryer)
+				wait.Done()
+				<-c.start
+
+				for i := 1; ; i++ {
+					select {
+					case <-c.stop:
+						return
+					default:
+					}
+
+					recs := atomic.LoadInt32(&c.records)
+					id := recs * int32(i) % recs
+					rows, err := q.Query("SELECT * FROM foo WHERE id=$1", []driver.Value{int64(id)})
+					if err != nil {
+						if c.retry(err) {
+							continue
+						}
+
+						c.b.Fatal(err)
+					}
+
+					var dest [2]driver.Value
+					for {
+						if err := rows.Next(dest[:]); err != nil {
+							if err != io.EOF {
+								c.b.Fatal(err)
+							}
+							break
+						}
+					}
+
+					if err := rows.Close(); err != nil {
+						c.b.Fatal(err)
+					}
+
+					atomic.AddInt32(&c.reads, 1)
+				}
+
+			}()
+		default:
+			panic(todo(""))
+		}
 	}
+	wait.Wait()
+}
+
+func (c *concurrentBenchmark) makeWriters(n int, mode string) {
+	var wait sync.WaitGroup
+	wait.Add(n)
+	c.wg.Add(n)
+	for i := 0; i < n; i++ {
+		switch mode {
+		case "sql":
+			go func() {
+				db := c.makeSQLConn()
+
+				defer func() {
+					db.Close()
+					c.wg.Done()
+				}()
+
+				wait.Done()
+				<-c.start
+
+				for {
+					select {
+					case <-c.stop:
+						return
+					default:
+					}
+
+					if _, err := db.Exec("INSERT INTO FOO(name) VALUES($1)", c.randString(30)); err != nil {
+						if c.retry(err) {
+							continue
+						}
+
+						c.b.Fatal(err)
+					}
+
+					atomic.AddInt32(&c.records, 1)
+					atomic.AddInt32(&c.writes, 1)
+				}
+
+			}()
+		case "drv":
+			go func() {
+				conn := c.makeDrvConn()
+
+				defer func() {
+					conn.Close()
+					c.wg.Done()
+				}()
+
+				e := conn.(driver.Execer)
+				wait.Done()
+				<-c.start
+
+				for {
+					select {
+					case <-c.stop:
+						return
+					default:
+					}
+
+					if _, err := e.Exec("INSERT INTO FOO(name) VALUES($1)", []driver.Value{c.randString(30)}); err != nil {
+						if c.retry(err) {
+							continue
+						}
+
+						c.b.Fatal(err)
+					}
+
+					atomic.AddInt32(&c.records, 1)
+					atomic.AddInt32(&c.writes, 1)
+				}
+
+			}()
+		default:
+			panic(todo(""))
+		}
+	}
+	wait.Wait()
 }

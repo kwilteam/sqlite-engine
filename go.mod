@@ -7,12 +7,13 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.15
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
 	modernc.org/ccgo/v3 v3.16.13
-	modernc.org/libc v1.21.5
+	modernc.org/libc v1.22.2
 	modernc.org/mathutil v1.5.0
 	modernc.org/tcl v1.15.0
 )
 
 require (
+	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
