@@ -34,3 +34,5 @@ require (
 retract [v1.16.0, v1.17.2] // https://gitlab.com/cznic/sqlite/-/issues/100
 
 retract v1.19.0 // module source tree too large (max size is 524288000 bytes)
+
+retract v1.20.1 // https://gitlab.com/cznic/sqlite/-/issues/123
