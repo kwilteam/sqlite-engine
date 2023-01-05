@@ -36,23 +36,6 @@ func init() {
 	tls.Close()
 }
 
-const (
-	mutexIdxApp1 uintptr = iota + 1 // reserve 0 for "nil"
-	mutexIdxApp2
-	mutexIdxApp3
-	mutexIdxLRU
-	mutexIdxMaster
-	mutexIdxMem
-	mutexIdxOpen
-	mutexIdxPMem
-	mutexIdxPRNG
-	mutexIdxVFS1
-	mutexIdxVFS2
-	mutexIdxVFS3
-
-	maxStaticMutex
-)
-
 var (
 	mutexMethods = Sqlite3_mutex_methods{
 		FxMutexInit: *(*uintptr)(unsafe.Pointer(&struct{ f func(*libc.TLS) int32 }{mutexInit})),
@@ -74,8 +57,6 @@ var (
 		}{mutexNotheld})),
 	}
 
-	staticMutexes [maxStaticMutex]mutex
-
 	MutexCounters = libc.NewPerfCounter([]string{
 		"enter-fast",
 		"enter-recursive",
@@ -86,6 +67,19 @@ var (
 	MutexEnterCallers = libc.NewStackCapture(4)
 
 	mutexes mutexPool
+
+	mutexApp1   = mutexes.alloc(false)
+	mutexApp2   = mutexes.alloc(false)
+	mutexApp3   = mutexes.alloc(false)
+	mutexLRU    = mutexes.alloc(false)
+	mutexMaster = mutexes.alloc(false)
+	mutexMem    = mutexes.alloc(false)
+	mutexOpen   = mutexes.alloc(false)
+	mutexPMem   = mutexes.alloc(false)
+	mutexPRNG   = mutexes.alloc(false)
+	mutexVFS1   = mutexes.alloc(false)
+	mutexVFS2   = mutexes.alloc(false)
+	mutexVFS3   = mutexes.alloc(false)
 )
 
 type mutexPool struct {
@@ -98,10 +92,7 @@ func mutexFromPtr(p uintptr) *mutex {
 	if p == 0 {
 		return nil
 	}
-	if p < maxStaticMutex {
-		return &staticMutexes[p]
-	}
-	ix := p - maxStaticMutex
+	ix := p - 1
 	return &mutexes.a[ix>>8][ix&255]
 }
 
@@ -126,7 +117,7 @@ func (m *mutexPool) alloc(recursive bool) uintptr {
 	p := &m.a[outer][inner]
 	p.poolIndex = ix
 	p.recursive = recursive
-	return uintptr(ix) + maxStaticMutex
+	return uintptr(ix) + 1
 }
 
 func (m *mutexPool) free(p uintptr) {
@@ -299,29 +290,29 @@ func mutexAlloc(tls *libc.TLS, typ int32) uintptr {
 	case SQLITE_MUTEX_RECURSIVE:
 		return mutexes.alloc(true)
 	case SQLITE_MUTEX_STATIC_MASTER:
-		return mutexIdxMaster
+		return mutexMaster
 	case SQLITE_MUTEX_STATIC_MEM:
-		return mutexIdxMem
+		return mutexMem
 	case SQLITE_MUTEX_STATIC_OPEN:
-		return mutexIdxOpen
+		return mutexOpen
 	case SQLITE_MUTEX_STATIC_PRNG:
-		return mutexIdxPRNG
+		return mutexPRNG
 	case SQLITE_MUTEX_STATIC_LRU:
-		return mutexIdxLRU
+		return mutexLRU
 	case SQLITE_MUTEX_STATIC_PMEM:
-		return mutexIdxPMem
+		return mutexPMem
 	case SQLITE_MUTEX_STATIC_APP1:
-		return mutexIdxApp1
+		return mutexApp1
 	case SQLITE_MUTEX_STATIC_APP2:
-		return mutexIdxApp2
+		return mutexApp2
 	case SQLITE_MUTEX_STATIC_APP3:
-		return mutexIdxApp3
+		return mutexApp3
 	case SQLITE_MUTEX_STATIC_VFS1:
-		return mutexIdxVFS1
+		return mutexVFS1
 	case SQLITE_MUTEX_STATIC_VFS2:
-		return mutexIdxVFS2
+		return mutexVFS2
 	case SQLITE_MUTEX_STATIC_VFS3:
-		return mutexIdxVFS3
+		return mutexVFS3
 	default:
 		return 0
 	}
