@@ -657,14 +657,14 @@ type tx struct {
 	c *conn
 }
 
-func newTx(c *conn) (*tx, error) {
+func newTx(c *conn, opts driver.TxOptions) (*tx, error) {
 	r := &tx{c: c}
-	var sql string
-	if c.beginMode != "" {
+
+	sql := "begin"
+	if !opts.ReadOnly && c.beginMode != "" {
 		sql = "begin " + c.beginMode
-	} else {
-		sql = "begin"
 	}
+
 	if err := r.exec(context.Background(), sql); err != nil {
 		return nil, err
 	}
@@ -1325,7 +1325,7 @@ func (c *conn) Begin() (driver.Tx, error) {
 }
 
 func (c *conn) begin(ctx context.Context, opts driver.TxOptions) (t driver.Tx, err error) {
-	return newTx(c)
+	return newTx(c, opts)
 }
 
 // Close invalidates and potentially stops any current prepared statements and
