@@ -1373,6 +1373,12 @@ func (c *conn) closeV2(db uintptr) error {
 	return nil
 }
 
+type FunctionImpl struct {
+	NArgs int32
+	Scalar func(ctx *FunctionContext, args []driver.Value) (driver.Value, error)
+	Deterministic bool
+}
+
 type userDefinedFunction struct {
 	zFuncName uintptr
 	nArg      int32
@@ -1558,7 +1564,7 @@ func RegisterScalarFunction(
 			dmesg("zFuncName %q, nArg %v, xFunc %p: err %v", zFuncName, nArg, xFunc, err)
 		}()
 	}
-	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8, xFunc)
+	return registerScalarFunction(zFuncName, &FunctionImpl{NArgs: nArg, Scalar: xFunc, Deterministic: false})
 }
 
 // MustRegisterScalarFunction is like RegisterScalarFunction but panics on
@@ -1608,14 +1614,12 @@ func RegisterDeterministicScalarFunction(
 			dmesg("zFuncName %q, nArg %v, xFunc %p: err %v", zFuncName, nArg, xFunc, err)
 		}()
 	}
-	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8|sqlite3.SQLITE_DETERMINISTIC, xFunc)
+	return registerScalarFunction(zFuncName, &FunctionImpl{NArgs: nArg, Scalar: xFunc, Deterministic: true})
 }
 
 func registerScalarFunction(
 	zFuncName string,
-	nArg int32,
-	eTextRep int32,
-	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
+	impl *FunctionImpl,
 ) error {
 
 	if _, ok := d.udfs[zFuncName]; ok {
@@ -1628,10 +1632,16 @@ func registerScalarFunction(
 		return err
 	}
 
+	var textrep int32 = sqlite3.SQLITE_UTF8
+
+	if impl.Deterministic {
+		textrep |= sqlite3.SQLITE_DETERMINISTIC
+	}
+
 	udf := &userDefinedFunction{
 		zFuncName: name,
-		nArg:      nArg,
-		eTextRep:  eTextRep,
+		nArg:      impl.NArgs,
+		eTextRep:  textrep,
 		xFunc: func(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
 			setErrorResult := func(res error) {
 				errmsg, cerr := libc.CString(res.Error())
@@ -1667,7 +1677,7 @@ func registerScalarFunction(
 				}
 			}
 
-			res, err := xFunc(&FunctionContext{}, args)
+			res, err := impl.Scalar(&FunctionContext{}, args)
 			if err != nil {
 				setErrorResult(err)
 				return
