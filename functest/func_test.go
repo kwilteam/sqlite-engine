@@ -19,6 +19,41 @@ import (
 	sqlite3 "modernc.org/sqlite"
 )
 
+var finalCalled bool
+
+type sumFunction struct {
+	sum int64
+	finalCalled *bool
+}
+
+func (f *sumFunction) Step(ctx *sqlite3.FunctionContext, args []driver.Value) error {
+	switch resTyped := args[0].(type) {
+	case int64:
+		f.sum += resTyped
+	default:
+		return fmt.Errorf("function did not return a valid driver.Value: %T", resTyped)
+	}
+	return nil
+}
+
+func (f *sumFunction) WindowInverse(ctx *sqlite3.FunctionContext, args []driver.Value) error {
+	switch resTyped := args[0].(type) {
+	case int64:
+		f.sum -= resTyped
+	default:
+		return fmt.Errorf("function did not return a valid driver.Value: %T", resTyped)
+	}
+	return nil
+}
+
+func (f *sumFunction) WindowValue(ctx *sqlite3.FunctionContext) (driver.Value, error) {
+	return f.sum, nil
+}
+
+func (f *sumFunction) Final(ctx *sqlite3.FunctionContext) {
+	*f.finalCalled = true
+}
+
 func init() {
 	sqlite3.MustRegisterDeterministicScalarFunction(
 		"test_int64",
@@ -120,6 +155,30 @@ func init() {
 			return hex.EncodeToString(w.Sum(nil)), nil
 		},
 	)
+
+	sqlite3.MustRegisterFunction("test_sum", &sqlite3.FunctionImpl{
+		NArgs:         1,
+		Deterministic: true,
+		MakeAggregate: func(ctx sqlite3.FunctionContext) (sqlite3.AggregateFunction, error) {
+			return &sumFunction{finalCalled: &finalCalled}, nil
+		},
+	})
+
+	sqlite3.MustRegisterFunction("test_aggregate_error", &sqlite3.FunctionImpl{
+		NArgs:         1,
+		Deterministic: true,
+		MakeAggregate: func(ctx sqlite3.FunctionContext) (sqlite3.AggregateFunction, error) {
+			return nil, errors.New("boom")
+		},
+	})
+
+	sqlite3.MustRegisterFunction("test_aggregate_null_pointer", &sqlite3.FunctionImpl{
+		NArgs:         1,
+		Deterministic: true,
+		MakeAggregate: func(ctx sqlite3.FunctionContext) (sqlite3.AggregateFunction, error) {
+			return nil, nil
+		},
+	})
 }
 
 func TestRegisteredFunctions(t *testing.T) {
@@ -130,6 +189,7 @@ func TestRegisteredFunctions(t *testing.T) {
 		}
 		defer db.Close()
 
+		finalCalled = false
 		test(db)
 	}
 
@@ -286,6 +346,125 @@ func TestRegisteredFunctions(t *testing.T) {
 			}
 			if g, e := a, []byte("7ac66c0f148de9519b8bd264312c4d64"); !bytes.Equal(g, e) {
 				tt.Fatal(string(g), string(e))
+			}
+		})
+	})
+
+	t.Run("sumFunction type error", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			row := db.QueryRow("select test_sum('foo');")
+
+			err := row.Scan()
+			if err == nil {
+				tt.Fatal("expected error, got none")
+			}
+			if !strings.Contains(err.Error(), "string") {
+				tt.Fatal(err)
+			}
+			if !finalCalled {
+				t.Error("xFinal not called")
+			}
+		})
+	})
+
+	t.Run("sumFunction multiple columns", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			if _, err := db.Exec("create table t(a int64, b int64); insert into t values (1, 5), (2, 6), (3, 7), (4, 8)"); err != nil {
+				tt.Fatal(err)
+			}
+			row := db.QueryRow("select test_sum(a), test_sum(b) from t;")
+
+			var a, b int64
+			var e int64 = 10
+			var f int64 = 26
+			if err := row.Scan(&a, &b); err != nil {
+				tt.Fatal(err)
+			}
+			if a != e {
+				tt.Fatal(a, e)
+			}
+			if b != f {
+				tt.Fatal(b, f)
+			}
+			if !finalCalled {
+				t.Error("xFinal not called")
+			}
+		})
+	})
+
+	// https://www.sqlite.org/windowfunctions.html#user_defined_aggregate_window_functions
+	t.Run("sumFunction as window function", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			if _, err := db.Exec("create table t3(x, y); insert into t3 values('a', 4), ('b', 5), ('c', 3), ('d', 8), ('e', 1);"); err != nil {
+				tt.Fatal(err)
+			}
+			rows, err := db.Query("select x, test_sum(y) over (order by x rows between 1 preceding and 1 following) as sum_y from t3 order by x;")
+			if err != nil {
+				tt.Fatal(err)
+			}
+			defer rows.Close()
+
+			type row struct {
+				x    string
+				sumY int64
+			}
+
+			got := make([]row, 0)
+			for rows.Next() {
+				var r row
+				if err := rows.Scan(&r.x, &r.sumY); err != nil {
+					tt.Fatal(err)
+				}
+				got = append(got, r)
+			}
+
+			want := []row{
+				{"a", 9},
+				{"b", 12},
+				{"c", 16},
+				{"d", 12},
+				{"e", 9},
+			}
+
+			if len(got) != len(want) {
+				tt.Fatal(len(got), len(want))
+			}
+
+			for i, g := range got {
+				if g != want[i] {
+					tt.Fatal(i, g, want[i])
+				}
+			}
+			if !finalCalled {
+				t.Error("xFinal not called")
+			}
+		})
+	})
+
+	t.Run("aggregate function cannot be created", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			row := db.QueryRow("select test_aggregate_error(1);")
+
+			err := row.Scan()
+			if err == nil {
+				tt.Fatal("expected error, got none")
+			}
+			if !strings.Contains(err.Error(), "boom") {
+				tt.Fatal(err)
+			}
+		})
+	})
+
+	t.Run("null aggregate function pointer", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			row := db.QueryRow("select test_aggregate_null_pointer(1);")
+
+			err := row.Scan()
+			if err == nil {
+				tt.Fatal("expected error, got none")
+			}
+			if !strings.Contains(err.Error(), "MakeAggregate function returned nil") {
+				tt.Fatal(err)
 			}
 		})
 	})
