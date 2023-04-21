@@ -29,6 +29,7 @@
 //	linux	arm64   3.41.2
 //	linux	ppc64le 3.41.2
 //	linux	riscv64 3.41.2
+//	linux	s390x   3.41.2
 //	windows	amd64   3.41.2
 //	windows	arm64   3.41.2
 //
@@ -39,6 +40,10 @@
 // https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2fsqlite
 //
 // Changelog
+//
+// 2023-04-22 v1.22.0:
+//
+// Support linux/s390x.
 //
 // 2023-02-23 v1.21.0:
 //

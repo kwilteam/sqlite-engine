@@ -60952,49 +60952,49 @@ func ts_fcntl(tls *libc.TLS, fd int32, cmd int32, va uintptr) int32 {
 	return (*(*func(*libc.TLS, int32, int32, uintptr) int32)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 7*32 + 16)))(tls, fd, cmd, libc.VaList(bp, pArg))
 }
 
-func ts_read(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t) int32 {
+func ts_read(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t) ssize_t {
 	if tsIsFailErrno(tls, ts+29921) != 0 {
-		return -1
+		return int64(-1)
 	}
-	return int32((*(*func(*libc.TLS, int32, uintptr, size_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 8*32 + 16)))(tls, fd, aBuf, nBuf))
+	return (*(*func(*libc.TLS, int32, uintptr, size_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 8*32 + 16)))(tls, fd, aBuf, nBuf)
 }
 
-func ts_pread(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off off_t) int32 {
+func ts_pread(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off off_t) ssize_t {
 	if tsIsFailErrno(tls, ts+41707) != 0 {
-		return -1
+		return int64(-1)
 	}
-	return int32((*(*func(*libc.TLS, int32, uintptr, size_t, off_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 9*32 + 16)))(tls, fd, aBuf, nBuf, off))
+	return (*(*func(*libc.TLS, int32, uintptr, size_t, off_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 9*32 + 16)))(tls, fd, aBuf, nBuf, off)
 }
 
-func ts_pread64(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off sqlite3_uint64) int32 {
+func ts_pread64(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off sqlite3_uint64) ssize_t {
 	if tsIsFailErrno(tls, ts+41713) != 0 {
-		return -1
+		return int64(-1)
 	}
-	return int32((*(*func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 10*32 + 16)))(tls, fd, aBuf, nBuf, off))
+	return (*(*func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 10*32 + 16)))(tls, fd, aBuf, nBuf, off)
 }
 
-func ts_write(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t) int32 {
+func ts_write(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t) ssize_t {
 	if tsIsFailErrno(tls, ts+29926) != 0 {
 		if tsErrno(tls, ts+29926) == EINTR {
 			(*(*func(*libc.TLS, int32, uintptr, size_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 11*32 + 16)))(tls, fd, aBuf, nBuf/uint64(2))
 		}
-		return -1
+		return int64(-1)
 	}
-	return int32((*(*func(*libc.TLS, int32, uintptr, size_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 11*32 + 16)))(tls, fd, aBuf, nBuf))
+	return (*(*func(*libc.TLS, int32, uintptr, size_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 11*32 + 16)))(tls, fd, aBuf, nBuf)
 }
 
-func ts_pwrite(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off off_t) int32 {
+func ts_pwrite(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off off_t) ssize_t {
 	if tsIsFailErrno(tls, ts+41721) != 0 {
-		return -1
+		return int64(-1)
 	}
-	return int32((*(*func(*libc.TLS, int32, uintptr, size_t, off_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 12*32 + 16)))(tls, fd, aBuf, nBuf, off))
+	return (*(*func(*libc.TLS, int32, uintptr, size_t, off_t) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 12*32 + 16)))(tls, fd, aBuf, nBuf, off)
 }
 
-func ts_pwrite64(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off sqlite3_uint64) int32 {
+func ts_pwrite64(tls *libc.TLS, fd int32, aBuf uintptr, nBuf size_t, off sqlite3_uint64) ssize_t {
 	if tsIsFailErrno(tls, ts+41728) != 0 {
-		return -1
+		return int64(-1)
 	}
-	return int32((*(*func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 13*32 + 16)))(tls, fd, aBuf, nBuf, off))
+	return (*(*func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) ssize_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 13*32 + 16)))(tls, fd, aBuf, nBuf, off)
 }
 
 func ts_fchmod(tls *libc.TLS, fd int32, mode mode_t) int32 {
@@ -65101,22 +65101,22 @@ func init() {
 		f func(*libc.TLS, int32, int32, uintptr) int32
 	}{ts_fcntl}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 264)) = *(*uintptr)(unsafe.Pointer(&struct {
-		f func(*libc.TLS, int32, uintptr, size_t) int32
+		f func(*libc.TLS, int32, uintptr, size_t) ssize_t
 	}{ts_read}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 296)) = *(*uintptr)(unsafe.Pointer(&struct {
-		f func(*libc.TLS, int32, uintptr, size_t, off_t) int32
+		f func(*libc.TLS, int32, uintptr, size_t, off_t) ssize_t
 	}{ts_pread}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 328)) = *(*uintptr)(unsafe.Pointer(&struct {
-		f func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) int32
+		f func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) ssize_t
 	}{ts_pread64}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 360)) = *(*uintptr)(unsafe.Pointer(&struct {
-		f func(*libc.TLS, int32, uintptr, size_t) int32
+		f func(*libc.TLS, int32, uintptr, size_t) ssize_t
 	}{ts_write}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 392)) = *(*uintptr)(unsafe.Pointer(&struct {
-		f func(*libc.TLS, int32, uintptr, size_t, off_t) int32
+		f func(*libc.TLS, int32, uintptr, size_t, off_t) ssize_t
 	}{ts_pwrite}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 424)) = *(*uintptr)(unsafe.Pointer(&struct {
-		f func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) int32
+		f func(*libc.TLS, int32, uintptr, size_t, sqlite3_uint64) ssize_t
 	}{ts_pwrite64}))
 	*(*sqlite3_syscall_ptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&aSyscall)) + 456)) = *(*uintptr)(unsafe.Pointer(&struct {
 		f func(*libc.TLS, int32, mode_t) int32
