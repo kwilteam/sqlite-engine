@@ -8,9 +8,9 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.16
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
 	modernc.org/ccgo/v3 v3.16.13
-	modernc.org/libc v1.22.4
+	modernc.org/libc v1.22.5
 	modernc.org/mathutil v1.5.0
-	modernc.org/tcl v1.15.1
+	modernc.org/tcl v1.15.2
 )
 
 require (
@@ -29,7 +29,7 @@ require (
 	modernc.org/opt v0.1.3 // indirect
 	modernc.org/strutil v1.1.3 // indirect
 	modernc.org/token v1.0.1 // indirect
-	modernc.org/z v1.7.0 // indirect
+	modernc.org/z v1.7.3 // indirect
 )
 
 retract [v1.16.0, v1.17.2] // https://gitlab.com/cznic/sqlite/-/issues/100
