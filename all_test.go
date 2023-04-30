@@ -73,19 +73,6 @@ func init() {
 	use(caller, dbg, stack, todo, trc) //TODOOK
 }
 
-func origin(skip int) string {
-	pc, fn, fl, _ := runtime.Caller(skip)
-	f := runtime.FuncForPC(pc)
-	var fns string
-	if f != nil {
-		fns = f.Name()
-		if x := strings.LastIndex(fns, "."); x > 0 {
-			fns = fns[x+1:]
-		}
-	}
-	return fmt.Sprintf("%s:%d:%s", fn, fl, fns)
-}
-
 func todo(s string, args ...interface{}) string { //TODO-
 	switch {
 	case s == "":

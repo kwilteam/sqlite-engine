@@ -15,6 +15,7 @@ import (
 	"math"
 	"net/url"
 	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -1319,7 +1320,12 @@ func (c *conn) errstr(rc int32) error {
 // Begin starts a transaction.
 //
 // Deprecated: Drivers should implement ConnBeginTx instead (or additionally).
-func (c *conn) Begin() (driver.Tx, error) {
+func (c *conn) Begin() (dt driver.Tx, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("conn %p: (driver.Tx %p, err %v)", c, dt, err)
+		}()
+	}
 	return c.begin(context.Background(), driver.TxOptions{})
 }
 
@@ -1333,7 +1339,12 @@ func (c *conn) begin(ctx context.Context, opts driver.TxOptions) (t driver.Tx, e
 // Because the sql package maintains a free pool of connections and only calls
 // Close when there's a surplus of idle connections, it shouldn't be necessary
 // for drivers to do their own connection caching.
-func (c *conn) Close() error {
+func (c *conn) Close() (err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("conn %p: err %v", c, err)
+		}()
+	}
 	c.Lock() // Defend against race with .interrupt invoked by context handling.
 
 	defer c.Unlock()
@@ -1396,7 +1407,12 @@ func (c *conn) createFunctionInternal(fun *userDefinedFunction) error {
 // Exec may return ErrSkip.
 //
 // Deprecated: Drivers should implement ExecerContext instead.
-func (c *conn) Exec(query string, args []driver.Value) (driver.Result, error) {
+func (c *conn) Exec(query string, args []driver.Value) (dr driver.Result, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("conn %p, query %q, args %v: (driver.Result %p, err %v)", c, query, args, dr, err)
+		}()
+	}
 	return c.exec(context.Background(), query, toNamedValues(args))
 }
 
@@ -1416,7 +1432,12 @@ func (c *conn) exec(ctx context.Context, query string, args []driver.NamedValue)
 }
 
 // Prepare returns a prepared statement, bound to this connection.
-func (c *conn) Prepare(query string) (driver.Stmt, error) {
+func (c *conn) Prepare(query string) (ds driver.Stmt, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("conn %p, query %q: (driver.Stmt %p, err %v)", c, query, ds, err)
+		}()
+	}
 	return c.prepare(context.Background(), query)
 }
 
@@ -1433,7 +1454,12 @@ func (c *conn) prepare(ctx context.Context, query string) (s driver.Stmt, err er
 // Query may return ErrSkip.
 //
 // Deprecated: Drivers should implement QueryerContext instead.
-func (c *conn) Query(query string, args []driver.Value) (driver.Rows, error) {
+func (c *conn) Query(query string, args []driver.Value) (dr driver.Rows, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("conn %p, query %q, args %v: (driver.Rows %p, err %v)", c, query, args, dr, err)
+		}()
+	}
 	return c.query(context.Background(), query, toNamedValues(args))
 }
 
@@ -1491,7 +1517,12 @@ func newDriver() *Driver { return d }
 // not specify one, which SQLite maps to "deferred". More information is
 // available at
 // https://www.sqlite.org/lang_transaction.html#deferred_immediate_and_exclusive_transactions
-func (d *Driver) Open(name string) (driver.Conn, error) {
+func (d *Driver) Open(name string) (conn driver.Conn, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("name %q: (driver.Conn %p, err %v)", name, conn, err)
+		}()
+	}
 	c, err := newConn(name)
 	if err != nil {
 		return nil, err
@@ -1521,7 +1552,12 @@ func RegisterScalarFunction(
 	zFuncName string,
 	nArg int32,
 	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
-) error {
+) (err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("zFuncName %q, nArg %v, xFunc %p: err %v", zFuncName, nArg, xFunc, err)
+		}()
+	}
 	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8, xFunc)
 }
 
@@ -1532,6 +1568,9 @@ func MustRegisterScalarFunction(
 	nArg int32,
 	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
 ) {
+	if dmesgs {
+		dmesg("zFuncName %q, nArg %v, xFunc %p", zFuncName, nArg, xFunc)
+	}
 	if err := RegisterScalarFunction(zFuncName, nArg, xFunc); err != nil {
 		panic(err)
 	}
@@ -1544,6 +1583,9 @@ func MustRegisterDeterministicScalarFunction(
 	nArg int32,
 	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
 ) {
+	if dmesgs {
+		dmesg("zFuncName %q, nArg %v, xFunc %p", zFuncName, nArg, xFunc)
+	}
 	if err := RegisterDeterministicScalarFunction(zFuncName, nArg, xFunc); err != nil {
 		panic(err)
 	}
@@ -1560,7 +1602,12 @@ func RegisterDeterministicScalarFunction(
 	zFuncName string,
 	nArg int32,
 	xFunc func(ctx *FunctionContext, args []driver.Value) (driver.Value, error),
-) error {
+) (err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("zFuncName %q, nArg %v, xFunc %p: err %v", zFuncName, nArg, xFunc, err)
+		}()
+	}
 	return registerScalarFunction(zFuncName, nArg, sqlite3.SQLITE_UTF8|sqlite3.SQLITE_DETERMINISTIC, xFunc)
 }
 
@@ -1668,4 +1715,17 @@ func registerScalarFunction(
 	d.udfs[zFuncName] = udf
 
 	return nil
+}
+
+func origin(skip int) string {
+	pc, fn, fl, _ := runtime.Caller(skip)
+	f := runtime.FuncForPC(pc)
+	var fns string
+	if f != nil {
+		fns = f.Name()
+		if x := strings.LastIndex(fns, "."); x > 0 {
+			fns = fns[x+1:]
+		}
+	}
+	return fmt.Sprintf("%s:%d:%s", fn, fl, fns)
 }
