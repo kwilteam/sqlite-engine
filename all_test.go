@@ -3277,12 +3277,28 @@ func (q *issue142Queries) exec(ctx context.Context, stmt *sql.Stmt, query string
 	}
 }
 
+var (
+	issue142Retries    int
+	issue142MaxRetries int32
+)
+
 func (q *issue142Queries) query(ctx context.Context, stmt *sql.Stmt, query string, args ...interface{}) (*sql.Rows, error) {
 	switch {
 	case stmt != nil && q.tx != nil:
 		return q.tx.StmtContext(ctx, stmt).QueryContext(ctx, args...)
 	case stmt != nil:
-		return stmt.QueryContext(ctx, args...)
+		var r *sql.Rows
+		var err error
+		for i := 0; i < 10; i++ {
+			if r, err = stmt.QueryContext(ctx, args...); err == nil {
+				return r, nil
+			}
+
+			issue142Retries++
+			issue142MaxRetries = mathutil.MaxInt32(issue142MaxRetries, int32(i+1))
+			time.Sleep(10 * time.Millisecond)
+		}
+		return r, err
 	default:
 		return nil, errors.New("no prepared statement provided")
 	}
@@ -3406,6 +3422,7 @@ func TestIssue142(t *testing.T) {
 		t.Log(i)
 		testIssue142(t)
 	}
+	t.Logf("retries %d/1000, max retries %d", issue142Retries, issue142MaxRetries)
 }
 
 func testIssue142(t *testing.T) {
