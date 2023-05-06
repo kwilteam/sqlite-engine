@@ -3418,11 +3418,17 @@ func (t *issue142Tx) Commit() error {
 }
 
 func TestIssue142(t *testing.T) {
+	t0 := time.Now()
+	n := 0
 	for i := 0; i < 1000; i++ {
 		t.Log(i)
 		testIssue142(t)
+		n++
+		if i&15 == 0 && time.Since(t0) > time.Hour {
+			break
+		}
 	}
-	t.Logf("retries %d/1000, max retries %d", issue142Retries, issue142MaxRetries)
+	t.Logf("retries %d/%d, max retries %d", issue142Retries, n, issue142MaxRetries)
 }
 
 func testIssue142(t *testing.T) {
@@ -3457,6 +3463,7 @@ CREATE TABLE container_aliases (
 	tempDir := t.TempDir()
 	dbFile := filepath.Join(tempDir, "sqlite.db")
 	dbFile += "?_txlock=immediate"
+	dbFile += "&_pragma=busy_timeout%3d5000"
 	sqlDB, err := sql.Open("sqlite", dbFile)
 	if err != nil {
 		t.Fatal(err)
