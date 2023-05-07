@@ -3296,7 +3296,7 @@ func (q *issue142Queries) query(ctx context.Context, stmt *sql.Stmt, query strin
 
 			issue142Retries++
 			issue142MaxRetries = mathutil.MaxInt32(issue142MaxRetries, int32(i+1))
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 		}
 		return r, err
 	default:
@@ -3463,7 +3463,6 @@ CREATE TABLE container_aliases (
 	tempDir := t.TempDir()
 	dbFile := filepath.Join(tempDir, "sqlite.db")
 	dbFile += "?_txlock=immediate"
-	dbFile += "&_pragma=busy_timeout%3d5000"
 	sqlDB, err := sql.Open("sqlite", dbFile)
 	if err != nil {
 		t.Fatal(err)
