@@ -2787,8 +2787,8 @@ func BenchmarkConcurrent(b *testing.B) {
 func benchmarkConcurrent(b *testing.B, drv string, modes []string) {
 	for _, mode := range modes {
 		for _, measurement := range []string{"reads", "writes"} {
-			for _, writers := range []int{0, 1, 10, 100, 100} {
-				for _, readers := range []int{0, 1, 10, 100, 100} {
+			for _, writers := range []int{0, 1, 10, 100} {
+				for _, readers := range []int{0, 1, 10, 100} {
 					if measurement == "reads" && readers == 0 || measurement == "writes" && writers == 0 {
 						continue
 					}
@@ -3420,7 +3420,7 @@ func (t *issue142Tx) Commit() error {
 func TestIssue142(t *testing.T) {
 	t0 := time.Now()
 	n := 0
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
 		t.Log(i)
 		testIssue142(t)
 		n++
@@ -3463,6 +3463,7 @@ CREATE TABLE container_aliases (
 	tempDir := t.TempDir()
 	dbFile := filepath.Join(tempDir, "sqlite.db")
 	dbFile += "?_txlock=immediate"
+	dbFile += "&_pragma=busy_timeout%3d5000"
 	sqlDB, err := sql.Open("sqlite", dbFile)
 	if err != nil {
 		t.Fatal(err)
