@@ -1438,19 +1438,15 @@ type userDefinedFunction struct {
 	nArg      int32
 	eTextRep  int32
 	pApp      uintptr
-	xFunc     func(*libc.TLS, uintptr, int32, uintptr)
-	xStep     func(*libc.TLS, uintptr, int32, uintptr)
-	xInverse  func(*libc.TLS, uintptr, int32, uintptr)
-	xValue    func(*libc.TLS, uintptr)
-	xFinal    func(*libc.TLS, uintptr)
 
+	scalar   bool
 	freeOnce sync.Once
 }
 
 func (c *conn) createFunctionInternal(fun *userDefinedFunction) error {
 	var rc int32
 
-	if fun.xFunc != nil {
+	if fun.scalar {
 		rc = sqlite3.Xsqlite3_create_function(
 			c.tls,
 			c.db,
@@ -1458,7 +1454,7 @@ func (c *conn) createFunctionInternal(fun *userDefinedFunction) error {
 			fun.nArg,
 			fun.eTextRep,
 			fun.pApp,
-			cFuncPointer(fun.xFunc),
+			cFuncPointer(funcTrampoline),
 			0,
 			0,
 		)
@@ -1470,10 +1466,10 @@ func (c *conn) createFunctionInternal(fun *userDefinedFunction) error {
 			fun.nArg,
 			fun.eTextRep,
 			fun.pApp,
-			cFuncPointer(fun.xStep),
-			cFuncPointer(fun.xFinal),
-			cFuncPointer(fun.xValue),
-			cFuncPointer(fun.xInverse),
+			cFuncPointer(stepTrampoline),
+			cFuncPointer(finalTrampoline),
+			cFuncPointer(valueTrampoline),
+			cFuncPointer(inverseTrampoline),
 			0,
 		)
 	}
@@ -1752,19 +1748,13 @@ func registerFunction(
 	}
 
 	if impl.Scalar != nil {
-		udf.xFunc = func(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
-			setErrorResult := errorResultFunction(tls, ctx)
-			res, err := impl.Scalar(&FunctionContext{}, functionArgs(tls, argc, argv))
-			if err != nil {
-				setErrorResult(err)
-				return
-			}
+		xFuncs.mu.Lock()
+		id := xFuncs.ids.next()
+		xFuncs.m[id] = impl.Scalar
+		xFuncs.mu.Unlock()
 
-			err = functionReturnValue(tls, ctx, res)
-			if err != nil {
-				setErrorResult(err)
-			}
-		}
+		udf.scalar = true
+		udf.pApp = id
 	} else {
 		xAggregateFactories.mu.Lock()
 		id := xAggregateFactories.ids.next()
@@ -1772,74 +1762,6 @@ func registerFunction(
 		xAggregateFactories.mu.Unlock()
 
 		udf.pApp = id
-
-		udf.xStep = func(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
-			impl, _ := makeAggregate(tls, ctx)
-			if impl == nil {
-				return
-			}
-
-			setErrorResult := errorResultFunction(tls, ctx)
-			err := impl.Step(&FunctionContext{}, functionArgs(tls, argc, argv))
-			if err != nil {
-				setErrorResult(err)
-			}
-		}
-
-		udf.xInverse = func(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
-			impl, _ := makeAggregate(tls, ctx)
-			if impl == nil {
-				return
-			}
-
-			setErrorResult := errorResultFunction(tls, ctx)
-			err := impl.WindowInverse(&FunctionContext{}, functionArgs(tls, argc, argv))
-			if err != nil {
-				setErrorResult(err)
-			}
-		}
-
-		udf.xValue = func(tls *libc.TLS, ctx uintptr) {
-			impl, _ := makeAggregate(tls, ctx)
-			if impl == nil {
-				return
-			}
-
-			setErrorResult := errorResultFunction(tls, ctx)
-			res, err := impl.WindowValue(&FunctionContext{})
-			if err != nil {
-				setErrorResult(err)
-			} else {
-				err = functionReturnValue(tls, ctx, res)
-				if err != nil {
-					setErrorResult(err)
-				}
-			}
-		}
-
-		udf.xFinal = func(tls *libc.TLS, ctx uintptr) {
-			impl, id := makeAggregate(tls, ctx)
-			if impl == nil {
-				return
-			}
-
-			setErrorResult := errorResultFunction(tls, ctx)
-			res, err := impl.WindowValue(&FunctionContext{})
-			if err != nil {
-				setErrorResult(err)
-			} else {
-				err = functionReturnValue(tls, ctx, res)
-				if err != nil {
-					setErrorResult(err)
-				}
-			}
-			impl.Final(&FunctionContext{})
-
-			xAggregateContext.mu.Lock()
-			defer xAggregateContext.mu.Unlock()
-			delete(xAggregateContext.m, id)
-			xAggregateContext.ids.reclaim(id)
-		}
 	}
 
 	d.udfs[zFuncName] = udf
@@ -1951,9 +1873,18 @@ func functionReturnValue(tls *libc.TLS, ctx uintptr, res driver.Value) error {
 // MakeAggregate factory function to set it up, and track that in
 // xAggregateContext, retrieving it via sqlite3_aggregate_context.
 //
-// We also need to ensure that the function pointer we pass to SQLite meets
-// certain rules on the Go side, so that the pointer remains valid.
+// We also need to ensure that, for both aggregate and scalar functions, the
+// function pointer we pass to SQLite meets certain rules on the Go side, so
+// that the pointer remains valid.
 var (
+	xFuncs = struct {
+		mu  sync.RWMutex
+		m   map[uintptr]func(*FunctionContext, []driver.Value) (driver.Value, error)
+		ids idGen
+	}{
+		m: make(map[uintptr]func(*FunctionContext, []driver.Value) (driver.Value, error)),
+	}
+
 	xAggregateFactories = struct {
 		mu  sync.RWMutex
 		m   map[uintptr]func(FunctionContext) (AggregateFunction, error)
@@ -2046,4 +1977,92 @@ func cFuncPointer[T any](f T) uintptr {
 	// 3) Dereference the pointer to uintptr to obtain the function value as a
 	//    uintptr. This is safe as long as function values are passed as pointers.
 	return *(*uintptr)(unsafe.Pointer(&struct{ f T }{f}))
+}
+
+func funcTrampoline(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
+	id := sqlite3.Xsqlite3_user_data(tls, ctx)
+	xFuncs.mu.RLock()
+	xFunc := xFuncs.m[id]
+	xFuncs.mu.RUnlock()
+
+	setErrorResult := errorResultFunction(tls, ctx)
+	res, err := xFunc(&FunctionContext{}, functionArgs(tls, argc, argv))
+
+	if err != nil {
+		setErrorResult(err)
+		return
+	}
+
+	err = functionReturnValue(tls, ctx, res)
+	if err != nil {
+		setErrorResult(err)
+	}
+}
+
+func stepTrampoline(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
+	impl, _ := makeAggregate(tls, ctx)
+	if impl == nil {
+		return
+	}
+
+	setErrorResult := errorResultFunction(tls, ctx)
+	err := impl.Step(&FunctionContext{}, functionArgs(tls, argc, argv))
+	if err != nil {
+		setErrorResult(err)
+	}
+}
+
+func inverseTrampoline(tls *libc.TLS, ctx uintptr, argc int32, argv uintptr) {
+	impl, _ := makeAggregate(tls, ctx)
+	if impl == nil {
+		return
+	}
+
+	setErrorResult := errorResultFunction(tls, ctx)
+	err := impl.WindowInverse(&FunctionContext{}, functionArgs(tls, argc, argv))
+	if err != nil {
+		setErrorResult(err)
+	}
+}
+
+func valueTrampoline(tls *libc.TLS, ctx uintptr) {
+	impl, _ := makeAggregate(tls, ctx)
+	if impl == nil {
+		return
+	}
+
+	setErrorResult := errorResultFunction(tls, ctx)
+	res, err := impl.WindowValue(&FunctionContext{})
+	if err != nil {
+		setErrorResult(err)
+	} else {
+		err = functionReturnValue(tls, ctx, res)
+		if err != nil {
+			setErrorResult(err)
+		}
+	}
+}
+
+func finalTrampoline(tls *libc.TLS, ctx uintptr) {
+	impl, id := makeAggregate(tls, ctx)
+	if impl == nil {
+		return
+	}
+
+	setErrorResult := errorResultFunction(tls, ctx)
+	res, err := impl.WindowValue(&FunctionContext{})
+	if err != nil {
+		setErrorResult(err)
+	} else {
+		err = functionReturnValue(tls, ctx, res)
+		if err != nil {
+			setErrorResult(err)
+		}
+	}
+	impl.Final(&FunctionContext{})
+
+	xAggregateContext.mu.Lock()
+	defer xAggregateContext.mu.Unlock()
+	delete(xAggregateContext.m, id)
+	xAggregateContext.ids.reclaim(id)
 }

@@ -12,6 +12,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -153,6 +154,38 @@ func init() {
 				return nil, fmt.Errorf("unable to compute md5 checksum: %s", err)
 			}
 			return hex.EncodeToString(w.Sum(nil)), nil
+		},
+	)
+
+	sqlite3.MustRegisterDeterministicScalarFunction(
+		"regexp",
+		2,
+		func(ctx *sqlite3.FunctionContext, args []driver.Value) (driver.Value, error) {
+			var s1 string
+			var s2 string
+
+			switch arg0 := args[0].(type) {
+			case string:
+				s1 = arg0
+			default:
+				return nil, errors.New("expected argv[0] to be text")
+			}
+
+			fmt.Println(args)
+
+			switch arg1 := args[1].(type) {
+			case string:
+				s2 = arg1
+			default:
+				return nil, errors.New("expected argv[1] to be text")
+			}
+
+			matched, err := regexp.MatchString(s1, s2)
+			if err != nil {
+				return nil, fmt.Errorf("bad regular expression: %q", err)
+			}
+
+			return matched, nil
 		},
 	)
 
@@ -346,6 +379,102 @@ func TestRegisteredFunctions(t *testing.T) {
 			}
 			if g, e := a, []byte("7ac66c0f148de9519b8bd264312c4d64"); !bytes.Equal(g, e) {
 				tt.Fatal(string(g), string(e))
+			}
+		})
+	})
+
+	t.Run("regexp filter", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			t1 := "seafood"
+			t2 := "fruit"
+
+			if _, err := db.Exec("create table t(b text); insert into t values (?), (?)", t1, t2); err != nil {
+				tt.Fatal(err)
+			}
+			rows, err := db.Query("select * from t where b regexp 'foo.*'")
+			if err != nil {
+				tt.Fatal(err)
+			}
+
+			type rec struct {
+				b string
+			}
+			var a []rec
+			for rows.Next() {
+				var r rec
+				if err := rows.Scan(&r.b); err != nil {
+					tt.Fatal(err)
+				}
+
+				a = append(a, r)
+			}
+			if err := rows.Err(); err != nil {
+				tt.Fatal(err)
+			}
+
+			if g, e := len(a), 1; g != e {
+				tt.Fatal(g, e)
+			}
+
+			if g, e := a[0].b, t1; g != e {
+				tt.Fatal(g, e)
+			}
+		})
+	})
+
+	t.Run("regexp matches", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			row := db.QueryRow("select 'seafood' regexp 'foo.*'")
+
+			var r int
+			if err := row.Scan(&r); err != nil {
+				tt.Fatal(err)
+			}
+
+			if g, e := r, 1; g != e {
+				tt.Fatal(g, e)
+			}
+		})
+	})
+
+	t.Run("regexp does not match", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			row := db.QueryRow("select 'fruit' regexp 'foo.*'")
+
+			var r int
+			if err := row.Scan(&r); err != nil {
+				tt.Fatal(err)
+			}
+
+			if g, e := r, 0; g != e {
+				tt.Fatal(g, e)
+			}
+		})
+	})
+
+	t.Run("regexp errors on bad regexp", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			_, err := db.Query("select 'seafood' regexp 'a(b'")
+			if err == nil {
+				tt.Fatal(errors.New("expected error, got none"))
+			}
+		})
+	})
+
+	t.Run("regexp errors on bad first argument", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			_, err := db.Query("SELECT 1 REGEXP 'a(b'")
+			if err == nil {
+				tt.Fatal(errors.New("expected error, got none"))
+			}
+		})
+	})
+
+	t.Run("regexp errors on bad second argument", func(tt *testing.T) {
+		withDB(func(db *sql.DB) {
+			_, err := db.Query("SELECT 'seafood' REGEXP 1")
+			if err == nil {
+				tt.Fatal(errors.New("expected error, got none"))
 			}
 		})
 	})
