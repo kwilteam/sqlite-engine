@@ -94,6 +94,10 @@
 //
 // Changelog
 //
+// 2023-06-01 v1.23.0:
+//
+// Allow registering aggregate functions
+//
 // 2023-04-22 v1.22.0:
 //
 // Support linux/s390x.
