@@ -1,3 +1,7 @@
+# Kwil Sqlite
+
+This package is a fork of the repository found at [https://gitlab.com/cznic/sqlite](<https://gitlab.com/cznic/sqlite>).  The only difference with this repo is that it allows us to specify SQLite build flags necessary for Kwil.
+
 # sqlite
 
 Package sqlite is a cgo-free port of SQLite. Although you could see mattn's driver (`github.com/mattn/go-sqlite3`) in go.mod file, we import it for tests only.
