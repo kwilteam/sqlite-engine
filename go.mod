@@ -32,6 +32,8 @@ require (
 	modernc.org/z v1.7.3 // indirect
 )
 
+replace modernc.org/sqlite => ./
+
 retract [v1.16.0, v1.17.2] // https://gitlab.com/cznic/sqlite/-/issues/100
 
 retract v1.19.0 // module source tree too large (max size is 524288000 bytes)
