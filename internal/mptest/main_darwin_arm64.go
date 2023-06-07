@@ -23,1396 +23,2069 @@ var _ types.Size_t
 func main() { libc.Start(main1) }
 
 const (
-	ACCESSX_MAX_DESCRIPTORS                     = 100
-	ACCESSX_MAX_TABLESIZE                       = 16384
-	BIG_ENDIAN                                  = 4321
-	BUFSIZ                                      = 1024
-	BUS_ADRALN                                  = 1
-	BUS_ADRERR                                  = 2
-	BUS_NOOP                                    = 0
-	BUS_OBJERR                                  = 3
-	BYTE_ORDER                                  = 1234
-	CLD_CONTINUED                               = 6
-	CLD_DUMPED                                  = 3
-	CLD_EXITED                                  = 1
-	CLD_KILLED                                  = 2
-	CLD_NOOP                                    = 0
-	CLD_STOPPED                                 = 5
-	CLD_TRAPPED                                 = 4
-	CPUMON_MAKE_FATAL                           = 0x1000
-	DEFAULT_TIMEOUT                             = 1000000
-	E2BIG                                       = 7
-	EACCES                                      = 13
-	EADDRINUSE                                  = 48
-	EADDRNOTAVAIL                               = 49
-	EAFNOSUPPORT                                = 47
-	EAGAIN                                      = 35
-	EALREADY                                    = 37
-	EAUTH                                       = 80
-	EBADARCH                                    = 86
-	EBADEXEC                                    = 85
-	EBADF                                       = 9
-	EBADMACHO                                   = 88
-	EBADMSG                                     = 94
-	EBADRPC                                     = 72
-	EBUSY                                       = 16
-	ECANCELED                                   = 89
-	ECHILD                                      = 10
-	ECONNABORTED                                = 53
-	ECONNREFUSED                                = 61
-	ECONNRESET                                  = 54
-	EDEADLK                                     = 11
-	EDESTADDRREQ                                = 39
-	EDEVERR                                     = 83
-	EDOM                                        = 33
-	EDQUOT                                      = 69
-	EEXIST                                      = 17
-	EFAULT                                      = 14
-	EFBIG                                       = 27
-	EFTYPE                                      = 79
-	EHOSTDOWN                                   = 64
-	EHOSTUNREACH                                = 65
-	EIDRM                                       = 90
-	EILSEQ                                      = 92
-	EINPROGRESS                                 = 36
-	EINTR                                       = 4
-	EINVAL                                      = 22
-	EIO                                         = 5
-	EISCONN                                     = 56
-	EISDIR                                      = 21
-	ELAST                                       = 106
-	ELOOP                                       = 62
-	EMFILE                                      = 24
-	EMLINK                                      = 31
-	EMSGSIZE                                    = 40
-	EMULTIHOP                                   = 95
-	ENAMETOOLONG                                = 63
-	ENEEDAUTH                                   = 81
-	ENETDOWN                                    = 50
-	ENETRESET                                   = 52
-	ENETUNREACH                                 = 51
-	ENFILE                                      = 23
-	ENOATTR                                     = 93
-	ENOBUFS                                     = 55
-	ENODATA                                     = 96
-	ENODEV                                      = 19
-	ENOENT                                      = 2
-	ENOEXEC                                     = 8
-	ENOLCK                                      = 77
-	ENOLINK                                     = 97
-	ENOMEM                                      = 12
-	ENOMSG                                      = 91
-	ENOPOLICY                                   = 103
-	ENOPROTOOPT                                 = 42
-	ENOSPC                                      = 28
-	ENOSR                                       = 98
-	ENOSTR                                      = 99
-	ENOSYS                                      = 78
-	ENOTBLK                                     = 15
-	ENOTCONN                                    = 57
-	ENOTDIR                                     = 20
-	ENOTEMPTY                                   = 66
-	ENOTRECOVERABLE                             = 104
-	ENOTSOCK                                    = 38
-	ENOTSUP                                     = 45
-	ENOTTY                                      = 25
-	ENXIO                                       = 6
-	EOF                                         = -1
-	EOPNOTSUPP                                  = 102
-	EOVERFLOW                                   = 84
-	EOWNERDEAD                                  = 105
-	EPERM                                       = 1
-	EPFNOSUPPORT                                = 46
-	EPIPE                                       = 32
-	EPROCLIM                                    = 67
-	EPROCUNAVAIL                                = 76
-	EPROGMISMATCH                               = 75
-	EPROGUNAVAIL                                = 74
-	EPROTO                                      = 100
-	EPROTONOSUPPORT                             = 43
-	EPROTOTYPE                                  = 41
-	EPWROFF                                     = 82
-	EQFULL                                      = 106
-	ERANGE                                      = 34
-	EREMOTE                                     = 71
-	EROFS                                       = 30
-	ERPCMISMATCH                                = 73
-	ESHLIBVERS                                  = 87
-	ESHUTDOWN                                   = 58
-	ESOCKTNOSUPPORT                             = 44
-	ESPIPE                                      = 29
-	ESRCH                                       = 3
-	ESTALE                                      = 70
-	ETIME                                       = 101
-	ETIMEDOUT                                   = 60
-	ETOOMANYREFS                                = 59
-	ETXTBSY                                     = 26
-	EUSERS                                      = 68
-	EWOULDBLOCK                                 = 35
-	EXDEV                                       = 18
-	EXIT_FAILURE                                = 1
-	EXIT_SUCCESS                                = 0
-	FD_SETSIZE                                  = 1024
-	FILENAME_MAX                                = 1024
-	FOOTPRINT_INTERVAL_RESET                    = 0x1
-	FOPEN_MAX                                   = 20
-	FPE_FLTDIV                                  = 1
-	FPE_FLTINV                                  = 5
-	FPE_FLTOVF                                  = 2
-	FPE_FLTRES                                  = 4
-	FPE_FLTSUB                                  = 6
-	FPE_FLTUND                                  = 3
-	FPE_INTDIV                                  = 7
-	FPE_INTOVF                                  = 8
-	FPE_NOOP                                    = 0
-	FTS5_TOKENIZE_AUX                           = 0x0008
-	FTS5_TOKENIZE_DOCUMENT                      = 0x0004
-	FTS5_TOKENIZE_PREFIX                        = 0x0002
-	FTS5_TOKENIZE_QUERY                         = 0x0001
-	FTS5_TOKEN_COLOCATED                        = 0x0001
-	FULLY_WITHIN                                = 2
-	F_LOCK                                      = 1
-	F_OK                                        = 0
-	F_TEST                                      = 3
-	F_TLOCK                                     = 2
-	F_ULOCK                                     = 0
-	HAVE_USLEEP                                 = 1
-	ILL_BADSTK                                  = 8
-	ILL_COPROC                                  = 7
-	ILL_ILLADR                                  = 5
-	ILL_ILLOPC                                  = 1
-	ILL_ILLOPN                                  = 4
-	ILL_ILLTRP                                  = 2
-	ILL_NOOP                                    = 0
-	ILL_PRVOPC                                  = 3
-	ILL_PRVREG                                  = 6
-	INT16_MAX                                   = 32767
-	INT16_MIN                                   = -32768
-	INT32_MAX                                   = 2147483647
-	INT32_MIN                                   = -2147483648
-	INT64_MAX                                   = 9223372036854775807
-	INT64_MIN                                   = -9223372036854775808
-	INT8_MAX                                    = 127
-	INT8_MIN                                    = -128
-	INTMAX_MAX                                  = 9223372036854775807
-	INTMAX_MIN                                  = -9223372036854775808
-	INTPTR_MAX                                  = 9223372036854775807
-	INTPTR_MIN                                  = -9223372036854775808
-	INT_FAST16_MAX                              = 32767
-	INT_FAST16_MIN                              = -32768
-	INT_FAST32_MAX                              = 2147483647
-	INT_FAST32_MIN                              = -2147483648
-	INT_FAST64_MAX                              = 9223372036854775807
-	INT_FAST64_MIN                              = -9223372036854775808
-	INT_FAST8_MAX                               = 127
-	INT_FAST8_MIN                               = -128
-	INT_LEAST16_MAX                             = 32767
-	INT_LEAST16_MIN                             = -32768
-	INT_LEAST32_MAX                             = 2147483647
-	INT_LEAST32_MIN                             = -2147483648
-	INT_LEAST64_MAX                             = 9223372036854775807
-	INT_LEAST64_MIN                             = -9223372036854775808
-	INT_LEAST8_MAX                              = 127
-	INT_LEAST8_MIN                              = -128
-	IOPOL_APPLICATION                           = 5
-	IOPOL_ATIME_UPDATES_DEFAULT                 = 0
-	IOPOL_ATIME_UPDATES_OFF                     = 1
-	IOPOL_DEFAULT                               = 0
-	IOPOL_IMPORTANT                             = 1
-	IOPOL_MATERIALIZE_DATALESS_FILES_DEFAULT    = 0
-	IOPOL_MATERIALIZE_DATALESS_FILES_OFF        = 1
-	IOPOL_MATERIALIZE_DATALESS_FILES_ON         = 2
-	IOPOL_NORMAL                                = 1
-	IOPOL_PASSIVE                               = 2
-	IOPOL_SCOPE_DARWIN_BG                       = 2
-	IOPOL_SCOPE_PROCESS                         = 0
-	IOPOL_SCOPE_THREAD                          = 1
-	IOPOL_STANDARD                              = 5
-	IOPOL_THROTTLE                              = 3
-	IOPOL_TYPE_DISK                             = 0
-	IOPOL_TYPE_VFS_ALLOW_LOW_SPACE_WRITES       = 9
-	IOPOL_TYPE_VFS_ATIME_UPDATES                = 2
-	IOPOL_TYPE_VFS_DISALLOW_RW_FOR_O_EVTONLY    = 10
-	IOPOL_TYPE_VFS_IGNORE_CONTENT_PROTECTION    = 6
-	IOPOL_TYPE_VFS_IGNORE_PERMISSIONS           = 7
-	IOPOL_TYPE_VFS_MATERIALIZE_DATALESS_FILES   = 3
-	IOPOL_TYPE_VFS_SKIP_MTIME_UPDATE            = 8
-	IOPOL_TYPE_VFS_STATFS_NO_DATA_VOLUME        = 4
-	IOPOL_TYPE_VFS_TRIGGER_RESOLVE              = 5
-	IOPOL_UTILITY                               = 4
-	IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_OFF        = 0
-	IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_ON         = 1
-	IOPOL_VFS_CONTENT_PROTECTION_DEFAULT        = 0
-	IOPOL_VFS_CONTENT_PROTECTION_IGNORE         = 1
-	IOPOL_VFS_DISALLOW_RW_FOR_O_EVTONLY_DEFAULT = 0
-	IOPOL_VFS_DISALLOW_RW_FOR_O_EVTONLY_ON      = 1
-	IOPOL_VFS_IGNORE_PERMISSIONS_OFF            = 0
-	IOPOL_VFS_IGNORE_PERMISSIONS_ON             = 1
-	IOPOL_VFS_SKIP_MTIME_UPDATE_OFF             = 0
-	IOPOL_VFS_SKIP_MTIME_UPDATE_ON              = 1
-	IOPOL_VFS_STATFS_FORCE_NO_DATA_VOLUME       = 1
-	IOPOL_VFS_STATFS_NO_DATA_VOLUME_DEFAULT     = 0
-	IOPOL_VFS_TRIGGER_RESOLVE_DEFAULT           = 0
-	IOPOL_VFS_TRIGGER_RESOLVE_OFF               = 1
-	LITTLE_ENDIAN                               = 1234
-	L_INCR                                      = 1
-	L_SET                                       = 0
-	L_XTND                                      = 2
-	L_ctermid                                   = 1024
-	L_tmpnam                                    = 1024
-	MAC_OS_VERSION_11_0                         = 110000
-	MAC_OS_VERSION_12_0                         = 120000
-	MAC_OS_VERSION_13_0                         = 130000
-	MAC_OS_X_VERSION_10_0                       = 1000
-	MAC_OS_X_VERSION_10_1                       = 1010
-	MAC_OS_X_VERSION_10_10                      = 101000
-	MAC_OS_X_VERSION_10_10_2                    = 101002
-	MAC_OS_X_VERSION_10_10_3                    = 101003
-	MAC_OS_X_VERSION_10_11                      = 101100
-	MAC_OS_X_VERSION_10_11_2                    = 101102
-	MAC_OS_X_VERSION_10_11_3                    = 101103
-	MAC_OS_X_VERSION_10_11_4                    = 101104
-	MAC_OS_X_VERSION_10_12                      = 101200
-	MAC_OS_X_VERSION_10_12_1                    = 101201
-	MAC_OS_X_VERSION_10_12_2                    = 101202
-	MAC_OS_X_VERSION_10_12_4                    = 101204
-	MAC_OS_X_VERSION_10_13                      = 101300
-	MAC_OS_X_VERSION_10_13_1                    = 101301
-	MAC_OS_X_VERSION_10_13_2                    = 101302
-	MAC_OS_X_VERSION_10_13_4                    = 101304
-	MAC_OS_X_VERSION_10_14                      = 101400
-	MAC_OS_X_VERSION_10_14_1                    = 101401
-	MAC_OS_X_VERSION_10_14_4                    = 101404
-	MAC_OS_X_VERSION_10_14_6                    = 101406
-	MAC_OS_X_VERSION_10_15                      = 101500
-	MAC_OS_X_VERSION_10_15_1                    = 101501
-	MAC_OS_X_VERSION_10_16                      = 101600
-	MAC_OS_X_VERSION_10_2                       = 1020
-	MAC_OS_X_VERSION_10_3                       = 1030
-	MAC_OS_X_VERSION_10_4                       = 1040
-	MAC_OS_X_VERSION_10_5                       = 1050
-	MAC_OS_X_VERSION_10_6                       = 1060
-	MAC_OS_X_VERSION_10_7                       = 1070
-	MAC_OS_X_VERSION_10_8                       = 1080
-	MAC_OS_X_VERSION_10_9                       = 1090
-	MINSIGSTKSZ                                 = 32768
-	MX_ARG                                      = 2
-	NDEBUG                                      = 1
-	NOT_WITHIN                                  = 0
-	NSIG                                        = 32
-	PARTLY_WITHIN                               = 1
-	PDP_ENDIAN                                  = 3412
-	POLL_ERR                                    = 4
-	POLL_HUP                                    = 6
-	POLL_IN                                     = 1
-	POLL_MSG                                    = 3
-	POLL_OUT                                    = 2
-	POLL_PRI                                    = 5
-	PRIO_DARWIN_BG                              = 0x1000
-	PRIO_DARWIN_NONUI                           = 0x1001
-	PRIO_DARWIN_PROCESS                         = 4
-	PRIO_DARWIN_THREAD                          = 3
-	PRIO_MAX                                    = 20
-	PRIO_MIN                                    = -20
-	PRIO_PGRP                                   = 1
-	PRIO_PROCESS                                = 0
-	PRIO_USER                                   = 2
-	PTRDIFF_MAX                                 = 9223372036854775807
-	PTRDIFF_MIN                                 = -9223372036854775808
-	P_tmpdir                                    = "/var/tmp/"
-	RAND_MAX                                    = 0x7fffffff
-	RENAME_EXCL                                 = 0x00000004
-	RENAME_NOFOLLOW_ANY                         = 0x00000010
-	RENAME_RESERVED1                            = 0x00000008
-	RENAME_SECLUDE                              = 0x00000001
-	RENAME_SWAP                                 = 0x00000002
-	RLIMIT_AS                                   = 5
-	RLIMIT_CORE                                 = 4
-	RLIMIT_CPU                                  = 0
-	RLIMIT_CPU_USAGE_MONITOR                    = 0x2
-	RLIMIT_DATA                                 = 2
-	RLIMIT_FOOTPRINT_INTERVAL                   = 0x4
-	RLIMIT_FSIZE                                = 1
-	RLIMIT_MEMLOCK                              = 6
-	RLIMIT_NOFILE                               = 8
-	RLIMIT_NPROC                                = 7
-	RLIMIT_RSS                                  = 5
-	RLIMIT_STACK                                = 3
-	RLIMIT_THREAD_CPULIMITS                     = 0x3
-	RLIMIT_WAKEUPS_MONITOR                      = 0x1
-	RLIM_NLIMITS                                = 9
-	RSIZE_MAX                                   = 9223372036854775807
-	RUSAGE_CHILDREN                             = -1
-	RUSAGE_INFO_CURRENT                         = 6
-	RUSAGE_INFO_V0                              = 0
-	RUSAGE_INFO_V1                              = 1
-	RUSAGE_INFO_V2                              = 2
-	RUSAGE_INFO_V3                              = 3
-	RUSAGE_INFO_V4                              = 4
-	RUSAGE_INFO_V5                              = 5
-	RUSAGE_INFO_V6                              = 6
-	RUSAGE_SELF                                 = 0
-	RU_PROC_RUNS_RESLIDE                        = 0x00000001
-	R_OK                                        = 4
-	SA_64REGSET                                 = 0x0200
-	SA_NOCLDSTOP                                = 0x0008
-	SA_NOCLDWAIT                                = 0x0020
-	SA_NODEFER                                  = 0x0010
-	SA_ONSTACK                                  = 0x0001
-	SA_RESETHAND                                = 0x0004
-	SA_RESTART                                  = 0x0002
-	SA_SIGINFO                                  = 0x0040
-	SA_USERSPACE_MASK                           = 127
-	SA_USERTRAMP                                = 0x0100
-	SEEK_CUR                                    = 1
-	SEEK_DATA                                   = 4
-	SEEK_END                                    = 2
-	SEEK_HOLE                                   = 3
-	SEEK_SET                                    = 0
-	SEGV_ACCERR                                 = 2
-	SEGV_MAPERR                                 = 1
-	SEGV_NOOP                                   = 0
-	SIGABRT                                     = 6
-	SIGALRM                                     = 14
-	SIGBUS                                      = 10
-	SIGCHLD                                     = 20
-	SIGCONT                                     = 19
-	SIGEMT                                      = 7
-	SIGEV_NONE                                  = 0
-	SIGEV_SIGNAL                                = 1
-	SIGEV_THREAD                                = 3
-	SIGFPE                                      = 8
-	SIGHUP                                      = 1
-	SIGILL                                      = 4
-	SIGINFO                                     = 29
-	SIGINT                                      = 2
-	SIGIO                                       = 23
-	SIGIOT                                      = 6
-	SIGKILL                                     = 9
-	SIGPIPE                                     = 13
-	SIGPROF                                     = 27
-	SIGQUIT                                     = 3
-	SIGSEGV                                     = 11
-	SIGSTKSZ                                    = 131072
-	SIGSTOP                                     = 17
-	SIGSYS                                      = 12
-	SIGTERM                                     = 15
-	SIGTRAP                                     = 5
-	SIGTSTP                                     = 18
-	SIGTTIN                                     = 21
-	SIGTTOU                                     = 22
-	SIGURG                                      = 16
-	SIGUSR1                                     = 30
-	SIGUSR2                                     = 31
-	SIGVTALRM                                   = 26
-	SIGWINCH                                    = 28
-	SIGXCPU                                     = 24
-	SIGXFSZ                                     = 25
-	SIG_ATOMIC_MAX                              = 2147483647
-	SIG_ATOMIC_MIN                              = -2147483648
-	SIG_BLOCK                                   = 1
-	SIG_SETMASK                                 = 3
-	SIG_UNBLOCK                                 = 2
-	SIZE_MAX                                    = 18446744073709551615
-	SI_ASYNCIO                                  = 0x10004
-	SI_MESGQ                                    = 0x10005
-	SI_QUEUE                                    = 0x10002
-	SI_TIMER                                    = 0x10003
-	SI_USER                                     = 0x10001
-	SQLITE3_H                                   = 0
-	SQLITE3_TEXT                                = 3
-	SQLITE_ABORT                                = 4
-	SQLITE_ABORT_ROLLBACK                       = 516
-	SQLITE_ACCESS_EXISTS                        = 0
-	SQLITE_ACCESS_READ                          = 2
-	SQLITE_ACCESS_READWRITE                     = 1
-	SQLITE_ALTER_TABLE                          = 26
-	SQLITE_ANALYZE                              = 28
-	SQLITE_ANY                                  = 5
-	SQLITE_API                                  = 0
-	SQLITE_APICALL                              = 0
-	SQLITE_ATTACH                               = 24
-	SQLITE_AUTH                                 = 23
-	SQLITE_AUTH_USER                            = 279
-	SQLITE_BLOB                                 = 4
-	SQLITE_BUSY                                 = 5
-	SQLITE_BUSY_RECOVERY                        = 261
-	SQLITE_BUSY_SNAPSHOT                        = 517
-	SQLITE_BUSY_TIMEOUT                         = 773
-	SQLITE_CALLBACK                             = 0
-	SQLITE_CANTOPEN                             = 14
-	SQLITE_CANTOPEN_CONVPATH                    = 1038
-	SQLITE_CANTOPEN_DIRTYWAL                    = 1294
-	SQLITE_CANTOPEN_FULLPATH                    = 782
-	SQLITE_CANTOPEN_ISDIR                       = 526
-	SQLITE_CANTOPEN_NOTEMPDIR                   = 270
-	SQLITE_CANTOPEN_SYMLINK                     = 1550
-	SQLITE_CDECL                                = 0
-	SQLITE_CHANGESETAPPLY_INVERT                = 0x0002
-	SQLITE_CHANGESETAPPLY_NOSAVEPOINT           = 0x0001
-	SQLITE_CHANGESETSTART_INVERT                = 0x0002
-	SQLITE_CHANGESET_ABORT                      = 2
-	SQLITE_CHANGESET_CONFLICT                   = 3
-	SQLITE_CHANGESET_CONSTRAINT                 = 4
-	SQLITE_CHANGESET_DATA                       = 1
-	SQLITE_CHANGESET_FOREIGN_KEY                = 5
-	SQLITE_CHANGESET_NOTFOUND                   = 2
-	SQLITE_CHANGESET_OMIT                       = 0
-	SQLITE_CHANGESET_REPLACE                    = 1
-	SQLITE_CHECKPOINT_FULL                      = 1
-	SQLITE_CHECKPOINT_PASSIVE                   = 0
-	SQLITE_CHECKPOINT_RESTART                   = 2
-	SQLITE_CHECKPOINT_TRUNCATE                  = 3
-	SQLITE_CONFIG_COVERING_INDEX_SCAN           = 20
-	SQLITE_CONFIG_GETMALLOC                     = 5
-	SQLITE_CONFIG_GETMUTEX                      = 11
-	SQLITE_CONFIG_GETPCACHE                     = 15
-	SQLITE_CONFIG_GETPCACHE2                    = 19
-	SQLITE_CONFIG_HEAP                          = 8
-	SQLITE_CONFIG_LOG                           = 16
-	SQLITE_CONFIG_LOOKASIDE                     = 13
-	SQLITE_CONFIG_MALLOC                        = 4
-	SQLITE_CONFIG_MEMDB_MAXSIZE                 = 29
-	SQLITE_CONFIG_MEMSTATUS                     = 9
-	SQLITE_CONFIG_MMAP_SIZE                     = 22
-	SQLITE_CONFIG_MULTITHREAD                   = 2
-	SQLITE_CONFIG_MUTEX                         = 10
-	SQLITE_CONFIG_PAGECACHE                     = 7
-	SQLITE_CONFIG_PCACHE                        = 14
-	SQLITE_CONFIG_PCACHE2                       = 18
-	SQLITE_CONFIG_PCACHE_HDRSZ                  = 24
-	SQLITE_CONFIG_PMASZ                         = 25
-	SQLITE_CONFIG_SCRATCH                       = 6
-	SQLITE_CONFIG_SERIALIZED                    = 3
-	SQLITE_CONFIG_SINGLETHREAD                  = 1
-	SQLITE_CONFIG_SMALL_MALLOC                  = 27
-	SQLITE_CONFIG_SORTERREF_SIZE                = 28
-	SQLITE_CONFIG_SQLLOG                        = 21
-	SQLITE_CONFIG_STMTJRNL_SPILL                = 26
-	SQLITE_CONFIG_URI                           = 17
-	SQLITE_CONFIG_WIN32_HEAPSIZE                = 23
-	SQLITE_CONSTRAINT                           = 19
-	SQLITE_CONSTRAINT_CHECK                     = 275
-	SQLITE_CONSTRAINT_COMMITHOOK                = 531
-	SQLITE_CONSTRAINT_DATATYPE                  = 3091
-	SQLITE_CONSTRAINT_FOREIGNKEY                = 787
-	SQLITE_CONSTRAINT_FUNCTION                  = 1043
-	SQLITE_CONSTRAINT_NOTNULL                   = 1299
-	SQLITE_CONSTRAINT_PINNED                    = 2835
-	SQLITE_CONSTRAINT_PRIMARYKEY                = 1555
-	SQLITE_CONSTRAINT_ROWID                     = 2579
-	SQLITE_CONSTRAINT_TRIGGER                   = 1811
-	SQLITE_CONSTRAINT_UNIQUE                    = 2067
-	SQLITE_CONSTRAINT_VTAB                      = 2323
-	SQLITE_COPY                                 = 0
-	SQLITE_CORE                                 = 1
-	SQLITE_CORRUPT                              = 11
-	SQLITE_CORRUPT_INDEX                        = 779
-	SQLITE_CORRUPT_SEQUENCE                     = 523
-	SQLITE_CORRUPT_VTAB                         = 267
-	SQLITE_CREATE_INDEX                         = 1
-	SQLITE_CREATE_TABLE                         = 2
-	SQLITE_CREATE_TEMP_INDEX                    = 3
-	SQLITE_CREATE_TEMP_TABLE                    = 4
-	SQLITE_CREATE_TEMP_TRIGGER                  = 5
-	SQLITE_CREATE_TEMP_VIEW                     = 6
-	SQLITE_CREATE_TRIGGER                       = 7
-	SQLITE_CREATE_VIEW                          = 8
-	SQLITE_CREATE_VTABLE                        = 29
-	SQLITE_DBCONFIG_DEFENSIVE                   = 1010
-	SQLITE_DBCONFIG_DQS_DDL                     = 1014
-	SQLITE_DBCONFIG_DQS_DML                     = 1013
-	SQLITE_DBCONFIG_ENABLE_FKEY                 = 1002
-	SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER       = 1004
-	SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION       = 1005
-	SQLITE_DBCONFIG_ENABLE_QPSG                 = 1007
-	SQLITE_DBCONFIG_ENABLE_TRIGGER              = 1003
-	SQLITE_DBCONFIG_ENABLE_VIEW                 = 1015
-	SQLITE_DBCONFIG_LEGACY_ALTER_TABLE          = 1012
-	SQLITE_DBCONFIG_LEGACY_FILE_FORMAT          = 1016
-	SQLITE_DBCONFIG_LOOKASIDE                   = 1001
-	SQLITE_DBCONFIG_MAINDBNAME                  = 1000
-	SQLITE_DBCONFIG_MAX                         = 1017
-	SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE            = 1006
-	SQLITE_DBCONFIG_RESET_DATABASE              = 1009
-	SQLITE_DBCONFIG_TRIGGER_EQP                 = 1008
-	SQLITE_DBCONFIG_TRUSTED_SCHEMA              = 1017
-	SQLITE_DBCONFIG_WRITABLE_SCHEMA             = 1011
-	SQLITE_DBSTATUS_CACHE_HIT                   = 7
-	SQLITE_DBSTATUS_CACHE_MISS                  = 8
-	SQLITE_DBSTATUS_CACHE_SPILL                 = 12
-	SQLITE_DBSTATUS_CACHE_USED                  = 1
-	SQLITE_DBSTATUS_CACHE_USED_SHARED           = 11
-	SQLITE_DBSTATUS_CACHE_WRITE                 = 9
-	SQLITE_DBSTATUS_DEFERRED_FKS                = 10
-	SQLITE_DBSTATUS_LOOKASIDE_HIT               = 4
-	SQLITE_DBSTATUS_LOOKASIDE_MISS_FULL         = 6
-	SQLITE_DBSTATUS_LOOKASIDE_MISS_SIZE         = 5
-	SQLITE_DBSTATUS_LOOKASIDE_USED              = 0
-	SQLITE_DBSTATUS_MAX                         = 12
-	SQLITE_DBSTATUS_SCHEMA_USED                 = 2
-	SQLITE_DBSTATUS_STMT_USED                   = 3
-	SQLITE_DEFAULT_MEMSTATUS                    = 0
-	SQLITE_DELETE                               = 9
-	SQLITE_DENY                                 = 1
-	SQLITE_DEPRECATED                           = 0
-	SQLITE_DESERIALIZE_FREEONCLOSE              = 1
-	SQLITE_DESERIALIZE_READONLY                 = 4
-	SQLITE_DESERIALIZE_RESIZEABLE               = 2
-	SQLITE_DETACH                               = 25
-	SQLITE_DETERMINISTIC                        = 0x000000800
-	SQLITE_DIRECTONLY                           = 0x000080000
-	SQLITE_DONE                                 = 101
-	SQLITE_DROP_INDEX                           = 10
-	SQLITE_DROP_TABLE                           = 11
-	SQLITE_DROP_TEMP_INDEX                      = 12
-	SQLITE_DROP_TEMP_TABLE                      = 13
-	SQLITE_DROP_TEMP_TRIGGER                    = 14
-	SQLITE_DROP_TEMP_VIEW                       = 15
-	SQLITE_DROP_TRIGGER                         = 16
-	SQLITE_DROP_VIEW                            = 17
-	SQLITE_DROP_VTABLE                          = 30
-	SQLITE_EMPTY                                = 16
-	SQLITE_ENABLE_COLUMN_METADATA               = 1
-	SQLITE_ENABLE_FTS5                          = 1
-	SQLITE_ENABLE_GEOPOLY                       = 1
-	SQLITE_ENABLE_MATH_FUNCTIONS                = 1
-	SQLITE_ENABLE_MEMORY_MANAGEMENT             = 1
-	SQLITE_ENABLE_OFFSET_SQL_FUNC               = 1
-	SQLITE_ENABLE_PREUPDATE_HOOK                = 1
-	SQLITE_ENABLE_RBU                           = 1
-	SQLITE_ENABLE_RTREE                         = 1
-	SQLITE_ENABLE_SESSION                       = 1
-	SQLITE_ENABLE_SNAPSHOT                      = 1
-	SQLITE_ENABLE_STAT4                         = 1
-	SQLITE_ENABLE_UNLOCK_NOTIFY                 = 1
-	SQLITE_ERROR                                = 1
-	SQLITE_ERROR_MISSING_COLLSEQ                = 257
-	SQLITE_ERROR_RETRY                          = 513
-	SQLITE_ERROR_SNAPSHOT                       = 769
-	SQLITE_EXPERIMENTAL                         = 0
-	SQLITE_FAIL                                 = 3
-	SQLITE_FCNTL_BEGIN_ATOMIC_WRITE             = 31
-	SQLITE_FCNTL_BUSYHANDLER                    = 15
-	SQLITE_FCNTL_CHUNK_SIZE                     = 6
-	SQLITE_FCNTL_CKPT_DONE                      = 37
-	SQLITE_FCNTL_CKPT_START                     = 39
-	SQLITE_FCNTL_CKSM_FILE                      = 41
-	SQLITE_FCNTL_COMMIT_ATOMIC_WRITE            = 32
-	SQLITE_FCNTL_COMMIT_PHASETWO                = 22
-	SQLITE_FCNTL_DATA_VERSION                   = 35
-	SQLITE_FCNTL_EXTERNAL_READER                = 40
-	SQLITE_FCNTL_FILE_POINTER                   = 7
-	SQLITE_FCNTL_GET_LOCKPROXYFILE              = 2
-	SQLITE_FCNTL_HAS_MOVED                      = 20
-	SQLITE_FCNTL_JOURNAL_POINTER                = 28
-	SQLITE_FCNTL_LAST_ERRNO                     = 4
-	SQLITE_FCNTL_LOCKSTATE                      = 1
-	SQLITE_FCNTL_LOCK_TIMEOUT                   = 34
-	SQLITE_FCNTL_MMAP_SIZE                      = 18
-	SQLITE_FCNTL_OVERWRITE                      = 11
-	SQLITE_FCNTL_PDB                            = 30
-	SQLITE_FCNTL_PERSIST_WAL                    = 10
-	SQLITE_FCNTL_POWERSAFE_OVERWRITE            = 13
-	SQLITE_FCNTL_PRAGMA                         = 14
-	SQLITE_FCNTL_RBU                            = 26
-	SQLITE_FCNTL_RESERVE_BYTES                  = 38
-	SQLITE_FCNTL_RESET_CACHE                    = 42
-	SQLITE_FCNTL_ROLLBACK_ATOMIC_WRITE          = 33
-	SQLITE_FCNTL_SET_LOCKPROXYFILE              = 3
-	SQLITE_FCNTL_SIZE_HINT                      = 5
-	SQLITE_FCNTL_SIZE_LIMIT                     = 36
-	SQLITE_FCNTL_SYNC                           = 21
-	SQLITE_FCNTL_SYNC_OMITTED                   = 8
-	SQLITE_FCNTL_TEMPFILENAME                   = 16
-	SQLITE_FCNTL_TRACE                          = 19
-	SQLITE_FCNTL_VFSNAME                        = 12
-	SQLITE_FCNTL_VFS_POINTER                    = 27
-	SQLITE_FCNTL_WAL_BLOCK                      = 24
-	SQLITE_FCNTL_WIN32_AV_RETRY                 = 9
-	SQLITE_FCNTL_WIN32_GET_HANDLE               = 29
-	SQLITE_FCNTL_WIN32_SET_HANDLE               = 23
-	SQLITE_FCNTL_ZIPVFS                         = 25
-	SQLITE_FLOAT                                = 2
-	SQLITE_FORMAT                               = 24
-	SQLITE_FULL                                 = 13
-	SQLITE_FUNCTION                             = 31
-	SQLITE_GET_LOCKPROXYFILE                    = 2
-	SQLITE_IGNORE                               = 2
-	SQLITE_INDEX_CONSTRAINT_EQ                  = 2
-	SQLITE_INDEX_CONSTRAINT_FUNCTION            = 150
-	SQLITE_INDEX_CONSTRAINT_GE                  = 32
-	SQLITE_INDEX_CONSTRAINT_GLOB                = 66
-	SQLITE_INDEX_CONSTRAINT_GT                  = 4
-	SQLITE_INDEX_CONSTRAINT_IS                  = 72
-	SQLITE_INDEX_CONSTRAINT_ISNOT               = 69
-	SQLITE_INDEX_CONSTRAINT_ISNOTNULL           = 70
-	SQLITE_INDEX_CONSTRAINT_ISNULL              = 71
-	SQLITE_INDEX_CONSTRAINT_LE                  = 8
-	SQLITE_INDEX_CONSTRAINT_LIKE                = 65
-	SQLITE_INDEX_CONSTRAINT_LIMIT               = 73
-	SQLITE_INDEX_CONSTRAINT_LT                  = 16
-	SQLITE_INDEX_CONSTRAINT_MATCH               = 64
-	SQLITE_INDEX_CONSTRAINT_NE                  = 68
-	SQLITE_INDEX_CONSTRAINT_OFFSET              = 74
-	SQLITE_INDEX_CONSTRAINT_REGEXP              = 67
-	SQLITE_INDEX_SCAN_UNIQUE                    = 1
-	SQLITE_INNOCUOUS                            = 0x000200000
-	SQLITE_INSERT                               = 18
-	SQLITE_INTEGER                              = 1
-	SQLITE_INTERNAL                             = 2
-	SQLITE_INTERRUPT                            = 9
-	SQLITE_IOCAP_ATOMIC                         = 0x00000001
-	SQLITE_IOCAP_ATOMIC16K                      = 0x00000040
-	SQLITE_IOCAP_ATOMIC1K                       = 0x00000004
-	SQLITE_IOCAP_ATOMIC2K                       = 0x00000008
-	SQLITE_IOCAP_ATOMIC32K                      = 0x00000080
-	SQLITE_IOCAP_ATOMIC4K                       = 0x00000010
-	SQLITE_IOCAP_ATOMIC512                      = 0x00000002
-	SQLITE_IOCAP_ATOMIC64K                      = 0x00000100
-	SQLITE_IOCAP_ATOMIC8K                       = 0x00000020
-	SQLITE_IOCAP_BATCH_ATOMIC                   = 0x00004000
-	SQLITE_IOCAP_IMMUTABLE                      = 0x00002000
-	SQLITE_IOCAP_POWERSAFE_OVERWRITE            = 0x00001000
-	SQLITE_IOCAP_SAFE_APPEND                    = 0x00000200
-	SQLITE_IOCAP_SEQUENTIAL                     = 0x00000400
-	SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN          = 0x00000800
-	SQLITE_IOERR                                = 10
-	SQLITE_IOERR_ACCESS                         = 3338
-	SQLITE_IOERR_AUTH                           = 7178
-	SQLITE_IOERR_BEGIN_ATOMIC                   = 7434
-	SQLITE_IOERR_BLOCKED                        = 2826
-	SQLITE_IOERR_CHECKRESERVEDLOCK              = 3594
-	SQLITE_IOERR_CLOSE                          = 4106
-	SQLITE_IOERR_COMMIT_ATOMIC                  = 7690
-	SQLITE_IOERR_CONVPATH                       = 6666
-	SQLITE_IOERR_CORRUPTFS                      = 8458
-	SQLITE_IOERR_DATA                           = 8202
-	SQLITE_IOERR_DELETE                         = 2570
-	SQLITE_IOERR_DELETE_NOENT                   = 5898
-	SQLITE_IOERR_DIR_CLOSE                      = 4362
-	SQLITE_IOERR_DIR_FSYNC                      = 1290
-	SQLITE_IOERR_FSTAT                          = 1802
-	SQLITE_IOERR_FSYNC                          = 1034
-	SQLITE_IOERR_GETTEMPPATH                    = 6410
-	SQLITE_IOERR_LOCK                           = 3850
-	SQLITE_IOERR_MMAP                           = 6154
-	SQLITE_IOERR_NOMEM                          = 3082
-	SQLITE_IOERR_RDLOCK                         = 2314
-	SQLITE_IOERR_READ                           = 266
-	SQLITE_IOERR_ROLLBACK_ATOMIC                = 7946
-	SQLITE_IOERR_SEEK                           = 5642
-	SQLITE_IOERR_SHMLOCK                        = 5130
-	SQLITE_IOERR_SHMMAP                         = 5386
-	SQLITE_IOERR_SHMOPEN                        = 4618
-	SQLITE_IOERR_SHMSIZE                        = 4874
-	SQLITE_IOERR_SHORT_READ                     = 522
-	SQLITE_IOERR_TRUNCATE                       = 1546
-	SQLITE_IOERR_UNLOCK                         = 2058
-	SQLITE_IOERR_VNODE                          = 6922
-	SQLITE_IOERR_WRITE                          = 778
-	SQLITE_LAST_ERRNO                           = 4
-	SQLITE_LIKE_DOESNT_MATCH_BLOBS              = 1
-	SQLITE_LIMIT_ATTACHED                       = 7
-	SQLITE_LIMIT_COLUMN                         = 2
-	SQLITE_LIMIT_COMPOUND_SELECT                = 4
-	SQLITE_LIMIT_EXPR_DEPTH                     = 3
-	SQLITE_LIMIT_FUNCTION_ARG                   = 6
-	SQLITE_LIMIT_LENGTH                         = 0
-	SQLITE_LIMIT_LIKE_PATTERN_LENGTH            = 8
-	SQLITE_LIMIT_SQL_LENGTH                     = 1
-	SQLITE_LIMIT_TRIGGER_DEPTH                  = 10
-	SQLITE_LIMIT_VARIABLE_NUMBER                = 9
-	SQLITE_LIMIT_VDBE_OP                        = 5
-	SQLITE_LIMIT_WORKER_THREADS                 = 11
-	SQLITE_LOCKED                               = 6
-	SQLITE_LOCKED_SHAREDCACHE                   = 262
-	SQLITE_LOCKED_VTAB                          = 518
-	SQLITE_LOCK_EXCLUSIVE                       = 4
-	SQLITE_LOCK_NONE                            = 0
-	SQLITE_LOCK_PENDING                         = 3
-	SQLITE_LOCK_RESERVED                        = 2
-	SQLITE_LOCK_SHARED                          = 1
-	SQLITE_MISMATCH                             = 20
-	SQLITE_MISUSE                               = 21
-	SQLITE_MUTEX_APPDEF                         = 1
-	SQLITE_MUTEX_FAST                           = 0
-	SQLITE_MUTEX_NOOP                           = 1
-	SQLITE_MUTEX_RECURSIVE                      = 1
-	SQLITE_MUTEX_STATIC_APP1                    = 8
-	SQLITE_MUTEX_STATIC_APP2                    = 9
-	SQLITE_MUTEX_STATIC_APP3                    = 10
-	SQLITE_MUTEX_STATIC_LRU                     = 6
-	SQLITE_MUTEX_STATIC_LRU2                    = 7
-	SQLITE_MUTEX_STATIC_MAIN                    = 2
-	SQLITE_MUTEX_STATIC_MASTER                  = 2
-	SQLITE_MUTEX_STATIC_MEM                     = 3
-	SQLITE_MUTEX_STATIC_MEM2                    = 4
-	SQLITE_MUTEX_STATIC_OPEN                    = 4
-	SQLITE_MUTEX_STATIC_PMEM                    = 7
-	SQLITE_MUTEX_STATIC_PRNG                    = 5
-	SQLITE_MUTEX_STATIC_VFS1                    = 11
-	SQLITE_MUTEX_STATIC_VFS2                    = 12
-	SQLITE_MUTEX_STATIC_VFS3                    = 13
-	SQLITE_NOLFS                                = 22
-	SQLITE_NOMEM                                = 7
-	SQLITE_NOTADB                               = 26
-	SQLITE_NOTFOUND                             = 12
-	SQLITE_NOTICE                               = 27
-	SQLITE_NOTICE_RBU                           = 795
-	SQLITE_NOTICE_RECOVER_ROLLBACK              = 539
-	SQLITE_NOTICE_RECOVER_WAL                   = 283
-	SQLITE_NULL                                 = 5
-	SQLITE_OK                                   = 0
-	SQLITE_OK_LOAD_PERMANENTLY                  = 256
-	SQLITE_OK_SYMLINK                           = 512
-	SQLITE_OPEN_AUTOPROXY                       = 0x00000020
-	SQLITE_OPEN_CREATE                          = 0x00000004
-	SQLITE_OPEN_DELETEONCLOSE                   = 0x00000008
-	SQLITE_OPEN_EXCLUSIVE                       = 0x00000010
-	SQLITE_OPEN_EXRESCODE                       = 0x02000000
-	SQLITE_OPEN_FULLMUTEX                       = 0x00010000
-	SQLITE_OPEN_MAIN_DB                         = 0x00000100
-	SQLITE_OPEN_MAIN_JOURNAL                    = 0x00000800
-	SQLITE_OPEN_MASTER_JOURNAL                  = 0x00004000
-	SQLITE_OPEN_MEMORY                          = 0x00000080
-	SQLITE_OPEN_NOFOLLOW                        = 0x01000000
-	SQLITE_OPEN_NOMUTEX                         = 0x00008000
-	SQLITE_OPEN_PRIVATECACHE                    = 0x00040000
-	SQLITE_OPEN_READONLY                        = 0x00000001
-	SQLITE_OPEN_READWRITE                       = 0x00000002
-	SQLITE_OPEN_SHAREDCACHE                     = 0x00020000
-	SQLITE_OPEN_SUBJOURNAL                      = 0x00002000
-	SQLITE_OPEN_SUPER_JOURNAL                   = 0x00004000
-	SQLITE_OPEN_TEMP_DB                         = 0x00000200
-	SQLITE_OPEN_TEMP_JOURNAL                    = 0x00001000
-	SQLITE_OPEN_TRANSIENT_DB                    = 0x00000400
-	SQLITE_OPEN_URI                             = 0x00000040
-	SQLITE_OPEN_WAL                             = 0x00080000
-	SQLITE_OS_UNIX                              = 1
-	SQLITE_PERM                                 = 3
-	SQLITE_PRAGMA                               = 19
-	SQLITE_PREPARE_NORMALIZE                    = 0x02
-	SQLITE_PREPARE_NO_VTAB                      = 0x04
-	SQLITE_PREPARE_PERSISTENT                   = 0x01
-	SQLITE_PROTOCOL                             = 15
-	SQLITE_RANGE                                = 25
-	SQLITE_READ                                 = 20
-	SQLITE_READONLY                             = 8
-	SQLITE_READONLY_CANTINIT                    = 1288
-	SQLITE_READONLY_CANTLOCK                    = 520
-	SQLITE_READONLY_DBMOVED                     = 1032
-	SQLITE_READONLY_DIRECTORY                   = 1544
-	SQLITE_READONLY_RECOVERY                    = 264
-	SQLITE_READONLY_ROLLBACK                    = 776
-	SQLITE_RECURSIVE                            = 33
-	SQLITE_REINDEX                              = 27
-	SQLITE_REPLACE                              = 5
-	SQLITE_ROLLBACK                             = 1
-	SQLITE_ROW                                  = 100
-	SQLITE_SAVEPOINT                            = 32
-	SQLITE_SCANSTAT_COMPLEX                     = 0x0001
-	SQLITE_SCANSTAT_EST                         = 2
-	SQLITE_SCANSTAT_EXPLAIN                     = 4
-	SQLITE_SCANSTAT_NAME                        = 3
-	SQLITE_SCANSTAT_NCYCLE                      = 7
-	SQLITE_SCANSTAT_NLOOP                       = 0
-	SQLITE_SCANSTAT_NVISIT                      = 1
-	SQLITE_SCANSTAT_PARENTID                    = 6
-	SQLITE_SCANSTAT_SELECTID                    = 5
-	SQLITE_SCHEMA                               = 17
-	SQLITE_SELECT                               = 21
-	SQLITE_SERIALIZE_NOCOPY                     = 0x001
-	SQLITE_SESSION_CONFIG_STRMSIZE              = 1
-	SQLITE_SESSION_OBJCONFIG_SIZE               = 1
-	SQLITE_SET_LOCKPROXYFILE                    = 3
-	SQLITE_SHM_EXCLUSIVE                        = 8
-	SQLITE_SHM_LOCK                             = 2
-	SQLITE_SHM_NLOCK                            = 8
-	SQLITE_SHM_SHARED                           = 4
-	SQLITE_SHM_UNLOCK                           = 1
-	SQLITE_SOUNDEX                              = 1
-	SQLITE_SOURCE_ID                            = "2023-03-22 11:56:21 0d1fc92f94cb6b76bffe3ec34d69cffde2924203304e8ffc4155597af0c191da"
-	SQLITE_STATUS_MALLOC_COUNT                  = 9
-	SQLITE_STATUS_MALLOC_SIZE                   = 5
-	SQLITE_STATUS_MEMORY_USED                   = 0
-	SQLITE_STATUS_PAGECACHE_OVERFLOW            = 2
-	SQLITE_STATUS_PAGECACHE_SIZE                = 7
-	SQLITE_STATUS_PAGECACHE_USED                = 1
-	SQLITE_STATUS_PARSER_STACK                  = 6
-	SQLITE_STATUS_SCRATCH_OVERFLOW              = 4
-	SQLITE_STATUS_SCRATCH_SIZE                  = 8
-	SQLITE_STATUS_SCRATCH_USED                  = 3
-	SQLITE_STDCALL                              = 0
-	SQLITE_STMTSTATUS_AUTOINDEX                 = 3
-	SQLITE_STMTSTATUS_FILTER_HIT                = 8
-	SQLITE_STMTSTATUS_FILTER_MISS               = 7
-	SQLITE_STMTSTATUS_FULLSCAN_STEP             = 1
-	SQLITE_STMTSTATUS_MEMUSED                   = 99
-	SQLITE_STMTSTATUS_REPREPARE                 = 5
-	SQLITE_STMTSTATUS_RUN                       = 6
-	SQLITE_STMTSTATUS_SORT                      = 2
-	SQLITE_STMTSTATUS_VM_STEP                   = 4
-	SQLITE_SUBTYPE                              = 0x000100000
-	SQLITE_SYNC_DATAONLY                        = 0x00010
-	SQLITE_SYNC_FULL                            = 0x00003
-	SQLITE_SYNC_NORMAL                          = 0x00002
-	SQLITE_SYSAPI                               = 0
-	SQLITE_TESTCTRL_ALWAYS                      = 13
-	SQLITE_TESTCTRL_ASSERT                      = 12
-	SQLITE_TESTCTRL_BENIGN_MALLOC_HOOKS         = 10
-	SQLITE_TESTCTRL_BITVEC_TEST                 = 8
-	SQLITE_TESTCTRL_BYTEORDER                   = 22
-	SQLITE_TESTCTRL_EXPLAIN_STMT                = 19
-	SQLITE_TESTCTRL_EXTRA_SCHEMA_CHECKS         = 29
-	SQLITE_TESTCTRL_FAULT_INSTALL               = 9
-	SQLITE_TESTCTRL_FIRST                       = 5
-	SQLITE_TESTCTRL_IMPOSTER                    = 25
-	SQLITE_TESTCTRL_INTERNAL_FUNCTIONS          = 17
-	SQLITE_TESTCTRL_ISINIT                      = 23
-	SQLITE_TESTCTRL_ISKEYWORD                   = 16
-	SQLITE_TESTCTRL_LAST                        = 33
-	SQLITE_TESTCTRL_LOCALTIME_FAULT             = 18
-	SQLITE_TESTCTRL_LOGEST                      = 33
-	SQLITE_TESTCTRL_NEVER_CORRUPT               = 20
-	SQLITE_TESTCTRL_ONCE_RESET_THRESHOLD        = 19
-	SQLITE_TESTCTRL_OPTIMIZATIONS               = 15
-	SQLITE_TESTCTRL_PARSER_COVERAGE             = 26
-	SQLITE_TESTCTRL_PENDING_BYTE                = 11
-	SQLITE_TESTCTRL_PRNG_RESET                  = 7
-	SQLITE_TESTCTRL_PRNG_RESTORE                = 6
-	SQLITE_TESTCTRL_PRNG_SAVE                   = 5
-	SQLITE_TESTCTRL_PRNG_SEED                   = 28
-	SQLITE_TESTCTRL_RESERVE                     = 14
-	SQLITE_TESTCTRL_RESULT_INTREAL              = 27
-	SQLITE_TESTCTRL_SCRATCHMALLOC               = 17
-	SQLITE_TESTCTRL_SEEK_COUNT                  = 30
-	SQLITE_TESTCTRL_SORTER_MMAP                 = 24
-	SQLITE_TESTCTRL_TRACEFLAGS                  = 31
-	SQLITE_TESTCTRL_TUNE                        = 32
-	SQLITE_TESTCTRL_VDBE_COVERAGE               = 21
-	SQLITE_TEXT                                 = 3
-	SQLITE_THREADSAFE                           = 1
-	SQLITE_TOOBIG                               = 18
-	SQLITE_TRACE_CLOSE                          = 0x08
-	SQLITE_TRACE_PROFILE                        = 0x02
-	SQLITE_TRACE_ROW                            = 0x04
-	SQLITE_TRACE_STMT                           = 0x01
-	SQLITE_TRANSACTION                          = 22
-	SQLITE_TXN_NONE                             = 0
-	SQLITE_TXN_READ                             = 1
-	SQLITE_TXN_WRITE                            = 2
-	SQLITE_UPDATE                               = 23
-	SQLITE_UTF16                                = 4
-	SQLITE_UTF16BE                              = 3
-	SQLITE_UTF16LE                              = 2
-	SQLITE_UTF16_ALIGNED                        = 8
-	SQLITE_UTF8                                 = 1
-	SQLITE_VERSION                              = "3.41.2"
-	SQLITE_VERSION_NUMBER                       = 3041002
-	SQLITE_VTAB_CONSTRAINT_SUPPORT              = 1
-	SQLITE_VTAB_DIRECTONLY                      = 3
-	SQLITE_VTAB_INNOCUOUS                       = 2
-	SQLITE_WARNING                              = 28
-	SQLITE_WARNING_AUTOINDEX                    = 284
-	SQLITE_WIN32_DATA_DIRECTORY_TYPE            = 1
-	SQLITE_WIN32_TEMP_DIRECTORY_TYPE            = 2
-	SQLITE_WITHOUT_ZONEMALLOC                   = 1
-	SS_DISABLE                                  = 0x0004
-	SS_ONSTACK                                  = 0x0001
-	STDERR_FILENO                               = 2
-	STDIN_FILENO                                = 0
-	STDOUT_FILENO                               = 1
-	SV_INTERRUPT                                = 2
-	SV_NOCLDSTOP                                = 8
-	SV_NODEFER                                  = 16
-	SV_ONSTACK                                  = 1
-	SV_RESETHAND                                = 4
-	SV_SIGINFO                                  = 64
-	SYNC_VOLUME_FULLSYNC                        = 0x01
-	SYNC_VOLUME_WAIT                            = 0x02
-	TMP_MAX                                     = 308915776
-	TRAP_BRKPT                                  = 1
-	TRAP_TRACE                                  = 2
-	UINT16_MAX                                  = 65535
-	UINT32_MAX                                  = 4294967295
-	UINT64_MAX                                  = 18446744073709551615
-	UINT8_MAX                                   = 255
-	UINTMAX_MAX                                 = 18446744073709551615
-	UINTPTR_MAX                                 = 18446744073709551615
-	UINT_FAST16_MAX                             = 65535
-	UINT_FAST32_MAX                             = 4294967295
-	UINT_FAST64_MAX                             = 18446744073709551615
-	UINT_FAST8_MAX                              = 255
-	UINT_LEAST16_MAX                            = 65535
-	UINT_LEAST32_MAX                            = 4294967295
-	UINT_LEAST64_MAX                            = 18446744073709551615
-	UINT_LEAST8_MAX                             = 255
-	WAIT_ANY                                    = -1
-	WAIT_MYPGRP                                 = 0
-	WAKEMON_DISABLE                             = 0x02
-	WAKEMON_ENABLE                              = 0x01
-	WAKEMON_GET_PARAMS                          = 0x04
-	WAKEMON_MAKE_FATAL                          = 0x10
-	WAKEMON_SET_DEFAULTS                        = 0x08
-	WCHAR_MAX                                   = 2147483647
-	WCHAR_MIN                                   = -2147483648
-	WCONTINUED                                  = 0x00000010
-	WCOREFLAG                                   = 0200
-	WEXITED                                     = 0x00000004
-	WINT_MAX                                    = 2147483647
-	WINT_MIN                                    = -2147483648
-	WNOHANG                                     = 0x00000001
-	WNOWAIT                                     = 0x00000020
-	WSTOPPED                                    = 0x00000008
-	WUNTRACED                                   = 0x00000002
-	W_OK                                        = 2
-	X_OK                                        = 1
-	X_ACCESS_EXTENDED_MASK                      = 4193792
-	X_ALLOCA_H_                                 = 0
-	X_APPEND_OK                                 = 8192
-	X_ARM_ARCH_H                                = 0
-	X_ARM_MACHTYPES_H_                          = 0
-	X_ARM_SIGNAL_                               = 1
-	X_ARM__ENDIAN_H_                            = 0
-	X_ASSERT_H_                                 = 0
-	X_BSD_ARM__TYPES_H_                         = 0
-	X_BSD_MACHINE_ENDIAN_H_                     = 0
-	X_BSD_MACHINE_SIGNAL_H_                     = 0
-	X_BSD_MACHINE_TYPES_H_                      = 0
-	X_BSD_MACHINE__MCONTEXT_H_                  = 0
-	X_BSD_MACHINE__TYPES_H_                     = 0
-	X_CACHED_RUNES                              = 256
-	X_CDEFS_H_                                  = 0
-	X_CHOWN_OK                                  = 2097152
-	X_CRMASK                                    = -256
-	X_CS_DARWIN_USER_CACHE_DIR                  = 65538
-	X_CS_DARWIN_USER_DIR                        = 65536
-	X_CS_DARWIN_USER_TEMP_DIR                   = 65537
-	X_CS_PATH                                   = 1
-	X_CS_POSIX_V6_ILP32_OFF32_CFLAGS            = 2
-	X_CS_POSIX_V6_ILP32_OFF32_LDFLAGS           = 3
-	X_CS_POSIX_V6_ILP32_OFF32_LIBS              = 4
-	X_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS           = 5
-	X_CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS          = 6
-	X_CS_POSIX_V6_ILP32_OFFBIG_LIBS             = 7
-	X_CS_POSIX_V6_LP64_OFF64_CFLAGS             = 8
-	X_CS_POSIX_V6_LP64_OFF64_LDFLAGS            = 9
-	X_CS_POSIX_V6_LP64_OFF64_LIBS               = 10
-	X_CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS           = 11
-	X_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS          = 12
-	X_CS_POSIX_V6_LPBIG_OFFBIG_LIBS             = 13
-	X_CS_POSIX_V6_WIDTH_RESTRICTED_ENVS         = 14
-	X_CS_XBS5_ILP32_OFF32_CFLAGS                = 20
-	X_CS_XBS5_ILP32_OFF32_LDFLAGS               = 21
-	X_CS_XBS5_ILP32_OFF32_LIBS                  = 22
-	X_CS_XBS5_ILP32_OFF32_LINTFLAGS             = 23
-	X_CS_XBS5_ILP32_OFFBIG_CFLAGS               = 24
-	X_CS_XBS5_ILP32_OFFBIG_LDFLAGS              = 25
-	X_CS_XBS5_ILP32_OFFBIG_LIBS                 = 26
-	X_CS_XBS5_ILP32_OFFBIG_LINTFLAGS            = 27
-	X_CS_XBS5_LP64_OFF64_CFLAGS                 = 28
-	X_CS_XBS5_LP64_OFF64_LDFLAGS                = 29
-	X_CS_XBS5_LP64_OFF64_LIBS                   = 30
-	X_CS_XBS5_LP64_OFF64_LINTFLAGS              = 31
-	X_CS_XBS5_LPBIG_OFFBIG_CFLAGS               = 32
-	X_CS_XBS5_LPBIG_OFFBIG_LDFLAGS              = 33
-	X_CS_XBS5_LPBIG_OFFBIG_LIBS                 = 34
-	X_CS_XBS5_LPBIG_OFFBIG_LINTFLAGS            = 35
-	X_CTERMID_H_                                = 0
-	X_CTYPE_A                                   = 0x00000100
-	X_CTYPE_B                                   = 0x00020000
-	X_CTYPE_C                                   = 0x00000200
-	X_CTYPE_D                                   = 0x00000400
-	X_CTYPE_G                                   = 0x00000800
-	X_CTYPE_H_                                  = 0
-	X_CTYPE_I                                   = 0x00080000
-	X_CTYPE_L                                   = 0x00001000
-	X_CTYPE_P                                   = 0x00002000
-	X_CTYPE_Q                                   = 0x00200000
-	X_CTYPE_R                                   = 0x00040000
-	X_CTYPE_S                                   = 0x00004000
-	X_CTYPE_SW0                                 = 0x20000000
-	X_CTYPE_SW1                                 = 0x40000000
-	X_CTYPE_SW2                                 = 0x80000000
-	X_CTYPE_SW3                                 = 0xc0000000
-	X_CTYPE_SWM                                 = 0xe0000000
-	X_CTYPE_SWS                                 = 30
-	X_CTYPE_T                                   = 0x00100000
-	X_CTYPE_U                                   = 0x00008000
-	X_CTYPE_X                                   = 0x00010000
-	X_CT_RUNE_T                                 = 0
-	X_DARWIN_FEATURE_64_BIT_INODE               = 1
-	X_DARWIN_FEATURE_ONLY_64_BIT_INODE          = 1
-	X_DARWIN_FEATURE_ONLY_UNIX_CONFORMANCE      = 1
-	X_DARWIN_FEATURE_ONLY_VERS_1050             = 1
-	X_DARWIN_FEATURE_UNIX_CONFORMANCE           = 3
-	X_DELETE_OK                                 = 4096
-	X_DEV_T                                     = 0
-	X_ERRNO_T                                   = 0
-	X_EXECUTE_OK                                = 2048
-	X_FD_SET                                    = 0
-	X_FILE_OFFSET_BITS                          = 64
-	X_FORTIFY_SOURCE                            = 2
-	X_FSTDIO                                    = 0
-	X_FTS5_H                                    = 0
-	X_GID_T                                     = 0
-	X_ID_T                                      = 0
-	X_INT16_T                                   = 0
-	X_INT32_T                                   = 0
-	X_INT64_T                                   = 0
-	X_INT8_T                                    = 0
-	X_INTPTR_T                                  = 0
-	X_IOFBF                                     = 0
-	X_IOLBF                                     = 1
-	X_IONBF                                     = 2
-	X_LP64                                      = 1
-	X_MACHTYPES_H_                              = 0
-	X_MACH_ARM__STRUCTS_H_                      = 0
-	X_MACH_MACHINE__STRUCTS_H_                  = 0
-	X_MALLOC_UNDERSCORE_MALLOC_H_               = 0
-	X_MCONTEXT_T                                = 0
-	X_MODE_T                                    = 0
-	X_Nonnull                                   = 0
-	X_Null_unspecified                          = 0
-	X_Nullable                                  = 0
-	X_OFF_T                                     = 0
-	X_OS_OSBYTEORDERARM_H                       = 0
-	X_OS__OSBYTEORDER_H                         = 0
-	X_PC_2_SYMLINKS                             = 15
-	X_PC_ALLOC_SIZE_MIN                         = 16
-	X_PC_ASYNC_IO                               = 17
-	X_PC_AUTH_OPAQUE_NP                         = 14
-	X_PC_CASE_PRESERVING                        = 12
-	X_PC_CASE_SENSITIVE                         = 11
-	X_PC_CHOWN_RESTRICTED                       = 7
-	X_PC_EXTENDED_SECURITY_NP                   = 13
-	X_PC_FILESIZEBITS                           = 18
-	X_PC_LINK_MAX                               = 1
-	X_PC_MAX_CANON                              = 2
-	X_PC_MAX_INPUT                              = 3
-	X_PC_MIN_HOLE_SIZE                          = 27
-	X_PC_NAME_CHARS_MAX                         = 10
-	X_PC_NAME_MAX                               = 4
-	X_PC_NO_TRUNC                               = 8
-	X_PC_PATH_MAX                               = 5
-	X_PC_PIPE_BUF                               = 6
-	X_PC_PRIO_IO                                = 19
-	X_PC_REC_INCR_XFER_SIZE                     = 20
-	X_PC_REC_MAX_XFER_SIZE                      = 21
-	X_PC_REC_MIN_XFER_SIZE                      = 22
-	X_PC_REC_XFER_ALIGN                         = 23
-	X_PC_SYMLINK_MAX                            = 24
-	X_PC_SYNC_IO                                = 25
-	X_PC_VDISABLE                               = 9
-	X_PC_XATTR_SIZE_BITS                        = 26
-	X_PID_T                                     = 0
-	X_POSIX2_CHAR_TERM                          = 200112
-	X_POSIX2_C_BIND                             = 200112
-	X_POSIX2_C_DEV                              = 200112
-	X_POSIX2_FORT_DEV                           = -1
-	X_POSIX2_FORT_RUN                           = 200112
-	X_POSIX2_LOCALEDEF                          = 200112
-	X_POSIX2_PBS                                = -1
-	X_POSIX2_PBS_ACCOUNTING                     = -1
-	X_POSIX2_PBS_CHECKPOINT                     = -1
-	X_POSIX2_PBS_LOCATE                         = -1
-	X_POSIX2_PBS_MESSAGE                        = -1
-	X_POSIX2_PBS_TRACK                          = -1
-	X_POSIX2_SW_DEV                             = 200112
-	X_POSIX2_UPE                                = 200112
-	X_POSIX2_VERSION                            = 200112
-	X_POSIX_ADVISORY_INFO                       = -1
-	X_POSIX_ASYNCHRONOUS_IO                     = -1
-	X_POSIX_BARRIERS                            = -1
-	X_POSIX_CHOWN_RESTRICTED                    = 200112
-	X_POSIX_CLOCK_SELECTION                     = -1
-	X_POSIX_CPUTIME                             = -1
-	X_POSIX_FSYNC                               = 200112
-	X_POSIX_IPV6                                = 200112
-	X_POSIX_JOB_CONTROL                         = 200112
-	X_POSIX_MAPPED_FILES                        = 200112
-	X_POSIX_MEMLOCK                             = -1
-	X_POSIX_MEMLOCK_RANGE                       = -1
-	X_POSIX_MEMORY_PROTECTION                   = 200112
-	X_POSIX_MESSAGE_PASSING                     = -1
-	X_POSIX_MONOTONIC_CLOCK                     = -1
-	X_POSIX_NO_TRUNC                            = 200112
-	X_POSIX_PRIORITIZED_IO                      = -1
-	X_POSIX_PRIORITY_SCHEDULING                 = -1
-	X_POSIX_RAW_SOCKETS                         = -1
-	X_POSIX_READER_WRITER_LOCKS                 = 200112
-	X_POSIX_REALTIME_SIGNALS                    = -1
-	X_POSIX_REGEXP                              = 200112
-	X_POSIX_SAVED_IDS                           = 200112
-	X_POSIX_SEMAPHORES                          = -1
-	X_POSIX_SHARED_MEMORY_OBJECTS               = -1
-	X_POSIX_SHELL                               = 200112
-	X_POSIX_SPAWN                               = -1
-	X_POSIX_SPIN_LOCKS                          = -1
-	X_POSIX_SPORADIC_SERVER                     = -1
-	X_POSIX_SYNCHRONIZED_IO                     = -1
-	X_POSIX_THREADS                             = 200112
-	X_POSIX_THREAD_ATTR_STACKADDR               = 200112
-	X_POSIX_THREAD_ATTR_STACKSIZE               = 200112
-	X_POSIX_THREAD_CPUTIME                      = -1
-	X_POSIX_THREAD_KEYS_MAX                     = 128
-	X_POSIX_THREAD_PRIORITY_SCHEDULING          = -1
-	X_POSIX_THREAD_PRIO_INHERIT                 = -1
-	X_POSIX_THREAD_PRIO_PROTECT                 = -1
-	X_POSIX_THREAD_PROCESS_SHARED               = 200112
-	X_POSIX_THREAD_SAFE_FUNCTIONS               = 200112
-	X_POSIX_THREAD_SPORADIC_SERVER              = -1
-	X_POSIX_TIMEOUTS                            = -1
-	X_POSIX_TIMERS                              = -1
-	X_POSIX_TRACE                               = -1
-	X_POSIX_TRACE_EVENT_FILTER                  = -1
-	X_POSIX_TRACE_INHERIT                       = -1
-	X_POSIX_TRACE_LOG                           = -1
-	X_POSIX_TYPED_MEMORY_OBJECTS                = -1
-	X_POSIX_V6_ILP32_OFF32                      = -1
-	X_POSIX_V6_ILP32_OFFBIG                     = -1
-	X_POSIX_V6_LP64_OFF64                       = 1
-	X_POSIX_V6_LPBIG_OFFBIG                     = 1
-	X_POSIX_V7_ILP32_OFF32                      = -1
-	X_POSIX_V7_ILP32_OFFBIG                     = -1
-	X_POSIX_V7_LP64_OFF64                       = 1
-	X_POSIX_V7_LPBIG_OFFBIG                     = 1
-	X_POSIX_VERSION                             = 200112
-	X_PTHREAD_ATTR_T                            = 0
-	X_QUAD_HIGHWORD                             = 1
-	X_QUAD_LOWWORD                              = 0
-	X_RATTR_OK                                  = 32768
-	X_READ_OK                                   = 512
-	X_REXT_OK                                   = 131072
-	X_RLIMIT_POSIX_FLAG                         = 0x1000
-	X_RMFILE_OK                                 = 16384
-	X_RPERM_OK                                  = 524288
-	X_RSIZE_T                                   = 0
-	X_RUNETYPE_H_                               = 0
-	X_RUNE_MAGIC_A                              = "RuneMagA"
-	X_RUNE_T                                    = 0
-	X_SC_2_CHAR_TERM                            = 20
-	X_SC_2_C_BIND                               = 18
-	X_SC_2_C_DEV                                = 19
-	X_SC_2_FORT_DEV                             = 21
-	X_SC_2_FORT_RUN                             = 22
-	X_SC_2_LOCALEDEF                            = 23
-	X_SC_2_PBS                                  = 59
-	X_SC_2_PBS_ACCOUNTING                       = 60
-	X_SC_2_PBS_CHECKPOINT                       = 61
-	X_SC_2_PBS_LOCATE                           = 62
-	X_SC_2_PBS_MESSAGE                          = 63
-	X_SC_2_PBS_TRACK                            = 64
-	X_SC_2_SW_DEV                               = 24
-	X_SC_2_UPE                                  = 25
-	X_SC_2_VERSION                              = 17
-	X_SC_ADVISORY_INFO                          = 65
-	X_SC_AIO_LISTIO_MAX                         = 42
-	X_SC_AIO_MAX                                = 43
-	X_SC_AIO_PRIO_DELTA_MAX                     = 44
-	X_SC_ARG_MAX                                = 1
-	X_SC_ASYNCHRONOUS_IO                        = 28
-	X_SC_ATEXIT_MAX                             = 107
-	X_SC_BARRIERS                               = 66
-	X_SC_BC_BASE_MAX                            = 9
-	X_SC_BC_DIM_MAX                             = 10
-	X_SC_BC_SCALE_MAX                           = 11
-	X_SC_BC_STRING_MAX                          = 12
-	X_SC_CHILD_MAX                              = 2
-	X_SC_CLK_TCK                                = 3
-	X_SC_CLOCK_SELECTION                        = 67
-	X_SC_COLL_WEIGHTS_MAX                       = 13
-	X_SC_CPUTIME                                = 68
-	X_SC_DELAYTIMER_MAX                         = 45
-	X_SC_EXPR_NEST_MAX                          = 14
-	X_SC_FILE_LOCKING                           = 69
-	X_SC_FSYNC                                  = 38
-	X_SC_GETGR_R_SIZE_MAX                       = 70
-	X_SC_GETPW_R_SIZE_MAX                       = 71
-	X_SC_HOST_NAME_MAX                          = 72
-	X_SC_IOV_MAX                                = 56
-	X_SC_IPV6                                   = 118
-	X_SC_JOB_CONTROL                            = 6
-	X_SC_LINE_MAX                               = 15
-	X_SC_LOGIN_NAME_MAX                         = 73
-	X_SC_MAPPED_FILES                           = 47
-	X_SC_MEMLOCK                                = 30
-	X_SC_MEMLOCK_RANGE                          = 31
-	X_SC_MEMORY_PROTECTION                      = 32
-	X_SC_MESSAGE_PASSING                        = 33
-	X_SC_MONOTONIC_CLOCK                        = 74
-	X_SC_MQ_OPEN_MAX                            = 46
-	X_SC_MQ_PRIO_MAX                            = 75
-	X_SC_NGROUPS_MAX                            = 4
-	X_SC_NPROCESSORS_CONF                       = 57
-	X_SC_NPROCESSORS_ONLN                       = 58
-	X_SC_OPEN_MAX                               = 5
-	X_SC_PAGESIZE                               = 29
-	X_SC_PAGE_SIZE                              = 29
-	X_SC_PASS_MAX                               = 131
-	X_SC_PHYS_PAGES                             = 200
-	X_SC_PRIORITIZED_IO                         = 34
-	X_SC_PRIORITY_SCHEDULING                    = 35
-	X_SC_RAW_SOCKETS                            = 119
-	X_SC_READER_WRITER_LOCKS                    = 76
-	X_SC_REALTIME_SIGNALS                       = 36
-	X_SC_REGEXP                                 = 77
-	X_SC_RE_DUP_MAX                             = 16
-	X_SC_RTSIG_MAX                              = 48
-	X_SC_SAVED_IDS                              = 7
-	X_SC_SEMAPHORES                             = 37
-	X_SC_SEM_NSEMS_MAX                          = 49
-	X_SC_SEM_VALUE_MAX                          = 50
-	X_SC_SHARED_MEMORY_OBJECTS                  = 39
-	X_SC_SHELL                                  = 78
-	X_SC_SIGQUEUE_MAX                           = 51
-	X_SC_SPAWN                                  = 79
-	X_SC_SPIN_LOCKS                             = 80
-	X_SC_SPORADIC_SERVER                        = 81
-	X_SC_SS_REPL_MAX                            = 126
-	X_SC_STREAM_MAX                             = 26
-	X_SC_SYMLOOP_MAX                            = 120
-	X_SC_SYNCHRONIZED_IO                        = 40
-	X_SC_THREADS                                = 96
-	X_SC_THREAD_ATTR_STACKADDR                  = 82
-	X_SC_THREAD_ATTR_STACKSIZE                  = 83
-	X_SC_THREAD_CPUTIME                         = 84
-	X_SC_THREAD_DESTRUCTOR_ITERATIONS           = 85
-	X_SC_THREAD_KEYS_MAX                        = 86
-	X_SC_THREAD_PRIORITY_SCHEDULING             = 89
-	X_SC_THREAD_PRIO_INHERIT                    = 87
-	X_SC_THREAD_PRIO_PROTECT                    = 88
-	X_SC_THREAD_PROCESS_SHARED                  = 90
-	X_SC_THREAD_SAFE_FUNCTIONS                  = 91
-	X_SC_THREAD_SPORADIC_SERVER                 = 92
-	X_SC_THREAD_STACK_MIN                       = 93
-	X_SC_THREAD_THREADS_MAX                     = 94
-	X_SC_TIMEOUTS                               = 95
-	X_SC_TIMERS                                 = 41
-	X_SC_TIMER_MAX                              = 52
-	X_SC_TRACE                                  = 97
-	X_SC_TRACE_EVENT_FILTER                     = 98
-	X_SC_TRACE_EVENT_NAME_MAX                   = 127
-	X_SC_TRACE_INHERIT                          = 99
-	X_SC_TRACE_LOG                              = 100
-	X_SC_TRACE_NAME_MAX                         = 128
-	X_SC_TRACE_SYS_MAX                          = 129
-	X_SC_TRACE_USER_EVENT_MAX                   = 130
-	X_SC_TTY_NAME_MAX                           = 101
-	X_SC_TYPED_MEMORY_OBJECTS                   = 102
-	X_SC_TZNAME_MAX                             = 27
-	X_SC_V6_ILP32_OFF32                         = 103
-	X_SC_V6_ILP32_OFFBIG                        = 104
-	X_SC_V6_LP64_OFF64                          = 105
-	X_SC_V6_LPBIG_OFFBIG                        = 106
-	X_SC_VERSION                                = 8
-	X_SC_XBS5_ILP32_OFF32                       = 122
-	X_SC_XBS5_ILP32_OFFBIG                      = 123
-	X_SC_XBS5_LP64_OFF64                        = 124
-	X_SC_XBS5_LPBIG_OFFBIG                      = 125
-	X_SC_XOPEN_CRYPT                            = 108
-	X_SC_XOPEN_ENH_I18N                         = 109
-	X_SC_XOPEN_LEGACY                           = 110
-	X_SC_XOPEN_REALTIME                         = 111
-	X_SC_XOPEN_REALTIME_THREADS                 = 112
-	X_SC_XOPEN_SHM                              = 113
-	X_SC_XOPEN_STREAMS                          = 114
-	X_SC_XOPEN_UNIX                             = 115
-	X_SC_XOPEN_VERSION                          = 116
-	X_SC_XOPEN_XCU_VERSION                      = 121
-	X_SECURE__COMMON_H_                         = 0
-	X_SECURE__STDIO_H_                          = 0
-	X_SECURE__STRINGS_H_                        = 0
-	X_SECURE__STRING_H_                         = 0
-	X_SIGSET_T                                  = 0
-	X_SIZE_T                                    = 0
-	X_SQLITE3RTREE_H_                           = 0
-	X_SSIZE_T                                   = 0
-	X_STDIO_H_                                  = 0
-	X_STDLIB_H_                                 = 0
-	X_STRINGS_H_                                = 0
-	X_STRING_H_                                 = 0
-	X_SUSECONDS_T                               = 0
-	X_SYS_ERRNO_H_                              = 0
-	X_SYS_RESOURCE_H_                           = 0
-	X_SYS_SELECT_H_                             = 0
-	X_SYS_SIGNAL_H_                             = 0
-	X_SYS_STDIO_H_                              = 0
-	X_SYS_UNISTD_H_                             = 0
-	X_SYS_WAIT_H_                               = 0
-	X_SYS__ENDIAN_H_                            = 0
-	X_SYS__PTHREAD_TYPES_H_                     = 0
-	X_SYS__SELECT_H_                            = 0
-	X_SYS__TYPES_H_                             = 0
-	X_TIME_T                                    = 0
-	X_UID_T                                     = 0
-	X_UINT32_T                                  = 0
-	X_UINT64_T                                  = 0
-	X_UINTPTR_T                                 = 0
-	X_UNISTD_H_                                 = 0
-	X_USECONDS_T                                = 0
-	X_USE_FORTIFY_LEVEL                         = 2
-	X_UUID_T                                    = 0
-	X_U_INT16_T                                 = 0
-	X_U_INT32_T                                 = 0
-	X_U_INT64_T                                 = 0
-	X_U_INT8_T                                  = 0
-	X_V6_ILP32_OFF32                            = -1
-	X_V6_ILP32_OFFBIG                           = -1
-	X_V6_LP64_OFF64                             = 1
-	X_V6_LPBIG_OFFBIG                           = 1
-	X_VA_LIST                                   = 0
-	X_VA_LIST_T                                 = 0
-	X_WATTR_OK                                  = 65536
-	X_WCHAR_T                                   = 0
-	X_WEXT_OK                                   = 262144
-	X_WINT_T                                    = 0
-	X_WPERM_OK                                  = 1048576
-	X_WRITE_OK                                  = 1024
-	X_WSTOPPED                                  = 0177
-	X_XBS5_ILP32_OFF32                          = -1
-	X_XBS5_ILP32_OFFBIG                         = -1
-	X_XBS5_LP64_OFF64                           = 1
-	X_XBS5_LPBIG_OFFBIG                         = 1
-	X_XOPEN_CRYPT                               = 1
-	X_XOPEN_ENH_I18N                            = 1
-	X_XOPEN_LEGACY                              = -1
-	X_XOPEN_REALTIME                            = -1
-	X_XOPEN_REALTIME_THREADS                    = -1
-	X_XOPEN_SHM                                 = 1
-	X_XOPEN_STREAMS                             = -1
-	X_XOPEN_UNIX                                = 1
-	X_XOPEN_VERSION                             = 600
-	X_XOPEN_XCU_VERSION                         = 4
+	ACCESSX_MAX_DESCRIPTORS                   = 100                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:137:1:
+	ACCESSX_MAX_TABLESIZE                     = 16384                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:138:1:
+	BIG_ENDIAN                                = 4321                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:72:1:
+	BUFSIZ                                    = 1024                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:103:1:
+	BUS_ADRALN                                = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:241:1:
+	BUS_ADRERR                                = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:242:1:
+	BUS_NOOP                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:239:1:
+	BUS_OBJERR                                = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:243:1:
+	BYTE_ORDER                                = 1234                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:75:1:
+	CLD_CONTINUED                             = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:258:1:
+	CLD_DUMPED                                = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:255:1:
+	CLD_EXITED                                = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:253:1:
+	CLD_KILLED                                = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:254:1:
+	CLD_NOOP                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:251:1:
+	CLD_STOPPED                               = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:257:1:
+	CLD_TRAPPED                               = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:256:1:
+	CPUMON_MAKE_FATAL                         = 0x1000                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:439:1:
+	DEFAULT_TIMEOUT                           = 1000000                                                                                // testdata/mptest.c:97:1:
+	E2BIG                                     = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:94:1:
+	EACCES                                    = 13                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:101:1:
+	EADDRINUSE                                = 48                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:161:1:
+	EADDRNOTAVAIL                             = 49                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:162:1:
+	EAFNOSUPPORT                              = 47                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:160:1:
+	EAGAIN                                    = 35                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:129:1:
+	EALREADY                                  = 37                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:132:1:
+	EAUTH                                     = 80                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:213:1:
+	EBADARCH                                  = 86                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:226:1:
+	EBADEXEC                                  = 85                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:225:1:
+	EBADF                                     = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:96:1:
+	EBADMACHO                                 = 88                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:228:1:
+	EBADMSG                                   = 94                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:240:1:
+	EBADRPC                                   = 72                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:201:1:
+	EBUSY                                     = 16                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:106:1:
+	ECANCELED                                 = 89                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:231:1:
+	ECHILD                                    = 10                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:97:1:
+	ECONNABORTED                              = 53                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:168:1:
+	ECONNREFUSED                              = 61                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:178:1:
+	ECONNRESET                                = 54                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:169:1:
+	EDEADLK                                   = 11                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:98:1:
+	EDESTADDRREQ                              = 39                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:136:1:
+	EDEVERR                                   = 83                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:218:1:
+	EDOM                                      = 33                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:125:1:
+	EDQUOT                                    = 69                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:195:1:
+	EEXIST                                    = 17                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:107:1:
+	EFAULT                                    = 14                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:102:1:
+	EFBIG                                     = 27                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:117:1:
+	EFTYPE                                    = 79                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:212:1:
+	EHOSTDOWN                                 = 64                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:185:1:
+	EHOSTUNREACH                              = 65                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:187:1:
+	EIDRM                                     = 90                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:233:1:
+	EILSEQ                                    = 92                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:235:1:
+	EINPROGRESS                               = 36                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:131:1:
+	EINTR                                     = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:91:1:
+	EINVAL                                    = 22                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:112:1:
+	EIO                                       = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:92:1:
+	EISCONN                                   = 56                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:171:1:
+	EISDIR                                    = 21                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:111:1:
+	ELAST                                     = 106                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:263:1:
+	ELOOP                                     = 62                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:180:1:
+	EMFILE                                    = 24                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:114:1:
+	EMLINK                                    = 31                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:121:1:
+	EMSGSIZE                                  = 40                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:137:1:
+	EMULTIHOP                                 = 95                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:241:1:
+	ENAMETOOLONG                              = 63                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:181:1:
+	ENEEDAUTH                                 = 81                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:214:1:
+	ENETDOWN                                  = 50                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:165:1:
+	ENETRESET                                 = 52                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:167:1:
+	ENETUNREACH                               = 51                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:166:1:
+	ENFILE                                    = 23                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:113:1:
+	ENOATTR                                   = 93                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:237:1:
+	ENOBUFS                                   = 55                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:170:1:
+	ENODATA                                   = 96                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:242:1:
+	ENODEV                                    = 19                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:109:1:
+	ENOENT                                    = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:89:1:
+	ENOEXEC                                   = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:95:1:
+	ENOLCK                                    = 77                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:208:1:
+	ENOLINK                                   = 97                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:243:1:
+	ENOMEM                                    = 12                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:100:1:
+	ENOMSG                                    = 91                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:234:1:
+	ENOPOLICY                                 = 103                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:254:1:
+	ENOPROTOOPT                               = 42                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:139:1:
+	ENOSPC                                    = 28                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:118:1:
+	ENOSR                                     = 98                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:244:1:
+	ENOSTR                                    = 99                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:245:1:
+	ENOSYS                                    = 78                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:209:1:
+	ENOTBLK                                   = 15                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:104:1:
+	ENOTCONN                                  = 57                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:172:1:
+	ENOTDIR                                   = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:110:1:
+	ENOTEMPTY                                 = 66                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:188:1:
+	ENOTRECOVERABLE                           = 104                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:257:1:
+	ENOTSOCK                                  = 38                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:135:1:
+	ENOTSUP                                   = 45                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:144:1:
+	ENOTTY                                    = 25                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:115:1:
+	ENXIO                                     = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:93:1:
+	EOF                                       = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:104:1:
+	EOPNOTSUPP                                = 102                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:251:1:
+	EOVERFLOW                                 = 84                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:221:1:
+	EOWNERDEAD                                = 105                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:258:1:
+	EPERM                                     = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:88:1:
+	EPFNOSUPPORT                              = 46                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:158:1:
+	EPIPE                                     = 32                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:122:1:
+	EPROCLIM                                  = 67                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:192:1:
+	EPROCUNAVAIL                              = 76                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:205:1:
+	EPROGMISMATCH                             = 75                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:204:1:
+	EPROGUNAVAIL                              = 74                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:203:1:
+	EPROTO                                    = 100                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:246:1:
+	EPROTONOSUPPORT                           = 43                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:140:1:
+	EPROTOTYPE                                = 41                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:138:1:
+	EPWROFF                                   = 82                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:217:1:
+	EQFULL                                    = 106                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:262:1:
+	ERANGE                                    = 34                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:126:1:
+	EREMOTE                                   = 71                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:200:1:
+	EROFS                                     = 30                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:120:1:
+	ERPCMISMATCH                              = 73                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:202:1:
+	ESHLIBVERS                                = 87                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:227:1:
+	ESHUTDOWN                                 = 58                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:174:1:
+	ESOCKTNOSUPPORT                           = 44                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:142:1:
+	ESPIPE                                    = 29                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:119:1:
+	ESRCH                                     = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:90:1:
+	ESTALE                                    = 70                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:198:1:
+	ETIME                                     = 101                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:247:1:
+	ETIMEDOUT                                 = 60                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:177:1:
+	ETOOMANYREFS                              = 59                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:175:1:
+	ETXTBSY                                   = 26                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:116:1:
+	EUSERS                                    = 68                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:193:1:
+	EWOULDBLOCK                               = 35                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:130:1:
+	EXDEV                                     = 18                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:108:1:
+	EXIT_FAILURE                              = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:102:1:
+	EXIT_SUCCESS                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:103:1:
+	FD_SETSIZE                                = 1024                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_setsize.h:29:1:
+	FILENAME_MAX                              = 1024                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:108:1:
+	FOOTPRINT_INTERVAL_RESET                  = 0x1                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:444:1:
+	FOPEN_MAX                                 = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:107:1:
+	FPE_FLTDIV                                = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:221:1:
+	FPE_FLTINV                                = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:225:1:
+	FPE_FLTOVF                                = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:222:1:
+	FPE_FLTRES                                = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:224:1:
+	FPE_FLTSUB                                = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:226:1:
+	FPE_FLTUND                                = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:223:1:
+	FPE_INTDIV                                = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:227:1:
+	FPE_INTOVF                                = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:228:1:
+	FPE_NOOP                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:219:1:
+	FTS5_TOKENIZE_AUX                         = 0x0008                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:12916:1:
+	FTS5_TOKENIZE_DOCUMENT                    = 0x0004                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:12915:1:
+	FTS5_TOKENIZE_PREFIX                      = 0x0002                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:12914:1:
+	FTS5_TOKENIZE_QUERY                       = 0x0001                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:12913:1:
+	FTS5_TOKEN_COLOCATED                      = 0x0001                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:12920:1:
+	FULLY_WITHIN                              = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10661:1:
+	F_LOCK                                    = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:528:1:
+	F_OK                                      = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:89:1:
+	F_TEST                                    = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:530:1:
+	F_TLOCK                                   = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:529:1:
+	F_ULOCK                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:527:1:
+	HAVE_USLEEP                               = 1                                                                                      // <defines>:2:1:
+	ILL_BADSTK                                = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:215:1:
+	ILL_COPROC                                = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:214:1:
+	ILL_ILLADR                                = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:212:1:
+	ILL_ILLOPC                                = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:208:1:
+	ILL_ILLOPN                                = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:211:1:
+	ILL_ILLTRP                                = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:209:1:
+	ILL_NOOP                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:206:1:
+	ILL_PRVOPC                                = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:210:1:
+	ILL_PRVREG                                = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:213:1:
+	INT16_MAX                                 = 32767                                                                                  // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:599:1:
+	INT16_MIN                                 = -32768                                                                                 // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:600:1:
+	INT32_MAX                                 = 2147483647                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:555:1:
+	INT32_MIN                                 = -2147483648                                                                            // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:556:1:
+	INT64_MAX                                 = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:461:1:
+	INT64_MIN                                 = -9223372036854775808                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:462:1:
+	INT8_MAX                                  = 127                                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:621:1:
+	INT8_MIN                                  = -128                                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:622:1:
+	INTMAX_MAX                                = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:663:1:
+	INTMAX_MIN                                = -9223372036854775808                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:662:1:
+	INTPTR_MAX                                = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:649:1:
+	INTPTR_MIN                                = -9223372036854775808                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:648:1:
+	INT_FAST16_MAX                            = 32767                                                                                  // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:615:1:
+	INT_FAST16_MIN                            = -32768                                                                                 // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:614:1:
+	INT_FAST32_MAX                            = 2147483647                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:574:1:
+	INT_FAST32_MIN                            = -2147483648                                                                            // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:573:1:
+	INT_FAST64_MAX                            = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:483:1:
+	INT_FAST64_MIN                            = -9223372036854775808                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:482:1:
+	INT_FAST8_MAX                             = 127                                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:634:1:
+	INT_FAST8_MIN                             = -128                                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:633:1:
+	INT_LEAST16_MAX                           = 32767                                                                                  // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:612:1:
+	INT_LEAST16_MIN                           = -32768                                                                                 // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:611:1:
+	INT_LEAST32_MAX                           = 2147483647                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:571:1:
+	INT_LEAST32_MIN                           = -2147483648                                                                            // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:570:1:
+	INT_LEAST64_MAX                           = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:480:1:
+	INT_LEAST64_MIN                           = -9223372036854775808                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:479:1:
+	INT_LEAST8_MAX                            = 127                                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:631:1:
+	INT_LEAST8_MIN                            = -128                                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:630:1:
+	IOPOL_APPLICATION                         = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:478:1:
+	IOPOL_ATIME_UPDATES_DEFAULT               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:482:1:
+	IOPOL_ATIME_UPDATES_OFF                   = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:483:1:
+	IOPOL_DEFAULT                             = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:470:1:
+	IOPOL_IMPORTANT                           = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:471:1:
+	IOPOL_MATERIALIZE_DATALESS_FILES_DEFAULT  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:485:1:
+	IOPOL_MATERIALIZE_DATALESS_FILES_OFF      = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:486:1:
+	IOPOL_MATERIALIZE_DATALESS_FILES_ON       = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:487:1:
+	IOPOL_NORMAL                              = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:479:1:
+	IOPOL_PASSIVE                             = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:472:1:
+	IOPOL_SCOPE_DARWIN_BG                     = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:467:1:
+	IOPOL_SCOPE_PROCESS                       = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:465:1:
+	IOPOL_SCOPE_THREAD                        = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:466:1:
+	IOPOL_STANDARD                            = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:475:1:
+	IOPOL_THROTTLE                            = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:473:1:
+	IOPOL_TYPE_DISK                           = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:454:1:
+	IOPOL_TYPE_VFS_ALLOW_LOW_SPACE_WRITES     = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:462:1:
+	IOPOL_TYPE_VFS_ATIME_UPDATES              = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:455:1:
+	IOPOL_TYPE_VFS_IGNORE_CONTENT_PROTECTION  = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:459:1:
+	IOPOL_TYPE_VFS_IGNORE_PERMISSIONS         = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:460:1:
+	IOPOL_TYPE_VFS_MATERIALIZE_DATALESS_FILES = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:456:1:
+	IOPOL_TYPE_VFS_SKIP_MTIME_UPDATE          = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:461:1:
+	IOPOL_TYPE_VFS_STATFS_NO_DATA_VOLUME      = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:457:1:
+	IOPOL_TYPE_VFS_TRIGGER_RESOLVE            = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:458:1:
+	IOPOL_UTILITY                             = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:474:1:
+	IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_OFF      = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:504:1:
+	IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_ON       = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:505:1:
+	IOPOL_VFS_CONTENT_PROTECTION_DEFAULT      = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:495:1:
+	IOPOL_VFS_CONTENT_PROTECTION_IGNORE       = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:496:1:
+	IOPOL_VFS_IGNORE_PERMISSIONS_OFF          = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:498:1:
+	IOPOL_VFS_IGNORE_PERMISSIONS_ON           = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:499:1:
+	IOPOL_VFS_SKIP_MTIME_UPDATE_OFF           = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:501:1:
+	IOPOL_VFS_SKIP_MTIME_UPDATE_ON            = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:502:1:
+	IOPOL_VFS_STATFS_FORCE_NO_DATA_VOLUME     = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:490:1:
+	IOPOL_VFS_STATFS_NO_DATA_VOLUME_DEFAULT   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:489:1:
+	IOPOL_VFS_TRIGGER_RESOLVE_DEFAULT         = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:492:1:
+	IOPOL_VFS_TRIGGER_RESOLVE_OFF             = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:493:1:
+	LITTLE_ENDIAN                             = 1234                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:71:1:
+	L_INCR                                    = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:127:1:
+	L_SET                                     = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:126:1:
+	L_XTND                                    = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:128:1:
+	L_ctermid                                 = 1024                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:202:1:
+	L_tmpnam                                  = 1024                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:114:1:
+	MAC_OS_VERSION_11_0                       = 110000                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:238:1:
+	MAC_OS_VERSION_12_0                       = 120000                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:239:1:
+	MAC_OS_X_VERSION_10_0                     = 1000                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:206:1:
+	MAC_OS_X_VERSION_10_1                     = 1010                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:207:1:
+	MAC_OS_X_VERSION_10_10                    = 101000                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:216:1:
+	MAC_OS_X_VERSION_10_10_2                  = 101002                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:217:1:
+	MAC_OS_X_VERSION_10_10_3                  = 101003                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:218:1:
+	MAC_OS_X_VERSION_10_11                    = 101100                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:219:1:
+	MAC_OS_X_VERSION_10_11_2                  = 101102                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:220:1:
+	MAC_OS_X_VERSION_10_11_3                  = 101103                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:221:1:
+	MAC_OS_X_VERSION_10_11_4                  = 101104                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:222:1:
+	MAC_OS_X_VERSION_10_12                    = 101200                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:223:1:
+	MAC_OS_X_VERSION_10_12_1                  = 101201                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:224:1:
+	MAC_OS_X_VERSION_10_12_2                  = 101202                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:225:1:
+	MAC_OS_X_VERSION_10_12_4                  = 101204                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:226:1:
+	MAC_OS_X_VERSION_10_13                    = 101300                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:227:1:
+	MAC_OS_X_VERSION_10_13_1                  = 101301                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:228:1:
+	MAC_OS_X_VERSION_10_13_2                  = 101302                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:229:1:
+	MAC_OS_X_VERSION_10_13_4                  = 101304                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:230:1:
+	MAC_OS_X_VERSION_10_14                    = 101400                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:231:1:
+	MAC_OS_X_VERSION_10_14_1                  = 101401                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:232:1:
+	MAC_OS_X_VERSION_10_14_4                  = 101404                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:233:1:
+	MAC_OS_X_VERSION_10_14_6                  = 101406                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:234:1:
+	MAC_OS_X_VERSION_10_15                    = 101500                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:235:1:
+	MAC_OS_X_VERSION_10_15_1                  = 101501                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:236:1:
+	MAC_OS_X_VERSION_10_16                    = 101600                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:237:1:
+	MAC_OS_X_VERSION_10_2                     = 1020                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:208:1:
+	MAC_OS_X_VERSION_10_3                     = 1030                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:209:1:
+	MAC_OS_X_VERSION_10_4                     = 1040                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:210:1:
+	MAC_OS_X_VERSION_10_5                     = 1050                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:211:1:
+	MAC_OS_X_VERSION_10_6                     = 1060                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:212:1:
+	MAC_OS_X_VERSION_10_7                     = 1070                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:213:1:
+	MAC_OS_X_VERSION_10_8                     = 1080                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:214:1:
+	MAC_OS_X_VERSION_10_9                     = 1090                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h:215:1:
+	MINSIGSTKSZ                               = 32768                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:340:1:
+	MX_ARG                                    = 2                                                                                      // testdata/mptest.c:871:1:
+	NDEBUG                                    = 1                                                                                      // <defines>:1:1:
+	NOT_WITHIN                                = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10659:1:
+	NSIG                                      = 32                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:79:1:
+	PARTLY_WITHIN                             = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10660:1:
+	PDP_ENDIAN                                = 3412                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:73:1:
+	POLL_ERR                                  = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:264:1:
+	POLL_HUP                                  = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:266:1:
+	POLL_IN                                   = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:261:1:
+	POLL_MSG                                  = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:263:1:
+	POLL_OUT                                  = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:262:1:
+	POLL_PRI                                  = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:265:1:
+	PRIO_DARWIN_BG                            = 0x1000                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:120:1:
+	PRIO_DARWIN_NONUI                         = 0x1001                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:126:1:
+	PRIO_DARWIN_PROCESS                       = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:106:1:
+	PRIO_DARWIN_THREAD                        = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:105:1:
+	PRIO_MAX                                  = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:113:1:
+	PRIO_MIN                                  = -20                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:112:1:
+	PRIO_PGRP                                 = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:101:1:
+	PRIO_PROCESS                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:100:1:
+	PRIO_USER                                 = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:102:1:
+	PTRDIFF_MAX                               = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:652:1:
+	PTRDIFF_MIN                               = -9223372036854775808                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:651:1:
+	P_tmpdir                                  = "/var/tmp/"                                                                            // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:112:1:
+	RAND_MAX                                  = 0x7fffffff                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:105:1:
+	RENAME_EXCL                               = 0x00000004                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h:37:1:
+	RENAME_NOFOLLOW_ANY                       = 0x00000010                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h:39:1:
+	RENAME_RESERVED1                          = 0x00000008                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h:38:1:
+	RENAME_SECLUDE                            = 0x00000001                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h:35:1:
+	RENAME_SWAP                               = 0x00000002                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h:36:1:
+	RLIMIT_AS                                 = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:395:1:
+	RLIMIT_CORE                               = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:394:1:
+	RLIMIT_CPU                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:390:1:
+	RLIMIT_CPU_USAGE_MONITOR                  = 0x2                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:423:1:
+	RLIMIT_DATA                               = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:392:1:
+	RLIMIT_FOOTPRINT_INTERVAL                 = 0x4                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:425:1:
+	RLIMIT_FSIZE                              = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:391:1:
+	RLIMIT_MEMLOCK                            = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:398:1:
+	RLIMIT_NOFILE                             = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:401:1:
+	RLIMIT_NPROC                              = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:399:1:
+	RLIMIT_RSS                                = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:397:1:
+	RLIMIT_STACK                              = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:393:1:
+	RLIMIT_THREAD_CPULIMITS                   = 0x3                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:424:1:
+	RLIMIT_WAKEUPS_MONITOR                    = 0x1                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:422:1:
+	RLIM_NLIMITS                              = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:403:1:
+	RSIZE_MAX                                 = 9223372036854775807                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:658:1:
+	RUSAGE_CHILDREN                           = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:141:1:
+	RUSAGE_INFO_CURRENT                       = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:192:1:
+	RUSAGE_INFO_V0                            = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:186:1:
+	RUSAGE_INFO_V1                            = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:187:1:
+	RUSAGE_INFO_V2                            = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:188:1:
+	RUSAGE_INFO_V3                            = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:189:1:
+	RUSAGE_INFO_V4                            = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:190:1:
+	RUSAGE_INFO_V5                            = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:191:1:
+	RUSAGE_SELF                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:140:1:
+	RU_PROC_RUNS_RESLIDE                      = 0x00000001                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:197:1:
+	R_OK                                      = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:92:1:
+	SA_64REGSET                               = 0x0200                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:308:1:
+	SA_NOCLDSTOP                              = 0x0008                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:301:1:
+	SA_NOCLDWAIT                              = 0x0020                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:303:1:
+	SA_NODEFER                                = 0x0010                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:302:1:
+	SA_ONSTACK                                = 0x0001                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:298:1:
+	SA_RESETHAND                              = 0x0004                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:300:1:
+	SA_RESTART                                = 0x0002                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:299:1:
+	SA_SIGINFO                                = 0x0040                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:304:1:
+	SA_USERSPACE_MASK                         = 127                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:314:1:
+	SA_USERTRAMP                              = 0x0100                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:306:1:
+	SEEK_CUR                                  = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:121:1:
+	SEEK_DATA                                 = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_seek_set.h:44:1:
+	SEEK_END                                  = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:124:1:
+	SEEK_HOLE                                 = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_seek_set.h:40:1:
+	SEEK_SET                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:118:1:
+	SEGV_ACCERR                               = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:235:1:
+	SEGV_MAPERR                               = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:234:1:
+	SEGV_NOOP                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:232:1:
+	SIGABRT                                   = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:89:1:
+	SIGALRM                                   = 14                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:102:1:
+	SIGBUS                                    = 10                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:98:1:
+	SIGCHLD                                   = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:108:1:
+	SIGCONT                                   = 19                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:107:1:
+	SIGEMT                                    = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:94:1:
+	SIGEV_NONE                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:164:1:
+	SIGEV_SIGNAL                              = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:165:1:
+	SIGEV_THREAD                              = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:166:1:
+	SIGFPE                                    = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:96:1:
+	SIGHUP                                    = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:84:1:
+	SIGILL                                    = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:87:1:
+	SIGINFO                                   = 29                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:120:1:
+	SIGINT                                    = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:85:1:
+	SIGIO                                     = 23                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:112:1:
+	SIGIOT                                    = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:93:1:
+	SIGKILL                                   = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:97:1:
+	SIGPIPE                                   = 13                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:101:1:
+	SIGPROF                                   = 27                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:117:1:
+	SIGQUIT                                   = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:86:1:
+	SIGSEGV                                   = 11                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:99:1:
+	SIGSTKSZ                                  = 131072                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:341:1:
+	SIGSTOP                                   = 17                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:105:1:
+	SIGSYS                                    = 12                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:100:1:
+	SIGTERM                                   = 15                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:103:1:
+	SIGTRAP                                   = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:88:1:
+	SIGTSTP                                   = 18                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:106:1:
+	SIGTTIN                                   = 21                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:109:1:
+	SIGTTOU                                   = 22                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:110:1:
+	SIGURG                                    = 16                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:104:1:
+	SIGUSR1                                   = 30                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:122:1:
+	SIGUSR2                                   = 31                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:123:1:
+	SIGVTALRM                                 = 26                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:116:1:
+	SIGWINCH                                  = 28                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:119:1:
+	SIGXCPU                                   = 24                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:114:1:
+	SIGXFSZ                                   = 25                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:115:1:
+	SIG_ATOMIC_MAX                            = 2147483647                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:668:1:
+	SIG_ATOMIC_MIN                            = -2147483648                                                                            // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:667:1:
+	SIG_BLOCK                                 = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:319:1:
+	SIG_SETMASK                               = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:321:1:
+	SIG_UNBLOCK                               = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:320:1:
+	SIZE_MAX                                  = 18446744073709551615                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:653:1:
+	SI_ASYNCIO                                = 0x10004                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:327:1:
+	SI_MESGQ                                  = 0x10005                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:328:1:
+	SI_QUEUE                                  = 0x10002                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:325:1:
+	SI_TIMER                                  = 0x10003                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:326:1:
+	SI_USER                                   = 0x10001                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:324:1:
+	SQLITE3_H                                 = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:34:1:
+	SQLITE3_TEXT                              = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4942:1:
+	SQLITE_ABORT                              = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:449:1:
+	SQLITE_ABORT_ROLLBACK                     = 516                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:551:1:
+	SQLITE_ACCESS_EXISTS                      = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1523:1:
+	SQLITE_ACCESS_READ                        = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1525:1:
+	SQLITE_ACCESS_READWRITE                   = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1524:1:
+	SQLITE_ALTER_TABLE                        = 26                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3222:1:
+	SQLITE_ANALYZE                            = 28                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3224:1:
+	SQLITE_ANY                                = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:5400:1:
+	SQLITE_API                                = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:75:1:
+	SQLITE_APICALL                            = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:81:1:
+	SQLITE_ATTACH                             = 24                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3220:1:
+	SQLITE_AUTH                               = 23                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:468:1:
+	SQLITE_AUTH_USER                          = 279                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:568:1:
+	SQLITE_BLOB                               = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4935:1:
+	SQLITE_BUSY                               = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:450:1:
+	SQLITE_BUSY_RECOVERY                      = 261                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:533:1:
+	SQLITE_BUSY_SNAPSHOT                      = 517                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:534:1:
+	SQLITE_BUSY_TIMEOUT                       = 773                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:535:1:
+	SQLITE_CALLBACK                           = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:87:1:
+	SQLITE_CANTOPEN                           = 14                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:459:1:
+	SQLITE_CANTOPEN_CONVPATH                  = 1038                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:539:1:
+	SQLITE_CANTOPEN_DIRTYWAL                  = 1294                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:540:1:
+	SQLITE_CANTOPEN_FULLPATH                  = 782                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:538:1:
+	SQLITE_CANTOPEN_ISDIR                     = 526                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:537:1:
+	SQLITE_CANTOPEN_NOTEMPDIR                 = 270                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:536:1:
+	SQLITE_CANTOPEN_SYMLINK                   = 1550                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:541:1:
+	SQLITE_CDECL                              = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:78:1:
+	SQLITE_CHANGESETAPPLY_INVERT              = 0x0002                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:11918:1:
+	SQLITE_CHANGESETAPPLY_NOSAVEPOINT         = 0x0001                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:11917:1:
+	SQLITE_CHANGESETSTART_INVERT              = 0x0002                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:11233:1:
+	SQLITE_CHANGESET_ABORT                    = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:12014:1:
+	SQLITE_CHANGESET_CONFLICT                 = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:11977:1:
+	SQLITE_CHANGESET_CONSTRAINT               = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:11978:1:
+	SQLITE_CHANGESET_DATA                     = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:11975:1:
+	SQLITE_CHANGESET_FOREIGN_KEY              = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:11979:1:
+	SQLITE_CHANGESET_NOTFOUND                 = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:11976:1:
+	SQLITE_CHANGESET_OMIT                     = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:12012:1:
+	SQLITE_CHANGESET_REPLACE                  = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:12013:1:
+	SQLITE_CHECKPOINT_FULL                    = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9490:1:
+	SQLITE_CHECKPOINT_PASSIVE                 = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9489:1:
+	SQLITE_CHECKPOINT_RESTART                 = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9491:1:
+	SQLITE_CHECKPOINT_TRUNCATE                = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9492:1:
+	SQLITE_CONFIG_COVERING_INDEX_SCAN         = 20                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2144:1:
+	SQLITE_CONFIG_GETMALLOC                   = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2129:1:
+	SQLITE_CONFIG_GETMUTEX                    = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2135:1:
+	SQLITE_CONFIG_GETPCACHE                   = 15                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2139:1:
+	SQLITE_CONFIG_GETPCACHE2                  = 19                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2143:1:
+	SQLITE_CONFIG_HEAP                        = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2132:1:
+	SQLITE_CONFIG_LOG                         = 16                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2140:1:
+	SQLITE_CONFIG_LOOKASIDE                   = 13                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2137:1:
+	SQLITE_CONFIG_MALLOC                      = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2128:1:
+	SQLITE_CONFIG_MEMDB_MAXSIZE               = 29                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2153:1:
+	SQLITE_CONFIG_MEMSTATUS                   = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2133:1:
+	SQLITE_CONFIG_MMAP_SIZE                   = 22                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2146:1:
+	SQLITE_CONFIG_MULTITHREAD                 = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2126:1:
+	SQLITE_CONFIG_MUTEX                       = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2134:1:
+	SQLITE_CONFIG_PAGECACHE                   = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2131:1:
+	SQLITE_CONFIG_PCACHE                      = 14                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2138:1:
+	SQLITE_CONFIG_PCACHE2                     = 18                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2142:1:
+	SQLITE_CONFIG_PCACHE_HDRSZ                = 24                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2148:1:
+	SQLITE_CONFIG_PMASZ                       = 25                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2149:1:
+	SQLITE_CONFIG_SCRATCH                     = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2130:1:
+	SQLITE_CONFIG_SERIALIZED                  = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2127:1:
+	SQLITE_CONFIG_SINGLETHREAD                = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:2125:1:
+	SQLITE_CONFIG_SMALL_MALLOC                = 27                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2151:1:
+	SQLITE_CONFIG_SORTERREF_SIZE              = 28                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2152:1:
+	SQLITE_CONFIG_SQLLOG                      = 21                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2145:1:
+	SQLITE_CONFIG_STMTJRNL_SPILL              = 26                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2150:1:
+	SQLITE_CONFIG_URI                         = 17                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2141:1:
+	SQLITE_CONFIG_WIN32_HEAPSIZE              = 23                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:2147:1:
+	SQLITE_CONSTRAINT                         = 19                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:464:1:
+	SQLITE_CONSTRAINT_CHECK                   = 275                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:552:1:
+	SQLITE_CONSTRAINT_COMMITHOOK              = 531                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:553:1:
+	SQLITE_CONSTRAINT_DATATYPE                = 3091                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:563:1:
+	SQLITE_CONSTRAINT_FOREIGNKEY              = 787                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:554:1:
+	SQLITE_CONSTRAINT_FUNCTION                = 1043                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:555:1:
+	SQLITE_CONSTRAINT_NOTNULL                 = 1299                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:556:1:
+	SQLITE_CONSTRAINT_PINNED                  = 2835                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:562:1:
+	SQLITE_CONSTRAINT_PRIMARYKEY              = 1555                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:557:1:
+	SQLITE_CONSTRAINT_ROWID                   = 2579                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:561:1:
+	SQLITE_CONSTRAINT_TRIGGER                 = 1811                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:558:1:
+	SQLITE_CONSTRAINT_UNIQUE                  = 2067                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:559:1:
+	SQLITE_CONSTRAINT_VTAB                    = 2323                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:560:1:
+	SQLITE_COPY                               = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3229:1:
+	SQLITE_CORE                               = 1                                                                                      // <defines>:4:1:
+	SQLITE_CORRUPT                            = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:456:1:
+	SQLITE_CORRUPT_INDEX                      = 779                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:544:1:
+	SQLITE_CORRUPT_SEQUENCE                   = 523                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:543:1:
+	SQLITE_CORRUPT_VTAB                       = 267                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:542:1:
+	SQLITE_CREATE_INDEX                       = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3197:1:
+	SQLITE_CREATE_TABLE                       = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3198:1:
+	SQLITE_CREATE_TEMP_INDEX                  = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3199:1:
+	SQLITE_CREATE_TEMP_TABLE                  = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3200:1:
+	SQLITE_CREATE_TEMP_TRIGGER                = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3201:1:
+	SQLITE_CREATE_TEMP_VIEW                   = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3202:1:
+	SQLITE_CREATE_TRIGGER                     = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3203:1:
+	SQLITE_CREATE_VIEW                        = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3204:1:
+	SQLITE_CREATE_VTABLE                      = 29                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3225:1:
+	SQLITE_DBCONFIG_DEFENSIVE                 = 1010                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2451:1:
+	SQLITE_DBCONFIG_DQS_DDL                   = 1014                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2455:1:
+	SQLITE_DBCONFIG_DQS_DML                   = 1013                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2454:1:
+	SQLITE_DBCONFIG_ENABLE_FKEY               = 1002                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2443:1:
+	SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER     = 1004                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2445:1:
+	SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION     = 1005                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2446:1:
+	SQLITE_DBCONFIG_ENABLE_QPSG               = 1007                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2448:1:
+	SQLITE_DBCONFIG_ENABLE_TRIGGER            = 1003                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2444:1:
+	SQLITE_DBCONFIG_ENABLE_VIEW               = 1015                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2456:1:
+	SQLITE_DBCONFIG_LEGACY_ALTER_TABLE        = 1012                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2453:1:
+	SQLITE_DBCONFIG_LEGACY_FILE_FORMAT        = 1016                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2457:1:
+	SQLITE_DBCONFIG_LOOKASIDE                 = 1001                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2442:1:
+	SQLITE_DBCONFIG_MAINDBNAME                = 1000                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2441:1:
+	SQLITE_DBCONFIG_MAX                       = 1017                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2459:1:
+	SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE          = 1006                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2447:1:
+	SQLITE_DBCONFIG_RESET_DATABASE            = 1009                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2450:1:
+	SQLITE_DBCONFIG_TRIGGER_EQP               = 1008                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2449:1:
+	SQLITE_DBCONFIG_TRUSTED_SCHEMA            = 1017                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2458:1:
+	SQLITE_DBCONFIG_WRITABLE_SCHEMA           = 1011                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:2452:1:
+	SQLITE_DBSTATUS_CACHE_HIT                 = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8544:1:
+	SQLITE_DBSTATUS_CACHE_MISS                = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8545:1:
+	SQLITE_DBSTATUS_CACHE_SPILL               = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8549:1:
+	SQLITE_DBSTATUS_CACHE_USED                = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8538:1:
+	SQLITE_DBSTATUS_CACHE_USED_SHARED         = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8548:1:
+	SQLITE_DBSTATUS_CACHE_WRITE               = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8546:1:
+	SQLITE_DBSTATUS_DEFERRED_FKS              = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8547:1:
+	SQLITE_DBSTATUS_LOOKASIDE_HIT             = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8541:1:
+	SQLITE_DBSTATUS_LOOKASIDE_MISS_FULL       = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8543:1:
+	SQLITE_DBSTATUS_LOOKASIDE_MISS_SIZE       = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8542:1:
+	SQLITE_DBSTATUS_LOOKASIDE_USED            = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8537:1:
+	SQLITE_DBSTATUS_MAX                       = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8550:1:
+	SQLITE_DBSTATUS_SCHEMA_USED               = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8539:1:
+	SQLITE_DBSTATUS_STMT_USED                 = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8540:1:
+	SQLITE_DEFAULT_MEMSTATUS                  = 0                                                                                      // <defines>:5:1:
+	SQLITE_DELETE                             = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3205:1:
+	SQLITE_DENY                               = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3174:1:
+	SQLITE_DEPRECATED                         = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:106:1:
+	SQLITE_DESERIALIZE_FREEONCLOSE            = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10522:1:
+	SQLITE_DESERIALIZE_READONLY               = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10524:1:
+	SQLITE_DESERIALIZE_RESIZEABLE             = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10523:1:
+	SQLITE_DETACH                             = 25                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3221:1:
+	SQLITE_DETERMINISTIC                      = 0x000000800                                                                            // testdata/sqlite-amalgamation-3410200/sqlite3.h:5479:1:
+	SQLITE_DIRECTONLY                         = 0x000080000                                                                            // testdata/sqlite-amalgamation-3410200/sqlite3.h:5480:1:
+	SQLITE_DONE                               = 101                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:475:1:
+	SQLITE_DROP_INDEX                         = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3206:1:
+	SQLITE_DROP_TABLE                         = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3207:1:
+	SQLITE_DROP_TEMP_INDEX                    = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3208:1:
+	SQLITE_DROP_TEMP_TABLE                    = 13                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3209:1:
+	SQLITE_DROP_TEMP_TRIGGER                  = 14                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3210:1:
+	SQLITE_DROP_TEMP_VIEW                     = 15                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3211:1:
+	SQLITE_DROP_TRIGGER                       = 16                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3212:1:
+	SQLITE_DROP_VIEW                          = 17                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3213:1:
+	SQLITE_DROP_VTABLE                        = 30                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3226:1:
+	SQLITE_EMPTY                              = 16                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:461:1:
+	SQLITE_ENABLE_COLUMN_METADATA             = 1                                                                                      // <defines>:6:1:
+	SQLITE_ENABLE_FTS5                        = 1                                                                                      // <defines>:7:1:
+	SQLITE_ENABLE_GEOPOLY                     = 1                                                                                      // <defines>:8:1:
+	SQLITE_ENABLE_MATH_FUNCTIONS              = 1                                                                                      // <defines>:9:1:
+	SQLITE_ENABLE_MEMORY_MANAGEMENT           = 1                                                                                      // <defines>:10:1:
+	SQLITE_ENABLE_OFFSET_SQL_FUNC             = 1                                                                                      // <defines>:11:1:
+	SQLITE_ENABLE_PREUPDATE_HOOK              = 1                                                                                      // <defines>:12:1:
+	SQLITE_ENABLE_RBU                         = 1                                                                                      // <defines>:13:1:
+	SQLITE_ENABLE_RTREE                       = 1                                                                                      // <defines>:14:1:
+	SQLITE_ENABLE_SESSION                     = 1                                                                                      // <defines>:15:1:
+	SQLITE_ENABLE_SNAPSHOT                    = 1                                                                                      // <defines>:16:1:
+	SQLITE_ENABLE_STAT4                       = 1                                                                                      // <defines>:17:1:
+	SQLITE_ENABLE_UNLOCK_NOTIFY               = 1                                                                                      // <defines>:18:1:
+	SQLITE_ERROR                              = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:446:1:
+	SQLITE_ERROR_MISSING_COLLSEQ              = 257                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:495:1:
+	SQLITE_ERROR_RETRY                        = 513                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:496:1:
+	SQLITE_ERROR_SNAPSHOT                     = 769                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:497:1:
+	SQLITE_EXPERIMENTAL                       = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:107:1:
+	SQLITE_FAIL                               = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9903:1:
+	SQLITE_FCNTL_BEGIN_ATOMIC_WRITE           = 31                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1232:1:
+	SQLITE_FCNTL_BUSYHANDLER                  = 15                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1217:1:
+	SQLITE_FCNTL_CHUNK_SIZE                   = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1208:1:
+	SQLITE_FCNTL_CKPT_DONE                    = 37                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1238:1:
+	SQLITE_FCNTL_CKPT_START                   = 39                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1240:1:
+	SQLITE_FCNTL_CKSM_FILE                    = 41                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1242:1:
+	SQLITE_FCNTL_COMMIT_ATOMIC_WRITE          = 32                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1233:1:
+	SQLITE_FCNTL_COMMIT_PHASETWO              = 22                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1223:1:
+	SQLITE_FCNTL_DATA_VERSION                 = 35                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1236:1:
+	SQLITE_FCNTL_EXTERNAL_READER              = 40                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1241:1:
+	SQLITE_FCNTL_FILE_POINTER                 = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1209:1:
+	SQLITE_FCNTL_GET_LOCKPROXYFILE            = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1204:1:
+	SQLITE_FCNTL_HAS_MOVED                    = 20                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1221:1:
+	SQLITE_FCNTL_JOURNAL_POINTER              = 28                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1229:1:
+	SQLITE_FCNTL_LAST_ERRNO                   = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1206:1:
+	SQLITE_FCNTL_LOCKSTATE                    = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1203:1:
+	SQLITE_FCNTL_LOCK_TIMEOUT                 = 34                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1235:1:
+	SQLITE_FCNTL_MMAP_SIZE                    = 18                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1219:1:
+	SQLITE_FCNTL_OVERWRITE                    = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1213:1:
+	SQLITE_FCNTL_PDB                          = 30                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1231:1:
+	SQLITE_FCNTL_PERSIST_WAL                  = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1212:1:
+	SQLITE_FCNTL_POWERSAFE_OVERWRITE          = 13                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1215:1:
+	SQLITE_FCNTL_PRAGMA                       = 14                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1216:1:
+	SQLITE_FCNTL_RBU                          = 26                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1227:1:
+	SQLITE_FCNTL_RESERVE_BYTES                = 38                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1239:1:
+	SQLITE_FCNTL_RESET_CACHE                  = 42                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1243:1:
+	SQLITE_FCNTL_ROLLBACK_ATOMIC_WRITE        = 33                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1234:1:
+	SQLITE_FCNTL_SET_LOCKPROXYFILE            = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1205:1:
+	SQLITE_FCNTL_SIZE_HINT                    = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1207:1:
+	SQLITE_FCNTL_SIZE_LIMIT                   = 36                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1237:1:
+	SQLITE_FCNTL_SYNC                         = 21                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1222:1:
+	SQLITE_FCNTL_SYNC_OMITTED                 = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1210:1:
+	SQLITE_FCNTL_TEMPFILENAME                 = 16                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1218:1:
+	SQLITE_FCNTL_TRACE                        = 19                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1220:1:
+	SQLITE_FCNTL_VFSNAME                      = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1214:1:
+	SQLITE_FCNTL_VFS_POINTER                  = 27                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1228:1:
+	SQLITE_FCNTL_WAL_BLOCK                    = 24                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1225:1:
+	SQLITE_FCNTL_WIN32_AV_RETRY               = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1211:1:
+	SQLITE_FCNTL_WIN32_GET_HANDLE             = 29                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1230:1:
+	SQLITE_FCNTL_WIN32_SET_HANDLE             = 23                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1224:1:
+	SQLITE_FCNTL_ZIPVFS                       = 25                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:1226:1:
+	SQLITE_FLOAT                              = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4934:1:
+	SQLITE_FORMAT                             = 24                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:469:1:
+	SQLITE_FULL                               = 13                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:458:1:
+	SQLITE_FUNCTION                           = 31                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3227:1:
+	SQLITE_GET_LOCKPROXYFILE                  = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1246:1:
+	SQLITE_IGNORE                             = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:3175:1:
+	SQLITE_INDEX_CONSTRAINT_EQ                = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7291:1:
+	SQLITE_INDEX_CONSTRAINT_FUNCTION          = 150                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:7307:1:
+	SQLITE_INDEX_CONSTRAINT_GE                = 32                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7295:1:
+	SQLITE_INDEX_CONSTRAINT_GLOB              = 66                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7298:1:
+	SQLITE_INDEX_CONSTRAINT_GT                = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7292:1:
+	SQLITE_INDEX_CONSTRAINT_IS                = 72                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7304:1:
+	SQLITE_INDEX_CONSTRAINT_ISNOT             = 69                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7301:1:
+	SQLITE_INDEX_CONSTRAINT_ISNOTNULL         = 70                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7302:1:
+	SQLITE_INDEX_CONSTRAINT_ISNULL            = 71                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7303:1:
+	SQLITE_INDEX_CONSTRAINT_LE                = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7293:1:
+	SQLITE_INDEX_CONSTRAINT_LIKE              = 65                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7297:1:
+	SQLITE_INDEX_CONSTRAINT_LIMIT             = 73                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7305:1:
+	SQLITE_INDEX_CONSTRAINT_LT                = 16                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7294:1:
+	SQLITE_INDEX_CONSTRAINT_MATCH             = 64                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7296:1:
+	SQLITE_INDEX_CONSTRAINT_NE                = 68                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7300:1:
+	SQLITE_INDEX_CONSTRAINT_OFFSET            = 74                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7306:1:
+	SQLITE_INDEX_CONSTRAINT_REGEXP            = 67                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7299:1:
+	SQLITE_INDEX_SCAN_UNIQUE                  = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7251:1:
+	SQLITE_INNOCUOUS                          = 0x000200000                                                                            // testdata/sqlite-amalgamation-3410200/sqlite3.h:5482:1:
+	SQLITE_INSERT                             = 18                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3214:1:
+	SQLITE_INTEGER                            = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4933:1:
+	SQLITE_INTERNAL                           = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:447:1:
+	SQLITE_INTERRUPT                          = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:454:1:
+	SQLITE_IOCAP_ATOMIC                       = 0x00000001                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:653:1:
+	SQLITE_IOCAP_ATOMIC16K                    = 0x00000040                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:659:1:
+	SQLITE_IOCAP_ATOMIC1K                     = 0x00000004                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:655:1:
+	SQLITE_IOCAP_ATOMIC2K                     = 0x00000008                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:656:1:
+	SQLITE_IOCAP_ATOMIC32K                    = 0x00000080                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:660:1:
+	SQLITE_IOCAP_ATOMIC4K                     = 0x00000010                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:657:1:
+	SQLITE_IOCAP_ATOMIC512                    = 0x00000002                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:654:1:
+	SQLITE_IOCAP_ATOMIC64K                    = 0x00000100                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:661:1:
+	SQLITE_IOCAP_ATOMIC8K                     = 0x00000020                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:658:1:
+	SQLITE_IOCAP_BATCH_ATOMIC                 = 0x00004000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:667:1:
+	SQLITE_IOCAP_IMMUTABLE                    = 0x00002000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:666:1:
+	SQLITE_IOCAP_POWERSAFE_OVERWRITE          = 0x00001000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:665:1:
+	SQLITE_IOCAP_SAFE_APPEND                  = 0x00000200                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:662:1:
+	SQLITE_IOCAP_SEQUENTIAL                   = 0x00000400                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:663:1:
+	SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN        = 0x00000800                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:664:1:
+	SQLITE_IOERR                              = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:455:1:
+	SQLITE_IOERR_ACCESS                       = 3338                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:510:1:
+	SQLITE_IOERR_AUTH                         = 7178                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:525:1:
+	SQLITE_IOERR_BEGIN_ATOMIC                 = 7434                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:526:1:
+	SQLITE_IOERR_BLOCKED                      = 2826                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:508:1:
+	SQLITE_IOERR_CHECKRESERVEDLOCK            = 3594                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:511:1:
+	SQLITE_IOERR_CLOSE                        = 4106                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:513:1:
+	SQLITE_IOERR_COMMIT_ATOMIC                = 7690                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:527:1:
+	SQLITE_IOERR_CONVPATH                     = 6666                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:523:1:
+	SQLITE_IOERR_CORRUPTFS                    = 8458                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:530:1:
+	SQLITE_IOERR_DATA                         = 8202                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:529:1:
+	SQLITE_IOERR_DELETE                       = 2570                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:507:1:
+	SQLITE_IOERR_DELETE_NOENT                 = 5898                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:520:1:
+	SQLITE_IOERR_DIR_CLOSE                    = 4362                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:514:1:
+	SQLITE_IOERR_DIR_FSYNC                    = 1290                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:502:1:
+	SQLITE_IOERR_FSTAT                        = 1802                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:504:1:
+	SQLITE_IOERR_FSYNC                        = 1034                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:501:1:
+	SQLITE_IOERR_GETTEMPPATH                  = 6410                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:522:1:
+	SQLITE_IOERR_LOCK                         = 3850                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:512:1:
+	SQLITE_IOERR_MMAP                         = 6154                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:521:1:
+	SQLITE_IOERR_NOMEM                        = 3082                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:509:1:
+	SQLITE_IOERR_RDLOCK                       = 2314                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:506:1:
+	SQLITE_IOERR_READ                         = 266                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:498:1:
+	SQLITE_IOERR_ROLLBACK_ATOMIC              = 7946                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:528:1:
+	SQLITE_IOERR_SEEK                         = 5642                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:519:1:
+	SQLITE_IOERR_SHMLOCK                      = 5130                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:517:1:
+	SQLITE_IOERR_SHMMAP                       = 5386                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:518:1:
+	SQLITE_IOERR_SHMOPEN                      = 4618                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:515:1:
+	SQLITE_IOERR_SHMSIZE                      = 4874                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:516:1:
+	SQLITE_IOERR_SHORT_READ                   = 522                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:499:1:
+	SQLITE_IOERR_TRUNCATE                     = 1546                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:503:1:
+	SQLITE_IOERR_UNLOCK                       = 2058                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:505:1:
+	SQLITE_IOERR_VNODE                        = 6922                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:524:1:
+	SQLITE_IOERR_WRITE                        = 778                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:500:1:
+	SQLITE_LAST_ERRNO                         = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1248:1:
+	SQLITE_LIKE_DOESNT_MATCH_BLOBS            = 1                                                                                      // <defines>:19:1:
+	SQLITE_LIMIT_ATTACHED                     = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4069:1:
+	SQLITE_LIMIT_COLUMN                       = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4064:1:
+	SQLITE_LIMIT_COMPOUND_SELECT              = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4066:1:
+	SQLITE_LIMIT_EXPR_DEPTH                   = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4065:1:
+	SQLITE_LIMIT_FUNCTION_ARG                 = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4068:1:
+	SQLITE_LIMIT_LENGTH                       = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4062:1:
+	SQLITE_LIMIT_LIKE_PATTERN_LENGTH          = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4070:1:
+	SQLITE_LIMIT_SQL_LENGTH                   = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4063:1:
+	SQLITE_LIMIT_TRIGGER_DEPTH                = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:4072:1:
+	SQLITE_LIMIT_VARIABLE_NUMBER              = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4071:1:
+	SQLITE_LIMIT_VDBE_OP                      = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4067:1:
+	SQLITE_LIMIT_WORKER_THREADS               = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:4073:1:
+	SQLITE_LOCKED                             = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:451:1:
+	SQLITE_LOCKED_SHAREDCACHE                 = 262                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:531:1:
+	SQLITE_LOCKED_VTAB                        = 518                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:532:1:
+	SQLITE_LOCK_EXCLUSIVE                     = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:684:1:
+	SQLITE_LOCK_NONE                          = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:680:1:
+	SQLITE_LOCK_PENDING                       = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:683:1:
+	SQLITE_LOCK_RESERVED                      = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:682:1:
+	SQLITE_LOCK_SHARED                        = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:681:1:
+	SQLITE_MISMATCH                           = 20                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:465:1:
+	SQLITE_MISUSE                             = 21                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:466:1:
+	SQLITE_MUTEX_APPDEF                       = 1                                                                                      // <defines>:20:1:
+	SQLITE_MUTEX_FAST                         = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7965:1:
+	SQLITE_MUTEX_NOOP                         = 1                                                                                      // <defines>:21:1:
+	SQLITE_MUTEX_RECURSIVE                    = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7966:1:
+	SQLITE_MUTEX_STATIC_APP1                  = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7975:1:
+	SQLITE_MUTEX_STATIC_APP2                  = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7976:1:
+	SQLITE_MUTEX_STATIC_APP3                  = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7977:1:
+	SQLITE_MUTEX_STATIC_LRU                   = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7972:1:
+	SQLITE_MUTEX_STATIC_LRU2                  = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7973:1:
+	SQLITE_MUTEX_STATIC_MAIN                  = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7967:1:
+	SQLITE_MUTEX_STATIC_MASTER                = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7983:1:
+	SQLITE_MUTEX_STATIC_MEM                   = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7968:1:
+	SQLITE_MUTEX_STATIC_MEM2                  = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7969:1:
+	SQLITE_MUTEX_STATIC_OPEN                  = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7970:1:
+	SQLITE_MUTEX_STATIC_PMEM                  = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7974:1:
+	SQLITE_MUTEX_STATIC_PRNG                  = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:7971:1:
+	SQLITE_MUTEX_STATIC_VFS1                  = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7978:1:
+	SQLITE_MUTEX_STATIC_VFS2                  = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7979:1:
+	SQLITE_MUTEX_STATIC_VFS3                  = 13                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:7980:1:
+	SQLITE_NOLFS                              = 22                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:467:1:
+	SQLITE_NOMEM                              = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:452:1:
+	SQLITE_NOTADB                             = 26                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:471:1:
+	SQLITE_NOTFOUND                           = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:457:1:
+	SQLITE_NOTICE                             = 27                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:472:1:
+	SQLITE_NOTICE_RBU                         = 795                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:566:1:
+	SQLITE_NOTICE_RECOVER_ROLLBACK            = 539                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:565:1:
+	SQLITE_NOTICE_RECOVER_WAL                 = 283                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:564:1:
+	SQLITE_NULL                               = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4936:1:
+	SQLITE_OK                                 = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:444:1:
+	SQLITE_OK_LOAD_PERMANENTLY                = 256                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:569:1:
+	SQLITE_OK_SYMLINK                         = 512                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:570:1:
+	SQLITE_OPEN_AUTOPROXY                     = 0x00000020                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:597:1:
+	SQLITE_OPEN_CREATE                        = 0x00000004                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:594:1:
+	SQLITE_OPEN_DELETEONCLOSE                 = 0x00000008                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:595:1:
+	SQLITE_OPEN_EXCLUSIVE                     = 0x00000010                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:596:1:
+	SQLITE_OPEN_EXRESCODE                     = 0x02000000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:613:1:
+	SQLITE_OPEN_FULLMUTEX                     = 0x00010000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:608:1:
+	SQLITE_OPEN_MAIN_DB                       = 0x00000100                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:600:1:
+	SQLITE_OPEN_MAIN_JOURNAL                  = 0x00000800                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:603:1:
+	SQLITE_OPEN_MASTER_JOURNAL                = 0x00004000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:617:1:
+	SQLITE_OPEN_MEMORY                        = 0x00000080                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:599:1:
+	SQLITE_OPEN_NOFOLLOW                      = 0x01000000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:612:1:
+	SQLITE_OPEN_NOMUTEX                       = 0x00008000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:607:1:
+	SQLITE_OPEN_PRIVATECACHE                  = 0x00040000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:610:1:
+	SQLITE_OPEN_READONLY                      = 0x00000001                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:592:1:
+	SQLITE_OPEN_READWRITE                     = 0x00000002                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:593:1:
+	SQLITE_OPEN_SHAREDCACHE                   = 0x00020000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:609:1:
+	SQLITE_OPEN_SUBJOURNAL                    = 0x00002000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:605:1:
+	SQLITE_OPEN_SUPER_JOURNAL                 = 0x00004000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:606:1:
+	SQLITE_OPEN_TEMP_DB                       = 0x00000200                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:601:1:
+	SQLITE_OPEN_TEMP_JOURNAL                  = 0x00001000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:604:1:
+	SQLITE_OPEN_TRANSIENT_DB                  = 0x00000400                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:602:1:
+	SQLITE_OPEN_URI                           = 0x00000040                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:598:1:
+	SQLITE_OPEN_WAL                           = 0x00080000                                                                             // testdata/sqlite-amalgamation-3410200/sqlite3.h:611:1:
+	SQLITE_OS_UNIX                            = 1                                                                                      // <defines>:24:1:
+	SQLITE_PERM                               = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:448:1:
+	SQLITE_PRAGMA                             = 19                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3215:1:
+	SQLITE_PREPARE_NORMALIZE                  = 0x02                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:4111:1:
+	SQLITE_PREPARE_NO_VTAB                    = 0x04                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:4112:1:
+	SQLITE_PREPARE_PERSISTENT                 = 0x01                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:4110:1:
+	SQLITE_PROTOCOL                           = 15                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:460:1:
+	SQLITE_RANGE                              = 25                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:470:1:
+	SQLITE_READ                               = 20                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3216:1:
+	SQLITE_READONLY                           = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:453:1:
+	SQLITE_READONLY_CANTINIT                  = 1288                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:549:1:
+	SQLITE_READONLY_CANTLOCK                  = 520                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:546:1:
+	SQLITE_READONLY_DBMOVED                   = 1032                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:548:1:
+	SQLITE_READONLY_DIRECTORY                 = 1544                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:550:1:
+	SQLITE_READONLY_RECOVERY                  = 264                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:545:1:
+	SQLITE_READONLY_ROLLBACK                  = 776                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:547:1:
+	SQLITE_RECURSIVE                          = 33                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3230:1:
+	SQLITE_REINDEX                            = 27                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3223:1:
+	SQLITE_REPLACE                            = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9905:1:
+	SQLITE_ROLLBACK                           = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9901:1:
+	SQLITE_ROW                                = 100                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:474:1:
+	SQLITE_SAVEPOINT                          = 32                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3228:1:
+	SQLITE_SCANSTAT_COMPLEX                   = 0x0001                                                                                 // testdata/sqlite-amalgamation-3410200/sqlite3.h:10034:1:
+	SQLITE_SCANSTAT_EST                       = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9972:1:
+	SQLITE_SCANSTAT_EXPLAIN                   = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9974:1:
+	SQLITE_SCANSTAT_NAME                      = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9973:1:
+	SQLITE_SCANSTAT_NCYCLE                    = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9977:1:
+	SQLITE_SCANSTAT_NLOOP                     = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9970:1:
+	SQLITE_SCANSTAT_NVISIT                    = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9971:1:
+	SQLITE_SCANSTAT_PARENTID                  = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9976:1:
+	SQLITE_SCANSTAT_SELECTID                  = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9975:1:
+	SQLITE_SCHEMA                             = 17                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:462:1:
+	SQLITE_SELECT                             = 21                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3217:1:
+	SQLITE_SERIALIZE_NOCOPY                   = 0x001                                                                                  // testdata/sqlite-amalgamation-3410200/sqlite3.h:10457:1:
+	SQLITE_SESSION_CONFIG_STRMSIZE            = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:12382:1:
+	SQLITE_SESSION_OBJCONFIG_SIZE             = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10783:1:
+	SQLITE_SET_LOCKPROXYFILE                  = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1247:1:
+	SQLITE_SHM_EXCLUSIVE                      = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1552:1:
+	SQLITE_SHM_LOCK                           = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1550:1:
+	SQLITE_SHM_NLOCK                          = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1562:1:
+	SQLITE_SHM_SHARED                         = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1551:1:
+	SQLITE_SHM_UNLOCK                         = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:1549:1:
+	SQLITE_SOUNDEX                            = 1                                                                                      // <defines>:22:1:
+	SQLITE_SOURCE_ID                          = "2023-03-22 11:56:21 0d1fc92f94cb6b76bffe3ec34d69cffde2924203304e8ffc4155597af0c191da" // testdata/sqlite-amalgamation-3410200/sqlite3.h:151:1:
+	SQLITE_STATUS_MALLOC_COUNT                = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8399:1:
+	SQLITE_STATUS_MALLOC_SIZE                 = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8395:1:
+	SQLITE_STATUS_MEMORY_USED                 = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8390:1:
+	SQLITE_STATUS_PAGECACHE_OVERFLOW          = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8392:1:
+	SQLITE_STATUS_PAGECACHE_SIZE              = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8397:1:
+	SQLITE_STATUS_PAGECACHE_USED              = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8391:1:
+	SQLITE_STATUS_PARSER_STACK                = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8396:1:
+	SQLITE_STATUS_SCRATCH_OVERFLOW            = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8394:1:
+	SQLITE_STATUS_SCRATCH_SIZE                = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8398:1:
+	SQLITE_STATUS_SCRATCH_USED                = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8393:1:
+	SQLITE_STDCALL                            = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:84:1:
+	SQLITE_STMTSTATUS_AUTOINDEX               = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8646:1:
+	SQLITE_STMTSTATUS_FILTER_HIT              = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8651:1:
+	SQLITE_STMTSTATUS_FILTER_MISS             = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8650:1:
+	SQLITE_STMTSTATUS_FULLSCAN_STEP           = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8644:1:
+	SQLITE_STMTSTATUS_MEMUSED                 = 99                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8652:1:
+	SQLITE_STMTSTATUS_REPREPARE               = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8648:1:
+	SQLITE_STMTSTATUS_RUN                     = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8649:1:
+	SQLITE_STMTSTATUS_SORT                    = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8645:1:
+	SQLITE_STMTSTATUS_VM_STEP                 = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8647:1:
+	SQLITE_SUBTYPE                            = 0x000100000                                                                            // testdata/sqlite-amalgamation-3410200/sqlite3.h:5481:1:
+	SQLITE_SYNC_DATAONLY                      = 0x00010                                                                                // testdata/sqlite-amalgamation-3410200/sqlite3.h:714:1:
+	SQLITE_SYNC_FULL                          = 0x00003                                                                                // testdata/sqlite-amalgamation-3410200/sqlite3.h:713:1:
+	SQLITE_SYNC_NORMAL                        = 0x00002                                                                                // testdata/sqlite-amalgamation-3410200/sqlite3.h:712:1:
+	SQLITE_SYSAPI                             = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:90:1:
+	SQLITE_TESTCTRL_ALWAYS                    = 13                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8080:1:
+	SQLITE_TESTCTRL_ASSERT                    = 12                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8079:1:
+	SQLITE_TESTCTRL_BENIGN_MALLOC_HOOKS       = 10                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8077:1:
+	SQLITE_TESTCTRL_BITVEC_TEST               = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8075:1:
+	SQLITE_TESTCTRL_BYTEORDER                 = 22                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8091:1:
+	SQLITE_TESTCTRL_EXPLAIN_STMT              = 19                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8087:1:
+	SQLITE_TESTCTRL_EXTRA_SCHEMA_CHECKS       = 29                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8098:1:
+	SQLITE_TESTCTRL_FAULT_INSTALL             = 9                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8076:1:
+	SQLITE_TESTCTRL_FIRST                     = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8071:1:
+	SQLITE_TESTCTRL_IMPOSTER                  = 25                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8094:1:
+	SQLITE_TESTCTRL_INTERNAL_FUNCTIONS        = 17                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8085:1:
+	SQLITE_TESTCTRL_ISINIT                    = 23                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8092:1:
+	SQLITE_TESTCTRL_ISKEYWORD                 = 16                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8083:1:
+	SQLITE_TESTCTRL_LAST                      = 33                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8103:1:
+	SQLITE_TESTCTRL_LOCALTIME_FAULT           = 18                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8086:1:
+	SQLITE_TESTCTRL_LOGEST                    = 33                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8102:1:
+	SQLITE_TESTCTRL_NEVER_CORRUPT             = 20                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8089:1:
+	SQLITE_TESTCTRL_ONCE_RESET_THRESHOLD      = 19                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8088:1:
+	SQLITE_TESTCTRL_OPTIMIZATIONS             = 15                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8082:1:
+	SQLITE_TESTCTRL_PARSER_COVERAGE           = 26                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8095:1:
+	SQLITE_TESTCTRL_PENDING_BYTE              = 11                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8078:1:
+	SQLITE_TESTCTRL_PRNG_RESET                = 7                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8074:1:
+	SQLITE_TESTCTRL_PRNG_RESTORE              = 6                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8073:1:
+	SQLITE_TESTCTRL_PRNG_SAVE                 = 5                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:8072:1:
+	SQLITE_TESTCTRL_PRNG_SEED                 = 28                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8097:1:
+	SQLITE_TESTCTRL_RESERVE                   = 14                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8081:1:
+	SQLITE_TESTCTRL_RESULT_INTREAL            = 27                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8096:1:
+	SQLITE_TESTCTRL_SCRATCHMALLOC             = 17                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8084:1:
+	SQLITE_TESTCTRL_SEEK_COUNT                = 30                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8099:1:
+	SQLITE_TESTCTRL_SORTER_MMAP               = 24                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8093:1:
+	SQLITE_TESTCTRL_TRACEFLAGS                = 31                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8100:1:
+	SQLITE_TESTCTRL_TUNE                      = 32                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8101:1:
+	SQLITE_TESTCTRL_VDBE_COVERAGE             = 21                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:8090:1:
+	SQLITE_TEXT                               = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:4940:1:
+	SQLITE_THREADSAFE                         = 1                                                                                      // <defines>:23:1:
+	SQLITE_TOOBIG                             = 18                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:463:1:
+	SQLITE_TRACE_CLOSE                        = 0x08                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:3324:1:
+	SQLITE_TRACE_PROFILE                      = 0x02                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:3322:1:
+	SQLITE_TRACE_ROW                          = 0x04                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:3323:1:
+	SQLITE_TRACE_STMT                         = 0x01                                                                                   // testdata/sqlite-amalgamation-3410200/sqlite3.h:3321:1:
+	SQLITE_TRANSACTION                        = 22                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3218:1:
+	SQLITE_TXN_NONE                           = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:6485:1:
+	SQLITE_TXN_READ                           = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:6486:1:
+	SQLITE_TXN_WRITE                          = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:6487:1:
+	SQLITE_UPDATE                             = 23                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:3219:1:
+	SQLITE_UTF16                              = 4                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:5399:1:
+	SQLITE_UTF16BE                            = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:5398:1:
+	SQLITE_UTF16LE                            = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:5397:1:
+	SQLITE_UTF16_ALIGNED                      = 8                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:5401:1:
+	SQLITE_UTF8                               = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:5396:1:
+	SQLITE_VERSION                            = "3.41.2"                                                                               // testdata/sqlite-amalgamation-3410200/sqlite3.h:149:1:
+	SQLITE_VERSION_NUMBER                     = 3041002                                                                                // testdata/sqlite-amalgamation-3410200/sqlite3.h:150:1:
+	SQLITE_VTAB_CONSTRAINT_SUPPORT            = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9576:1:
+	SQLITE_VTAB_DIRECTONLY                    = 3                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9578:1:
+	SQLITE_VTAB_INNOCUOUS                     = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:9577:1:
+	SQLITE_WARNING                            = 28                                                                                     // testdata/sqlite-amalgamation-3410200/sqlite3.h:473:1:
+	SQLITE_WARNING_AUTOINDEX                  = 284                                                                                    // testdata/sqlite-amalgamation-3410200/sqlite3.h:567:1:
+	SQLITE_WIN32_DATA_DIRECTORY_TYPE          = 1                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:6334:1:
+	SQLITE_WIN32_TEMP_DIRECTORY_TYPE          = 2                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:6335:1:
+	SQLITE_WITHOUT_ZONEMALLOC                 = 1                                                                                      // <defines>:25:1:
+	SS_DISABLE                                = 0x0004                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:339:1:
+	SS_ONSTACK                                = 0x0001                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:338:1:
+	STDERR_FILENO                             = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:88:1:
+	STDIN_FILENO                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:86:1:
+	STDOUT_FILENO                             = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:87:1:
+	SV_INTERRUPT                              = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:355:1:
+	SV_NOCLDSTOP                              = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:358:1:
+	SV_NODEFER                                = 16                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:357:1:
+	SV_ONSTACK                                = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:354:1:
+	SV_RESETHAND                              = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:356:1:
+	SV_SIGINFO                                = 64                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:359:1:
+	SYNC_VOLUME_FULLSYNC                      = 0x01                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:780:1:
+	SYNC_VOLUME_WAIT                          = 0x02                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:781:1:
+	TMP_MAX                                   = 308915776                                                                              // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:115:1:
+	TRAP_BRKPT                                = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:246:1:
+	TRAP_TRACE                                = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:247:1:
+	UINT16_MAX                                = 65535                                                                                  // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:601:1:
+	UINT32_MAX                                = 4294967295                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:557:1:
+	UINT64_MAX                                = 18446744073709551615                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:463:1:
+	UINT8_MAX                                 = 255                                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:623:1:
+	UINTMAX_MAX                               = 18446744073709551615                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:664:1:
+	UINTPTR_MAX                               = 18446744073709551615                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:650:1:
+	UINT_FAST16_MAX                           = 65535                                                                                  // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:616:1:
+	UINT_FAST32_MAX                           = 4294967295                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:575:1:
+	UINT_FAST64_MAX                           = 18446744073709551615                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:484:1:
+	UINT_FAST8_MAX                            = 255                                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:635:1:
+	UINT_LEAST16_MAX                          = 65535                                                                                  // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:613:1:
+	UINT_LEAST32_MAX                          = 4294967295                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:572:1:
+	UINT_LEAST64_MAX                          = 18446744073709551615                                                                   // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:481:1:
+	UINT_LEAST8_MAX                           = 255                                                                                    // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:632:1:
+	WAIT_ANY                                  = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:183:1:
+	WAIT_MYPGRP                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:184:1:
+	WAKEMON_DISABLE                           = 0x02                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:431:1:
+	WAKEMON_ENABLE                            = 0x01                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:430:1:
+	WAKEMON_GET_PARAMS                        = 0x04                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:432:1:
+	WAKEMON_MAKE_FATAL                        = 0x10                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:434:1:
+	WAKEMON_SET_DEFAULTS                      = 0x08                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:433:1:
+	WCHAR_MAX                                 = 2147483647                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:678:1:
+	WCHAR_MIN                                 = -2147483648                                                                            // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:682:1:
+	WCONTINUED                                = 0x00000010                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:173:1:
+	WCOREFLAG                                 = 0200                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:132:1:
+	WEXITED                                   = 0x00000004                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:168:1:
+	WINT_MAX                                  = 2147483647                                                                             // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:674:1:
+	WINT_MIN                                  = -2147483648                                                                            // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:673:1:
+	WNOHANG                                   = 0x00000001                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:121:1:
+	WNOWAIT                                   = 0x00000020                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:174:1:
+	WSTOPPED                                  = 0x00000008                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:171:1:
+	WUNTRACED                                 = 0x00000002                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:122:1:
+	W_OK                                      = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:91:1:
+	X_OK                                      = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:90:1:
+	X_ACCESS_EXTENDED_MASK                    = 4193792                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:114:1:
+	X_ALLOCA_H_                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/alloca.h:25:1:
+	X_APPEND_OK                               = 8192                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:104:1:
+	X_ARM_ARCH_H                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/arch.h:29:1:
+	X_ARM_MACHTYPES_H_                        = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:43:1:
+	X_ARM_SIGNAL_                             = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/signal.h:10:1:
+	X_ARM__ENDIAN_H_                          = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:43:1:
+	X_ASSERT_H_                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/assert.h:109:1:
+	X_BSD_ARM__TYPES_H_                       = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/_types.h:5:1:
+	X_BSD_MACHINE_ENDIAN_H_                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/endian.h:32:1:
+	X_BSD_MACHINE_SIGNAL_H_                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/signal.h:29:1:
+	X_BSD_MACHINE_TYPES_H_                    = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/types.h:32:1:
+	X_BSD_MACHINE__MCONTEXT_H_                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/_mcontext.h:29:1:
+	X_BSD_MACHINE__TYPES_H_                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/_types.h:29:1:
+	X_CACHED_RUNES                            = 256                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:54:1:
+	X_CDEFS_H_                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:68:1:
+	X_CHOWN_OK                                = 2097152                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:112:1:
+	X_CRMASK                                  = -256                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:55:1:
+	X_CS_DARWIN_USER_CACHE_DIR                = 65538                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:415:1:
+	X_CS_DARWIN_USER_DIR                      = 65536                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:413:1:
+	X_CS_DARWIN_USER_TEMP_DIR                 = 65537                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:414:1:
+	X_CS_PATH                                 = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:175:1:
+	X_CS_POSIX_V6_ILP32_OFF32_CFLAGS          = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:377:1:
+	X_CS_POSIX_V6_ILP32_OFF32_LDFLAGS         = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:378:1:
+	X_CS_POSIX_V6_ILP32_OFF32_LIBS            = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:379:1:
+	X_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS         = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:380:1:
+	X_CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS        = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:381:1:
+	X_CS_POSIX_V6_ILP32_OFFBIG_LIBS           = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:382:1:
+	X_CS_POSIX_V6_LP64_OFF64_CFLAGS           = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:383:1:
+	X_CS_POSIX_V6_LP64_OFF64_LDFLAGS          = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:384:1:
+	X_CS_POSIX_V6_LP64_OFF64_LIBS             = 10                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:385:1:
+	X_CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS         = 11                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:386:1:
+	X_CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS        = 12                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:387:1:
+	X_CS_POSIX_V6_LPBIG_OFFBIG_LIBS           = 13                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:388:1:
+	X_CS_POSIX_V6_WIDTH_RESTRICTED_ENVS       = 14                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:389:1:
+	X_CS_XBS5_ILP32_OFF32_CFLAGS              = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:394:1:
+	X_CS_XBS5_ILP32_OFF32_LDFLAGS             = 21                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:395:1:
+	X_CS_XBS5_ILP32_OFF32_LIBS                = 22                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:396:1:
+	X_CS_XBS5_ILP32_OFF32_LINTFLAGS           = 23                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:397:1:
+	X_CS_XBS5_ILP32_OFFBIG_CFLAGS             = 24                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:398:1:
+	X_CS_XBS5_ILP32_OFFBIG_LDFLAGS            = 25                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:399:1:
+	X_CS_XBS5_ILP32_OFFBIG_LIBS               = 26                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:400:1:
+	X_CS_XBS5_ILP32_OFFBIG_LINTFLAGS          = 27                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:401:1:
+	X_CS_XBS5_LP64_OFF64_CFLAGS               = 28                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:402:1:
+	X_CS_XBS5_LP64_OFF64_LDFLAGS              = 29                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:403:1:
+	X_CS_XBS5_LP64_OFF64_LIBS                 = 30                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:404:1:
+	X_CS_XBS5_LP64_OFF64_LINTFLAGS            = 31                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:405:1:
+	X_CS_XBS5_LPBIG_OFFBIG_CFLAGS             = 32                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:406:1:
+	X_CS_XBS5_LPBIG_OFFBIG_LDFLAGS            = 33                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:407:1:
+	X_CS_XBS5_LPBIG_OFFBIG_LIBS               = 34                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:408:1:
+	X_CS_XBS5_LPBIG_OFFBIG_LINTFLAGS          = 35                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:409:1:
+	X_CTERMID_H_                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctermid.h:25:1:
+	X_CTYPE_A                                 = 0x00000100                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:72:1:
+	X_CTYPE_B                                 = 0x00020000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:81:1:
+	X_CTYPE_C                                 = 0x00000200                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:73:1:
+	X_CTYPE_D                                 = 0x00000400                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:74:1:
+	X_CTYPE_G                                 = 0x00000800                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:75:1:
+	X_CTYPE_H_                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/ctype.h:67:1:
+	X_CTYPE_I                                 = 0x00080000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:83:1:
+	X_CTYPE_L                                 = 0x00001000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:76:1:
+	X_CTYPE_P                                 = 0x00002000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:77:1:
+	X_CTYPE_Q                                 = 0x00200000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:85:1:
+	X_CTYPE_R                                 = 0x00040000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:82:1:
+	X_CTYPE_S                                 = 0x00004000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:78:1:
+	X_CTYPE_SW0                               = 0x20000000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:86:1:
+	X_CTYPE_SW1                               = 0x40000000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:87:1:
+	X_CTYPE_SW2                               = 0x80000000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:88:1:
+	X_CTYPE_SW3                               = 0xc0000000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:89:1:
+	X_CTYPE_SWM                               = 0xe0000000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:90:1:
+	X_CTYPE_SWS                               = 30                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:91:1:
+	X_CTYPE_T                                 = 0x00100000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:84:1:
+	X_CTYPE_U                                 = 0x00008000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:79:1:
+	X_CTYPE_X                                 = 0x00010000                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:80:1:
+	X_CT_RUNE_T                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_ct_rune_t.h:30:1:
+	X_DARWIN_FEATURE_64_BIT_INODE             = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:774:1:
+	X_DARWIN_FEATURE_ONLY_64_BIT_INODE        = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:784:1:
+	X_DARWIN_FEATURE_ONLY_UNIX_CONFORMANCE    = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:800:1:
+	X_DARWIN_FEATURE_ONLY_VERS_1050           = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:792:1:
+	X_DARWIN_FEATURE_UNIX_CONFORMANCE         = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:808:1:
+	X_DELETE_OK                               = 4096                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:103:1:
+	X_DEV_T                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_dev_t.h:29:1:
+	X_ERRNO_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_errno_t.h:29:1:
+	X_EXECUTE_OK                              = 2048                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:102:1:
+	X_FD_SET                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_def.h:29:1:
+	X_FILE_OFFSET_BITS                        = 64                                                                                     // <builtin>:25:1:
+	X_FORTIFY_SOURCE                          = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types.h:65:1:
+	X_FSTDIO                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h:83:1:
+	X_FTS5_H                                  = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:12416:1:
+	X_GID_T                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_gid_t.h:29:1:
+	X_ID_T                                    = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_id_t.h:29:1:
+	X_INT16_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int16_t.h:29:1:
+	X_INT32_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int32_t.h:29:1:
+	X_INT64_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int64_t.h:29:1:
+	X_INT8_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int8_t.h:29:1:
+	X_INTPTR_T                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_intptr_t.h:29:1:
+	X_IOFBF                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:99:1:
+	X_IOLBF                                   = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:100:1:
+	X_IONBF                                   = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:101:1:
+	X_LP64                                    = 1                                                                                      // <predefined>:1:1:
+	X_MACHTYPES_H_                            = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:44:1:
+	X_MACH_ARM__STRUCTS_H_                    = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:32:1:
+	X_MACH_MACHINE__STRUCTS_H_                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/machine/_structs.h:30:1:
+	X_MALLOC_UNDERSCORE_MALLOC_H_             = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/malloc/_malloc.h:25:1:
+	X_MCONTEXT_T                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/_mcontext.h:83:1:
+	X_MODE_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_mode_t.h:29:1:
+	X_Nonnull                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:268:1:
+	X_Null_unspecified                        = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:271:1:
+	X_Nullable                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:265:1:
+	X_OFF_T                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_off_t.h:29:1:
+	X_OS_OSBYTEORDERARM_H                     = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:6:1:
+	X_OS__OSBYTEORDER_H                       = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/_OSByteOrder.h:30:1:
+	X_PC_2_SYMLINKS                           = 15                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:160:1:
+	X_PC_ALLOC_SIZE_MIN                       = 16                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:161:1:
+	X_PC_ASYNC_IO                             = 17                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:162:1:
+	X_PC_AUTH_OPAQUE_NP                       = 14                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:157:1:
+	X_PC_CASE_PRESERVING                      = 12                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:155:1:
+	X_PC_CASE_SENSITIVE                       = 11                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:154:1:
+	X_PC_CHOWN_RESTRICTED                     = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:148:1:
+	X_PC_EXTENDED_SECURITY_NP                 = 13                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:156:1:
+	X_PC_FILESIZEBITS                         = 18                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:163:1:
+	X_PC_LINK_MAX                             = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:142:1:
+	X_PC_MAX_CANON                            = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:143:1:
+	X_PC_MAX_INPUT                            = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:144:1:
+	X_PC_MIN_HOLE_SIZE                        = 27                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:172:1:
+	X_PC_NAME_CHARS_MAX                       = 10                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:153:1:
+	X_PC_NAME_MAX                             = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:145:1:
+	X_PC_NO_TRUNC                             = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:149:1:
+	X_PC_PATH_MAX                             = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:146:1:
+	X_PC_PIPE_BUF                             = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:147:1:
+	X_PC_PRIO_IO                              = 19                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:164:1:
+	X_PC_REC_INCR_XFER_SIZE                   = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:165:1:
+	X_PC_REC_MAX_XFER_SIZE                    = 21                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:166:1:
+	X_PC_REC_MIN_XFER_SIZE                    = 22                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:167:1:
+	X_PC_REC_XFER_ALIGN                       = 23                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:168:1:
+	X_PC_SYMLINK_MAX                          = 24                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:169:1:
+	X_PC_SYNC_IO                              = 25                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:170:1:
+	X_PC_VDISABLE                             = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:150:1:
+	X_PC_XATTR_SIZE_BITS                      = 26                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:171:1:
+	X_PID_T                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_pid_t.h:29:1:
+	X_POSIX2_CHAR_TERM                        = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:152:1:
+	X_POSIX2_C_BIND                           = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:150:1:
+	X_POSIX2_C_DEV                            = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:151:1:
+	X_POSIX2_FORT_DEV                         = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:153:1:
+	X_POSIX2_FORT_RUN                         = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:154:1:
+	X_POSIX2_LOCALEDEF                        = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:155:1:
+	X_POSIX2_PBS                              = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:156:1:
+	X_POSIX2_PBS_ACCOUNTING                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:157:1:
+	X_POSIX2_PBS_CHECKPOINT                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:158:1:
+	X_POSIX2_PBS_LOCATE                       = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:159:1:
+	X_POSIX2_PBS_MESSAGE                      = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:160:1:
+	X_POSIX2_PBS_TRACK                        = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:161:1:
+	X_POSIX2_SW_DEV                           = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:162:1:
+	X_POSIX2_UPE                              = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:163:1:
+	X_POSIX2_VERSION                          = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:80:1:
+	X_POSIX_ADVISORY_INFO                     = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:98:1:
+	X_POSIX_ASYNCHRONOUS_IO                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:99:1:
+	X_POSIX_BARRIERS                          = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:100:1:
+	X_POSIX_CHOWN_RESTRICTED                  = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:101:1:
+	X_POSIX_CLOCK_SELECTION                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:102:1:
+	X_POSIX_CPUTIME                           = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:103:1:
+	X_POSIX_FSYNC                             = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:104:1:
+	X_POSIX_IPV6                              = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:105:1:
+	X_POSIX_JOB_CONTROL                       = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:106:1:
+	X_POSIX_MAPPED_FILES                      = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:107:1:
+	X_POSIX_MEMLOCK                           = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:108:1:
+	X_POSIX_MEMLOCK_RANGE                     = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:109:1:
+	X_POSIX_MEMORY_PROTECTION                 = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:110:1:
+	X_POSIX_MESSAGE_PASSING                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:111:1:
+	X_POSIX_MONOTONIC_CLOCK                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:112:1:
+	X_POSIX_NO_TRUNC                          = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:113:1:
+	X_POSIX_PRIORITIZED_IO                    = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:114:1:
+	X_POSIX_PRIORITY_SCHEDULING               = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:115:1:
+	X_POSIX_RAW_SOCKETS                       = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:116:1:
+	X_POSIX_READER_WRITER_LOCKS               = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:117:1:
+	X_POSIX_REALTIME_SIGNALS                  = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:118:1:
+	X_POSIX_REGEXP                            = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:119:1:
+	X_POSIX_SAVED_IDS                         = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:120:1:
+	X_POSIX_SEMAPHORES                        = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:121:1:
+	X_POSIX_SHARED_MEMORY_OBJECTS             = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:122:1:
+	X_POSIX_SHELL                             = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:123:1:
+	X_POSIX_SPAWN                             = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:124:1:
+	X_POSIX_SPIN_LOCKS                        = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:125:1:
+	X_POSIX_SPORADIC_SERVER                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:126:1:
+	X_POSIX_SYNCHRONIZED_IO                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:127:1:
+	X_POSIX_THREADS                           = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:137:1:
+	X_POSIX_THREAD_ATTR_STACKADDR             = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:128:1:
+	X_POSIX_THREAD_ATTR_STACKSIZE             = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:129:1:
+	X_POSIX_THREAD_CPUTIME                    = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:130:1:
+	X_POSIX_THREAD_KEYS_MAX                   = 128                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:86:1:
+	X_POSIX_THREAD_PRIORITY_SCHEDULING        = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:133:1:
+	X_POSIX_THREAD_PRIO_INHERIT               = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:131:1:
+	X_POSIX_THREAD_PRIO_PROTECT               = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:132:1:
+	X_POSIX_THREAD_PROCESS_SHARED             = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:134:1:
+	X_POSIX_THREAD_SAFE_FUNCTIONS             = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:135:1:
+	X_POSIX_THREAD_SPORADIC_SERVER            = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:136:1:
+	X_POSIX_TIMEOUTS                          = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:138:1:
+	X_POSIX_TIMERS                            = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:139:1:
+	X_POSIX_TRACE                             = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:140:1:
+	X_POSIX_TRACE_EVENT_FILTER                = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:141:1:
+	X_POSIX_TRACE_INHERIT                     = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:142:1:
+	X_POSIX_TRACE_LOG                         = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:143:1:
+	X_POSIX_TYPED_MEMORY_OBJECTS              = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:144:1:
+	X_POSIX_V6_ILP32_OFF32                    = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:173:1:
+	X_POSIX_V6_ILP32_OFFBIG                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:174:1:
+	X_POSIX_V6_LP64_OFF64                     = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:175:1:
+	X_POSIX_V6_LPBIG_OFFBIG                   = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:176:1:
+	X_POSIX_V7_ILP32_OFF32                    = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:180:1:
+	X_POSIX_V7_ILP32_OFFBIG                   = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:181:1:
+	X_POSIX_V7_LP64_OFF64                     = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:182:1:
+	X_POSIX_V7_LPBIG_OFFBIG                   = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:183:1:
+	X_POSIX_VERSION                           = 200112                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:79:1:
+	X_PTHREAD_ATTR_T                          = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_attr_t.h:29:1:
+	X_QUAD_HIGHWORD                           = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:56:1:
+	X_QUAD_LOWWORD                            = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/endian.h:57:1:
+	X_RATTR_OK                                = 32768                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:106:1:
+	X_READ_OK                                 = 512                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:100:1:
+	X_REXT_OK                                 = 131072                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:108:1:
+	X_RLIMIT_POSIX_FLAG                       = 0x1000                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:405:1:
+	X_RMFILE_OK                               = 16384                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:105:1:
+	X_RPERM_OK                                = 524288                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:110:1:
+	X_RSIZE_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_rsize_t.h:29:1:
+	X_RUNETYPE_H_                             = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:40:1:
+	X_RUNE_MAGIC_A                            = "RuneMagA"                                                                             // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:108:1:
+	X_RUNE_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_rune_t.h:29:1:
+	X_SC_2_CHAR_TERM                          = 20                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:232:1:
+	X_SC_2_C_BIND                             = 18                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:230:1:
+	X_SC_2_C_DEV                              = 19                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:231:1:
+	X_SC_2_FORT_DEV                           = 21                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:233:1:
+	X_SC_2_FORT_RUN                           = 22                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:234:1:
+	X_SC_2_LOCALEDEF                          = 23                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:235:1:
+	X_SC_2_PBS                                = 59                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:275:1:
+	X_SC_2_PBS_ACCOUNTING                     = 60                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:276:1:
+	X_SC_2_PBS_CHECKPOINT                     = 61                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:277:1:
+	X_SC_2_PBS_LOCATE                         = 62                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:278:1:
+	X_SC_2_PBS_MESSAGE                        = 63                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:279:1:
+	X_SC_2_PBS_TRACK                          = 64                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:280:1:
+	X_SC_2_SW_DEV                             = 24                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:236:1:
+	X_SC_2_UPE                                = 25                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:237:1:
+	X_SC_2_VERSION                            = 17                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:229:1:
+	X_SC_ADVISORY_INFO                        = 65                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:281:1:
+	X_SC_AIO_LISTIO_MAX                       = 42                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:256:1:
+	X_SC_AIO_MAX                              = 43                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:257:1:
+	X_SC_AIO_PRIO_DELTA_MAX                   = 44                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:258:1:
+	X_SC_ARG_MAX                              = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:213:1:
+	X_SC_ASYNCHRONOUS_IO                      = 28                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:242:1:
+	X_SC_ATEXIT_MAX                           = 107                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:329:1:
+	X_SC_BARRIERS                             = 66                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:282:1:
+	X_SC_BC_BASE_MAX                          = 9                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:221:1:
+	X_SC_BC_DIM_MAX                           = 10                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:222:1:
+	X_SC_BC_SCALE_MAX                         = 11                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:223:1:
+	X_SC_BC_STRING_MAX                        = 12                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:224:1:
+	X_SC_CHILD_MAX                            = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:214:1:
+	X_SC_CLK_TCK                              = 3                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:215:1:
+	X_SC_CLOCK_SELECTION                      = 67                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:283:1:
+	X_SC_COLL_WEIGHTS_MAX                     = 13                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:225:1:
+	X_SC_CPUTIME                              = 68                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:284:1:
+	X_SC_DELAYTIMER_MAX                       = 45                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:259:1:
+	X_SC_EXPR_NEST_MAX                        = 14                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:226:1:
+	X_SC_FILE_LOCKING                         = 69                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:285:1:
+	X_SC_FSYNC                                = 38                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:252:1:
+	X_SC_GETGR_R_SIZE_MAX                     = 70                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:286:1:
+	X_SC_GETPW_R_SIZE_MAX                     = 71                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:287:1:
+	X_SC_HOST_NAME_MAX                        = 72                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:288:1:
+	X_SC_IOV_MAX                              = 56                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:330:1:
+	X_SC_IPV6                                 = 118                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:323:1:
+	X_SC_JOB_CONTROL                          = 6                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:218:1:
+	X_SC_LINE_MAX                             = 15                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:227:1:
+	X_SC_LOGIN_NAME_MAX                       = 73                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:289:1:
+	X_SC_MAPPED_FILES                         = 47                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:261:1:
+	X_SC_MEMLOCK                              = 30                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:244:1:
+	X_SC_MEMLOCK_RANGE                        = 31                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:245:1:
+	X_SC_MEMORY_PROTECTION                    = 32                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:246:1:
+	X_SC_MESSAGE_PASSING                      = 33                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:247:1:
+	X_SC_MONOTONIC_CLOCK                      = 74                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:290:1:
+	X_SC_MQ_OPEN_MAX                          = 46                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:260:1:
+	X_SC_MQ_PRIO_MAX                          = 75                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:291:1:
+	X_SC_NGROUPS_MAX                          = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:216:1:
+	X_SC_NPROCESSORS_CONF                     = 57                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:270:1:
+	X_SC_NPROCESSORS_ONLN                     = 58                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:271:1:
+	X_SC_OPEN_MAX                             = 5                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:217:1:
+	X_SC_PAGESIZE                             = 29                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:243:1:
+	X_SC_PAGE_SIZE                            = 29                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:331:1:
+	X_SC_PASS_MAX                             = 131                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:362:1:
+	X_SC_PHYS_PAGES                           = 200                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:367:1:
+	X_SC_PRIORITIZED_IO                       = 34                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:248:1:
+	X_SC_PRIORITY_SCHEDULING                  = 35                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:249:1:
+	X_SC_RAW_SOCKETS                          = 119                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:324:1:
+	X_SC_READER_WRITER_LOCKS                  = 76                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:292:1:
+	X_SC_REALTIME_SIGNALS                     = 36                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:250:1:
+	X_SC_REGEXP                               = 77                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:293:1:
+	X_SC_RE_DUP_MAX                           = 16                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:228:1:
+	X_SC_RTSIG_MAX                            = 48                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:262:1:
+	X_SC_SAVED_IDS                            = 7                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:219:1:
+	X_SC_SEMAPHORES                           = 37                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:251:1:
+	X_SC_SEM_NSEMS_MAX                        = 49                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:263:1:
+	X_SC_SEM_VALUE_MAX                        = 50                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:264:1:
+	X_SC_SHARED_MEMORY_OBJECTS                = 39                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:253:1:
+	X_SC_SHELL                                = 78                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:294:1:
+	X_SC_SIGQUEUE_MAX                         = 51                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:265:1:
+	X_SC_SPAWN                                = 79                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:295:1:
+	X_SC_SPIN_LOCKS                           = 80                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:296:1:
+	X_SC_SPORADIC_SERVER                      = 81                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:297:1:
+	X_SC_SS_REPL_MAX                          = 126                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:353:1:
+	X_SC_STREAM_MAX                           = 26                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:238:1:
+	X_SC_SYMLOOP_MAX                          = 120                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:325:1:
+	X_SC_SYNCHRONIZED_IO                      = 40                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:254:1:
+	X_SC_THREADS                              = 96                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:312:1:
+	X_SC_THREAD_ATTR_STACKADDR                = 82                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:298:1:
+	X_SC_THREAD_ATTR_STACKSIZE                = 83                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:299:1:
+	X_SC_THREAD_CPUTIME                       = 84                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:300:1:
+	X_SC_THREAD_DESTRUCTOR_ITERATIONS         = 85                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:301:1:
+	X_SC_THREAD_KEYS_MAX                      = 86                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:302:1:
+	X_SC_THREAD_PRIORITY_SCHEDULING           = 89                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:305:1:
+	X_SC_THREAD_PRIO_INHERIT                  = 87                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:303:1:
+	X_SC_THREAD_PRIO_PROTECT                  = 88                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:304:1:
+	X_SC_THREAD_PROCESS_SHARED                = 90                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:306:1:
+	X_SC_THREAD_SAFE_FUNCTIONS                = 91                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:307:1:
+	X_SC_THREAD_SPORADIC_SERVER               = 92                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:308:1:
+	X_SC_THREAD_STACK_MIN                     = 93                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:309:1:
+	X_SC_THREAD_THREADS_MAX                   = 94                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:310:1:
+	X_SC_TIMEOUTS                             = 95                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:311:1:
+	X_SC_TIMERS                               = 41                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:255:1:
+	X_SC_TIMER_MAX                            = 52                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:266:1:
+	X_SC_TRACE                                = 97                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:313:1:
+	X_SC_TRACE_EVENT_FILTER                   = 98                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:314:1:
+	X_SC_TRACE_EVENT_NAME_MAX                 = 127                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:354:1:
+	X_SC_TRACE_INHERIT                        = 99                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:315:1:
+	X_SC_TRACE_LOG                            = 100                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:316:1:
+	X_SC_TRACE_NAME_MAX                       = 128                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:355:1:
+	X_SC_TRACE_SYS_MAX                        = 129                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:356:1:
+	X_SC_TRACE_USER_EVENT_MAX                 = 130                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:357:1:
+	X_SC_TTY_NAME_MAX                         = 101                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:317:1:
+	X_SC_TYPED_MEMORY_OBJECTS                 = 102                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:318:1:
+	X_SC_TZNAME_MAX                           = 27                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:239:1:
+	X_SC_V6_ILP32_OFF32                       = 103                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:319:1:
+	X_SC_V6_ILP32_OFFBIG                      = 104                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:320:1:
+	X_SC_V6_LP64_OFF64                        = 105                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:321:1:
+	X_SC_V6_LPBIG_OFFBIG                      = 106                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:322:1:
+	X_SC_VERSION                              = 8                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:220:1:
+	X_SC_XBS5_ILP32_OFF32                     = 122                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:346:1:
+	X_SC_XBS5_ILP32_OFFBIG                    = 123                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:347:1:
+	X_SC_XBS5_LP64_OFF64                      = 124                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:348:1:
+	X_SC_XBS5_LPBIG_OFFBIG                    = 125                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:349:1:
+	X_SC_XOPEN_CRYPT                          = 108                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:332:1:
+	X_SC_XOPEN_ENH_I18N                       = 109                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:333:1:
+	X_SC_XOPEN_LEGACY                         = 110                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:334:1:
+	X_SC_XOPEN_REALTIME                       = 111                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:335:1:
+	X_SC_XOPEN_REALTIME_THREADS               = 112                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:336:1:
+	X_SC_XOPEN_SHM                            = 113                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:337:1:
+	X_SC_XOPEN_STREAMS                        = 114                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:338:1:
+	X_SC_XOPEN_UNIX                           = 115                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:339:1:
+	X_SC_XOPEN_VERSION                        = 116                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:340:1:
+	X_SC_XOPEN_XCU_VERSION                    = 121                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:341:1:
+	X_SECURE__COMMON_H_                       = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/secure/_common.h:25:1:
+	X_SECURE__STDIO_H_                        = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/secure/_stdio.h:29:1:
+	X_SECURE__STRINGS_H_                      = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/secure/_strings.h:29:1:
+	X_SECURE__STRING_H_                       = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/secure/_string.h:29:1:
+	X_SIGSET_T                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_sigset_t.h:29:1:
+	X_SIZE_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_size_t.h:29:1:
+	X_SQLITE3RTREE_H_                         = 0                                                                                      // testdata/sqlite-amalgamation-3410200/sqlite3.h:10567:1:
+	X_SSIZE_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_ssize_t.h:29:1:
+	X_STDIO_H_                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h:62:1:
+	X_STDLIB_H_                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:59:1:
+	X_STRINGS_H_                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/strings.h:59:1:
+	X_STRING_H_                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/string.h:59:1:
+	X_SUSECONDS_T                             = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_suseconds_t.h:29:1:
+	X_SYS_ERRNO_H_                            = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/errno.h:70:1:
+	X_SYS_RESOURCE_H_                         = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:65:1:
+	X_SYS_SELECT_H_                           = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/select.h:64:1:
+	X_SYS_SIGNAL_H_                           = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:70:1:
+	X_SYS_STDIO_H_                            = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h:30:1:
+	X_SYS_UNISTD_H_                           = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:65:1:
+	X_SYS_WAIT_H_                             = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:65:1:
+	X_SYS__ENDIAN_H_                          = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_endian.h:91:1:
+	X_SYS__PTHREAD_TYPES_H_                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:30:1:
+	X_SYS__SELECT_H_                          = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_select.h:37:1:
+	X_SYS__TYPES_H_                           = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types.h:30:1:
+	X_TIME_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_time_t.h:29:1:
+	X_UID_T                                   = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_uid_t.h:29:1:
+	X_UINT32_T                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types/_uint32_t.h:30:1:
+	X_UINT64_T                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types/_uint64_t.h:30:1:
+	X_UINTPTR_T                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_uintptr_t.h:29:1:
+	X_UNISTD_H_                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:69:1:
+	X_USECONDS_T                              = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_useconds_t.h:29:1:
+	X_USE_FORTIFY_LEVEL                       = 2                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/secure/_common.h:30:1:
+	X_UUID_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_uuid_t.h:29:1:
+	X_U_INT16_T                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int16_t.h:29:1:
+	X_U_INT32_T                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int32_t.h:29:1:
+	X_U_INT64_T                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int64_t.h:29:1:
+	X_U_INT8_T                                = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int8_t.h:29:1:
+	X_V6_ILP32_OFF32                          = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:187:1:
+	X_V6_ILP32_OFFBIG                         = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:188:1:
+	X_V6_LP64_OFF64                           = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:189:1:
+	X_V6_LPBIG_OFFBIG                         = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:190:1:
+	X_VA_LIST                                 = 0                                                                                      // /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdarg.h:15:1:
+	X_VA_LIST_T                               = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_va_list.h:30:1:
+	X_WATTR_OK                                = 65536                                                                                  // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:107:1:
+	X_WCHAR_T                                 = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_wchar_t.h:32:1:
+	X_WEXT_OK                                 = 262144                                                                                 // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:109:1:
+	X_WINT_T                                  = 0                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_wint_t.h:30:1:
+	X_WPERM_OK                                = 1048576                                                                                // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:111:1:
+	X_WRITE_OK                                = 1024                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:101:1:
+	X_WSTOPPED                                = 0177                                                                                   // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:137:1:
+	X_XBS5_ILP32_OFF32                        = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:195:1:
+	X_XBS5_ILP32_OFFBIG                       = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:196:1:
+	X_XBS5_LP64_OFF64                         = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:197:1:
+	X_XBS5_LPBIG_OFFBIG                       = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:198:1:
+	X_XOPEN_CRYPT                             = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:202:1:
+	X_XOPEN_ENH_I18N                          = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:203:1:
+	X_XOPEN_LEGACY                            = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:204:1:
+	X_XOPEN_REALTIME                          = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:205:1:
+	X_XOPEN_REALTIME_THREADS                  = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:206:1:
+	X_XOPEN_SHM                               = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:207:1:
+	X_XOPEN_STREAMS                           = -1                                                                                     // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:208:1:
+	X_XOPEN_UNIX                              = 1                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:209:1:
+	X_XOPEN_VERSION                           = 600                                                                                    // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:93:1:
+	X_XOPEN_XCU_VERSION                       = 4                                                                                      // /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h:94:1:
 )
 
-const (
+// Error codes
+
+// 11 was EAGAIN
+
+// math software
+
+// non-blocking and interrupt i/o
+
+// ipc/network software -- argument errors
+
+// ipc/network software -- operational errors
+
+// should be rearranged
+
+// quotas & mush
+
+// Network File System
+
+// Intelligent device errors
+
+// Program loading errors
+
+// This value is only discrete when compiling __DARWIN_UNIX03, or KERNEL
+
+// Copyright (c) 2000, 2002 - 2008 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// -
+// Copyright (c) 1990, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)stdlib.h	8.5 (Berkeley) 5/19/95
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2004, 2008, 2009 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
+// Copyright (c) 1982, 1986, 1989, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)wait.h	8.2 (Berkeley) 7/10/94
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// This file holds definitions relevent to the wait4 system call
+// and the alternate interfaces that use it (wait, wait3, waitpid).
+
+// [XSI] The type idtype_t shall be defined as an enumeration type whose
+// possible values shall include at least P_ALL, P_PID, and P_PGID.
+const ( /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:79:1: */
 	P_ALL  = 0
 	P_PID  = 1
 	P_PGID = 2
 )
 
-type ptrdiff_t = int64
+type ptrdiff_t = int64 /* <builtin>:3:26 */
 
-type size_t = uint64
+type size_t = uint64 /* <builtin>:9:23 */
 
-type wchar_t = int32
+type wchar_t = int32 /* <builtin>:15:24 */
 
-var __darwin_check_fd_set_overflow uintptr
+var __darwin_check_fd_set_overflow uintptr /* <builtin>:146:5: */
 
-type va_list = uintptr
+// 2022-09-20 Modified version of mptest.c from SQLite 3.39.3
+//
+// Make timeouts 100 times longer.
 
-type sqlite_int64 = int64
-type sqlite_uint64 = uint64
-type sqlite3_int64 = sqlite_int64
-type sqlite3_uint64 = sqlite_uint64
+// 2013-04-05
+//
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+//
+//
+//
+// This is a program used for testing SQLite, and specifically for testing
+// the ability of independent processes to access the same SQLite database
+// concurrently.
+//
+// Compile this program as follows:
+//
+//    gcc -g -c -Wall sqlite3.c $(OPTS)
+//    gcc -g -o mptest mptest.c sqlite3.o $(LIBS)
+//
+// Recommended options:
+//
+//    -DHAVE_USLEEP
+//    -DSQLITE_NO_SYNC
+//    -DSQLITE_THREADSAFE=0
+//    -DSQLITE_OMIT_LOAD_EXTENSION
+//
+// Run like this:
+//
+//     ./mptest $database $script
+//
+// where $database is the database to use for testing and $script is a
+// test script.
+// 2001-09-15
+//
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+//
+//
+// This header file defines the interface that the SQLite library
+// presents to client programs.  If a C-function, structure, datatype,
+// or constant definition does not appear in this file, then it is
+// not a published API of SQLite, is subject to change without
+// notice, and should not be referenced by programs that use SQLite.
+//
+// Some of the definitions that are in this file are marked as
+// "experimental".  Experimental interfaces are normally new
+// features recently added to SQLite.  We do not anticipate changes
+// to experimental interfaces but reserve the right to make minor changes
+// if experience from use "in the wild" suggest such changes are prudent.
+//
+// The official C-language API documentation for SQLite is derived
+// from comments in this file.  This file is the authoritative source
+// on how SQLite interfaces are supposed to operate.
+//
+// The name of this file under configuration management is "sqlite.h.in".
+// The makefile makes some minor changes to this file (such as inserting
+// the version number) and changes its name to "sqlite3.h" as
+// part of the build process.
+// ===---- stdarg.h - Variable argument handling ----------------------------===
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===-----------------------------------------------------------------------===
 
-type sqlite3_callback = uintptr
+type va_list = uintptr /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdarg.h:14:27 */
 
-type sqlite3_file1 = struct{ pMethods uintptr }
+// CAPI3REF: 64-Bit Integer Types
+// KEYWORDS: sqlite_int64 sqlite_uint64
+//
+// Because there is no cross-platform way to specify 64-bit integer types
+// SQLite includes typedefs for 64-bit signed and unsigned integers.
+//
+// The sqlite3_int64 and sqlite3_uint64 are the preferred type definitions.
+// The sqlite_int64 and sqlite_uint64 types are supported for backwards
+// compatibility only.
+//
+// ^The sqlite3_int64 and sqlite_int64 types can store integer values
+// between -9223372036854775808 and +9223372036854775807 inclusive.  ^The
+// sqlite3_uint64 and sqlite_uint64 types can store integer values
+// between 0 and +18446744073709551615 inclusive.
+type sqlite_int64 = int64           /* testdata/sqlite-amalgamation-3410200/sqlite3.h:301:25 */
+type sqlite_uint64 = uint64         /* testdata/sqlite-amalgamation-3410200/sqlite3.h:302:34 */
+type sqlite3_int64 = sqlite_int64   /* testdata/sqlite-amalgamation-3410200/sqlite3.h:304:22 */
+type sqlite3_uint64 = sqlite_uint64 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:305:23 */
 
-type sqlite3_file = sqlite3_file1
+// The type for a callback function.
+// This is legacy and deprecated.  It is included for historical
+// compatibility and is not documented.
+type sqlite3_callback = uintptr /* testdata/sqlite-amalgamation-3410200/sqlite3.h:361:13 */
+
+// CAPI3REF: Result Codes
+// KEYWORDS: {result code definitions}
+//
+// Many SQLite functions return an integer result code from the set shown
+// here in order to indicate success or failure.
+//
+// New error codes may be added in future versions of SQLite.
+//
+// See also: [extended result code definitions]
+// beginning-of-error-codes
+// end-of-error-codes
+
+// CAPI3REF: Extended Result Codes
+// KEYWORDS: {extended result code definitions}
+//
+// In its default configuration, SQLite API routines return one of 30 integer
+// [result codes].  However, experience has shown that many of
+// these result codes are too coarse-grained.  They do not provide as
+// much information about problems as programmers might like.  In an effort to
+// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
+// and later) include
+// support for additional result codes that provide more detailed information
+// about errors. These [extended result codes] are enabled or disabled
+// on a per database connection basis using the
+// [sqlite3_extended_result_codes()] API.  Or, the extended code for
+// the most recent error can be obtained using
+// [sqlite3_extended_errcode()].
+
+// CAPI3REF: Flags For File Open Operations
+//
+// These bit values are intended for use in the
+// 3rd parameter to the [sqlite3_open_v2()] interface and
+// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
+//
+// Only those flags marked as "Ok for sqlite3_open_v2()" may be
+// used as the third argument to the [sqlite3_open_v2()] interface.
+// The other flags have historically been ignored by sqlite3_open_v2(),
+// though future versions of SQLite might change so that an error is
+// raised if any of the disallowed bits are passed into sqlite3_open_v2().
+// Applications should not depend on the historical behavior.
+//
+// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
+// [sqlite3_open_v2()] does *not* cause the underlying database file
+// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
+// [sqlite3_open_v2()] has historically be a no-op and might become an
+// error in future versions of SQLite.
+
+// Reserved:                         0x00F00000
+// Legacy compatibility:
+
+// CAPI3REF: Device Characteristics
+//
+// The xDeviceCharacteristics method of the [sqlite3_io_methods]
+// object returns an integer which is a vector of these
+// bit values expressing I/O characteristics of the mass storage
+// device that holds the file that the [sqlite3_io_methods]
+// refers to.
+//
+// The SQLITE_IOCAP_ATOMIC property means that all writes of
+// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
+// mean that writes of blocks that are nnn bytes in size and
+// are aligned to an address which is an integer multiple of
+// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
+// that when data is appended to a file, the data is appended
+// first then the size of the file is extended, never the other
+// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
+// information is written to disk in the same order as calls
+// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
+// after reboot following a crash or power loss, the only bytes in a
+// file that were written at the application level might have changed
+// and that adjacent bytes, even bytes within the same sector are
+// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
+// flag indicates that a file cannot be deleted when open.  The
+// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
+// read-only media and cannot be changed even by processes with
+// elevated privileges.
+//
+// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
+// filesystem supports doing multiple write operations atomically when those
+// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
+// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
+
+// CAPI3REF: File Locking Levels
+//
+// SQLite uses one of these integer values as the second
+// argument to calls it makes to the xLock() and xUnlock() methods
+// of an [sqlite3_io_methods] object.  These values are ordered from
+// lest restrictive to most restrictive.
+//
+// The argument to xLock() is always SHARED or higher.  The argument to
+// xUnlock is either SHARED or NONE.
+
+// CAPI3REF: Synchronization Type Flags
+//
+// When SQLite invokes the xSync() method of an
+// [sqlite3_io_methods] object it uses a combination of
+// these integer values as the second argument.
+//
+// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
+// sync operation only needs to flush data to mass storage.  Inode
+// information need not be flushed. If the lower four bits of the flag
+// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
+// If the lower four bits equal SQLITE_SYNC_FULL, that means
+// to use Mac OS X style fullsync instead of fsync().
+//
+// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
+// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
+// settings.  The [synchronous pragma] determines when calls to the
+// xSync VFS method occur and applies uniformly across all platforms.
+// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
+// energetic or rigorous or forceful the sync operations are and
+// only make a difference on Mac OSX for the default SQLite code.
+// (Third-party VFS implementations might also make the distinction
+// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
+// operating systems natively supported by SQLite, only Mac OSX
+// cares about the difference.)
+
+// CAPI3REF: OS Interface Open File Handle
+//
+// An [sqlite3_file] object represents an open file in the
+// [sqlite3_vfs | OS interface layer].  Individual OS interface
+// implementations will
+// want to subclass this object by appending additional fields
+// for their own use.  The pMethods entry is a pointer to an
+// [sqlite3_io_methods] object that defines methods for performing
+// I/O operations on the open file.
+type sqlite3_file1 = struct{ pMethods uintptr } /* testdata/sqlite-amalgamation-3410200/sqlite3.h:727:9 */
+
+// CAPI3REF: Result Codes
+// KEYWORDS: {result code definitions}
+//
+// Many SQLite functions return an integer result code from the set shown
+// here in order to indicate success or failure.
+//
+// New error codes may be added in future versions of SQLite.
+//
+// See also: [extended result code definitions]
+// beginning-of-error-codes
+// end-of-error-codes
+
+// CAPI3REF: Extended Result Codes
+// KEYWORDS: {extended result code definitions}
+//
+// In its default configuration, SQLite API routines return one of 30 integer
+// [result codes].  However, experience has shown that many of
+// these result codes are too coarse-grained.  They do not provide as
+// much information about problems as programmers might like.  In an effort to
+// address this, newer versions of SQLite (version 3.3.8 [dateof:3.3.8]
+// and later) include
+// support for additional result codes that provide more detailed information
+// about errors. These [extended result codes] are enabled or disabled
+// on a per database connection basis using the
+// [sqlite3_extended_result_codes()] API.  Or, the extended code for
+// the most recent error can be obtained using
+// [sqlite3_extended_errcode()].
+
+// CAPI3REF: Flags For File Open Operations
+//
+// These bit values are intended for use in the
+// 3rd parameter to the [sqlite3_open_v2()] interface and
+// in the 4th parameter to the [sqlite3_vfs.xOpen] method.
+//
+// Only those flags marked as "Ok for sqlite3_open_v2()" may be
+// used as the third argument to the [sqlite3_open_v2()] interface.
+// The other flags have historically been ignored by sqlite3_open_v2(),
+// though future versions of SQLite might change so that an error is
+// raised if any of the disallowed bits are passed into sqlite3_open_v2().
+// Applications should not depend on the historical behavior.
+//
+// Note in particular that passing the SQLITE_OPEN_EXCLUSIVE flag into
+// [sqlite3_open_v2()] does *not* cause the underlying database file
+// to be opened using O_EXCL.  Passing SQLITE_OPEN_EXCLUSIVE into
+// [sqlite3_open_v2()] has historically be a no-op and might become an
+// error in future versions of SQLite.
+
+// Reserved:                         0x00F00000
+// Legacy compatibility:
+
+// CAPI3REF: Device Characteristics
+//
+// The xDeviceCharacteristics method of the [sqlite3_io_methods]
+// object returns an integer which is a vector of these
+// bit values expressing I/O characteristics of the mass storage
+// device that holds the file that the [sqlite3_io_methods]
+// refers to.
+//
+// The SQLITE_IOCAP_ATOMIC property means that all writes of
+// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
+// mean that writes of blocks that are nnn bytes in size and
+// are aligned to an address which is an integer multiple of
+// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
+// that when data is appended to a file, the data is appended
+// first then the size of the file is extended, never the other
+// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
+// information is written to disk in the same order as calls
+// to xWrite().  The SQLITE_IOCAP_POWERSAFE_OVERWRITE property means that
+// after reboot following a crash or power loss, the only bytes in a
+// file that were written at the application level might have changed
+// and that adjacent bytes, even bytes within the same sector are
+// guaranteed to be unchanged.  The SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN
+// flag indicates that a file cannot be deleted when open.  The
+// SQLITE_IOCAP_IMMUTABLE flag indicates that the file is on
+// read-only media and cannot be changed even by processes with
+// elevated privileges.
+//
+// The SQLITE_IOCAP_BATCH_ATOMIC property means that the underlying
+// filesystem supports doing multiple write operations atomically when those
+// write operations are bracketed by [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] and
+// [SQLITE_FCNTL_COMMIT_ATOMIC_WRITE].
+
+// CAPI3REF: File Locking Levels
+//
+// SQLite uses one of these integer values as the second
+// argument to calls it makes to the xLock() and xUnlock() methods
+// of an [sqlite3_io_methods] object.  These values are ordered from
+// lest restrictive to most restrictive.
+//
+// The argument to xLock() is always SHARED or higher.  The argument to
+// xUnlock is either SHARED or NONE.
+
+// CAPI3REF: Synchronization Type Flags
+//
+// When SQLite invokes the xSync() method of an
+// [sqlite3_io_methods] object it uses a combination of
+// these integer values as the second argument.
+//
+// When the SQLITE_SYNC_DATAONLY flag is used, it means that the
+// sync operation only needs to flush data to mass storage.  Inode
+// information need not be flushed. If the lower four bits of the flag
+// equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
+// If the lower four bits equal SQLITE_SYNC_FULL, that means
+// to use Mac OS X style fullsync instead of fsync().
+//
+// Do not confuse the SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags
+// with the [PRAGMA synchronous]=NORMAL and [PRAGMA synchronous]=FULL
+// settings.  The [synchronous pragma] determines when calls to the
+// xSync VFS method occur and applies uniformly across all platforms.
+// The SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL flags determine how
+// energetic or rigorous or forceful the sync operations are and
+// only make a difference on Mac OSX for the default SQLite code.
+// (Third-party VFS implementations might also make the distinction
+// between SQLITE_SYNC_NORMAL and SQLITE_SYNC_FULL, but among the
+// operating systems natively supported by SQLite, only Mac OSX
+// cares about the difference.)
+
+// CAPI3REF: OS Interface Open File Handle
+//
+// An [sqlite3_file] object represents an open file in the
+// [sqlite3_vfs | OS interface layer].  Individual OS interface
+// implementations will
+// want to subclass this object by appending additional fields
+// for their own use.  The pMethods entry is a pointer to an
+// [sqlite3_io_methods] object that defines methods for performing
+// I/O operations on the open file.
+type sqlite3_file = sqlite3_file1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:727:29 */
 type sqlite3_io_methods1 = struct {
 	iVersion               int32
 	_                      [4]byte
@@ -1434,12 +2107,296 @@ type sqlite3_io_methods1 = struct {
 	xShmUnmap              uintptr
 	xFetch                 uintptr
 	xUnfetch               uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:727:9 */
 
-type sqlite3_io_methods = sqlite3_io_methods1
+// CAPI3REF: OS Interface File Virtual Methods Object
+//
+// Every file opened by the [sqlite3_vfs.xOpen] method populates an
+// [sqlite3_file] object (or, more commonly, a subclass of the
+// [sqlite3_file] object) with a pointer to an instance of this object.
+// This object defines the methods used to perform various operations
+// against the open file represented by the [sqlite3_file] object.
+//
+// If the [sqlite3_vfs.xOpen] method sets the sqlite3_file.pMethods element
+// to a non-NULL pointer, then the sqlite3_io_methods.xClose method
+// may be invoked even if the [sqlite3_vfs.xOpen] reported that it failed.  The
+// only way to prevent a call to xClose following a failed [sqlite3_vfs.xOpen]
+// is for the [sqlite3_vfs.xOpen] to set the sqlite3_file.pMethods element
+// to NULL.
+//
+// The flags argument to xSync may be one of [SQLITE_SYNC_NORMAL] or
+// [SQLITE_SYNC_FULL].  The first choice is the normal fsync().
+// The second choice is a Mac OS X style fullsync.  The [SQLITE_SYNC_DATAONLY]
+// flag may be ORed in to indicate that only the data of the file
+// and not its inode needs to be synced.
+//
+// The integer values to xLock() and xUnlock() are one of
+// <ul>
+// <li> [SQLITE_LOCK_NONE],
+// <li> [SQLITE_LOCK_SHARED],
+// <li> [SQLITE_LOCK_RESERVED],
+// <li> [SQLITE_LOCK_PENDING], or
+// <li> [SQLITE_LOCK_EXCLUSIVE].
+// </ul>
+// xLock() upgrades the database file lock.  In other words, xLock() moves the
+// database file lock in the direction NONE toward EXCLUSIVE. The argument to
+// xLock() is always on of SHARED, RESERVED, PENDING, or EXCLUSIVE, never
+// SQLITE_LOCK_NONE.  If the database file lock is already at or above the
+// requested lock, then the call to xLock() is a no-op.
+// xUnlock() downgrades the database file lock to either SHARED or NONE.
+//
+//	If the lock is already at or below the requested lock state, then the call
+//
+// to xUnlock() is a no-op.
+// The xCheckReservedLock() method checks whether any database connection,
+// either in this process or in some other process, is holding a RESERVED,
+// PENDING, or EXCLUSIVE lock on the file.  It returns true
+// if such a lock exists and false otherwise.
+//
+// The xFileControl() method is a generic interface that allows custom
+// VFS implementations to directly control an open file using the
+// [sqlite3_file_control()] interface.  The second "op" argument is an
+// integer opcode.  The third argument is a generic pointer intended to
+// point to a structure that may contain arguments or space in which to
+// write return values.  Potential uses for xFileControl() might be
+// functions to enable blocking locks with timeouts, to change the
+// locking strategy (for example to use dot-file locks), to inquire
+// about the status of a lock, or to break stale locks.  The SQLite
+// core reserves all opcodes less than 100 for its own use.
+// A [file control opcodes | list of opcodes] less than 100 is available.
+// Applications that define a custom xFileControl method should use opcodes
+// greater than 100 to avoid conflicts.  VFS implementations should
+// return [SQLITE_NOTFOUND] for file control opcodes that they do not
+// recognize.
+//
+// The xSectorSize() method returns the sector size of the
+// device that underlies the file.  The sector size is the
+// minimum write that can be performed without disturbing
+// other bytes in the file.  The xDeviceCharacteristics()
+// method returns a bit vector describing behaviors of the
+// underlying device:
+//
+// <ul>
+// <li> [SQLITE_IOCAP_ATOMIC]
+// <li> [SQLITE_IOCAP_ATOMIC512]
+// <li> [SQLITE_IOCAP_ATOMIC1K]
+// <li> [SQLITE_IOCAP_ATOMIC2K]
+// <li> [SQLITE_IOCAP_ATOMIC4K]
+// <li> [SQLITE_IOCAP_ATOMIC8K]
+// <li> [SQLITE_IOCAP_ATOMIC16K]
+// <li> [SQLITE_IOCAP_ATOMIC32K]
+// <li> [SQLITE_IOCAP_ATOMIC64K]
+// <li> [SQLITE_IOCAP_SAFE_APPEND]
+// <li> [SQLITE_IOCAP_SEQUENTIAL]
+// <li> [SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN]
+// <li> [SQLITE_IOCAP_POWERSAFE_OVERWRITE]
+// <li> [SQLITE_IOCAP_IMMUTABLE]
+// <li> [SQLITE_IOCAP_BATCH_ATOMIC]
+// </ul>
+//
+// The SQLITE_IOCAP_ATOMIC property means that all writes of
+// any size are atomic.  The SQLITE_IOCAP_ATOMICnnn values
+// mean that writes of blocks that are nnn bytes in size and
+// are aligned to an address which is an integer multiple of
+// nnn are atomic.  The SQLITE_IOCAP_SAFE_APPEND value means
+// that when data is appended to a file, the data is appended
+// first then the size of the file is extended, never the other
+// way around.  The SQLITE_IOCAP_SEQUENTIAL property means that
+// information is written to disk in the same order as calls
+// to xWrite().
+//
+// If xRead() returns SQLITE_IOERR_SHORT_READ it must also fill
+// in the unread portions of the buffer with zeros.  A VFS that
+// fails to zero-fill short reads might seem to work.  However,
+// failure to zero-fill short reads will eventually lead to
+// database corruption.
+type sqlite3_io_methods = sqlite3_io_methods1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:833:35 */
 
-type sqlite3_filename = uintptr
+// CAPI3REF: File Name
+//
+// Type [sqlite3_filename] is used by SQLite to pass filenames to the
+// xOpen method of a [VFS]. It may be cast to (const char*) and treated
+// as a normal, nul-terminated, UTF-8 buffer containing the filename, but
+// may also be passed to special APIs such as:
+//
+// <ul>
+// <li>  sqlite3_filename_database()
+// <li>  sqlite3_filename_journal()
+// <li>  sqlite3_filename_wal()
+// <li>  sqlite3_uri_parameter()
+// <li>  sqlite3_uri_boolean()
+// <li>  sqlite3_uri_int64()
+// <li>  sqlite3_uri_key()
+// </ul>
+type sqlite3_filename = uintptr /* testdata/sqlite-amalgamation-3410200/sqlite3.h:1291:20 */
 
+// CAPI3REF: OS Interface Object
+//
+// An instance of the sqlite3_vfs object defines the interface between
+// the SQLite core and the underlying operating system.  The "vfs"
+// in the name of the object stands for "virtual file system".  See
+// the [VFS | VFS documentation] for further information.
+//
+// The VFS interface is sometimes extended by adding new methods onto
+// the end.  Each time such an extension occurs, the iVersion field
+// is incremented.  The iVersion value started out as 1 in
+// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
+// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
+// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
+// may be appended to the sqlite3_vfs object and the iVersion value
+// may increase again in future versions of SQLite.
+// Note that due to an oversight, the structure
+// of the sqlite3_vfs object changed in the transition from
+// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
+// and yet the iVersion field was not increased.
+//
+// The szOsFile field is the size of the subclassed [sqlite3_file]
+// structure used by this VFS.  mxPathname is the maximum length of
+// a pathname in this VFS.
+//
+// Registered sqlite3_vfs objects are kept on a linked list formed by
+// the pNext pointer.  The [sqlite3_vfs_register()]
+// and [sqlite3_vfs_unregister()] interfaces manage this list
+// in a thread-safe way.  The [sqlite3_vfs_find()] interface
+// searches the list.  Neither the application code nor the VFS
+// implementation should use the pNext pointer.
+//
+// The pNext field is the only field in the sqlite3_vfs
+// structure that SQLite will ever modify.  SQLite will only access
+// or modify this field while holding a particular static mutex.
+// The application should never modify anything within the sqlite3_vfs
+// object once the object has been registered.
+//
+// The zName field holds the name of the VFS module.  The name must
+// be unique across all VFS modules.
+//
+// [[sqlite3_vfs.xOpen]]
+// ^SQLite guarantees that the zFilename parameter to xOpen
+// is either a NULL pointer or string obtained
+// from xFullPathname() with an optional suffix added.
+// ^If a suffix is added to the zFilename parameter, it will
+// consist of a single "-" character followed by no more than
+// 11 alphanumeric and/or "-" characters.
+// ^SQLite further guarantees that
+// the string will be valid and unchanged until xClose() is
+// called. Because of the previous sentence,
+// the [sqlite3_file] can safely store a pointer to the
+// filename if it needs to remember the filename for some reason.
+// If the zFilename parameter to xOpen is a NULL pointer then xOpen
+// must invent its own temporary name for the file.  ^Whenever the
+// xFilename parameter is NULL it will also be the case that the
+// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
+//
+// The flags argument to xOpen() includes all bits set in
+// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
+// or [sqlite3_open16()] is used, then flags includes at least
+// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
+// If xOpen() opens a file read-only then it sets *pOutFlags to
+// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
+//
+// ^(SQLite will also add one of the following flags to the xOpen()
+// call, depending on the object being opened:
+//
+// <ul>
+// <li>  [SQLITE_OPEN_MAIN_DB]
+// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
+// <li>  [SQLITE_OPEN_TEMP_DB]
+// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
+// <li>  [SQLITE_OPEN_TRANSIENT_DB]
+// <li>  [SQLITE_OPEN_SUBJOURNAL]
+// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
+// <li>  [SQLITE_OPEN_WAL]
+// </ul>)^
+//
+// The file I/O implementation can use the object type flags to
+// change the way it deals with files.  For example, an application
+// that does not care about crash recovery or rollback might make
+// the open of a journal file a no-op.  Writes to this journal would
+// also be no-ops, and any attempt to read the journal would return
+// SQLITE_IOERR.  Or the implementation might recognize that a database
+// file will be doing page-aligned sector reads and writes in a random
+// order and set up its I/O subsystem accordingly.
+//
+// SQLite might also add one of the following flags to the xOpen method:
+//
+// <ul>
+// <li> [SQLITE_OPEN_DELETEONCLOSE]
+// <li> [SQLITE_OPEN_EXCLUSIVE]
+// </ul>
+//
+// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
+// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
+// will be set for TEMP databases and their journals, transient
+// databases, and subjournals.
+//
+// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
+// with the [SQLITE_OPEN_CREATE] flag, which are both directly
+// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
+// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
+// SQLITE_OPEN_CREATE, is used to indicate that file should always
+// be created, and that it is an error if it already exists.
+// It is <i>not</i> used to indicate the file should be opened
+// for exclusive access.
+//
+// ^At least szOsFile bytes of memory are allocated by SQLite
+// to hold the [sqlite3_file] structure passed as the third
+// argument to xOpen.  The xOpen method does not have to
+// allocate the structure; it should just fill it in.  Note that
+// the xOpen method must set the sqlite3_file.pMethods to either
+// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
+// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
+// element will be valid after xOpen returns regardless of the success
+// or failure of the xOpen call.
+//
+// [[sqlite3_vfs.xAccess]]
+// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
+// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
+// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
+// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
+// flag is never actually used and is not implemented in the built-in
+// VFSes of SQLite.  The file is named by the second argument and can be a
+// directory. The xAccess method returns [SQLITE_OK] on success or some
+// non-zero error code if there is an I/O error or if the name of
+// the file given in the second argument is illegal.  If SQLITE_OK
+// is returned, then non-zero or zero is written into *pResOut to indicate
+// whether or not the file is accessible.
+//
+// ^SQLite will always allocate at least mxPathname+1 bytes for the
+// output buffer xFullPathname.  The exact size of the output buffer
+// is also passed as a parameter to both  methods. If the output buffer
+// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
+// handled as a fatal error by SQLite, vfs implementations should endeavor
+// to prevent this by setting mxPathname to a sufficiently large value.
+//
+// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
+// interfaces are not strictly a part of the filesystem, but they are
+// included in the VFS structure for completeness.
+// The xRandomness() function attempts to return nBytes bytes
+// of good-quality randomness into zOut.  The return value is
+// the actual number of bytes of randomness obtained.
+// The xSleep() method causes the calling thread to sleep for at
+// least the number of microseconds given.  ^The xCurrentTime()
+// method returns a Julian Day Number for the current date and time as
+// a floating point value.
+// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
+// Day Number multiplied by 86400000 (the number of milliseconds in
+// a 24-hour day).
+// ^SQLite will use the xCurrentTimeInt64() method to get the current
+// date and time if that method is available (if iVersion is 2 or
+// greater and the function pointer is not NULL) and will fall back
+// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
+//
+// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
+// are not used by the SQLite core.  These optional interfaces are provided
+// by some VFSes to facilitate testing of the VFS code. By overriding
+// system calls with functions under its control, a test program can
+// simulate faults and error conditions that would otherwise be difficult
+// or impossible to induce.  The set of system calls that can be overridden
+// varies from one VFS to another, and from one version of the same VFS to the
+// next.  Applications that use these interfaces must be prepared for any
+// or all of these interfaces to be NULL or for their behavior to change
+// from one release to the next.  Applications must not attempt to access
+// any of these methods if the iVersion of the VFS is less than 3.
 type sqlite3_vfs1 = struct {
 	iVersion          int32
 	szOsFile          int32
@@ -1464,11 +2421,239 @@ type sqlite3_vfs1 = struct {
 	xSetSystemCall    uintptr
 	xGetSystemCall    uintptr
 	xNextSystemCall   uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:1462:9 */
 
-type sqlite3_vfs = sqlite3_vfs1
-type sqlite3_syscall_ptr = uintptr
+// CAPI3REF: OS Interface Object
+//
+// An instance of the sqlite3_vfs object defines the interface between
+// the SQLite core and the underlying operating system.  The "vfs"
+// in the name of the object stands for "virtual file system".  See
+// the [VFS | VFS documentation] for further information.
+//
+// The VFS interface is sometimes extended by adding new methods onto
+// the end.  Each time such an extension occurs, the iVersion field
+// is incremented.  The iVersion value started out as 1 in
+// SQLite [version 3.5.0] on [dateof:3.5.0], then increased to 2
+// with SQLite [version 3.7.0] on [dateof:3.7.0], and then increased
+// to 3 with SQLite [version 3.7.6] on [dateof:3.7.6].  Additional fields
+// may be appended to the sqlite3_vfs object and the iVersion value
+// may increase again in future versions of SQLite.
+// Note that due to an oversight, the structure
+// of the sqlite3_vfs object changed in the transition from
+// SQLite [version 3.5.9] to [version 3.6.0] on [dateof:3.6.0]
+// and yet the iVersion field was not increased.
+//
+// The szOsFile field is the size of the subclassed [sqlite3_file]
+// structure used by this VFS.  mxPathname is the maximum length of
+// a pathname in this VFS.
+//
+// Registered sqlite3_vfs objects are kept on a linked list formed by
+// the pNext pointer.  The [sqlite3_vfs_register()]
+// and [sqlite3_vfs_unregister()] interfaces manage this list
+// in a thread-safe way.  The [sqlite3_vfs_find()] interface
+// searches the list.  Neither the application code nor the VFS
+// implementation should use the pNext pointer.
+//
+// The pNext field is the only field in the sqlite3_vfs
+// structure that SQLite will ever modify.  SQLite will only access
+// or modify this field while holding a particular static mutex.
+// The application should never modify anything within the sqlite3_vfs
+// object once the object has been registered.
+//
+// The zName field holds the name of the VFS module.  The name must
+// be unique across all VFS modules.
+//
+// [[sqlite3_vfs.xOpen]]
+// ^SQLite guarantees that the zFilename parameter to xOpen
+// is either a NULL pointer or string obtained
+// from xFullPathname() with an optional suffix added.
+// ^If a suffix is added to the zFilename parameter, it will
+// consist of a single "-" character followed by no more than
+// 11 alphanumeric and/or "-" characters.
+// ^SQLite further guarantees that
+// the string will be valid and unchanged until xClose() is
+// called. Because of the previous sentence,
+// the [sqlite3_file] can safely store a pointer to the
+// filename if it needs to remember the filename for some reason.
+// If the zFilename parameter to xOpen is a NULL pointer then xOpen
+// must invent its own temporary name for the file.  ^Whenever the
+// xFilename parameter is NULL it will also be the case that the
+// flags parameter will include [SQLITE_OPEN_DELETEONCLOSE].
+//
+// The flags argument to xOpen() includes all bits set in
+// the flags argument to [sqlite3_open_v2()].  Or if [sqlite3_open()]
+// or [sqlite3_open16()] is used, then flags includes at least
+// [SQLITE_OPEN_READWRITE] | [SQLITE_OPEN_CREATE].
+// If xOpen() opens a file read-only then it sets *pOutFlags to
+// include [SQLITE_OPEN_READONLY].  Other bits in *pOutFlags may be set.
+//
+// ^(SQLite will also add one of the following flags to the xOpen()
+// call, depending on the object being opened:
+//
+// <ul>
+// <li>  [SQLITE_OPEN_MAIN_DB]
+// <li>  [SQLITE_OPEN_MAIN_JOURNAL]
+// <li>  [SQLITE_OPEN_TEMP_DB]
+// <li>  [SQLITE_OPEN_TEMP_JOURNAL]
+// <li>  [SQLITE_OPEN_TRANSIENT_DB]
+// <li>  [SQLITE_OPEN_SUBJOURNAL]
+// <li>  [SQLITE_OPEN_SUPER_JOURNAL]
+// <li>  [SQLITE_OPEN_WAL]
+// </ul>)^
+//
+// The file I/O implementation can use the object type flags to
+// change the way it deals with files.  For example, an application
+// that does not care about crash recovery or rollback might make
+// the open of a journal file a no-op.  Writes to this journal would
+// also be no-ops, and any attempt to read the journal would return
+// SQLITE_IOERR.  Or the implementation might recognize that a database
+// file will be doing page-aligned sector reads and writes in a random
+// order and set up its I/O subsystem accordingly.
+//
+// SQLite might also add one of the following flags to the xOpen method:
+//
+// <ul>
+// <li> [SQLITE_OPEN_DELETEONCLOSE]
+// <li> [SQLITE_OPEN_EXCLUSIVE]
+// </ul>
+//
+// The [SQLITE_OPEN_DELETEONCLOSE] flag means the file should be
+// deleted when it is closed.  ^The [SQLITE_OPEN_DELETEONCLOSE]
+// will be set for TEMP databases and their journals, transient
+// databases, and subjournals.
+//
+// ^The [SQLITE_OPEN_EXCLUSIVE] flag is always used in conjunction
+// with the [SQLITE_OPEN_CREATE] flag, which are both directly
+// analogous to the O_EXCL and O_CREAT flags of the POSIX open()
+// API.  The SQLITE_OPEN_EXCLUSIVE flag, when paired with the
+// SQLITE_OPEN_CREATE, is used to indicate that file should always
+// be created, and that it is an error if it already exists.
+// It is <i>not</i> used to indicate the file should be opened
+// for exclusive access.
+//
+// ^At least szOsFile bytes of memory are allocated by SQLite
+// to hold the [sqlite3_file] structure passed as the third
+// argument to xOpen.  The xOpen method does not have to
+// allocate the structure; it should just fill it in.  Note that
+// the xOpen method must set the sqlite3_file.pMethods to either
+// a valid [sqlite3_io_methods] object or to NULL.  xOpen must do
+// this even if the open fails.  SQLite expects that the sqlite3_file.pMethods
+// element will be valid after xOpen returns regardless of the success
+// or failure of the xOpen call.
+//
+// [[sqlite3_vfs.xAccess]]
+// ^The flags argument to xAccess() may be [SQLITE_ACCESS_EXISTS]
+// to test for the existence of a file, or [SQLITE_ACCESS_READWRITE] to
+// test whether a file is readable and writable, or [SQLITE_ACCESS_READ]
+// to test whether a file is at least readable.  The SQLITE_ACCESS_READ
+// flag is never actually used and is not implemented in the built-in
+// VFSes of SQLite.  The file is named by the second argument and can be a
+// directory. The xAccess method returns [SQLITE_OK] on success or some
+// non-zero error code if there is an I/O error or if the name of
+// the file given in the second argument is illegal.  If SQLITE_OK
+// is returned, then non-zero or zero is written into *pResOut to indicate
+// whether or not the file is accessible.
+//
+// ^SQLite will always allocate at least mxPathname+1 bytes for the
+// output buffer xFullPathname.  The exact size of the output buffer
+// is also passed as a parameter to both  methods. If the output buffer
+// is not large enough, [SQLITE_CANTOPEN] should be returned. Since this is
+// handled as a fatal error by SQLite, vfs implementations should endeavor
+// to prevent this by setting mxPathname to a sufficiently large value.
+//
+// The xRandomness(), xSleep(), xCurrentTime(), and xCurrentTimeInt64()
+// interfaces are not strictly a part of the filesystem, but they are
+// included in the VFS structure for completeness.
+// The xRandomness() function attempts to return nBytes bytes
+// of good-quality randomness into zOut.  The return value is
+// the actual number of bytes of randomness obtained.
+// The xSleep() method causes the calling thread to sleep for at
+// least the number of microseconds given.  ^The xCurrentTime()
+// method returns a Julian Day Number for the current date and time as
+// a floating point value.
+// ^The xCurrentTimeInt64() method returns, as an integer, the Julian
+// Day Number multiplied by 86400000 (the number of milliseconds in
+// a 24-hour day).
+// ^SQLite will use the xCurrentTimeInt64() method to get the current
+// date and time if that method is available (if iVersion is 2 or
+// greater and the function pointer is not NULL) and will fall back
+// to xCurrentTime() if xCurrentTimeInt64() is unavailable.
+//
+// ^The xSetSystemCall(), xGetSystemCall(), and xNestSystemCall() interfaces
+// are not used by the SQLite core.  These optional interfaces are provided
+// by some VFSes to facilitate testing of the VFS code. By overriding
+// system calls with functions under its control, a test program can
+// simulate faults and error conditions that would otherwise be difficult
+// or impossible to induce.  The set of system calls that can be overridden
+// varies from one VFS to another, and from one version of the same VFS to the
+// next.  Applications that use these interfaces must be prepared for any
+// or all of these interfaces to be NULL or for their behavior to change
+// from one release to the next.  Applications must not attempt to access
+// any of these methods if the iVersion of the VFS is less than 3.
+type sqlite3_vfs = sqlite3_vfs1    /* testdata/sqlite-amalgamation-3410200/sqlite3.h:1462:28 */
+type sqlite3_syscall_ptr = uintptr /* testdata/sqlite-amalgamation-3410200/sqlite3.h:1463:14 */
 
+// CAPI3REF: Memory Allocation Routines
+//
+// An instance of this object defines the interface between SQLite
+// and low-level memory allocation routines.
+//
+// This object is used in only one place in the SQLite interface.
+// A pointer to an instance of this object is the argument to
+// [sqlite3_config()] when the configuration option is
+// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
+// By creating an instance of this object
+// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
+// during configuration, an application can specify an alternative
+// memory allocation subsystem for SQLite to use for all of its
+// dynamic memory needs.
+//
+// Note that SQLite comes with several [built-in memory allocators]
+// that are perfectly adequate for the overwhelming majority of applications
+// and that this object is only useful to a tiny minority of applications
+// with specialized memory allocation requirements.  This object is
+// also used during testing of SQLite in order to specify an alternative
+// memory allocator that simulates memory out-of-memory conditions in
+// order to verify that SQLite recovers gracefully from such
+// conditions.
+//
+// The xMalloc, xRealloc, and xFree methods must work like the
+// malloc(), realloc() and free() functions from the standard C library.
+// ^SQLite guarantees that the second argument to
+// xRealloc is always a value returned by a prior call to xRoundup.
+//
+// xSize should return the allocated size of a memory allocation
+// previously obtained from xMalloc or xRealloc.  The allocated size
+// is always at least as big as the requested size but may be larger.
+//
+// The xRoundup method returns what would be the allocated size of
+// a memory allocation given a particular requested size.  Most memory
+// allocators round up memory allocations at least to the next multiple
+// of 8.  Some allocators round up to a larger multiple or to a power of 2.
+// Every memory allocation request coming in through [sqlite3_malloc()]
+// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
+// that causes the corresponding memory allocation to fail.
+//
+// The xInit method initializes the memory allocator.  For example,
+// it might allocate any required mutexes or initialize internal data
+// structures.  The xShutdown method is invoked (indirectly) by
+// [sqlite3_shutdown()] and should deallocate any resources acquired
+// by xInit.  The pAppData pointer is used as the only parameter to
+// xInit and xShutdown.
+//
+// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
+// the xInit method, so the xInit method need not be threadsafe.  The
+// xShutdown method is only called from [sqlite3_shutdown()] so it does
+// not need to be threadsafe either.  For all other methods, SQLite
+// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
+// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
+// it is by default) and so the methods are automatically serialized.
+// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
+// methods must be threadsafe or else make their own arrangements for
+// serialization.
+//
+// SQLite will never invoke xInit() more than once without an intervening
+// call to xShutdown().
 type sqlite3_mem_methods1 = struct {
 	xMalloc   uintptr
 	xFree     uintptr
@@ -1478,20 +2663,95 @@ type sqlite3_mem_methods1 = struct {
 	xInit     uintptr
 	xShutdown uintptr
 	pAppData  uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:1760:9 */
 
-type sqlite3_mem_methods = sqlite3_mem_methods1
+// CAPI3REF: Memory Allocation Routines
+//
+// An instance of this object defines the interface between SQLite
+// and low-level memory allocation routines.
+//
+// This object is used in only one place in the SQLite interface.
+// A pointer to an instance of this object is the argument to
+// [sqlite3_config()] when the configuration option is
+// [SQLITE_CONFIG_MALLOC] or [SQLITE_CONFIG_GETMALLOC].
+// By creating an instance of this object
+// and passing it to [sqlite3_config]([SQLITE_CONFIG_MALLOC])
+// during configuration, an application can specify an alternative
+// memory allocation subsystem for SQLite to use for all of its
+// dynamic memory needs.
+//
+// Note that SQLite comes with several [built-in memory allocators]
+// that are perfectly adequate for the overwhelming majority of applications
+// and that this object is only useful to a tiny minority of applications
+// with specialized memory allocation requirements.  This object is
+// also used during testing of SQLite in order to specify an alternative
+// memory allocator that simulates memory out-of-memory conditions in
+// order to verify that SQLite recovers gracefully from such
+// conditions.
+//
+// The xMalloc, xRealloc, and xFree methods must work like the
+// malloc(), realloc() and free() functions from the standard C library.
+// ^SQLite guarantees that the second argument to
+// xRealloc is always a value returned by a prior call to xRoundup.
+//
+// xSize should return the allocated size of a memory allocation
+// previously obtained from xMalloc or xRealloc.  The allocated size
+// is always at least as big as the requested size but may be larger.
+//
+// The xRoundup method returns what would be the allocated size of
+// a memory allocation given a particular requested size.  Most memory
+// allocators round up memory allocations at least to the next multiple
+// of 8.  Some allocators round up to a larger multiple or to a power of 2.
+// Every memory allocation request coming in through [sqlite3_malloc()]
+// or [sqlite3_realloc()] first calls xRoundup.  If xRoundup returns 0,
+// that causes the corresponding memory allocation to fail.
+//
+// The xInit method initializes the memory allocator.  For example,
+// it might allocate any required mutexes or initialize internal data
+// structures.  The xShutdown method is invoked (indirectly) by
+// [sqlite3_shutdown()] and should deallocate any resources acquired
+// by xInit.  The pAppData pointer is used as the only parameter to
+// xInit and xShutdown.
+//
+// SQLite holds the [SQLITE_MUTEX_STATIC_MAIN] mutex when it invokes
+// the xInit method, so the xInit method need not be threadsafe.  The
+// xShutdown method is only called from [sqlite3_shutdown()] so it does
+// not need to be threadsafe either.  For all other methods, SQLite
+// holds the [SQLITE_MUTEX_STATIC_MEM] mutex as long as the
+// [SQLITE_CONFIG_MEMSTATUS] configuration option is turned on (which
+// it is by default) and so the methods are automatically serialized.
+// However, if [SQLITE_CONFIG_MEMSTATUS] is disabled, then the other
+// methods must be threadsafe or else make their own arrangements for
+// serialization.
+//
+// SQLite will never invoke xInit() more than once without an intervening
+// call to xShutdown().
+type sqlite3_mem_methods = sqlite3_mem_methods1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:1760:36 */
 
-type sqlite3_destructor_type = uintptr
+// CAPI3REF: Constants Defining Special Destructor Behavior
+//
+// These are special values for the destructor that is passed in as the
+// final argument to routines like [sqlite3_result_blob()].  ^If the destructor
+// argument is SQLITE_STATIC, it means that the content pointer is constant
+// and will never change.  It does not need to be destroyed.  ^The
+// SQLITE_TRANSIENT value means that the content will likely change in
+// the near future and that SQLite should make its own private copy of
+// the content before returning.
+//
+// The typedef is necessary to work around problems in certain
+// C++ compilers.
+type sqlite3_destructor_type = uintptr /* testdata/sqlite-amalgamation-3410200/sqlite3.h:5847:14 */
 
+// Structures used by the virtual table interface
 type sqlite3_vtab1 = struct {
 	pModule uintptr
 	nRef    int32
 	_       [4]byte
 	zErrMsg uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7051:9 */
 
-type sqlite3_vtab = sqlite3_vtab1
+// Structures used by the virtual table interface
+type sqlite3_vtab = sqlite3_vtab1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7051:29 */
 type sqlite3_index_info1 = struct {
 	nConstraint      int32
 	_                [4]byte
@@ -1510,12 +2770,12 @@ type sqlite3_index_info1 = struct {
 	idxFlags         int32
 	_                [4]byte
 	colUsed          sqlite3_uint64
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7052:9 */
 
-type sqlite3_index_info = sqlite3_index_info1
-type sqlite3_vtab_cursor1 = struct{ pVtab uintptr }
+type sqlite3_index_info = sqlite3_index_info1       /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7052:35 */
+type sqlite3_vtab_cursor1 = struct{ pVtab uintptr } /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7053:9 */
 
-type sqlite3_vtab_cursor = sqlite3_vtab_cursor1
+type sqlite3_vtab_cursor = sqlite3_vtab_cursor1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7053:36 */
 type sqlite3_module1 = struct {
 	iVersion      int32
 	_             [4]byte
@@ -1542,30 +2802,395 @@ type sqlite3_module1 = struct {
 	xRelease      uintptr
 	xRollbackTo   uintptr
 	xShadowName   uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7051:9 */
 
-type sqlite3_module = sqlite3_module1
+type sqlite3_module = sqlite3_module1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7054:31 */
 
+// CAPI3REF: Virtual Table Indexing Information
+// KEYWORDS: sqlite3_index_info
+//
+// The sqlite3_index_info structure and its substructures is used as part
+// of the [virtual table] interface to
+// pass information into and receive the reply from the [xBestIndex]
+// method of a [virtual table module].  The fields under **Inputs** are the
+// inputs to xBestIndex and are read-only.  xBestIndex inserts its
+// results into the **Outputs** fields.
+//
+// ^(The aConstraint[] array records WHERE clause constraints of the form:
+//
+// <blockquote>column OP expr</blockquote>
+//
+// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
+// stored in aConstraint[].op using one of the
+// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
+// ^(The index of the column is stored in
+// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
+// expr on the right-hand side can be evaluated (and thus the constraint
+// is usable) and false if it cannot.)^
+//
+// ^The optimizer automatically inverts terms of the form "expr OP column"
+// and makes other simplifications to the WHERE clause in an attempt to
+// get as many WHERE clause terms into the form shown above as possible.
+// ^The aConstraint[] array only reports WHERE clause terms that are
+// relevant to the particular virtual table being queried.
+//
+// ^Information about the ORDER BY clause is stored in aOrderBy[].
+// ^Each term of aOrderBy records a column of the ORDER BY clause.
+//
+// The colUsed field indicates which columns of the virtual table may be
+// required by the current scan. Virtual table columns are numbered from
+// zero in the order in which they appear within the CREATE TABLE statement
+// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
+// the corresponding bit is set within the colUsed mask if the column may be
+// required by SQLite. If the table has at least 64 columns and any column
+// to the right of the first 63 is required, then bit 63 of colUsed is also
+// set. In other words, column iCol may be required if the expression
+// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
+// non-zero.
+//
+// The [xBestIndex] method must fill aConstraintUsage[] with information
+// about what parameters to pass to xFilter.  ^If argvIndex>0 then
+// the right-hand side of the corresponding aConstraint[] is evaluated
+// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
+// is true, then the constraint is assumed to be fully handled by the
+// virtual table and might not be checked again by the byte code.)^ ^(The
+// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
+// is left in its default setting of false, the constraint will always be
+// checked separately in byte code.  If the omit flag is change to true, then
+// the constraint may or may not be checked in byte code.  In other words,
+// when the omit flag is true there is no guarantee that the constraint will
+// not be checked again using byte code.)^
+//
+// ^The idxNum and idxStr values are recorded and passed into the
+// [xFilter] method.
+// ^[sqlite3_free()] is used to free idxStr if and only if
+// needToFreeIdxStr is true.
+//
+// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
+// the correct order to satisfy the ORDER BY clause so that no separate
+// sorting step is required.
+//
+// ^The estimatedCost value is an estimate of the cost of a particular
+// strategy. A cost of N indicates that the cost of the strategy is similar
+// to a linear scan of an SQLite table with N rows. A cost of log(N)
+// indicates that the expense of the operation is similar to that of a
+// binary search on a unique indexed field of an SQLite table with N rows.
+//
+// ^The estimatedRows value is an estimate of the number of rows that
+// will be returned by the strategy.
+//
+// The xBestIndex method may optionally populate the idxFlags field with a
+// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
+// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
+// assumes that the strategy may visit at most one row.
+//
+// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
+// SQLite also assumes that if a call to the xUpdate() method is made as
+// part of the same statement to delete or update a virtual table row and the
+// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
+// any database changes. In other words, if the xUpdate() returns
+// SQLITE_CONSTRAINT, the database contents must be exactly as they were
+// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
+// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
+// the xUpdate method are automatically rolled back by SQLite.
+//
+// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
+// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
+// If a virtual table extension is
+// used with an SQLite version earlier than 3.8.2, the results of attempting
+// to read or write the estimatedRows field are undefined (but are likely
+// to include crashing the application). The estimatedRows field should
+// therefore only be used if [sqlite3_libversion_number()] returns a
+// value greater than or equal to 3008002. Similarly, the idxFlags field
+// was added for [version 3.9.0] ([dateof:3.9.0]).
+// It may therefore only be used if
+// sqlite3_libversion_number() returns a value greater than or equal to
+// 3009000.
 type sqlite3_index_constraint = struct {
 	iColumn     int32
 	op          uint8
 	usable      uint8
 	_           [2]byte
 	iTermOffset int32
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7052:9 */
 
+// CAPI3REF: Virtual Table Indexing Information
+// KEYWORDS: sqlite3_index_info
+//
+// The sqlite3_index_info structure and its substructures is used as part
+// of the [virtual table] interface to
+// pass information into and receive the reply from the [xBestIndex]
+// method of a [virtual table module].  The fields under **Inputs** are the
+// inputs to xBestIndex and are read-only.  xBestIndex inserts its
+// results into the **Outputs** fields.
+//
+// ^(The aConstraint[] array records WHERE clause constraints of the form:
+//
+// <blockquote>column OP expr</blockquote>
+//
+// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
+// stored in aConstraint[].op using one of the
+// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
+// ^(The index of the column is stored in
+// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
+// expr on the right-hand side can be evaluated (and thus the constraint
+// is usable) and false if it cannot.)^
+//
+// ^The optimizer automatically inverts terms of the form "expr OP column"
+// and makes other simplifications to the WHERE clause in an attempt to
+// get as many WHERE clause terms into the form shown above as possible.
+// ^The aConstraint[] array only reports WHERE clause terms that are
+// relevant to the particular virtual table being queried.
+//
+// ^Information about the ORDER BY clause is stored in aOrderBy[].
+// ^Each term of aOrderBy records a column of the ORDER BY clause.
+//
+// The colUsed field indicates which columns of the virtual table may be
+// required by the current scan. Virtual table columns are numbered from
+// zero in the order in which they appear within the CREATE TABLE statement
+// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
+// the corresponding bit is set within the colUsed mask if the column may be
+// required by SQLite. If the table has at least 64 columns and any column
+// to the right of the first 63 is required, then bit 63 of colUsed is also
+// set. In other words, column iCol may be required if the expression
+// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
+// non-zero.
+//
+// The [xBestIndex] method must fill aConstraintUsage[] with information
+// about what parameters to pass to xFilter.  ^If argvIndex>0 then
+// the right-hand side of the corresponding aConstraint[] is evaluated
+// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
+// is true, then the constraint is assumed to be fully handled by the
+// virtual table and might not be checked again by the byte code.)^ ^(The
+// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
+// is left in its default setting of false, the constraint will always be
+// checked separately in byte code.  If the omit flag is change to true, then
+// the constraint may or may not be checked in byte code.  In other words,
+// when the omit flag is true there is no guarantee that the constraint will
+// not be checked again using byte code.)^
+//
+// ^The idxNum and idxStr values are recorded and passed into the
+// [xFilter] method.
+// ^[sqlite3_free()] is used to free idxStr if and only if
+// needToFreeIdxStr is true.
+//
+// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
+// the correct order to satisfy the ORDER BY clause so that no separate
+// sorting step is required.
+//
+// ^The estimatedCost value is an estimate of the cost of a particular
+// strategy. A cost of N indicates that the cost of the strategy is similar
+// to a linear scan of an SQLite table with N rows. A cost of log(N)
+// indicates that the expense of the operation is similar to that of a
+// binary search on a unique indexed field of an SQLite table with N rows.
+//
+// ^The estimatedRows value is an estimate of the number of rows that
+// will be returned by the strategy.
+//
+// The xBestIndex method may optionally populate the idxFlags field with a
+// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
+// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
+// assumes that the strategy may visit at most one row.
+//
+// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
+// SQLite also assumes that if a call to the xUpdate() method is made as
+// part of the same statement to delete or update a virtual table row and the
+// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
+// any database changes. In other words, if the xUpdate() returns
+// SQLITE_CONSTRAINT, the database contents must be exactly as they were
+// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
+// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
+// the xUpdate method are automatically rolled back by SQLite.
+//
+// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
+// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
+// If a virtual table extension is
+// used with an SQLite version earlier than 3.8.2, the results of attempting
+// to read or write the estimatedRows field are undefined (but are likely
+// to include crashing the application). The estimatedRows field should
+// therefore only be used if [sqlite3_libversion_number()] returns a
+// value greater than or equal to 3008002. Similarly, the idxFlags field
+// was added for [version 3.9.0] ([dateof:3.9.0]).
+// It may therefore only be used if
+// sqlite3_libversion_number() returns a value greater than or equal to
+// 3009000.
 type sqlite3_index_orderby = struct {
 	iColumn int32
 	desc    uint8
 	_       [3]byte
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7052:9 */
 
+// CAPI3REF: Virtual Table Indexing Information
+// KEYWORDS: sqlite3_index_info
+//
+// The sqlite3_index_info structure and its substructures is used as part
+// of the [virtual table] interface to
+// pass information into and receive the reply from the [xBestIndex]
+// method of a [virtual table module].  The fields under **Inputs** are the
+// inputs to xBestIndex and are read-only.  xBestIndex inserts its
+// results into the **Outputs** fields.
+//
+// ^(The aConstraint[] array records WHERE clause constraints of the form:
+//
+// <blockquote>column OP expr</blockquote>
+//
+// where OP is =, &lt;, &lt;=, &gt;, or &gt;=.)^  ^(The particular operator is
+// stored in aConstraint[].op using one of the
+// [SQLITE_INDEX_CONSTRAINT_EQ | SQLITE_INDEX_CONSTRAINT_ values].)^
+// ^(The index of the column is stored in
+// aConstraint[].iColumn.)^  ^(aConstraint[].usable is TRUE if the
+// expr on the right-hand side can be evaluated (and thus the constraint
+// is usable) and false if it cannot.)^
+//
+// ^The optimizer automatically inverts terms of the form "expr OP column"
+// and makes other simplifications to the WHERE clause in an attempt to
+// get as many WHERE clause terms into the form shown above as possible.
+// ^The aConstraint[] array only reports WHERE clause terms that are
+// relevant to the particular virtual table being queried.
+//
+// ^Information about the ORDER BY clause is stored in aOrderBy[].
+// ^Each term of aOrderBy records a column of the ORDER BY clause.
+//
+// The colUsed field indicates which columns of the virtual table may be
+// required by the current scan. Virtual table columns are numbered from
+// zero in the order in which they appear within the CREATE TABLE statement
+// passed to sqlite3_declare_vtab(). For the first 63 columns (columns 0-62),
+// the corresponding bit is set within the colUsed mask if the column may be
+// required by SQLite. If the table has at least 64 columns and any column
+// to the right of the first 63 is required, then bit 63 of colUsed is also
+// set. In other words, column iCol may be required if the expression
+// (colUsed & ((sqlite3_uint64)1 << (iCol>=63 ? 63 : iCol))) evaluates to
+// non-zero.
+//
+// The [xBestIndex] method must fill aConstraintUsage[] with information
+// about what parameters to pass to xFilter.  ^If argvIndex>0 then
+// the right-hand side of the corresponding aConstraint[] is evaluated
+// and becomes the argvIndex-th entry in argv.  ^(If aConstraintUsage[].omit
+// is true, then the constraint is assumed to be fully handled by the
+// virtual table and might not be checked again by the byte code.)^ ^(The
+// aConstraintUsage[].omit flag is an optimization hint. When the omit flag
+// is left in its default setting of false, the constraint will always be
+// checked separately in byte code.  If the omit flag is change to true, then
+// the constraint may or may not be checked in byte code.  In other words,
+// when the omit flag is true there is no guarantee that the constraint will
+// not be checked again using byte code.)^
+//
+// ^The idxNum and idxStr values are recorded and passed into the
+// [xFilter] method.
+// ^[sqlite3_free()] is used to free idxStr if and only if
+// needToFreeIdxStr is true.
+//
+// ^The orderByConsumed means that output from [xFilter]/[xNext] will occur in
+// the correct order to satisfy the ORDER BY clause so that no separate
+// sorting step is required.
+//
+// ^The estimatedCost value is an estimate of the cost of a particular
+// strategy. A cost of N indicates that the cost of the strategy is similar
+// to a linear scan of an SQLite table with N rows. A cost of log(N)
+// indicates that the expense of the operation is similar to that of a
+// binary search on a unique indexed field of an SQLite table with N rows.
+//
+// ^The estimatedRows value is an estimate of the number of rows that
+// will be returned by the strategy.
+//
+// The xBestIndex method may optionally populate the idxFlags field with a
+// mask of SQLITE_INDEX_SCAN_* flags. Currently there is only one such flag -
+// SQLITE_INDEX_SCAN_UNIQUE. If the xBestIndex method sets this flag, SQLite
+// assumes that the strategy may visit at most one row.
+//
+// Additionally, if xBestIndex sets the SQLITE_INDEX_SCAN_UNIQUE flag, then
+// SQLite also assumes that if a call to the xUpdate() method is made as
+// part of the same statement to delete or update a virtual table row and the
+// implementation returns SQLITE_CONSTRAINT, then there is no need to rollback
+// any database changes. In other words, if the xUpdate() returns
+// SQLITE_CONSTRAINT, the database contents must be exactly as they were
+// before xUpdate was called. By contrast, if SQLITE_INDEX_SCAN_UNIQUE is not
+// set and xUpdate returns SQLITE_CONSTRAINT, any database changes made by
+// the xUpdate method are automatically rolled back by SQLite.
+//
+// IMPORTANT: The estimatedRows field was added to the sqlite3_index_info
+// structure for SQLite [version 3.8.2] ([dateof:3.8.2]).
+// If a virtual table extension is
+// used with an SQLite version earlier than 3.8.2, the results of attempting
+// to read or write the estimatedRows field are undefined (but are likely
+// to include crashing the application). The estimatedRows field should
+// therefore only be used if [sqlite3_libversion_number()] returns a
+// value greater than or equal to 3008002. Similarly, the idxFlags field
+// was added for [version 3.9.0] ([dateof:3.9.0]).
+// It may therefore only be used if
+// sqlite3_libversion_number() returns a value greater than or equal to
+// 3009000.
 type sqlite3_index_constraint_usage = struct {
 	argvIndex int32
 	omit      uint8
 	_         [3]byte
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7052:9 */
 
+// CAPI3REF: Mutex Methods Object
+//
+// An instance of this structure defines the low-level routines
+// used to allocate and use mutexes.
+//
+// Usually, the default mutex implementations provided by SQLite are
+// sufficient, however the application has the option of substituting a custom
+// implementation for specialized deployments or systems for which SQLite
+// does not provide a suitable implementation. In this case, the application
+// creates and populates an instance of this structure to pass
+// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
+// Additionally, an instance of this structure can be used as an
+// output variable when querying the system for the current mutex
+// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
+//
+// ^The xMutexInit method defined by this structure is invoked as
+// part of system initialization by the sqlite3_initialize() function.
+// ^The xMutexInit routine is called by SQLite exactly once for each
+// effective call to [sqlite3_initialize()].
+//
+// ^The xMutexEnd method defined by this structure is invoked as
+// part of system shutdown by the sqlite3_shutdown() function. The
+// implementation of this method is expected to release all outstanding
+// resources obtained by the mutex methods implementation, especially
+// those obtained by the xMutexInit method.  ^The xMutexEnd()
+// interface is invoked exactly once for each call to [sqlite3_shutdown()].
+//
+// ^(The remaining seven methods defined by this structure (xMutexAlloc,
+// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
+// xMutexNotheld) implement the following interfaces (respectively):
+//
+// <ul>
+//
+//	<li>  [sqlite3_mutex_alloc()] </li>
+//	<li>  [sqlite3_mutex_free()] </li>
+//	<li>  [sqlite3_mutex_enter()] </li>
+//	<li>  [sqlite3_mutex_try()] </li>
+//	<li>  [sqlite3_mutex_leave()] </li>
+//	<li>  [sqlite3_mutex_held()] </li>
+//	<li>  [sqlite3_mutex_notheld()] </li>
+//
+// </ul>)^
+//
+// The only difference is that the public sqlite3_XXX functions enumerated
+// above silently ignore any invocations that pass a NULL pointer instead
+// of a valid mutex handle. The implementations of the methods defined
+// by this structure are not required to handle this case. The results
+// of passing a NULL pointer instead of a valid mutex handle are undefined
+// (i.e. it is acceptable to provide an implementation that segfaults if
+// it is passed a NULL pointer).
+//
+// The xMutexInit() method must be threadsafe.  It must be harmless to
+// invoke xMutexInit() multiple times within the same process and without
+// intervening calls to xMutexEnd().  Second and subsequent calls to
+// xMutexInit() must be no-ops.
+//
+// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
+// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
+// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
+// memory allocation for a fast or recursive mutex.
+//
+// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
+// called, but only if the prior call to xMutexInit returned SQLITE_OK.
+// If xMutexInit fails in any way, it is expected to clean up after itself
+// prior to returning.
 type sqlite3_mutex_methods1 = struct {
 	xMutexInit    uintptr
 	xMutexEnd     uintptr
@@ -1576,17 +3201,259 @@ type sqlite3_mutex_methods1 = struct {
 	xMutexLeave   uintptr
 	xMutexHeld    uintptr
 	xMutexNotheld uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7908:9 */
 
-type sqlite3_mutex_methods = sqlite3_mutex_methods1
+// CAPI3REF: Mutex Methods Object
+//
+// An instance of this structure defines the low-level routines
+// used to allocate and use mutexes.
+//
+// Usually, the default mutex implementations provided by SQLite are
+// sufficient, however the application has the option of substituting a custom
+// implementation for specialized deployments or systems for which SQLite
+// does not provide a suitable implementation. In this case, the application
+// creates and populates an instance of this structure to pass
+// to sqlite3_config() along with the [SQLITE_CONFIG_MUTEX] option.
+// Additionally, an instance of this structure can be used as an
+// output variable when querying the system for the current mutex
+// implementation, using the [SQLITE_CONFIG_GETMUTEX] option.
+//
+// ^The xMutexInit method defined by this structure is invoked as
+// part of system initialization by the sqlite3_initialize() function.
+// ^The xMutexInit routine is called by SQLite exactly once for each
+// effective call to [sqlite3_initialize()].
+//
+// ^The xMutexEnd method defined by this structure is invoked as
+// part of system shutdown by the sqlite3_shutdown() function. The
+// implementation of this method is expected to release all outstanding
+// resources obtained by the mutex methods implementation, especially
+// those obtained by the xMutexInit method.  ^The xMutexEnd()
+// interface is invoked exactly once for each call to [sqlite3_shutdown()].
+//
+// ^(The remaining seven methods defined by this structure (xMutexAlloc,
+// xMutexFree, xMutexEnter, xMutexTry, xMutexLeave, xMutexHeld and
+// xMutexNotheld) implement the following interfaces (respectively):
+//
+// <ul>
+//
+//	<li>  [sqlite3_mutex_alloc()] </li>
+//	<li>  [sqlite3_mutex_free()] </li>
+//	<li>  [sqlite3_mutex_enter()] </li>
+//	<li>  [sqlite3_mutex_try()] </li>
+//	<li>  [sqlite3_mutex_leave()] </li>
+//	<li>  [sqlite3_mutex_held()] </li>
+//	<li>  [sqlite3_mutex_notheld()] </li>
+//
+// </ul>)^
+//
+// The only difference is that the public sqlite3_XXX functions enumerated
+// above silently ignore any invocations that pass a NULL pointer instead
+// of a valid mutex handle. The implementations of the methods defined
+// by this structure are not required to handle this case. The results
+// of passing a NULL pointer instead of a valid mutex handle are undefined
+// (i.e. it is acceptable to provide an implementation that segfaults if
+// it is passed a NULL pointer).
+//
+// The xMutexInit() method must be threadsafe.  It must be harmless to
+// invoke xMutexInit() multiple times within the same process and without
+// intervening calls to xMutexEnd().  Second and subsequent calls to
+// xMutexInit() must be no-ops.
+//
+// xMutexInit() must not use SQLite memory allocation ([sqlite3_malloc()]
+// and its associates).  Similarly, xMutexAlloc() must not use SQLite memory
+// allocation for a static mutex.  ^However xMutexAlloc() may use SQLite
+// memory allocation for a fast or recursive mutex.
+//
+// ^SQLite will invoke the xMutexEnd() method when [sqlite3_shutdown()] is
+// called, but only if the prior call to xMutexInit returned SQLITE_OK.
+// If xMutexInit fails in any way, it is expected to clean up after itself
+// prior to returning.
+type sqlite3_mutex_methods = sqlite3_mutex_methods1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:7908:38 */
 
+// CAPI3REF: Custom Page Cache Object
+//
+// The sqlite3_pcache_page object represents a single page in the
+// page cache.  The page cache will allocate instances of this
+// object.  Various methods of the page cache use pointers to instances
+// of this object as parameters or as their return value.
+//
+// See [sqlite3_pcache_methods2] for additional information.
 type sqlite3_pcache_page1 = struct {
 	pBuf   uintptr
 	pExtra uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:8677:9 */
 
-type sqlite3_pcache_page = sqlite3_pcache_page1
+// CAPI3REF: Custom Page Cache Object
+//
+// The sqlite3_pcache_page object represents a single page in the
+// page cache.  The page cache will allocate instances of this
+// object.  Various methods of the page cache use pointers to instances
+// of this object as parameters or as their return value.
+//
+// See [sqlite3_pcache_methods2] for additional information.
+type sqlite3_pcache_page = sqlite3_pcache_page1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:8677:36 */
 
+// CAPI3REF: Application Defined Page Cache.
+// KEYWORDS: {page cache}
+//
+// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
+// register an alternative page cache implementation by passing in an
+// instance of the sqlite3_pcache_methods2 structure.)^
+// In many applications, most of the heap memory allocated by
+// SQLite is used for the page cache.
+// By implementing a
+// custom page cache using this API, an application can better control
+// the amount of memory consumed by SQLite, the way in which
+// that memory is allocated and released, and the policies used to
+// determine exactly which parts of a database file are cached and for
+// how long.
+//
+// The alternative page cache mechanism is an
+// extreme measure that is only needed by the most demanding applications.
+// The built-in page cache is recommended for most uses.
+//
+// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
+// internal buffer by SQLite within the call to [sqlite3_config].  Hence
+// the application may discard the parameter after the call to
+// [sqlite3_config()] returns.)^
+//
+// [[the xInit() page cache method]]
+// ^(The xInit() method is called once for each effective
+// call to [sqlite3_initialize()])^
+// (usually only once during the lifetime of the process). ^(The xInit()
+// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
+// The intent of the xInit() method is to set up global data structures
+// required by the custom page cache implementation.
+// ^(If the xInit() method is NULL, then the
+// built-in default page cache is used instead of the application defined
+// page cache.)^
+//
+// [[the xShutdown() page cache method]]
+// ^The xShutdown() method is called by [sqlite3_shutdown()].
+// It can be used to clean up
+// any outstanding resources before process shutdown, if required.
+// ^The xShutdown() method may be NULL.
+//
+// ^SQLite automatically serializes calls to the xInit method,
+// so the xInit method need not be threadsafe.  ^The
+// xShutdown method is only called from [sqlite3_shutdown()] so it does
+// not need to be threadsafe either.  All other methods must be threadsafe
+// in multithreaded applications.
+//
+// ^SQLite will never invoke xInit() more than once without an intervening
+// call to xShutdown().
+//
+// [[the xCreate() page cache methods]]
+// ^SQLite invokes the xCreate() method to construct a new cache instance.
+// SQLite will typically create one cache instance for each open database file,
+// though this is not guaranteed. ^The
+// first parameter, szPage, is the size in bytes of the pages that must
+// be allocated by the cache.  ^szPage will always a power of two.  ^The
+// second parameter szExtra is a number of bytes of extra storage
+// associated with each page cache entry.  ^The szExtra parameter will
+// a number less than 250.  SQLite will use the
+// extra szExtra bytes on each page to store metadata about the underlying
+// database page on disk.  The value passed into szExtra depends
+// on the SQLite version, the target platform, and how SQLite was compiled.
+// ^The third argument to xCreate(), bPurgeable, is true if the cache being
+// created will be used to cache database pages of a file stored on disk, or
+// false if it is used for an in-memory database. The cache implementation
+// does not have to do anything special based with the value of bPurgeable;
+// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
+// never invoke xUnpin() except to deliberately delete a page.
+// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
+// false will always have the "discard" flag set to true.
+// ^Hence, a cache created with bPurgeable false will
+// never contain any unpinned pages.
+//
+// [[the xCachesize() page cache method]]
+// ^(The xCachesize() method may be called at any time by SQLite to set the
+// suggested maximum cache-size (number of pages stored by) the cache
+// instance passed as the first argument. This is the value configured using
+// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
+// parameter, the implementation is not required to do anything with this
+// value; it is advisory only.
+//
+// [[the xPagecount() page cache methods]]
+// The xPagecount() method must return the number of pages currently
+// stored in the cache, both pinned and unpinned.
+//
+// [[the xFetch() page cache methods]]
+// The xFetch() method locates a page in the cache and returns a pointer to
+// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
+// The pBuf element of the returned sqlite3_pcache_page object will be a
+// pointer to a buffer of szPage bytes used to store the content of a
+// single database page.  The pExtra element of sqlite3_pcache_page will be
+// a pointer to the szExtra bytes of extra storage that SQLite has requested
+// for each entry in the page cache.
+//
+// The page to be fetched is determined by the key. ^The minimum key value
+// is 1.  After it has been retrieved using xFetch, the page is considered
+// to be "pinned".
+//
+// If the requested page is already in the page cache, then the page cache
+// implementation must return a pointer to the page buffer with its content
+// intact.  If the requested page is not already in the cache, then the
+// cache implementation should use the value of the createFlag
+// parameter to help it determined what action to take:
+//
+// <table border=1 width=85% align=center>
+// <tr><th> createFlag <th> Behavior when page is not already in cache
+// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
+// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
+//
+//	Otherwise return NULL.
+//
+// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
+//
+//	NULL if allocating a new page is effectively impossible.
+//
+// </table>
+//
+// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
+// will only use a createFlag of 2 after a prior call with a createFlag of 1
+// failed.)^  In between the xFetch() calls, SQLite may
+// attempt to unpin one or more cache pages by spilling the content of
+// pinned pages to disk and synching the operating system disk cache.
+//
+// [[the xUnpin() page cache method]]
+// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
+// as its second argument.  If the third parameter, discard, is non-zero,
+// then the page must be evicted from the cache.
+// ^If the discard parameter is
+// zero, then the page may be discarded or retained at the discretion of
+// page cache implementation. ^The page cache implementation
+// may choose to evict unpinned pages at any time.
+//
+// The cache must not perform any reference counting. A single
+// call to xUnpin() unpins the page regardless of the number of prior calls
+// to xFetch().
+//
+// [[the xRekey() page cache methods]]
+// The xRekey() method is used to change the key value associated with the
+// page passed as the second argument. If the cache
+// previously contains an entry associated with newKey, it must be
+// discarded. ^Any prior cache entry associated with newKey is guaranteed not
+// to be pinned.
+//
+// When SQLite calls the xTruncate() method, the cache must discard all
+// existing cache entries with page numbers (keys) greater than or equal
+// to the value of the iLimit parameter passed to xTruncate(). If any
+// of these pages are pinned, they are implicitly unpinned, meaning that
+// they can be safely discarded.
+//
+// [[the xDestroy() page cache method]]
+// ^The xDestroy() method is used to delete a cache allocated by xCreate().
+// All resources associated with the specified cache should be freed. ^After
+// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
+// handle invalid, and will not use it with any other sqlite3_pcache_methods2
+// functions.
+//
+// [[the xShrink() page cache method]]
+// ^SQLite invokes the xShrink() method when it wants the page cache to
+// free up as much of heap memory as possible.  The page cache implementation
+// is not obligated to free any memory, but well-behaved implementations should
+// do their best.
 type sqlite3_pcache_methods21 = struct {
 	iVersion   int32
 	_          [4]byte
@@ -1602,10 +3469,174 @@ type sqlite3_pcache_methods21 = struct {
 	xTruncate  uintptr
 	xDestroy   uintptr
 	xShrink    uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:8842:9 */
 
-type sqlite3_pcache_methods2 = sqlite3_pcache_methods21
+// CAPI3REF: Application Defined Page Cache.
+// KEYWORDS: {page cache}
+//
+// ^(The [sqlite3_config]([SQLITE_CONFIG_PCACHE2], ...) interface can
+// register an alternative page cache implementation by passing in an
+// instance of the sqlite3_pcache_methods2 structure.)^
+// In many applications, most of the heap memory allocated by
+// SQLite is used for the page cache.
+// By implementing a
+// custom page cache using this API, an application can better control
+// the amount of memory consumed by SQLite, the way in which
+// that memory is allocated and released, and the policies used to
+// determine exactly which parts of a database file are cached and for
+// how long.
+//
+// The alternative page cache mechanism is an
+// extreme measure that is only needed by the most demanding applications.
+// The built-in page cache is recommended for most uses.
+//
+// ^(The contents of the sqlite3_pcache_methods2 structure are copied to an
+// internal buffer by SQLite within the call to [sqlite3_config].  Hence
+// the application may discard the parameter after the call to
+// [sqlite3_config()] returns.)^
+//
+// [[the xInit() page cache method]]
+// ^(The xInit() method is called once for each effective
+// call to [sqlite3_initialize()])^
+// (usually only once during the lifetime of the process). ^(The xInit()
+// method is passed a copy of the sqlite3_pcache_methods2.pArg value.)^
+// The intent of the xInit() method is to set up global data structures
+// required by the custom page cache implementation.
+// ^(If the xInit() method is NULL, then the
+// built-in default page cache is used instead of the application defined
+// page cache.)^
+//
+// [[the xShutdown() page cache method]]
+// ^The xShutdown() method is called by [sqlite3_shutdown()].
+// It can be used to clean up
+// any outstanding resources before process shutdown, if required.
+// ^The xShutdown() method may be NULL.
+//
+// ^SQLite automatically serializes calls to the xInit method,
+// so the xInit method need not be threadsafe.  ^The
+// xShutdown method is only called from [sqlite3_shutdown()] so it does
+// not need to be threadsafe either.  All other methods must be threadsafe
+// in multithreaded applications.
+//
+// ^SQLite will never invoke xInit() more than once without an intervening
+// call to xShutdown().
+//
+// [[the xCreate() page cache methods]]
+// ^SQLite invokes the xCreate() method to construct a new cache instance.
+// SQLite will typically create one cache instance for each open database file,
+// though this is not guaranteed. ^The
+// first parameter, szPage, is the size in bytes of the pages that must
+// be allocated by the cache.  ^szPage will always a power of two.  ^The
+// second parameter szExtra is a number of bytes of extra storage
+// associated with each page cache entry.  ^The szExtra parameter will
+// a number less than 250.  SQLite will use the
+// extra szExtra bytes on each page to store metadata about the underlying
+// database page on disk.  The value passed into szExtra depends
+// on the SQLite version, the target platform, and how SQLite was compiled.
+// ^The third argument to xCreate(), bPurgeable, is true if the cache being
+// created will be used to cache database pages of a file stored on disk, or
+// false if it is used for an in-memory database. The cache implementation
+// does not have to do anything special based with the value of bPurgeable;
+// it is purely advisory.  ^On a cache where bPurgeable is false, SQLite will
+// never invoke xUnpin() except to deliberately delete a page.
+// ^In other words, calls to xUnpin() on a cache with bPurgeable set to
+// false will always have the "discard" flag set to true.
+// ^Hence, a cache created with bPurgeable false will
+// never contain any unpinned pages.
+//
+// [[the xCachesize() page cache method]]
+// ^(The xCachesize() method may be called at any time by SQLite to set the
+// suggested maximum cache-size (number of pages stored by) the cache
+// instance passed as the first argument. This is the value configured using
+// the SQLite "[PRAGMA cache_size]" command.)^  As with the bPurgeable
+// parameter, the implementation is not required to do anything with this
+// value; it is advisory only.
+//
+// [[the xPagecount() page cache methods]]
+// The xPagecount() method must return the number of pages currently
+// stored in the cache, both pinned and unpinned.
+//
+// [[the xFetch() page cache methods]]
+// The xFetch() method locates a page in the cache and returns a pointer to
+// an sqlite3_pcache_page object associated with that page, or a NULL pointer.
+// The pBuf element of the returned sqlite3_pcache_page object will be a
+// pointer to a buffer of szPage bytes used to store the content of a
+// single database page.  The pExtra element of sqlite3_pcache_page will be
+// a pointer to the szExtra bytes of extra storage that SQLite has requested
+// for each entry in the page cache.
+//
+// The page to be fetched is determined by the key. ^The minimum key value
+// is 1.  After it has been retrieved using xFetch, the page is considered
+// to be "pinned".
+//
+// If the requested page is already in the page cache, then the page cache
+// implementation must return a pointer to the page buffer with its content
+// intact.  If the requested page is not already in the cache, then the
+// cache implementation should use the value of the createFlag
+// parameter to help it determined what action to take:
+//
+// <table border=1 width=85% align=center>
+// <tr><th> createFlag <th> Behavior when page is not already in cache
+// <tr><td> 0 <td> Do not allocate a new page.  Return NULL.
+// <tr><td> 1 <td> Allocate a new page if it easy and convenient to do so.
+//
+//	Otherwise return NULL.
+//
+// <tr><td> 2 <td> Make every effort to allocate a new page.  Only return
+//
+//	NULL if allocating a new page is effectively impossible.
+//
+// </table>
+//
+// ^(SQLite will normally invoke xFetch() with a createFlag of 0 or 1.  SQLite
+// will only use a createFlag of 2 after a prior call with a createFlag of 1
+// failed.)^  In between the xFetch() calls, SQLite may
+// attempt to unpin one or more cache pages by spilling the content of
+// pinned pages to disk and synching the operating system disk cache.
+//
+// [[the xUnpin() page cache method]]
+// ^xUnpin() is called by SQLite with a pointer to a currently pinned page
+// as its second argument.  If the third parameter, discard, is non-zero,
+// then the page must be evicted from the cache.
+// ^If the discard parameter is
+// zero, then the page may be discarded or retained at the discretion of
+// page cache implementation. ^The page cache implementation
+// may choose to evict unpinned pages at any time.
+//
+// The cache must not perform any reference counting. A single
+// call to xUnpin() unpins the page regardless of the number of prior calls
+// to xFetch().
+//
+// [[the xRekey() page cache methods]]
+// The xRekey() method is used to change the key value associated with the
+// page passed as the second argument. If the cache
+// previously contains an entry associated with newKey, it must be
+// discarded. ^Any prior cache entry associated with newKey is guaranteed not
+// to be pinned.
+//
+// When SQLite calls the xTruncate() method, the cache must discard all
+// existing cache entries with page numbers (keys) greater than or equal
+// to the value of the iLimit parameter passed to xTruncate(). If any
+// of these pages are pinned, they are implicitly unpinned, meaning that
+// they can be safely discarded.
+//
+// [[the xDestroy() page cache method]]
+// ^The xDestroy() method is used to delete a cache allocated by xCreate().
+// All resources associated with the specified cache should be freed. ^After
+// calling the xDestroy() method, SQLite considers the [sqlite3_pcache*]
+// handle invalid, and will not use it with any other sqlite3_pcache_methods2
+// functions.
+//
+// [[the xShrink() page cache method]]
+// ^SQLite invokes the xShrink() method when it wants the page cache to
+// free up as much of heap memory as possible.  The page cache implementation
+// is not obligated to free any memory, but well-behaved implementations should
+// do their best.
+type sqlite3_pcache_methods2 = sqlite3_pcache_methods21 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:8842:40 */
 
+// This is the obsolete pcache_methods object that has now been replaced
+// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
+// retained in the header file for backwards compatibility only.
 type sqlite3_pcache_methods1 = struct {
 	pArg       uintptr
 	xInit      uintptr
@@ -1618,13 +3649,87 @@ type sqlite3_pcache_methods1 = struct {
 	xRekey     uintptr
 	xTruncate  uintptr
 	xDestroy   uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:8865:9 */
 
-type sqlite3_pcache_methods = sqlite3_pcache_methods1
+// This is the obsolete pcache_methods object that has now been replaced
+// by sqlite3_pcache_methods2.  This object is not used by SQLite.  It is
+// retained in the header file for backwards compatibility only.
+type sqlite3_pcache_methods = sqlite3_pcache_methods1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:8865:39 */
 
-type sqlite3_snapshot1 = struct{ hidden [48]uint8 }
+// CAPI3REF: Database Snapshot
+// KEYWORDS: {snapshot} {sqlite3_snapshot}
+//
+// An instance of the snapshot object records the state of a [WAL mode]
+// database for some specific point in history.
+//
+// In [WAL mode], multiple [database connections] that are open on the
+// same database file can each be reading a different historical version
+// of the database file.  When a [database connection] begins a read
+// transaction, that connection sees an unchanging copy of the database
+// as it existed for the point in time when the transaction first started.
+// Subsequent changes to the database from other connections are not seen
+// by the reader until a new read transaction is started.
+//
+// The sqlite3_snapshot object records state information about an historical
+// version of the database file so that it is possible to later open a new read
+// transaction that sees that historical version of the database rather than
+// the most recent version.
+type sqlite3_snapshot1 = struct{ hidden [48]uint8 } /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10230:9 */
 
-type sqlite3_snapshot = sqlite3_snapshot1
+// CAPI3REF: Database Snapshot
+// KEYWORDS: {snapshot} {sqlite3_snapshot}
+//
+// An instance of the snapshot object records the state of a [WAL mode]
+// database for some specific point in history.
+//
+// In [WAL mode], multiple [database connections] that are open on the
+// same database file can each be reading a different historical version
+// of the database file.  When a [database connection] begins a read
+// transaction, that connection sees an unchanging copy of the database
+// as it existed for the point in time when the transaction first started.
+// Subsequent changes to the database from other connections are not seen
+// by the reader until a new read transaction is started.
+//
+// The sqlite3_snapshot object records state information about an historical
+// version of the database file so that it is possible to later open a new read
+// transaction that sees that historical version of the database rather than
+// the most recent version.
+type sqlite3_snapshot = sqlite3_snapshot1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10232:3 */
+
+// CAPI3REF: Flags for sqlite3_deserialize()
+//
+// The following are allowed values for 6th argument (the F argument) to
+// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
+//
+// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
+// in the P argument is held in memory obtained from [sqlite3_malloc64()]
+// and that SQLite should take ownership of this memory and automatically
+// free it when it has finished using it.  Without this flag, the caller
+// is responsible for freeing any dynamically allocated memory.
+//
+// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
+// grow the size of the database using calls to [sqlite3_realloc64()].  This
+// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
+// Without this flag, the deserialized database cannot increase in size beyond
+// the number of bytes specified by the M parameter.
+//
+// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
+// should be treated as read-only.
+
+// Undo the hack that converts floating point types to integer for
+// builds on processors without floating point support.
+
+//******* Begin file sqlite3rtree.h ********
+// 2010 August 30
+//
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+//
+//
 
 type sqlite3_rtree_geometry1 = struct {
 	pContext uintptr
@@ -1633,9 +3738,44 @@ type sqlite3_rtree_geometry1 = struct {
 	aParam   uintptr
 	pUser    uintptr
 	xDelUser uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10574:9 */
 
-type sqlite3_rtree_geometry = sqlite3_rtree_geometry1
+// CAPI3REF: Flags for sqlite3_deserialize()
+//
+// The following are allowed values for 6th argument (the F argument) to
+// the [sqlite3_deserialize(D,S,P,N,M,F)] interface.
+//
+// The SQLITE_DESERIALIZE_FREEONCLOSE means that the database serialization
+// in the P argument is held in memory obtained from [sqlite3_malloc64()]
+// and that SQLite should take ownership of this memory and automatically
+// free it when it has finished using it.  Without this flag, the caller
+// is responsible for freeing any dynamically allocated memory.
+//
+// The SQLITE_DESERIALIZE_RESIZEABLE flag means that SQLite is allowed to
+// grow the size of the database using calls to [sqlite3_realloc64()].  This
+// flag should only be used if SQLITE_DESERIALIZE_FREEONCLOSE is also used.
+// Without this flag, the deserialized database cannot increase in size beyond
+// the number of bytes specified by the M parameter.
+//
+// The SQLITE_DESERIALIZE_READONLY flag means that the deserialized database
+// should be treated as read-only.
+
+// Undo the hack that converts floating point types to integer for
+// builds on processors without floating point support.
+
+//******* Begin file sqlite3rtree.h ********
+// 2010 August 30
+//
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+//
+//
+
+type sqlite3_rtree_geometry = sqlite3_rtree_geometry1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10574:39 */
 type sqlite3_rtree_query_info1 = struct {
 	pContext      uintptr
 	nParam        int32
@@ -1655,11 +3795,43 @@ type sqlite3_rtree_query_info1 = struct {
 	eWithin       int32
 	rScore        sqlite3_rtree_dbl
 	apSqlParam    uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10575:9 */
 
-type sqlite3_rtree_query_info = sqlite3_rtree_query_info1
+type sqlite3_rtree_query_info = sqlite3_rtree_query_info1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10575:41 */
 
-type sqlite3_rtree_dbl = float64
+// The double-precision datatype used by RTree depends on the
+// SQLITE_RTREE_INT_ONLY compile-time option.
+type sqlite3_rtree_dbl = float64 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:10583:18 */
+
+// CAPI3REF: Values for sqlite3session_config().
+
+// Make sure we can call this stuff from C++.
+
+//******* End of sqlite3session.h ********
+//******* Begin file fts5.h ********
+// 2014 May 31
+//
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+//
+//
+//
+// Interfaces to extend FTS5. Using the interfaces defined in this file,
+// FTS5 may be extended with:
+//
+//     * custom tokenizers, and
+//     * custom auxiliary functions.
+
+// ************************************************************************
+//
+// CUSTOM AUXILIARY FUNCTIONS
+//
+// Virtual table implementations may overload SQL functions by implementing
+// the sqlite3_module.xFindFunction() method.
 
 type Fts5ExtensionApi1 = struct {
 	iVersion           int32
@@ -1683,127 +3855,728 @@ type Fts5ExtensionApi1 = struct {
 	xPhraseNext        uintptr
 	xPhraseFirstColumn uintptr
 	xPhraseNextColumn  uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12430:9 */
 
-type Fts5ExtensionApi = Fts5ExtensionApi1
+// CAPI3REF: Values for sqlite3session_config().
+
+// Make sure we can call this stuff from C++.
+
+//******* End of sqlite3session.h ********
+//******* Begin file fts5.h ********
+// 2014 May 31
+//
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+//
+//
+//
+// Interfaces to extend FTS5. Using the interfaces defined in this file,
+// FTS5 may be extended with:
+//
+//     * custom tokenizers, and
+//     * custom auxiliary functions.
+
+// ************************************************************************
+//
+// CUSTOM AUXILIARY FUNCTIONS
+//
+// Virtual table implementations may overload SQL functions by implementing
+// the sqlite3_module.xFindFunction() method.
+
+type Fts5ExtensionApi = Fts5ExtensionApi1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12430:33 */
 type Fts5PhraseIter1 = struct {
 	a uintptr
 	b uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12432:9 */
 
-type Fts5PhraseIter = Fts5PhraseIter1
+type Fts5PhraseIter = Fts5PhraseIter1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12432:31 */
 
-type fts5_extension_function = uintptr
+type fts5_extension_function = uintptr /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12434:14 */
 type fts5_tokenizer1 = struct {
 	xCreate   uintptr
 	xDelete   uintptr
 	xTokenize uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12893:9 */
 
-type fts5_tokenizer = fts5_tokenizer1
+type fts5_tokenizer = fts5_tokenizer1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12893:31 */
 
+// Flags that may be passed as the third argument to xTokenize()
+
+// Flags that may be passed by the tokenizer implementation back to FTS5
+// as the third argument to the supplied xToken callback.
+
+//
+// END OF CUSTOM TOKENIZERS
+//
+
+// ************************************************************************
+//
+// FTS5 EXTENSION REGISTRATION API
 type fts5_api1 = struct {
 	iVersion         int32
 	_                [4]byte
 	xCreateTokenizer uintptr
 	xFindTokenizer   uintptr
 	xCreateFunction  uintptr
-}
+} /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12929:9 */
 
-type fts5_api = fts5_api1
+// Flags that may be passed as the third argument to xTokenize()
+
+// Flags that may be passed by the tokenizer implementation back to FTS5
+// as the third argument to the supplied xToken callback.
+
+//
+// END OF CUSTOM TOKENIZERS
+//
+
+// ************************************************************************
+//
+// FTS5 EXTENSION REGISTRATION API
+type fts5_api = fts5_api1 /* testdata/sqlite-amalgamation-3410200/sqlite3.h:12929:25 */
+
+// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// pthread opaque structures
 
 type __darwin_pthread_handler_rec = struct {
 	__routine uintptr
 	__arg     uintptr
 	__next    uintptr
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:57:1 */
 
 type _opaque_pthread_attr_t = struct {
 	__sig    int64
 	__opaque [56]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:63:1 */
 
 type _opaque_pthread_cond_t = struct {
 	__sig    int64
 	__opaque [40]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:68:1 */
 
 type _opaque_pthread_condattr_t = struct {
 	__sig    int64
 	__opaque [8]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:73:1 */
 
 type _opaque_pthread_mutex_t = struct {
 	__sig    int64
 	__opaque [56]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:78:1 */
 
 type _opaque_pthread_mutexattr_t = struct {
 	__sig    int64
 	__opaque [8]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:83:1 */
 
 type _opaque_pthread_once_t = struct {
 	__sig    int64
 	__opaque [8]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:88:1 */
 
 type _opaque_pthread_rwlock_t = struct {
 	__sig    int64
 	__opaque [192]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:93:1 */
 
 type _opaque_pthread_rwlockattr_t = struct {
 	__sig    int64
 	__opaque [16]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:98:1 */
 
 type _opaque_pthread_t = struct {
 	__sig           int64
 	__cleanup_stack uintptr
 	__opaque        [8176]int8
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h:103:1 */
 
-type int8_t = int8
+// DO NOT REMOVE THIS COMMENT: fixincludes needs to see:
+// __gnuc_va_list and include <stdarg.h>
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type int16_t = int16
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
 
-type int32_t = int32
+// Copyright (c) 2000-2008 Apple Inc. All rights reserved.
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1990, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)types.h	8.3 (Berkeley) 1/5/94
 
-type int64_t = int64
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
 
-type u_int8_t = uint8
+// Basic integral types.  Omit the typedef if
+// not possible for a machine/compiler combination.
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type int8_t = int8 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int8_t.h:30:31 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type int16_t = int16 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int16_t.h:30:33 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type int32_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int32_t.h:30:33 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type int64_t = int64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_int64_t.h:30:33 */
 
-type u_int16_t = uint16
+// Copyright (c) 2016 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type u_int8_t = uint8 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int8_t.h:30:33 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type u_int16_t = uint16 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int16_t.h:30:41 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type u_int32_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int32_t.h:30:33 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type u_int64_t = uint64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int64_t.h:30:33 */
 
-type u_int32_t = uint32
+type register_t = int64_t /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:66:33 */
 
-type u_int64_t = uint64
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
 
-type register_t = int64_t
+type intptr_t = int64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_intptr_t.h:32:33 */
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type intptr_t = int64
+type uintptr_t = uint64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_uintptr_t.h:34:33 */
 
-type uintptr_t = uint64
+// These types are used for reserving the largest possible size.
+type user_addr_t = u_int64_t  /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:77:33 */
+type user_size_t = u_int64_t  /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:78:33 */
+type user_ssize_t = int64_t   /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:79:33 */
+type user_long_t = int64_t    /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:80:33 */
+type user_ulong_t = u_int64_t /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:81:33 */
+type user_time_t = int64_t    /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:82:33 */
+type user_off_t = int64_t     /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:83:33 */
 
-type user_addr_t = u_int64_t
-type user_size_t = u_int64_t
-type user_ssize_t = int64_t
-type user_long_t = int64_t
-type user_ulong_t = u_int64_t
-type user_time_t = int64_t
-type user_off_t = int64_t
+// This defines the size of syscall arguments after copying into the kernel:
+type syscall_arg_t = u_int64_t /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/types.h:104:33 */
 
-type syscall_arg_t = u_int64_t
+type fpos_t = int64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h:81:25 */
 
-type fpos_t = int64
+// NB: to fit things in six character monocase externals, the stdio
+// code uses the prefix `__s' for stdio objects, typically followed
+// by a three-character attempt at a mnemonic.
 
+// stdio buffers
 type __sbuf = struct {
 	_base uintptr
 	_size int32
 	_     [4]byte
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h:92:1 */
 
+// stdio state variables.
+//
+// The following always hold:
+//
+//	if (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),
+//		_lbfsize is -_bf._size, else _lbfsize is 0
+//	if _flags&__SRD, _w is 0
+//	if _flags&__SWR, _r is 0
+//
+// This ensures that the getc and putc macros (or inline functions) never
+// try to write or read from a file that is in `read' or `write' mode.
+// (Moreover, they can, and do, automatically switch from read mode to
+// write mode, and back, on "r+" and "w+" files.)
+//
+// _lbfsize is used only to make the inline line-buffered output stream
+// code as compact as possible.
+//
+// _ub, _up, and _ur are used when ungetc() pushes back more characters
+// than fit in the current _bf, or when ungetc() pushes back a character
+// that does not match the previous one in _bf.  When this happens,
+// _ub._base becomes non-nil (i.e., a stream has ungetc() data iff
+// _ub._base!=NULL) and _up and _ur save the current values of _p and _r.
+//
+// NB: see WARNING above before changing the layout of this structure!
 type __sFILE = struct {
 	_p     uintptr
 	_r     int32
@@ -1840,37 +4613,1623 @@ type __sFILE = struct {
 	_blksize int32
 	_        [4]byte
 	_offset  fpos_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h:126:9 */
 
-type FILE = __sFILE
+// stdio state variables.
+//
+// The following always hold:
+//
+//	if (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),
+//		_lbfsize is -_bf._size, else _lbfsize is 0
+//	if _flags&__SRD, _w is 0
+//	if _flags&__SWR, _r is 0
+//
+// This ensures that the getc and putc macros (or inline functions) never
+// try to write or read from a file that is in `read' or `write' mode.
+// (Moreover, they can, and do, automatically switch from read mode to
+// write mode, and back, on "r+" and "w+" files.)
+//
+// _lbfsize is used only to make the inline line-buffered output stream
+// code as compact as possible.
+//
+// _ub, _up, and _ur are used when ungetc() pushes back more characters
+// than fit in the current _bf, or when ungetc() pushes back a character
+// that does not match the previous one in _bf.  When this happens,
+// _ub._base becomes non-nil (i.e., a stream has ungetc() data iff
+// _ub._base!=NULL) and _up and _ur save the current values of _p and _r.
+//
+// NB: see WARNING above before changing the layout of this structure!
+type FILE = __sFILE /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h:157:3 */
 
-type off_t = int64
+// Additional functionality provided by:
+// POSIX.1-2001
+// ISO C99
 
-type ssize_t = int64
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+type off_t = int64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_off_t.h:31:33 */
+
+// Additional functionality provided by:
+// POSIX.1-2008
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type ssize_t = int64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_ssize_t.h:31:33 */
+
+// Copyright (c) 2000, 2002-2006, 2008-2010, 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// -
+// Copyright (c) 1998-1999 Apple Computer, Inc. All Rights Reserved
+// Copyright (c) 1991, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)unistd.h	8.12 (Berkeley) 4/27/95
+//
+//  Copyright (c)  1998 Apple Compter, Inc.
+//  All Rights Reserved
+
+// History:
+//         7/14/99 EKN at Apple fixed getdirentriesattr from getdirentryattr
+//         3/26/98 CHW at Apple added real interface to searchfs call
+//   	3/5/98  CHW at Apple added hfs semantic system calls headers
+
+// Copyright (c) 2004, 2008, 2009 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2013 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
+// Copyright (c) 1989, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)unistd.h	8.2 (Berkeley) 1/7/94
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Although we have saved user/group IDs, we do not use them in setuid
+// as described in POSIX 1003.1, because the feature does not work for
+// root.  We use the saved IDs in seteuid/setegid, which are not currently
+// part of the POSIX 1003.1 specification.
+
+// execution-time symbolic constants
+// may disable terminal special characters
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// access function
+
+// Extended access functions.
+// Note that we depend on these matching the definitions in sys/kauth.h,
+// but with the bits shifted left by 8.
+
+// whence values for lseek(2)
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// whence values for lseek(2)
+
+// whence values for lseek(2); renamed by POSIX 1003.1
 
 type accessx_descriptor = struct {
 	ad_name_offset uint32
 	ad_flags       int32
 	ad_pad         [2]int32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/unistd.h:132:1 */
 
-type uint64_t = uint64
+// configurable pathname variables
 
-type uint32_t = uint32
+// configurable system strings
 
-type uid_t = uint32
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type gid_t = uint32
+type uint64_t = uint64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types/_uint64_t.h:31:28 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type pid_t = int32
+type uint32_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types/_uint32_t.h:31:22 */
 
-type useconds_t = uint32
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type fd_set1 = struct{ fds_bits [32]int32 }
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type fd_set = fd_set1
+type uid_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_uid_t.h:31:31 */
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-func __darwin_check_fd_set(tls *libc.TLS, _a int32, _b uintptr) int32 {
+type gid_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_gid_t.h:31:25 */
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+type pid_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_pid_t.h:31:31 */
+// DO NOT REMOVE THIS COMMENT: fixincludes needs to see:
+// _GCC_SIZE_T
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+type useconds_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_useconds_t.h:31:33 */
+
+// Darwin extensions
+
+// Copyright (c) 2000-2005 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1992, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)select.h	8.2 (Berkeley) 1/4/94
+
+// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// [XSI] The <sys/select.h> header shall define the fd_set type as a structure.
+// The timespec structure shall be defined as described in <time.h>
+// The <sys/select.h> header shall define the timeval structure.
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Select uses bit masks of file descriptors in longs.  These macros
+// manipulate such bit fields (the filesystem macros use chars).  The
+// extra protection here is to permit application redefinition above
+// the default size.
+
+type fd_set1 = struct{ fds_bits [32]int32 } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_def.h:50:9 */
+
+// Darwin extensions
+
+// Copyright (c) 2000-2005 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1992, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)select.h	8.2 (Berkeley) 1/4/94
+
+// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// [XSI] The <sys/select.h> header shall define the fd_set type as a structure.
+// The timespec structure shall be defined as described in <time.h>
+// The <sys/select.h> header shall define the timeval structure.
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Select uses bit masks of file descriptors in longs.  These macros
+// manipulate such bit fields (the filesystem macros use chars).  The
+// extra protection here is to permit application redefinition above
+// the default size.
+
+type fd_set = fd_set1 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_def.h:52:3 */
+
+func __darwin_check_fd_set(tls *libc.TLS, _a int32, _b uintptr) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_def.h:58:1: */
 	if uintptr_t(uintptr(unsafe.Pointer(&__darwin_check_fd_set_overflow))) != uint64(0) {
 		return (*struct {
 			f func(*libc.TLS, int32, uintptr, int32) int32
@@ -1881,48 +6240,1662 @@ func __darwin_check_fd_set(tls *libc.TLS, _a int32, _b uintptr) int32 {
 	return int32(0)
 }
 
+// Use the built-in bzero function instead of the library version so that
+// we do not pollute the namespace or introduce prototype warnings.
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+
 type timespec = struct {
 	tv_sec  int64
 	tv_nsec int64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_timespec.h:33:1 */
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
 type timeval = struct {
 	tv_sec  int64
 	tv_usec int32
 	_       [4]byte
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_timeval.h:34:1 */
 
-type time_t = int64
+// The time_t and suseconds_t types shall be defined as described in
+// <sys/types.h>
+// The sigset_t type shall be defined as described in <signal.h>
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type time_t = int64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_time_t.h:31:33 */
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type suseconds_t = int32
+type suseconds_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_suseconds_t.h:31:33 */
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type sigset_t = uint32
+type sigset_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_sigset_t.h:31:41 */
 
-type dev_t = int32
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type mode_t = uint16
+type dev_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_dev_t.h:31:31 */ // device number
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type uuid_t = [16]uint8
+type mode_t = uint16 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_mode_t.h:31:33 */
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
-type errno_t = int32
+type uuid_t = [16]uint8 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_uuid_t.h:31:25 */
 
-type idtype_t = uint32
+// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// Copyright (c) 2000-2012 Apple, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
+// Copyright (c) 1982, 1986, 1989, 1993
+//	The Regents of the University of California.  All rights reserved.
+// (c) UNIX System Laboratories, Inc.
+// All or some portions of this file are derived from material licensed
+// to the University of California by American Telephone and Telegraph
+// Co. or Unix System Laboratories, Inc. and are reproduced herein with
+// the permission of UNIX System Laboratories, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)errno.h	8.5 (Berkeley) 1/21/94
 
-type id_t = uint32
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
 
-type sig_atomic_t = int32
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type errno_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_errno_t.h:30:32 */
+
+// Error codes
+
+// 11 was EAGAIN
+
+// math software
+
+// non-blocking and interrupt i/o
+
+// ipc/network software -- argument errors
+
+// ipc/network software -- operational errors
+
+// should be rearranged
+
+// quotas & mush
+
+// Network File System
+
+// Intelligent device errors
+
+// Program loading errors
+
+// This value is only discrete when compiling __DARWIN_UNIX03, or KERNEL
+
+// Copyright (c) 2000, 2002 - 2008 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// -
+// Copyright (c) 1990, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)stdlib.h	8.5 (Berkeley) 5/19/95
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2004, 2008, 2009 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
+// Copyright (c) 1982, 1986, 1989, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)wait.h	8.2 (Berkeley) 7/10/94
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// This file holds definitions relevent to the wait4 system call
+// and the alternate interfaces that use it (wait, wait3, waitpid).
+
+// [XSI] The type idtype_t shall be defined as an enumeration type whose
+// possible values shall include at least P_ALL, P_PID, and P_PGID.
+type idtype_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:83:3 */
+
+// [XSI] The id_t and pid_t types shall be defined as described
+// in <sys/types.h>
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+type id_t = uint32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_id_t.h:31:25 */ // can hold pid_t, gid_t, or uid_t
+
+// [XSI] The siginfo_t type shall be defined as described in <signal.h>
+// [XSI] The rusage structure shall be defined as described in <sys/resource.h>
+// [XSI] Inclusion of the <sys/wait.h> header may also make visible all
+// symbols from <signal.h> and <sys/resource.h>
+//
+// NOTE:	This requirement is currently being satisfied by the direct
+//		inclusion of <sys/signal.h> and <sys/resource.h>, below.
+//
+//		Software should not depend on the exposure of anything other
+//		than the types siginfo_t and struct rusage as a result of
+//		this inclusion.  If you depend on any types or manifest
+//		values othe than siginfo_t and struct rusage from either of
+//		those files, you should explicitly include them yourself, as
+//		well, or in future releases your stware may not compile
+//		without modification.
+// Copyright (c) 2000-2006 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1995 NeXT Computer, Inc. All Rights Reserved
+// Copyright (c) 1982, 1986, 1989, 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+// (c) UNIX System Laboratories, Inc.
+// All or some portions of this file are derived from material licensed
+// to the University of California by American Telephone and Telegraph
+// Co. or Unix System Laboratories, Inc. and are reproduced herein with
+// the permission of UNIX System Laboratories, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)signal.h	8.2 (Berkeley) 1/21/94
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2009 Apple, Inc. All rights reserved.
+// Copyright (c) 1992 NeXT Computer, Inc.
+//
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+type sig_atomic_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/signal.h:17:13 */
+
+// Language spec sez we must list exactly one parameter, even though we
+// actually supply three.  Ugh!
+// SIG_HOLD is chosen to avoid KERN_SIG_* values in <sys/signalvar.h>
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2017 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2004-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// @OSF_COPYRIGHT@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
 
 type __darwin_arm_exception_state = struct {
 	__exception uint32
 	__fsr       uint32
 	__far       uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:41:1 */
 
 type __darwin_arm_exception_state64 = struct {
 	__far       uint64
 	__esr       uint32
 	__exception uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:59:1 */
 
 type __darwin_arm_thread_state = struct {
 	__r    [13]uint32
@@ -1930,7 +7903,12 @@ type __darwin_arm_thread_state = struct {
 	__lr   uint32
 	__pc   uint32
 	__cpsr uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:77:1 */
+
+// By default, the pointer fields in the arm_thread_state64_t structure are
+// opaque on the arm64e architecture and require the use of accessor macros.
+// This mode can also be enabled on the arm64 architecture by building with
+// -D__DARWIN_OPAQUE_ARM_THREAD_STATE64=1.
 
 type __darwin_arm_thread_state64 = struct {
 	__x    [29]uint64
@@ -1940,12 +7918,26 @@ type __darwin_arm_thread_state64 = struct {
 	__pc   uint64
 	__cpsr uint32
 	__pad  uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:136:1 */
+
+// Accessor macros for arm_thread_state64_t pointer fields
+
+// Return pc field of arm_thread_state64_t as a data pointer value
+// Return pc field of arm_thread_state64_t as a function pointer
+// Set pc field of arm_thread_state64_t to a function pointer
+// Return lr field of arm_thread_state64_t as a data pointer value
+// Return lr field of arm_thread_state64_t as a function pointer
+// Set lr field of arm_thread_state64_t to a function pointer
+// Return sp field of arm_thread_state64_t as a data pointer value
+// Set sp field of arm_thread_state64_t to a data pointer value
+// Return fp field of arm_thread_state64_t as a data pointer value
+// Set fp field of arm_thread_state64_t to a data pointer value
+// Strip ptr auth bits from pc, lr, sp and fp field of arm_thread_state64_t
 
 type __darwin_arm_vfp_state = struct {
 	__r     [64]uint32
 	__fpscr uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:433:1 */
 
 type __darwin_arm_neon_state64 = struct {
 	__v [32]struct {
@@ -1954,7 +7946,7 @@ type __darwin_arm_neon_state64 = struct {
 	}
 	__fpsr uint32
 	__fpcr uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:452:1 */
 
 type __darwin_arm_neon_state = struct {
 	__v [16]struct {
@@ -1963,16 +7955,20 @@ type __darwin_arm_neon_state = struct {
 	}
 	__fpsr uint32
 	__fpcr uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:459:1 */
 
-type __arm_pagein_state = struct{ __pagein_error int32 }
+type __arm_pagein_state = struct{ __pagein_error int32 } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:523:1 */
+
+// Debug State
+
+// ARM's arm_debug_state is ARM64's arm_legacy_debug_state
 
 type __arm_legacy_debug_state = struct {
 	__bvr [16]uint32
 	__bcr [16]uint32
 	__wvr [16]uint32
 	__wcr [16]uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:560:1 */
 
 type __darwin_arm_debug_state32 = struct {
 	__bvr       [16]uint32
@@ -1980,7 +7976,7 @@ type __darwin_arm_debug_state32 = struct {
 	__wvr       [16]uint32
 	__wcr       [16]uint32
 	__mdscr_el1 uint64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:583:1 */
 
 type __darwin_arm_debug_state64 = struct {
 	__bvr       [16]uint64
@@ -1988,9 +7984,9 @@ type __darwin_arm_debug_state64 = struct {
 	__wvr       [16]uint64
 	__wcr       [16]uint64
 	__mdscr_el1 uint64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:593:1 */
 
-type __darwin_arm_cpmu_state64 = struct{ __ctrs [16]uint64 }
+type __darwin_arm_cpmu_state64 = struct{ __ctrs [16]uint64 } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/arm/_structs.h:625:1 */
 
 type __darwin_mcontext32 = struct {
 	__es struct {
@@ -2009,7 +8005,7 @@ type __darwin_mcontext32 = struct {
 		__r     [64]uint32
 		__fpscr uint32
 	}
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/_mcontext.h:41:1 */
 
 type __darwin_mcontext64 = struct {
 	__es struct {
@@ -2034,20 +8030,381 @@ type __darwin_mcontext64 = struct {
 		__fpsr uint32
 		__fpcr uint32
 	}
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/_mcontext.h:64:1 */
 
-type mcontext_t = uintptr
+type mcontext_t = uintptr /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/arm/_mcontext.h:85:33 */
 
-type pthread_attr_t = _opaque_pthread_attr_t
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2013 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+type pthread_attr_t = _opaque_pthread_attr_t /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_attr_t.h:31:33 */
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Structure used in sigaltstack call.
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
 
 type __darwin_sigaltstack = struct {
 	ss_sp    uintptr
 	ss_size  uint64
 	ss_flags int32
 	_        [4]byte
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_sigaltstack.h:42:1 */
 
-type stack_t = __darwin_sigaltstack
+type stack_t = __darwin_sigaltstack /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_sigaltstack.h:48:33 */ // [???] signal stack
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Structure used in sigaltstack call.
 
 type __darwin_ucontext = struct {
 	uc_onstack int32
@@ -2061,15 +8418,117 @@ type __darwin_ucontext = struct {
 	uc_link     uintptr
 	uc_mcsize   uint64
 	uc_mcontext uintptr
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_ucontext.h:43:1 */
 
-type ucontext_t = __darwin_ucontext
+// user context
+type ucontext_t = __darwin_ucontext /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_ucontext.h:57:33 */ // [???] user context
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
 
 type sigval = struct {
 	_         [0]uint64
 	sival_int int32
 	_         [4]byte
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:158:1 */
 
 type sigevent = struct {
 	sigev_notify int32
@@ -2081,7 +8540,7 @@ type sigevent = struct {
 	}
 	sigev_notify_function   uintptr
 	sigev_notify_attributes uintptr
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:168:1 */
 
 type __siginfo = struct {
 	si_signo  int32
@@ -2098,66 +8557,271 @@ type __siginfo = struct {
 	}
 	si_band int64
 	__pad   [7]uint64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:177:9 */
 
-type siginfo_t = __siginfo
+type siginfo_t = __siginfo /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:188:3 */
 
-type __sigaction_u = struct{ __sa_handler uintptr }
+// When the signal is SIGILL or SIGFPE, si_addr contains the address of
+// the faulting instruction.
+// When the signal is SIGSEGV or SIGBUS, si_addr contains the address of
+// the faulting memory reference. Although for x86 there are cases of SIGSEGV
+// for which si_addr cannot be determined and is NULL.
+// If the signal is SIGCHLD, the si_pid field will contain the child process ID,
+//  si_status contains the exit value or signal and
+//  si_uid contains the real user ID of the process that sent the signal.
 
+// Values for si_code
+
+// Codes for SIGILL
+
+// Codes for SIGFPE
+
+// Codes for SIGSEGV
+
+// Codes for SIGBUS
+
+// Codes for SIGTRAP
+
+// Codes for SIGCHLD
+
+// Codes for SIGPOLL
+
+// union for signal handlers
+type __sigaction_u = struct{ __sa_handler uintptr } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:269:1 */
+
+// Signal vector template for Kernel user boundary
 type __sigaction = struct {
 	__sigaction_u struct{ __sa_handler uintptr }
 	sa_tramp      uintptr
 	sa_mask       sigset_t
 	sa_flags      int32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:276:1 */
 
+// Signal vector "template" used in sigaction call.
 type sigaction = struct {
 	__sigaction_u struct{ __sa_handler uintptr }
 	sa_mask       sigset_t
 	sa_flags      int32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:286:1 */
 
-type sig_t = uintptr
+// if SA_SIGINFO is set, sa_sigaction is to be used instead of sa_handler.
 
+// This will provide 64bit register set in a 32bit user address space
+
+// the following are the only bits we support from user space, the
+// rest are for kernel use only.
+
+// Flags for sigprocmask:
+
+// POSIX 1003.1b required values.
+
+type sig_t = uintptr /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:331:14 */ // type of signal function
+
+// Structure used in sigaltstack call.
+
+// 4.3 compatibility:
+// Signal vector "template" used in sigvec call.
 type sigvec = struct {
 	sv_handler uintptr
 	sv_mask    int32
 	sv_flags   int32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:348:1 */
 
+// Structure used in sigstack call.
 type sigstack = struct {
 	ss_sp      uintptr
 	ss_onstack int32
 	_          [4]byte
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/signal.h:367:1 */
 
-type int_least64_t = int64_t
-type uint_least64_t = uint64_t
-type int_fast64_t = int64_t
-type uint_fast64_t = uint64_t
+type int_least64_t = int64_t   /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:110:25 */
+type uint_least64_t = uint64_t /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:111:26 */
+type int_fast64_t = int64_t    /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:112:25 */
+type uint_fast64_t = uint64_t  /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:113:26 */
 
-type int_least32_t = int32_t
-type uint_least32_t = uint32_t
-type int_fast32_t = int32_t
-type uint_fast32_t = uint32_t
-type uint16_t = uint16
+type int_least32_t = int32_t   /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:184:25 */
+type uint_least32_t = uint32_t /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:185:26 */
+type int_fast32_t = int32_t    /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:186:25 */
+type uint_fast32_t = uint32_t  /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:187:26 */
+type uint16_t = uint16         /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:207:25 */
 
-type int_least16_t = int16_t
-type uint_least16_t = uint16_t
-type int_fast16_t = int16_t
-type uint_fast16_t = uint16_t
-type uint8_t = uint8
+type int_least16_t = int16_t   /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:215:25 */
+type uint_least16_t = uint16_t /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:216:26 */
+type int_fast16_t = int16_t    /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:217:25 */
+type uint_fast16_t = uint16_t  /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:218:26 */
+type uint8_t = uint8           /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:226:24 */
 
-type int_least8_t = int8_t
-type uint_least8_t = uint8_t
-type int_fast8_t = int8_t
-type uint_fast8_t = uint8_t
+type int_least8_t = int8_t   /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:232:24 */
+type uint_least8_t = uint8_t /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:233:25 */
+type int_fast8_t = int8_t    /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:234:24 */
+type uint_fast8_t = uint8_t  /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:235:25 */
 
-type intmax_t = int64
-type uintmax_t = uint64
+// prevent glibc sys/types.h from defining conflicting types
 
-type rlim_t = uint64
+// C99 7.18.1.4 Integer types capable of holding object pointers.
 
+// C99 7.18.1.5 Greatest-width integer types.
+type intmax_t = int64   /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:262:26 */
+type uintmax_t = uint64 /* /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h:263:26 */
+
+// C99 7.18.4 Macros for minimum-width integer constants.
+//
+// The standard requires that integer constant macros be defined for all the
+// minimum-width types defined above. As 8-, 16-, 32-, and 64-bit minimum-width
+// types are required, the corresponding integer constant macros are defined
+// here. This implementation also defines minimum-width types for every other
+// integer width that the target implements, so corresponding macros are
+// defined below, too.
+//
+// These macros are defined using the same successive-shrinking approach as
+// the type definitions above. It is likewise important that macros are defined
+// in order of decending width.
+//
+// Note that C++ should not check __STDC_CONSTANT_MACROS here, contrary to the
+// claims of the C standard (see C++ 18.3.1p2, [cstdint.syn]).
+
+// C99 7.18.2.1 Limits of exact-width integer types.
+// C99 7.18.2.2 Limits of minimum-width integer types.
+// C99 7.18.2.3 Limits of fastest minimum-width integer types.
+//
+// The presence of limit macros are completely optional in C99.  This
+// implementation defines limits for all of the types (exact- and
+// minimum-width) that it defines above, using the limits of the minimum-width
+// type for any types that do not have exact-width representations.
+//
+// As in the type definitions, this section takes an approach of
+// successive-shrinking to determine which limits to use for the standard (8,
+// 16, 32, 64) bit widths when they don't have exact representations. It is
+// therefore important that the definitions be kept in order of decending
+// widths.
+//
+// Note that C++ should not check __STDC_LIMIT_MACROS here, contrary to the
+// claims of the C standard (see C++ 18.3.1p2, [cstdint.syn]).
+
+// Some utility macros
+
+// C99 7.18.2.4 Limits of integer types capable of holding object pointers.
+// C99 7.18.3 Limits of other integer types.
+
+// ISO9899:2011 7.20 (C11 Annex K): Define RSIZE_MAX if __STDC_WANT_LIB_EXT1__
+// is enabled.
+
+// C99 7.18.2.5 Limits of greatest-width integer types.
+
+// C99 7.18.3 Limits of other integer types.
+
+// 7.18.4.2 Macros for greatest-width integer constants.
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// [XSI] The timeval structure shall be defined as described in
+// <sys/time.h>
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// The id_t type shall be defined as described in <sys/types.h>
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Resource limit type (low 63 bits, excluding the sign bit)
+type rlim_t = uint64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:89:25 */
+
+// ****
+//
+// PRIORITY
+
+// Possible values of the first parameter to getpriority()/setpriority(),
+// used to indicate the type of the second parameter.
+
+// Range limitations for the value of the third parameter to setpriority().
+
+// use PRIO_DARWIN_BG to set the current thread into "background" state
+// which lowers CPU, disk IO, and networking priorites until thread terminates
+// or "background" state is revoked
+
+// use PRIO_DARWIN_NONUI to restrict a process's ability to make calls to
+// the GPU. (deprecated)
+
+// ****
+//
+// RESOURCE USAGE
+
+// Possible values of the first parameter to getrusage(), used to indicate
+// the scope of the information to be returned.
+
+// A structure representing an accounting of resource utilization.  The
+// address of an instance of this structure is the second parameter to
+// getrusage().
+//
+// Note: All values other than ru_utime and ru_stime are implementaiton
+//
+//	defined and subject to change in a future release.  Their use
+//	is discouraged for standards compliant programs.
 type rusage = struct {
 	ru_utime struct {
 		tv_sec  int64
@@ -2183,9 +8847,13 @@ type rusage = struct {
 	ru_nsignals int64
 	ru_nvcsw    int64
 	ru_nivcsw   int64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:152:1 */
 
-type rusage_info_t = uintptr
+// Flavors for proc_pid_rusage().
+
+// Flags for RUSAGE_INFO_V5
+
+type rusage_info_t = uintptr /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:199:14 */
 
 type rusage_info_v0 = struct {
 	ri_uuid               [16]uint8_t
@@ -2199,7 +8867,7 @@ type rusage_info_v0 = struct {
 	ri_phys_footprint     uint64_t
 	ri_proc_start_abstime uint64_t
 	ri_proc_exit_abstime  uint64_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:201:1 */
 
 type rusage_info_v1 = struct {
 	ri_uuid                  [16]uint8_t
@@ -2219,7 +8887,7 @@ type rusage_info_v1 = struct {
 	ri_child_interrupt_wkups uint64_t
 	ri_child_pageins         uint64_t
 	ri_child_elapsed_abstime uint64_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:215:1 */
 
 type rusage_info_v2 = struct {
 	ri_uuid                  [16]uint8_t
@@ -2241,7 +8909,7 @@ type rusage_info_v2 = struct {
 	ri_child_elapsed_abstime uint64_t
 	ri_diskio_bytesread      uint64_t
 	ri_diskio_byteswritten   uint64_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:235:1 */
 
 type rusage_info_v3 = struct {
 	ri_uuid                          [16]uint8_t
@@ -2272,7 +8940,7 @@ type rusage_info_v3 = struct {
 	ri_cpu_time_qos_user_interactive uint64_t
 	ri_billed_system_time            uint64_t
 	ri_serviced_system_time          uint64_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:257:1 */
 
 type rusage_info_v4 = struct {
 	ri_uuid                          [16]uint8_t
@@ -2311,7 +8979,7 @@ type rusage_info_v4 = struct {
 	ri_serviced_energy               uint64_t
 	ri_interval_max_phys_footprint   uint64_t
 	ri_runnable_time                 uint64_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:288:1 */
 
 type rusage_info_v5 = struct {
 	ri_uuid                          [16]uint8_t
@@ -2351,131 +9019,1543 @@ type rusage_info_v5 = struct {
 	ri_interval_max_phys_footprint   uint64_t
 	ri_runnable_time                 uint64_t
 	ri_flags                         uint64_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:327:1 */
 
-type rusage_info_v6 = struct {
-	ri_uuid                          [16]uint8_t
-	ri_user_time                     uint64_t
-	ri_system_time                   uint64_t
-	ri_pkg_idle_wkups                uint64_t
-	ri_interrupt_wkups               uint64_t
-	ri_pageins                       uint64_t
-	ri_wired_size                    uint64_t
-	ri_resident_size                 uint64_t
-	ri_phys_footprint                uint64_t
-	ri_proc_start_abstime            uint64_t
-	ri_proc_exit_abstime             uint64_t
-	ri_child_user_time               uint64_t
-	ri_child_system_time             uint64_t
-	ri_child_pkg_idle_wkups          uint64_t
-	ri_child_interrupt_wkups         uint64_t
-	ri_child_pageins                 uint64_t
-	ri_child_elapsed_abstime         uint64_t
-	ri_diskio_bytesread              uint64_t
-	ri_diskio_byteswritten           uint64_t
-	ri_cpu_time_qos_default          uint64_t
-	ri_cpu_time_qos_maintenance      uint64_t
-	ri_cpu_time_qos_background       uint64_t
-	ri_cpu_time_qos_utility          uint64_t
-	ri_cpu_time_qos_legacy           uint64_t
-	ri_cpu_time_qos_user_initiated   uint64_t
-	ri_cpu_time_qos_user_interactive uint64_t
-	ri_billed_system_time            uint64_t
-	ri_serviced_system_time          uint64_t
-	ri_logical_writes                uint64_t
-	ri_lifetime_max_phys_footprint   uint64_t
-	ri_instructions                  uint64_t
-	ri_cycles                        uint64_t
-	ri_billed_energy                 uint64_t
-	ri_serviced_energy               uint64_t
-	ri_interval_max_phys_footprint   uint64_t
-	ri_runnable_time                 uint64_t
-	ri_flags                         uint64_t
-	ri_user_ptime                    uint64_t
-	ri_system_ptime                  uint64_t
-	ri_pinstructions                 uint64_t
-	ri_pcycles                       uint64_t
-	ri_energy_nj                     uint64_t
-	ri_penergy_nj                    uint64_t
-	ri_reserved                      [14]uint64_t
-}
+type rusage_info_current = rusage_info_v5 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:367:31 */
 
-type rusage_info_current = rusage_info_v6
+// ****
+//
+// RESOURCE LIMITS
 
+// Symbolic constants for resource limits; since all limits are representable
+// as a type rlim_t, we are permitted to define RLIM_SAVED_* in terms of
+// RLIM_INFINITY.
+
+// Possible values of the first parameter to getrlimit()/setrlimit(), to
+// indicate for which resource the operation is being performed.
+
+// A structure representing a resource limit.  The address of an instance
+// of this structure is the second parameter to getrlimit()/setrlimit().
 type rlimit = struct {
 	rlim_cur rlim_t
 	rlim_max rlim_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:411:1 */
+
+// proc_rlimit_control()
+//
+// Resource limit flavors
+
+// Flags for wakeups monitor control.
+
+// Flags for CPU usage monitor control.
+
+// Flags for memory footprint interval tracking.
 
 type proc_rlimit_control_wakeupmon = struct {
 	wm_flags uint32_t
 	wm_rate  int32_t
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/resource.h:446:1 */
 
-func _OSSwapInt16(tls *libc.TLS, _data uint16_t) uint16_t {
+// Option bits for the third argument of wait4.  WNOHANG causes the
+// wait to not hang if there are no stopped or terminated processes, rather
+// returning an error indication in this case (pid==0).  WUNTRACED
+// indicates that the caller should receive status about untraced children
+// which stop due to signals.  If children are stopped and a wait without
+// this option is done, it is as though they were still running... nothing
+// about them is returned.
+
+// Macros to test the exit status returned by wait
+// and extract the relevant values.
+
+// These macros are permited, as they are in the implementation namespace
+
+// [XSI] The <sys/wait.h> header shall define the following macros for
+// analysis of process status values
+// 0x13 == SIGCONT
+
+// [XSI] The following symbolic constants shall be defined as possible
+// values for the fourth argument to waitid().
+// WNOHANG already defined for wait4()
+// WUNTRACED defined for wait4() but not for waitid()
+// waitid() parameter
+
+// POSIX extensions and 4.2/4.3 compatability:
+
+// Tokens for special values of the "pid" parameter to wait4.
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1987, 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)endian.h	8.1 (Berkeley) 6/11/93
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Define _NOQUAD if the compiler does NOT support 64-bit integers.
+// #define _NOQUAD
+
+// Define the order of 32-bit words in 64-bit words.
+
+// Definitions for byte order, according to byte significance from low
+// address to high.
+
+// Copyright (c) 2004, 2006 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 2000-2002 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 1987, 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Macros for network/external number representation conversion.
+
+// Copyright (c) 2006 Apple Computer, Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// This header is normally included from <libkern/OSByteOrder.h>.  However,
+// <sys/_endian.h> also includes this in the case of little-endian
+// architectures, so that we can map OSByteOrder routines to the hton* and ntoh*
+// macros.  This results in the asymmetry below; we only include
+// <libkern/arch/_OSByteOrder.h> for little-endian architectures.
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Macros for swapping constant values in the preprocessing stage.
+
+// Copyright (c) 1999-2007 Apple Inc. All rights reserved.
+
+//===---- stdint.h - Standard header for sized integer types --------------===* *
+//  Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+//  See https://llvm.org/LICENSE.txt for license information.
+//  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+// \*===----------------------------------------------------------------------===
+
+// Copyright (c) 2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Collect the __ARM_ARCH_*__ compiler flags into something easier to use.
+
+// Generic byte swapping functions.
+
+func _OSSwapInt16(tls *libc.TLS, _data uint16_t) uint16_t { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:15:1: */
+	// Reduces to 'rev16' with clang
 	return uint16_t(int32(_data)<<8 | int32(_data)>>8)
 }
 
-func _OSSwapInt32(tls *libc.TLS, _data uint32_t) uint32_t {
+func _OSSwapInt32(tls *libc.TLS, _data uint32_t) uint32_t { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:25:1: */
 	_data = libc.X__builtin_bswap32(tls, _data)
 
 	return _data
 }
 
-func _OSSwapInt64(tls *libc.TLS, _data uint64_t) uint64_t {
+func _OSSwapInt64(tls *libc.TLS, _data uint64_t) uint64_t { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:41:1: */
 	return libc.X__builtin_bswap64(tls, _data)
 }
 
-type _OSUnalignedU16 = struct{ __val uint16_t }
+// Functions for byte reversed loads.
 
-type _OSUnalignedU32 = struct{ __val uint32_t }
+type _OSUnalignedU16 = struct{ __val uint16_t } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:64:1 */
 
-type _OSUnalignedU64 = struct{ __val uint64_t }
+type _OSUnalignedU32 = struct{ __val uint32_t } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:68:1 */
 
-type wait = struct{ w_status int32 }
+type _OSUnalignedU64 = struct{ __val uint64_t } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/OSByteOrder.h:72:1 */
 
-type ct_rune_t = int32
+// Deprecated:
+// Structure of the information in the status word returned by wait4.
+// If w_stopval==_WSTOPPED, then the second structure describes
+// the information returned, else the first.
+type wait = struct{ w_status int32 } /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h:194:1 */
 
-type rune_t = int32
+// built-in for gcc
+
+// built-in for gcc 3
+
+// DO NOT REMOVE THIS COMMENT: fixincludes needs to see:
+// _GCC_SIZE_T
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type ct_rune_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_ct_rune_t.h:32:28 */
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type rune_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_rune_t.h:31:25 */
 
 type div_t = struct {
 	quot int32
 	rem  int32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:86:3 */
 
 type ldiv_t = struct {
 	quot int64
 	rem  int64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:91:3 */
 
 type lldiv_t = struct {
 	quot int64
 	rem  int64
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdlib.h:97:3 */
 
-type rsize_t = uint64
+// C11 Annex K
 
-type wint_t = int32
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2000-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+type rsize_t = uint64 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_rsize_t.h:31:32 */
 
+// Copyright (c) 2000, 2007, 2010 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// -
+// Copyright (c) 1990, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)string.h	8.1 (Berkeley) 6/2/93
+
+// Security checking functions.
+// Copyright (c) 2017 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2007, 2008 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// bcopy and bzero
+
+// Removed in Issue 7
+
+// void	bcopy(const void *src, void *dst, size_t len)
+
+// void	bzero(void *s, size_t n)
+
+// Security checking functions.
+// Copyright (c) 2007,2017 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Copyright (c) 2007-2016 by Apple Inc.. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2007, 2008 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// <rdar://problem/12622659>
+
+// memccpy, memcpy, mempcpy, memmove, memset, strcpy, strlcpy, stpcpy,
+//    strncpy, stpncpy, strcat, strlcat, and strncat
+
+// void *memcpy(void *dst, const void *src, size_t n)
+
+// void *memmove(void *dst, const void *src, size_t len)
+
+// void *memset(void *b, int c, size_t len)
+
+// char *strcpy(char *dst, const char *src)
+
+// char *stpcpy(char *dst, const char *src)
+
+// char *stpncpy(char *dst, const char *src, size_t n)
+
+// char *strncpy(char *dst, const char *src, size_t n)
+
+// char *strcat(char *s1, const char *s2)
+
+// char *strncat(char *s1, const char *s2, size_t n)
+
+// -
+// Copyright (c) 1992, 1993
+//	The Regents of the University of California.  All rights reserved.
+// (c) UNIX System Laboratories, Inc.
+// All or some portions of this file are derived from material licensed
+// to the University of California by American Telephone and Telegraph
+// Co. or Unix System Laboratories, Inc. and are reproduced herein with
+// the permission of UNIX System Laboratories, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)assert.h	8.2 (Berkeley) 1/21/94
+// $FreeBSD: src/include/assert.h,v 1.4 2002/03/23 17:24:53 imp Exp $
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// Unlike other ANSI header files, <assert.h> may usefully be included
+// multiple times, with and without NDEBUG defined.
+
+// Copyright (c) 2000, 2005, 2008 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// Copyright (c) 1989, 1993
+//	The Regents of the University of California.  All rights reserved.
+// (c) UNIX System Laboratories, Inc.
+// All or some portions of this file are derived from material licensed
+// to the University of California by American Telephone and Telegraph
+// Co. or Unix System Laboratories, Inc. and are reproduced herein with
+// the permission of UNIX System Laboratories, Inc.
+//
+// This code is derived from software contributed to Berkeley by
+// Paul Borman at Krystal Technologies.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)ctype.h	8.4 (Berkeley) 1/21/94
+
+// Copyright (c) 2000, 2005, 2008 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+// Copyright (c) 1989, 1993
+//	The Regents of the University of California.  All rights reserved.
+// (c) UNIX System Laboratories, Inc.
+// All or some portions of this file are derived from material licensed
+// to the University of California by American Telephone and Telegraph
+// Co. or Unix System Laboratories, Inc. and are reproduced herein with
+// the permission of UNIX System Laboratories, Inc.
+//
+// This code is derived from software contributed to Berkeley by
+// Paul Borman at Krystal Technologies.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)ctype.h	8.4 (Berkeley) 1/21/94
+
+// Copyright (c) 2000-2018 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright 1995 NeXT Computer, Inc. All rights reserved.
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Berkeley Software Design, Inc.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)cdefs.h	8.8 (Berkeley) 1/9/95
+
+// -
+// Copyright (c) 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// This code is derived from software contributed to Berkeley by
+// Paul Borman at Krystal Technologies.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by the University of
+//	California, Berkeley and its contributors.
+// 4. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+//	@(#)runetype.h	8.1 (Berkeley) 6/2/93
+
+// Copyright (c) 2004, 2008, 2009 Apple Inc. All rights reserved.
+//
+// @APPLE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this
+// file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// wchar_t is a built-in type in C++
+// Copyright (c) 2012 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+
+// Copyright (c) 2003-2007 Apple Inc. All rights reserved.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_START@
+//
+// This file contains Original Code and/or Modifications of Original Code
+// as defined in and that are subject to the Apple Public Source License
+// Version 2.0 (the 'License'). You may not use this file except in
+// compliance with the License. The rights granted to you under the License
+// may not be used to create, or enable the creation or redistribution of,
+// unlawful or unlicensed copies of an Apple operating system, or to
+// circumvent, violate, or enable the circumvention or violation of, any
+// terms of an Apple operating system software license agreement.
+//
+// Please obtain a copy of the License at
+// http://www.opensource.apple.com/apsl/ and read it before using this file.
+//
+// The Original Code and all software distributed under the License are
+// distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+// INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+// Please see the License for the specific language governing rights and
+// limitations under the License.
+//
+// @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+type wint_t = int32 /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_wint_t.h:32:25 */
+
+// The lower 8 bits of runetype[] contain the digit value of the rune.
 type _RuneEntry = struct {
 	__min   int32
 	__max   int32
 	__map   int32
 	_       [4]byte
 	__types uintptr
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:65:3 */
 
 type _RuneRange = struct {
 	__nranges int32
 	_         [4]byte
 	__ranges  uintptr
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:70:3 */
 
 type _RuneCharClass = struct {
 	__name [14]int8
 	_      [2]byte
 	__mask uint32
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:75:3 */
 
 type _RuneLocale = struct {
 	__magic        [8]int8
@@ -2494,13 +10574,13 @@ type _RuneLocale = struct {
 	__variable_len int32
 	__ncharclasses int32
 	__charclasses  uintptr
-}
+} /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/runetype.h:106:3 */
 
-func isascii(tls *libc.TLS, _c int32) int32 {
+func isascii(tls *libc.TLS, _c int32) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:135:1: */
 	return libc.Bool32(_c&libc.CplInt32(0x7F) == 0)
 }
 
-func __istype(tls *libc.TLS, _c int32, _f uint64) int32 {
+func __istype(tls *libc.TLS, _c int32, _f uint64) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:153:1: */
 	return func() int32 {
 		if isascii(tls, _c) != 0 {
 			return libc.BoolInt32(!!(uint64(*(*uint32)(unsafe.Pointer(uintptr(unsafe.Pointer(&libc.X_DefaultRuneLocale)) + 60 + uintptr(_c)*4)))&_f != 0))
@@ -2509,25 +10589,33 @@ func __istype(tls *libc.TLS, _c int32, _f uint64) int32 {
 	}()
 }
 
-func __isctype(tls *libc.TLS, _c int32, _f uint64) int32 {
+func __isctype(tls *libc.TLS, _c int32, _f uint64) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:164:1: */
 	if _c < 0 || _c >= int32(1)<<8 {
 		return 0
 	}
 	return libc.BoolInt32(!!(uint64(*(*uint32)(unsafe.Pointer(uintptr(unsafe.Pointer(&libc.X_DefaultRuneLocale)) + 60 + uintptr(_c)*4)))&_f != 0))
 }
 
-func isalpha(tls *libc.TLS, _c int32) int32 {
+func isalpha(tls *libc.TLS, _c int32) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:218:1: */
 	return __istype(tls, _c, uint64(X_CTYPE_A))
 }
 
-func isdigit(tls *libc.TLS, _c int32) int32 {
+// ANSI -- locale independent
+func isdigit(tls *libc.TLS, _c int32) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:237:1: */
 	return __isctype(tls, _c, uint64(X_CTYPE_D))
 }
 
-func isspace(tls *libc.TLS, _c int32) int32 {
+func isspace(tls *libc.TLS, _c int32) int32 { /* /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_ctype.h:267:1: */
 	return __istype(tls, _c, uint64(X_CTYPE_S))
 }
 
+// The suffix to append to the child command lines, if any
+
+// The directory separator character(s)
+
+// Mark a parameter as unused to suppress compiler warnings
+
+// Global data
 type Global = struct {
 	argv0            uintptr
 	zVfs             uintptr
@@ -2546,11 +10634,21 @@ type Global = struct {
 	nTest            int32
 	iTimeout         int32
 	bSync            int32
-}
+} /* testdata/mptest.c:76:8 */
 
-var g Global
+// The suffix to append to the child command lines, if any
 
-func printWithPrefix(tls *libc.TLS, pOut uintptr, zPrefix uintptr, zMsg uintptr) {
+// The directory separator character(s)
+
+// Mark a parameter as unused to suppress compiler warnings
+
+// Global data
+var g Global /* testdata/mptest.c:94:3: */
+
+// Default timeout
+
+// Print a message adding zPrefix[] to the beginning of every line.
+func printWithPrefix(tls *libc.TLS, pOut uintptr, zPrefix uintptr, zMsg uintptr) { /* testdata/mptest.c:102:13: */
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
@@ -2566,7 +10664,8 @@ func printWithPrefix(tls *libc.TLS, pOut uintptr, zPrefix uintptr, zMsg uintptr)
 	}
 }
 
-func safe_strcmp(tls *libc.TLS, a uintptr, b uintptr) int32 {
+// Compare two pointers to strings, where the pointers might be NULL.
+func safe_strcmp(tls *libc.TLS, a uintptr, b uintptr) int32 { /* testdata/mptest.c:115:12: */
 	if a == b {
 		return 0
 	}
@@ -2579,7 +10678,23 @@ func safe_strcmp(tls *libc.TLS, a uintptr, b uintptr) int32 {
 	return libc.Xstrcmp(tls, a, b)
 }
 
-func strglob(tls *libc.TLS, zGlob uintptr, z uintptr) int32 {
+// Return TRUE if string z[] matches glob pattern zGlob[].
+// Return FALSE if the pattern does not match.
+//
+// Globbing rules:
+//
+//	 '*'       Matches any sequence of zero or more characters.
+//
+//	 '?'       Matches exactly one character.
+//
+//	[...]      Matches one character from the enclosed list of
+//	           characters.
+//
+//	[^...]     Matches one character not in the enclosed list.
+//
+//	 '#'       Matches any sequence of one or more digits with an
+//	           optional + or - sign in front
+func strglob(tls *libc.TLS, zGlob uintptr, z uintptr) int32 { /* testdata/mptest.c:140:5: */
 	var c int32
 	var c2 int32
 	var invert int32
@@ -2673,19 +10788,22 @@ func strglob(tls *libc.TLS, zGlob uintptr, z uintptr) int32 {
 	return libc.Bool32(int32(*(*int8)(unsafe.Pointer(z))) == 0)
 }
 
-func maybeClose(tls *libc.TLS, pOut uintptr) {
+// Close output stream pOut if it is not stdout or stderr
+func maybeClose(tls *libc.TLS, pOut uintptr) { /* testdata/mptest.c:212:13: */
 	if pOut != libc.X__stdoutp && pOut != libc.X__stderrp {
 		libc.Xfclose(tls, pOut)
 	}
 }
 
-func errorMessage(tls *libc.TLS, zFormat uintptr, va uintptr) {
+// Print an error message
+func errorMessage(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/mptest.c:219:13: */
 	bp := tls.Alloc(38)
 	defer tls.Free(38)
 
 	var ap va_list
 	_ = ap
 	var zMsg uintptr
+	// var zPrefix [30]int8 at bp+8, 30
 
 	ap = va
 	zMsg = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
@@ -2703,13 +10821,15 @@ func errorMessage(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	g.nError++
 }
 
-func fatalError(tls *libc.TLS, zFormat uintptr, va uintptr) {
+// Print an error message and then quit.
+func fatalError(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/mptest.c:245:13: */
 	bp := tls.Alloc(38)
 	defer tls.Free(38)
 
 	var ap va_list
 	_ = ap
 	var zMsg uintptr
+	// var zPrefix [30]int8 at bp+8, 30
 
 	ap = va
 	zMsg = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
@@ -2738,13 +10858,15 @@ func fatalError(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	libc.Xexit(tls, 1)
 }
 
-func logMessage(tls *libc.TLS, zFormat uintptr, va uintptr) {
+// Print a log message
+func logMessage(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/mptest.c:280:13: */
 	bp := tls.Alloc(38)
 	defer tls.Free(38)
 
 	var ap va_list
 	_ = ap
 	var zMsg uintptr
+	// var zPrefix [30]int8 at bp+8, 30
 
 	ap = va
 	zMsg = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
@@ -2757,7 +10879,8 @@ func logMessage(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	sqlite3.Xsqlite3_free(tls, zMsg)
 }
 
-func clipLength(tls *libc.TLS, z uintptr) int32 {
+// Return the length of a string omitting trailing whitespace
+func clipLength(tls *libc.TLS, z uintptr) int32 { /* testdata/mptest.c:298:12: */
 	var n int32 = int32(libc.Xstrlen(tls, z))
 	for n > 0 && isspace(tls, int32(uint8(*(*int8)(unsafe.Pointer(z + uintptr(n-1)))))) != 0 {
 		n--
@@ -2765,21 +10888,23 @@ func clipLength(tls *libc.TLS, z uintptr) int32 {
 	return n
 }
 
-func vfsNameFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) {
+// Auxiliary SQL function to return the name of the VFS
+func vfsNameFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) { /* testdata/mptest.c:307:13: */
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
 	var db uintptr = sqlite3.Xsqlite3_context_db_handle(tls, context)
-	*(*uintptr)(unsafe.Pointer(bp)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp /* zVfs */)) = uintptr(0)
 	_ = argc
 	_ = argv
 	sqlite3.Xsqlite3_file_control(tls, db, ts+65, SQLITE_FCNTL_VFSNAME, bp)
 	if *(*uintptr)(unsafe.Pointer(bp)) != 0 {
-		sqlite3.Xsqlite3_result_text(tls, context, *(*uintptr)(unsafe.Pointer(bp)), -1, *(*uintptr)(unsafe.Pointer(&struct{ f func(*libc.TLS, uintptr) }{sqlite3.Xsqlite3_free})))
+		sqlite3.Xsqlite3_result_text(tls, context, *(*uintptr)(unsafe.Pointer(bp /* zVfs */)), -1, *(*uintptr)(unsafe.Pointer(&struct{ f func(*libc.TLS, uintptr) }{sqlite3.Xsqlite3_free})))
 	}
 }
 
-func busyHandler(tls *libc.TLS, pCD uintptr, count int32) int32 {
+// Busy handler with a g.iTimeout-millisecond timeout
+func busyHandler(tls *libc.TLS, pCD uintptr, count int32) int32 { /* testdata/mptest.c:325:12: */
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -2794,7 +10919,8 @@ func busyHandler(tls *libc.TLS, pCD uintptr, count int32) int32 {
 	return 1
 }
 
-func sqlTraceCallback(tls *libc.TLS, NotUsed1 uintptr, zSql uintptr) {
+// SQL Trace callback
+func sqlTraceCallback(tls *libc.TLS, NotUsed1 uintptr, zSql uintptr) { /* testdata/mptest.c:338:13: */
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -2802,7 +10928,8 @@ func sqlTraceCallback(tls *libc.TLS, NotUsed1 uintptr, zSql uintptr) {
 	logMessage(tls, ts+89, libc.VaList(bp, clipLength(tls, zSql), zSql))
 }
 
-func sqlErrorCallback(tls *libc.TLS, pArg uintptr, iErrCode int32, zMsg uintptr) {
+// SQL error log callback
+func sqlErrorCallback(tls *libc.TLS, pArg uintptr, iErrCode int32, zMsg uintptr) { /* testdata/mptest.c:346:13: */
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
@@ -2823,7 +10950,8 @@ func sqlErrorCallback(tls *libc.TLS, pArg uintptr, iErrCode int32, zMsg uintptr)
 	}
 }
 
-func prepareSql(tls *libc.TLS, zFormat uintptr, va uintptr) uintptr {
+// Prepare an SQL statement.  Issue a fatal error if unable.
+func prepareSql(tls *libc.TLS, zFormat uintptr, va uintptr) uintptr { /* testdata/mptest.c:361:21: */
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
@@ -2831,20 +10959,21 @@ func prepareSql(tls *libc.TLS, zFormat uintptr, va uintptr) uintptr {
 	_ = ap
 	var zSql uintptr
 	var rc int32
-	*(*uintptr)(unsafe.Pointer(bp + 16)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp + 16 /* pStmt */)) = uintptr(0)
 	ap = va
 	zSql = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
 	_ = ap
 	rc = sqlite3.Xsqlite3_prepare_v2(tls, g.db, zSql, -1, bp+16, uintptr(0))
 	if rc != SQLITE_OK {
-		sqlite3.Xsqlite3_finalize(tls, *(*uintptr)(unsafe.Pointer(bp + 16)))
+		sqlite3.Xsqlite3_finalize(tls, *(*uintptr)(unsafe.Pointer(bp + 16 /* pStmt */)))
 		fatalError(tls, ts+122, libc.VaList(bp, sqlite3.Xsqlite3_errmsg(tls, g.db), zSql))
 	}
 	sqlite3.Xsqlite3_free(tls, zSql)
-	return *(*uintptr)(unsafe.Pointer(bp + 16))
+	return *(*uintptr)(unsafe.Pointer(bp + 16 /* pStmt */))
 }
 
-func runSql(tls *libc.TLS, zFormat uintptr, va uintptr) {
+// Run arbitrary SQL.  Issue a fatal error on failure.
+func runSql(tls *libc.TLS, zFormat uintptr, va uintptr) { /* testdata/mptest.c:381:13: */
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -2862,7 +10991,8 @@ func runSql(tls *libc.TLS, zFormat uintptr, va uintptr) {
 	sqlite3.Xsqlite3_free(tls, zSql)
 }
 
-func trySql(tls *libc.TLS, zFormat uintptr, va uintptr) int32 {
+// Try to run arbitrary SQL.  Return success code.
+func trySql(tls *libc.TLS, zFormat uintptr, va uintptr) int32 { /* testdata/mptest.c:398:12: */
 	var ap va_list
 	_ = ap
 	var zSql uintptr
@@ -2875,22 +11005,26 @@ func trySql(tls *libc.TLS, zFormat uintptr, va uintptr) int32 {
 	return rc
 }
 
+// Structure for holding an arbitrary length string
 type String1 = struct {
 	z      uintptr
 	n      int32
 	nAlloc int32
-}
+} /* testdata/mptest.c:412:9 */
 
-type String = String1
+// Structure for holding an arbitrary length string
+type String = String1 /* testdata/mptest.c:412:23 */
 
-func stringFree(tls *libc.TLS, p uintptr) {
+// Free a string
+func stringFree(tls *libc.TLS, p uintptr) { /* testdata/mptest.c:420:13: */
 	if (*String)(unsafe.Pointer(p)).z != 0 {
 		sqlite3.Xsqlite3_free(tls, (*String)(unsafe.Pointer(p)).z)
 	}
 	libc.X__builtin___memset_chk(tls, p, 0, uint64(unsafe.Sizeof(String{})), libc.X__builtin_object_size(tls, p, 0))
 }
 
-func stringAppend(tls *libc.TLS, p uintptr, z uintptr, n int32) {
+// Append n bytes of text to a string.  If n<0 append the entire string.
+func stringAppend(tls *libc.TLS, p uintptr, z uintptr, n int32) { /* testdata/mptest.c:426:13: */
 	if n < 0 {
 		n = int32(libc.Xstrlen(tls, z))
 	}
@@ -2908,7 +11042,8 @@ func stringAppend(tls *libc.TLS, p uintptr, z uintptr, n int32) {
 	*(*int8)(unsafe.Pointer((*String)(unsafe.Pointer(p)).z + uintptr((*String)(unsafe.Pointer(p)).n))) = int8(0)
 }
 
-func stringReset(tls *libc.TLS, p uintptr) {
+// Reset a string to an empty string
+func stringReset(tls *libc.TLS, p uintptr) { /* testdata/mptest.c:441:13: */
 	if (*String)(unsafe.Pointer(p)).z == uintptr(0) {
 		stringAppend(tls, p, ts+143, 1)
 	}
@@ -2916,7 +11051,8 @@ func stringReset(tls *libc.TLS, p uintptr) {
 	*(*int8)(unsafe.Pointer((*String)(unsafe.Pointer(p)).z)) = int8(0)
 }
 
-func stringAppendTerm(tls *libc.TLS, p uintptr, z uintptr) {
+// Append a new token onto the end of the string
+func stringAppendTerm(tls *libc.TLS, p uintptr, z uintptr) { /* testdata/mptest.c:448:13: */
 	var i int32
 	if (*String)(unsafe.Pointer(p)).n != 0 {
 		stringAppend(tls, p, ts+143, 1)
@@ -2947,7 +11083,8 @@ func stringAppendTerm(tls *libc.TLS, p uintptr, z uintptr) {
 	stringAppend(tls, p, ts+149, 1)
 }
 
-func evalCallback(tls *libc.TLS, pCData uintptr, argc int32, argv uintptr, azCol uintptr) int32 {
+// Callback function for evalSql()
+func evalCallback(tls *libc.TLS, pCData uintptr, argc int32, argv uintptr, azCol uintptr) int32 { /* testdata/mptest.c:478:12: */
 	var p uintptr = pCData
 	var i int32
 	_ = azCol
@@ -2957,7 +11094,9 @@ func evalCallback(tls *libc.TLS, pCData uintptr, argc int32, argv uintptr, azCol
 	return 0
 }
 
-func evalSql(tls *libc.TLS, p uintptr, zFormat uintptr, va uintptr) int32 {
+// Run arbitrary SQL and record the results in an output string
+// given by the first parameter.
+func evalSql(tls *libc.TLS, p uintptr, zFormat uintptr, va uintptr) int32 { /* testdata/mptest.c:490:12: */
 	bp := tls.Alloc(46)
 	defer tls.Free(46)
 
@@ -2965,52 +11104,59 @@ func evalSql(tls *libc.TLS, p uintptr, zFormat uintptr, va uintptr) int32 {
 	_ = ap
 	var zSql uintptr
 	var rc int32
-	*(*uintptr)(unsafe.Pointer(bp + 8)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp + 8 /* zErrMsg */)) = uintptr(0)
 	ap = va
 	zSql = sqlite3.Xsqlite3_vmprintf(tls, zFormat, ap)
 	_ = ap
 
 	rc = sqlite3.Xsqlite3_exec(tls, g.db, zSql, *(*uintptr)(unsafe.Pointer(&struct {
 		f func(*libc.TLS, uintptr, int32, uintptr, uintptr) int32
-	}{evalCallback})), p, bp+8)
+	}{evalCallback})), p, bp+8 /* &zErrMsg */)
 	sqlite3.Xsqlite3_free(tls, zSql)
 	if rc != 0 {
+		// var zErr [30]int8 at bp+16, 30
+
 		sqlite3.Xsqlite3_snprintf(tls, int32(unsafe.Sizeof([30]int8{})), bp+16, ts+151, libc.VaList(bp, rc))
 		stringAppendTerm(tls, p, bp+16)
 		if *(*uintptr)(unsafe.Pointer(bp + 8)) != 0 {
-			stringAppendTerm(tls, p, *(*uintptr)(unsafe.Pointer(bp + 8)))
-			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 8)))
+			stringAppendTerm(tls, p, *(*uintptr)(unsafe.Pointer(bp + 8 /* zErrMsg */)))
+			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 8 /* zErrMsg */)))
 		}
 	}
 	return rc
 }
 
-func evalFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) {
+// Auxiliary SQL function to recursively evaluate SQL.
+func evalFunc(tls *libc.TLS, context uintptr, argc int32, argv uintptr) { /* testdata/mptest.c:516:13: */
 	bp := tls.Alloc(24)
 	defer tls.Free(24)
 
 	var db uintptr = sqlite3.Xsqlite3_context_db_handle(tls, context)
 	var zSql uintptr = sqlite3.Xsqlite3_value_text(tls, *(*uintptr)(unsafe.Pointer(argv)))
+	// var res String at bp, 16
 
-	*(*uintptr)(unsafe.Pointer(bp + 16)) = uintptr(0)
+	*(*uintptr)(unsafe.Pointer(bp + 16 /* zErrMsg */)) = uintptr(0)
 	var rc int32
 	_ = argc
 	libc.X__builtin___memset_chk(tls, bp, 0, uint64(unsafe.Sizeof(String{})), libc.X__builtin_object_size(tls, bp, 0))
 	rc = sqlite3.Xsqlite3_exec(tls, db, zSql, *(*uintptr)(unsafe.Pointer(&struct {
 		f func(*libc.TLS, uintptr, int32, uintptr, uintptr) int32
-	}{evalCallback})), bp, bp+16)
+	}{evalCallback})), bp /* &res */, bp+16 /* &zErrMsg */)
 	if *(*uintptr)(unsafe.Pointer(bp + 16)) != 0 {
-		sqlite3.Xsqlite3_result_error(tls, context, *(*uintptr)(unsafe.Pointer(bp + 16)), -1)
-		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 16)))
+		sqlite3.Xsqlite3_result_error(tls, context, *(*uintptr)(unsafe.Pointer(bp + 16 /* zErrMsg */)), -1)
+		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 16 /* zErrMsg */)))
 	} else if rc != 0 {
 		sqlite3.Xsqlite3_result_error_code(tls, context, rc)
 	} else {
-		sqlite3.Xsqlite3_result_text(tls, context, (*String)(unsafe.Pointer(bp)).z, -1, libc.UintptrFromInt32(-1))
+		sqlite3.Xsqlite3_result_text(tls, context, (*String)(unsafe.Pointer(bp /* &res */)).z, -1, libc.UintptrFromInt32(-1))
 	}
 	stringFree(tls, bp)
 }
 
-func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr, pzTaskName uintptr) int32 {
+// Look up the next task for client iClient in the database.
+// Return the task script and the task number and mark that
+// task as being under way.
+func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr, pzTaskName uintptr) int32 { /* testdata/mptest.c:545:12: */
 	bp := tls.Alloc(80)
 	defer tls.Free(80)
 
@@ -3047,6 +11193,7 @@ func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr
 			return SQLITE_DONE
 		}
 		pStmt = prepareSql(tls,
+
 			ts+346, libc.VaList(bp+40, iClient))
 		rc = sqlite3.Xsqlite3_step(tls, pStmt)
 		if rc == SQLITE_ROW {
@@ -3062,6 +11209,7 @@ func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr
 			*(*uintptr)(unsafe.Pointer(pzTaskName)) = sqlite3.Xsqlite3_mprintf(tls, ts+438, libc.VaList(bp+48, sqlite3.Xsqlite3_column_text(tls, pStmt, 2)))
 			sqlite3.Xsqlite3_finalize(tls, pStmt)
 			runSql(tls,
+
 				ts+441, libc.VaList(bp+56, taskId))
 			g.iTimeout = DEFAULT_TIMEOUT
 			runSql(tls, ts+326, 0)
@@ -3089,11 +11237,14 @@ func startScript(tls *libc.TLS, iClient int32, pzScript uintptr, pTaskId uintptr
 	return int32(0)
 }
 
-func finishScript(tls *libc.TLS, iClient int32, taskId int32, bShutdown int32) int32 {
+// Mark a script as having finished.   Remove the CLIENT table entry
+// if bShutdown is true.
+func finishScript(tls *libc.TLS, iClient int32, taskId int32, bShutdown int32) int32 { /* testdata/mptest.c:627:12: */
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
 	runSql(tls,
+
 		ts+622, libc.VaList(bp, taskId))
 	if bShutdown != 0 {
 		runSql(tls, ts+295, libc.VaList(bp+8, iClient))
@@ -3101,7 +11252,10 @@ func finishScript(tls *libc.TLS, iClient int32, taskId int32, bShutdown int32) i
 	return SQLITE_OK
 }
 
-func startClient(tls *libc.TLS, iClient int32) {
+// Start up a client process for iClient, if it is not already
+// running.  If the client is already running, then this routine
+// is a no-op.
+func startClient(tls *libc.TLS, iClient int32) { /* testdata/mptest.c:642:13: */
 	bp := tls.Alloc(96)
 	defer tls.Free(96)
 
@@ -3132,7 +11286,8 @@ func startClient(tls *libc.TLS, iClient int32) {
 	}
 }
 
-func readFile(tls *libc.TLS, zFilename uintptr) uintptr {
+// Read the entire content of a file into memory
+func readFile(tls *libc.TLS, zFilename uintptr) uintptr { /* testdata/mptest.c:688:13: */
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -3152,7 +11307,8 @@ func readFile(tls *libc.TLS, zFilename uintptr) uintptr {
 	return z
 }
 
-func tokenLength(tls *libc.TLS, z uintptr, pnLine uintptr) int32 {
+// Return the length of the next token.
+func tokenLength(tls *libc.TLS, z uintptr, pnLine uintptr) int32 { /* testdata/mptest.c:708:12: */
 	var n int32 = 0
 	if isspace(tls, int32(uint8(*(*int8)(unsafe.Pointer(z))))) != 0 || int32(*(*int8)(unsafe.Pointer(z))) == '/' && int32(*(*int8)(unsafe.Pointer(z + 1))) == '*' {
 		var inC int32 = 0
@@ -3207,7 +11363,8 @@ func tokenLength(tls *libc.TLS, z uintptr, pnLine uintptr) int32 {
 	return n
 }
 
-func extractToken(tls *libc.TLS, zIn uintptr, nIn int32, zOut uintptr, nOut int32) int32 {
+// Copy a single token into a string buffer.
+func extractToken(tls *libc.TLS, zIn uintptr, nIn int32, zOut uintptr, nOut int32) int32 { /* testdata/mptest.c:753:12: */
 	var i int32
 	if nIn <= 0 {
 		*(*int8)(unsafe.Pointer(zOut)) = int8(0)
@@ -3220,7 +11377,8 @@ func extractToken(tls *libc.TLS, zIn uintptr, nIn int32, zOut uintptr, nOut int3
 	return i
 }
 
-func findEnd(tls *libc.TLS, z uintptr, pnLine uintptr) int32 {
+// Find the number of characters up to the start of the next "--end" token.
+func findEnd(tls *libc.TLS, z uintptr, pnLine uintptr) int32 { /* testdata/mptest.c:767:12: */
 	var n int32 = 0
 	for *(*int8)(unsafe.Pointer(z + uintptr(n))) != 0 && (libc.Xstrncmp(tls, z+uintptr(n), ts+898, uint64(5)) != 0 || !(isspace(tls, int32(uint8(*(*int8)(unsafe.Pointer(z + uintptr(n+5)))))) != 0)) {
 		n = n + tokenLength(tls, z+uintptr(n), pnLine)
@@ -3228,7 +11386,10 @@ func findEnd(tls *libc.TLS, z uintptr, pnLine uintptr) int32 {
 	return n
 }
 
-func findEndif(tls *libc.TLS, z uintptr, stopAtElse int32, pnLine uintptr) int32 {
+// Find the number of characters up to the first character past the
+// of the next "--endif"  or "--else" token. Nested --if commands are
+// also skipped.
+func findEndif(tls *libc.TLS, z uintptr, stopAtElse int32, pnLine uintptr) int32 { /* testdata/mptest.c:780:12: */
 	var n int32 = 0
 	for *(*int8)(unsafe.Pointer(z + uintptr(n))) != 0 {
 		var len int32 = tokenLength(tls, z+uintptr(n), pnLine)
@@ -3246,7 +11407,8 @@ func findEndif(tls *libc.TLS, z uintptr, stopAtElse int32, pnLine uintptr) int32
 	return n
 }
 
-func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uintptr) {
+// Wait for a client process to complete all its tasks
+func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uintptr) { /* testdata/mptest.c:802:13: */
 	bp := tls.Alloc(32)
 	defer tls.Free(32)
 
@@ -3254,10 +11416,12 @@ func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uint
 	var rc int32
 	if iClient > 0 {
 		pStmt = prepareSql(tls,
+
 			ts+924,
 			libc.VaList(bp, iClient))
 	} else {
 		pStmt = prepareSql(tls,
+
 			ts+1020, 0)
 	}
 	g.iTimeout = 0
@@ -3271,7 +11435,7 @@ func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uint
 	g.iTimeout = DEFAULT_TIMEOUT
 	if rc != SQLITE_DONE {
 		if zErrPrefix == uintptr(0) {
-			zErrPrefix = ts + 1101
+			zErrPrefix = ts + 1101 /* "" */
 		}
 		if iClient > 0 {
 			errorMessage(tls, ts+1102, libc.VaList(bp+8, zErrPrefix, iClient))
@@ -3281,7 +11445,8 @@ func waitForClient(tls *libc.TLS, iClient int32, iTimeout int32, zErrPrefix uint
 	}
 }
 
-func filenameTail(tls *libc.TLS, z uintptr) uintptr {
+// Return a pointer to the tail of a filename
+func filenameTail(tls *libc.TLS, z uintptr) uintptr { /* testdata/mptest.c:840:13: */
 	var i int32
 	var j int32
 	for i = libc.AssignInt32(&j, 0); *(*int8)(unsafe.Pointer(z + uintptr(i))) != 0; i++ {
@@ -3292,7 +11457,8 @@ func filenameTail(tls *libc.TLS, z uintptr) uintptr {
 	return z + uintptr(j)
 }
 
-func booleanValue(tls *libc.TLS, zArg uintptr) int32 {
+// Interpret zArg as a boolean value.  Return either 0 or 1.
+func booleanValue(tls *libc.TLS, zArg uintptr) int32 { /* testdata/mptest.c:849:12: */
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -3315,17 +11481,22 @@ func booleanValue(tls *libc.TLS, zArg uintptr) int32 {
 	return 0
 }
 
-func test_breakpoint(tls *libc.TLS) {
+// This routine exists as a convenient place to set a debugger
+// breakpoint.
+func test_breakpoint(tls *libc.TLS) { /* testdata/mptest.c:868:13: */
 	atomic.AddInt32(&cnt, 1)
 }
 
-var cnt int32 = 0
+var cnt int32 = 0 /* testdata/mptest.c:868:56 */
 
-func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFilename uintptr) {
+// Maximum number of arguments to a --command
+
+// Run a script.
+func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFilename uintptr) { /* testdata/mptest.c:876:13: */
 	bp := tls.Alloc(1610)
 	defer tls.Free(1610)
 
-	*(*int32)(unsafe.Pointer(bp + 376)) = 1
+	*(*int32)(unsafe.Pointer(bp + 376 /* lineno */)) = 1
 	var prevLine int32 = 1
 	var ii int32 = 0
 	var iBegin int32 = 0
@@ -3334,11 +11505,18 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 	var j int32
 	var len int32
 	var nArg int32
+	// var sResult String at bp+360, 16
+
+	// var zCmd [30]int8 at bp+380, 30
+
+	// var zError [1000]int8 at bp+610, 1000
+
+	// var azArg [2][100]int8 at bp+410, 200
 
 	libc.X__builtin___memset_chk(tls, bp+360, 0, uint64(unsafe.Sizeof(String{})), libc.X__builtin_object_size(tls, bp+360, 0))
 	stringReset(tls, bp+360)
 	for libc.AssignInt32(&c, int32(*(*int8)(unsafe.Pointer(zScript + uintptr(ii))))) != 0 {
-		prevLine = *(*int32)(unsafe.Pointer(bp + 376))
+		prevLine = *(*int32)(unsafe.Pointer(bp + 376 /* lineno */))
 		len = tokenLength(tls, zScript+uintptr(ii), bp+376)
 		if isspace(tls, int32(uint8(c))) != 0 || c == '/' && int32(*(*int8)(unsafe.Pointer(zScript + uintptr(ii+1)))) == '*' {
 			ii = ii + len
@@ -3349,6 +11527,7 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			continue
 		}
 
+		// Run any prior SQL before processing the new --command
 		if ii > iBegin {
 			var zSql uintptr = sqlite3.Xsqlite3_mprintf(tls, ts+1204, libc.VaList(bp, ii-iBegin, zScript+uintptr(iBegin)))
 			evalSql(tls, bp+360, zSql, 0)
@@ -3356,6 +11535,7 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			iBegin = ii + len
 		}
 
+		// Parse the --command
 		if g.iTrace >= 2 {
 			logMessage(tls, ts+1204, libc.VaList(bp+16, len, zScript+uintptr(ii)))
 		}
@@ -3374,25 +11554,56 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			*(*int8)(unsafe.Pointer(bp + 410 + uintptr(libc.PostIncInt32(&j, 1))*100)) = int8(0)
 		}
 
+		//  --sleep N
+		//
+		// Pause for N milliseconds
 		if libc.Xstrcmp(tls, bp+380, ts+1209) == 0 {
 			sqlite3.Xsqlite3_sleep(tls, libc.Xatoi(tls, bp+410))
-		} else if libc.Xstrcmp(tls, bp+380, ts+1215) == 0 {
+		} else
+
+		//   --exit N
+		//
+		// Exit this process.  If N>0 then exit without shutting down
+		// SQLite.  (In other words, simulate a crash.)
+		if libc.Xstrcmp(tls, bp+380, ts+1215) == 0 {
 			var rc int32 = libc.Xatoi(tls, bp+410)
 			finishScript(tls, iClient, taskId, 1)
 			if rc == 0 {
 				sqlite3.Xsqlite3_close(tls, g.db)
 			}
 			libc.Xexit(tls, rc)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1220) == 0 {
+		} else
+
+		//   --testcase NAME
+		//
+		// Begin a new test case.  Announce in the log that the test case
+		// has begun.
+		if libc.Xstrcmp(tls, bp+380, ts+1220) == 0 {
 			if g.iTrace == 1 {
 				logMessage(tls, ts+1204, libc.VaList(bp+32, len-1, zScript+uintptr(ii)))
 			}
 			stringReset(tls, bp+360)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1229) == 0 && iClient > 0 {
+		} else
+
+		//   --finish
+		//
+		// Mark the current task as having finished, even if it is not.
+		// This can be used in conjunction with --exit to simulate a crash.
+		if libc.Xstrcmp(tls, bp+380, ts+1229) == 0 && iClient > 0 {
 			finishScript(tls, iClient, taskId, 1)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1236) == 0 {
+		} else
+
+		//  --reset
+		//
+		// Reset accumulated results back to an empty string
+		if libc.Xstrcmp(tls, bp+380, ts+1236) == 0 {
 			stringReset(tls, bp+360)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1242) == 0 {
+		} else
+
+		//  --match ANSWER...
+		//
+		// Check to see if output matches ANSWER.  Report an error if not.
+		if libc.Xstrcmp(tls, bp+380, ts+1242) == 0 {
 			var jj int32
 			var zAns uintptr = zScript + uintptr(ii)
 			for jj = 7; jj < len-1 && isspace(tls, int32(uint8(*(*int8)(unsafe.Pointer(zAns + uintptr(jj)))))) != 0; jj++ {
@@ -3400,11 +11611,18 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			zAns += uintptr(jj)
 			if len-jj-1 != (*String)(unsafe.Pointer(bp+360)).n || libc.Xstrncmp(tls, (*String)(unsafe.Pointer(bp+360)).z, zAns, uint64(len-jj-1)) != 0 {
 				errorMessage(tls, ts+1248,
-					libc.VaList(bp+48, prevLine, zFilename, len-jj-1, zAns, (*String)(unsafe.Pointer(bp+360)).z))
+					libc.VaList(bp+48, prevLine, zFilename, len-jj-1, zAns, (*String)(unsafe.Pointer(bp+360 /* &sResult */)).z))
 			}
 			g.nTest++
 			stringReset(tls, bp+360)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1293) == 0 || libc.Xstrcmp(tls, bp+380, ts+1298) == 0 {
+		} else
+
+		//  --glob ANSWER...
+		//  --notglob ANSWER....
+		//
+		// Check to see if output does or does not match the glob pattern
+		// ANSWER.
+		if libc.Xstrcmp(tls, bp+380, ts+1293) == 0 || libc.Xstrcmp(tls, bp+380, ts+1298) == 0 {
 			var jj int32
 			var zAns uintptr = zScript + uintptr(ii)
 			var zCopy uintptr
@@ -3415,14 +11633,24 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			zCopy = sqlite3.Xsqlite3_mprintf(tls, ts+1204, libc.VaList(bp+88, len-jj-1, zAns))
 			if libc.Bool32(sqlite3.Xsqlite3_strglob(tls, zCopy, (*String)(unsafe.Pointer(bp+360)).z) == 0)^isGlob != 0 {
 				errorMessage(tls, ts+1306,
-					libc.VaList(bp+104, prevLine, zFilename, zCopy, (*String)(unsafe.Pointer(bp+360)).z))
+					libc.VaList(bp+104, prevLine, zFilename, zCopy, (*String)(unsafe.Pointer(bp+360 /* &sResult */)).z))
 			}
 			sqlite3.Xsqlite3_free(tls, zCopy)
 			g.nTest++
 			stringReset(tls, bp+360)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1349) == 0 {
-			logMessage(tls, ts+438, libc.VaList(bp+136, (*String)(unsafe.Pointer(bp+360)).z))
-		} else if libc.Xstrcmp(tls, bp+380, ts+1356) == 0 {
+		} else
+
+		//  --output
+		//
+		// Output the result of the previous SQL.
+		if libc.Xstrcmp(tls, bp+380, ts+1349) == 0 {
+			logMessage(tls, ts+438, libc.VaList(bp+136, (*String)(unsafe.Pointer(bp+360 /* &sResult */)).z))
+		} else
+
+		//  --source FILENAME
+		//
+		// Run a subscript from a separate file.
+		if libc.Xstrcmp(tls, bp+380, ts+1356) == 0 {
 			var zNewFile uintptr
 			var zNewScript uintptr
 			var zToDel uintptr = uintptr(0)
@@ -3445,12 +11673,22 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 				logMessage(tls, ts+1390, libc.VaList(bp+176, zNewFile))
 			}
 			sqlite3.Xsqlite3_free(tls, zToDel)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1407) == 0 {
+		} else
+
+		//  --print MESSAGE....
+		//
+		// Output the remainder of the line to the log file
+		if libc.Xstrcmp(tls, bp+380, ts+1407) == 0 {
 			var jj int32
 			for jj = 7; jj < len && isspace(tls, int32(uint8(*(*int8)(unsafe.Pointer(zScript + uintptr(ii+jj)))))) != 0; jj++ {
 			}
 			logMessage(tls, ts+1204, libc.VaList(bp+184, len-jj, zScript+uintptr(ii)+uintptr(jj)))
-		} else if libc.Xstrcmp(tls, bp+380, ts+1413) == 0 {
+		} else
+
+		//  --if EXPR
+		//
+		// Skip forward to the next matching --endif or --else if EXPR is false.
+		if libc.Xstrcmp(tls, bp+380, ts+1413) == 0 {
 			var jj int32
 			var rc int32
 			var pStmt uintptr
@@ -3462,15 +11700,40 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 				ii = ii + findEndif(tls, zScript+uintptr(ii)+uintptr(len), 1, bp+376)
 			}
 			sqlite3.Xsqlite3_finalize(tls, pStmt)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1428) == 0 {
+		} else
+
+		//  --else
+		//
+		// This command can only be encountered if currently inside an --if that
+		// is true.  Skip forward to the next matching --endif.
+		if libc.Xstrcmp(tls, bp+380, ts+1428) == 0 {
 			ii = ii + findEndif(tls, zScript+uintptr(ii)+uintptr(len), 0, bp+376)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1433) == 0 {
-		} else if libc.Xstrcmp(tls, bp+380, ts+1439) == 0 && iClient == 0 {
+		} else
+
+		//  --endif
+		//
+		// This command can only be encountered if currently inside an --if that
+		// is true or an --else of a false if.  This is a no-op.
+		if libc.Xstrcmp(tls, bp+380, ts+1433) == 0 {
+			// no-op
+		} else
+
+		//  --start CLIENT
+		//
+		// Start up the given client.
+		if libc.Xstrcmp(tls, bp+380, ts+1439) == 0 && iClient == 0 {
 			var iNewClient int32 = libc.Xatoi(tls, bp+410)
 			if iNewClient > 0 {
 				startClient(tls, iNewClient)
 			}
-		} else if libc.Xstrcmp(tls, bp+380, ts+1445) == 0 && iClient == 0 {
+		} else
+
+		//  --wait CLIENT TIMEOUT
+		//
+		// Wait until all tasks complete for the given client.  If CLIENT is
+		// "all" then wait for all clients to complete.  Wait no longer than
+		// TIMEOUT milliseconds (default 10,000)
+		if libc.Xstrcmp(tls, bp+380, ts+1445) == 0 && iClient == 0 {
 			var iTimeout int32
 			if nArg >= 2 {
 				iTimeout = libc.Xatoi(tls, bp+410+1*100)
@@ -3480,7 +11743,15 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			sqlite3.Xsqlite3_snprintf(tls, int32(unsafe.Sizeof([1000]int8{})), bp+610, ts+1450,
 				libc.VaList(bp+216, prevLine, zFilename))
 			waitForClient(tls, libc.Xatoi(tls, bp+410), iTimeout, bp+610)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1465) == 0 && iClient == 0 {
+		} else
+
+		//  --task CLIENT
+		//     <task-content-here>
+		//  --end
+		//
+		// Assign work to a client.  Start the client if it is not running
+		// already.
+		if libc.Xstrcmp(tls, bp+380, ts+1465) == 0 && iClient == 0 {
 			var iTarget int32 = libc.Xatoi(tls, bp+410)
 			var iEnd int32
 			var zTask uintptr
@@ -3505,9 +11776,20 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 			iEnd = iEnd + tokenLength(tls, zScript+uintptr(ii)+uintptr(len)+uintptr(iEnd), bp+376)
 			len = len + iEnd
 			iBegin = ii + len
-		} else if libc.Xstrcmp(tls, bp+380, ts+1569) == 0 {
+		} else
+
+		//  --breakpoint
+		//
+		// This command calls "test_breakpoint()" which is a routine provided
+		// as a convenient place to set a debugger breakpoint.
+		if libc.Xstrcmp(tls, bp+380, ts+1569) == 0 {
 			test_breakpoint(tls)
-		} else if libc.Xstrcmp(tls, bp+380, ts+1580) == 0 {
+		} else
+
+		//  --show-sql-errors BOOLEAN
+		//
+		// Turn display of SQL errors on and off.
+		if libc.Xstrcmp(tls, bp+380, ts+1580) == 0 {
 			g.bIgnoreSqlErrors = func() int32 {
 				if nArg >= 1 {
 					return libc.BoolInt32(!(booleanValue(tls, bp+410) != 0))
@@ -3528,7 +11810,13 @@ func runScript(tls *libc.TLS, iClient int32, taskId int32, zScript uintptr, zFil
 	stringFree(tls, bp+360)
 }
 
-func findOption(tls *libc.TLS, azArg uintptr, pnArg uintptr, zOption uintptr, hasArg int32) uintptr {
+// Look for a command-line option.  If present, return a pointer.
+// Return NULL if missing.
+//
+// hasArg==0 means the option is a flag.  It is either present or not.
+// hasArg==1 means the option has an argument.  Return a pointer to the
+// argument.
+func findOption(tls *libc.TLS, azArg uintptr, pnArg uintptr, zOption uintptr, hasArg int32) uintptr { /* testdata/mptest.c:1205:13: */
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -3573,7 +11861,8 @@ func findOption(tls *libc.TLS, azArg uintptr, pnArg uintptr, zOption uintptr, ha
 	return zReturn
 }
 
-func usage(tls *libc.TLS, argv0 uintptr) {
+// Print a usage message for the program and exit
+func usage(tls *libc.TLS, argv0 uintptr) { /* testdata/mptest.c:1245:13: */
 	bp := tls.Alloc(8)
 	defer tls.Free(8)
 
@@ -3586,11 +11875,13 @@ func usage(tls *libc.TLS, argv0 uintptr) {
 	}
 	libc.Xfprintf(tls, libc.X__stderrp, ts+1680, libc.VaList(bp, zTail))
 	libc.Xfprintf(tls, libc.X__stderrp,
+
 		ts+1719, 0)
 	libc.Xexit(tls, 1)
 }
 
-func unrecognizedArguments(tls *libc.TLS, argv0 uintptr, nArg int32, azArg uintptr) {
+// Report on unrecognized arguments
+func unrecognizedArguments(tls *libc.TLS, argv0 uintptr, nArg int32, azArg uintptr) { /* testdata/mptest.c:1269:13: */
 	bp := tls.Alloc(16)
 	defer tls.Free(16)
 
@@ -3603,16 +11894,20 @@ func unrecognizedArguments(tls *libc.TLS, argv0 uintptr, nArg int32, azArg uintp
 	libc.Xexit(tls, 1)
 }
 
-func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
+func main1(tls *libc.TLS, argc int32, argv uintptr) int32 { /* testdata/mptest.c:1283:18: */
 	bp := tls.Alloc(264)
 	defer tls.Free(264)
 
 	var zClient uintptr
 	var iClient int32
+	// var n int32 at bp+232, 4
 
 	var i int32
 	var openFlags int32 = SQLITE_OPEN_READWRITE
 	var rc int32
+	// var zScript uintptr at bp+240, 8
+
+	// var taskId int32 at bp+248, 4
 
 	var zTrace uintptr
 	var zCOption uintptr
@@ -3620,7 +11915,7 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
 	var zNRep uintptr
 	var nRep int32 = 1
 	var iRep int32
-	var iTmout int32 = 0
+	var iTmout int32 = 0 // Default: no timeout
 	var zTmout uintptr
 
 	g.argv0 = *(*uintptr)(unsafe.Pointer(argv))
@@ -3634,11 +11929,12 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
 	}
 	if libc.Xstrcmp(tls, sqlite3.Xsqlite3_sourceid(tls), ts+2332) != 0 {
 		libc.Xfprintf(tls, libc.X__stderrp,
+
 			ts+2417,
 			libc.VaList(bp, sqlite3.Xsqlite3_sourceid(tls), ts+2332))
 		libc.Xexit(tls, 1)
 	}
-	*(*int32)(unsafe.Pointer(bp + 232)) = argc - 2
+	*(*int32)(unsafe.Pointer(bp + 232 /* n */)) = argc - 2
 	sqlite3.Xsqlite3_snprintf(tls, int32(unsafe.Sizeof([32]int8{})), uintptr(unsafe.Pointer(&g))+64, ts+2477, libc.VaList(bp+16, libc.Xgetpid(tls)))
 	zJMode = findOption(tls, argv+uintptr(2)*8, bp+232, ts+2489, 1)
 	zNRep = findOption(tls, argv+uintptr(2)*8, bp+232, ts+2501, 1)
@@ -3706,9 +12002,9 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
 				libc.Xprintf(tls, ts+2737,
 					libc.VaList(bp+88, func() uintptr {
 						if nTry > 5 {
-							return ts + 2766
+							return ts + 2766 /* "still " */
 						}
-						return ts + 1101
+						return ts + 1101 /* "" */
 					}(), g.zDbFile))
 			}
 			rc = libc.Xunlink(tls, g.zDbFile)
@@ -3756,26 +12052,26 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
 	}
 	if iClient > 0 {
 		if *(*int32)(unsafe.Pointer(bp + 232)) > 0 {
-			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232)), argv+uintptr(2)*8)
+			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232 /* n */)), argv+uintptr(2)*8)
 		}
 		if g.iTrace != 0 {
 			logMessage(tls, ts+2891, 0)
 		}
 		for 1 != 0 {
-			*(*uintptr)(unsafe.Pointer(bp + 256)) = uintptr(0)
+			*(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)) = uintptr(0)
 			rc = startScript(tls, iClient, bp+240, bp+248, bp+256)
 			if rc == SQLITE_DONE {
 				break
 			}
 			if g.iTrace != 0 {
-				logMessage(tls, ts+2904, libc.VaList(bp+136, *(*uintptr)(unsafe.Pointer(bp + 256)), *(*int32)(unsafe.Pointer(bp + 248))))
+				logMessage(tls, ts+2904, libc.VaList(bp+136, *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)), *(*int32)(unsafe.Pointer(bp + 248 /* taskId */))))
 			}
-			runScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248)), *(*uintptr)(unsafe.Pointer(bp + 240)), *(*uintptr)(unsafe.Pointer(bp + 256)))
+			runScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248 /* taskId */)), *(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)), *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)))
 			if g.iTrace != 0 {
-				logMessage(tls, ts+2918, libc.VaList(bp+152, *(*uintptr)(unsafe.Pointer(bp + 256)), *(*int32)(unsafe.Pointer(bp + 248))))
+				logMessage(tls, ts+2918, libc.VaList(bp+152, *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)), *(*int32)(unsafe.Pointer(bp + 248 /* taskId */))))
 			}
-			finishScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248)), 0)
-			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 256)))
+			finishScript(tls, iClient, *(*int32)(unsafe.Pointer(bp + 248 /* taskId */)), 0)
+			sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 256 /* zTaskName */)))
 			sqlite3.Xsqlite3_sleep(tls, 10)
 		}
 		if g.iTrace != 0 {
@@ -3788,21 +12084,22 @@ func main1(tls *libc.TLS, argc int32, argv uintptr) int32 {
 			fatalError(tls, ts+2941, 0)
 		}
 		if *(*int32)(unsafe.Pointer(bp + 232)) > 1 {
-			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232)), argv+uintptr(2)*8)
+			unrecognizedArguments(tls, *(*uintptr)(unsafe.Pointer(argv)), *(*int32)(unsafe.Pointer(bp + 232 /* n */)), argv+uintptr(2)*8)
 		}
 		runSql(tls,
+
 			ts+2965, 0)
-		*(*uintptr)(unsafe.Pointer(bp + 240)) = readFile(tls, *(*uintptr)(unsafe.Pointer(argv + 2*8)))
+		*(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)) = readFile(tls, *(*uintptr)(unsafe.Pointer(argv + 2*8)))
 		for iRep = 1; iRep <= nRep; iRep++ {
 			if g.iTrace != 0 {
 				logMessage(tls, ts+3401, libc.VaList(bp+168, *(*uintptr)(unsafe.Pointer(argv + 2*8)), iRep))
 			}
-			runScript(tls, 0, 0, *(*uintptr)(unsafe.Pointer(bp + 240)), *(*uintptr)(unsafe.Pointer(argv + 2*8)))
+			runScript(tls, 0, 0, *(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)), *(*uintptr)(unsafe.Pointer(argv + 2*8)))
 			if g.iTrace != 0 {
 				logMessage(tls, ts+3429, libc.VaList(bp+184, *(*uintptr)(unsafe.Pointer(argv + 2*8)), iRep))
 			}
 		}
-		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 240)))
+		sqlite3.Xsqlite3_free(tls, *(*uintptr)(unsafe.Pointer(bp + 240 /* zScript */)))
 		waitForClient(tls, 0, 2000, ts+3455)
 		trySql(tls, ts+3475, 0)
 		sqlite3.Xsqlite3_sleep(tls, 10)

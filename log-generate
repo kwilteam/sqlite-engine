@@ -1,0 +1,390 @@
+Running on darwin/arm64.
+target: darwin/arm64
+C front end 1/1: testdata/sqlite-amalgamation-3410200/sqlite3.c ... 718.034667ms
+processing file scope declarations ... 417.38225ms
+processing symbol table ... 992.667µs
+processing struct/union types ... 687.174708ms
+processing enum values ... 7.784875ms
+processing #defines ... 20.865833ms
+processing static local declarations ... 400.973875ms
+Go back end 1/1: sqlite3.c ... 7.479003959s
+target: darwin/arm64
+C front end 1/1: testdata/sqlite-amalgamation-3410200/sqlite3.c ... 831.733917ms
+processing file scope declarations ... 434.652458ms
+processing symbol table ... 1.044875ms
+processing struct/union types ... 731.885459ms
+processing enum values ... 8.156958ms
+processing #defines ... 19.477334ms
+processing static local declarations ... 480.160417ms
+Go back end 1/1: sqlite3.c ... 8.103687417s
+target: darwin/arm64
+C front end 1/1: testdata/mptest.c ... 52.106542ms
+processing file scope declarations ... 7.54325ms
+processing symbol table ... 367.542µs
+processing struct/union types ... 15.875959ms
+processing enum values ... 1.65625ms
+processing #defines ... 7.372084ms
+processing static local declarations ... 6.506ms
+Go back end 1/1: mptest.c ... 73.961166ms
+target: darwin/arm64
+C front end 1/1: testdata/sqlite-src-3410200/test/speedtest1.c ... 42.738458ms
+processing file scope declarations ... 9.474417ms
+processing symbol table ... 325.625µs
+processing struct/union types ... 18.097167ms
+processing enum values ... 1.58825ms
+processing #defines ... 4.287834ms
+processing static local declarations ... 8.732667ms
+Go back end 1/1: speedtest1.c ... 123.440167ms
+==== newCmd make
+	distclean
+rm -f *.lo *.la *.o sqlite3 libsqlite3.la
+rm -f sqlite3.h opcodes.*
+rm -rf .libs .deps
+rm -f lemon lempar.c parse.* sqlite*.tar.gz
+rm -f mkkeywordhash keywordhash.h
+rm -f mksourceid
+rm -f *.da *.bb *.bbg gmon.out
+rm -rf tsrc .target_source
+rm -f tclsqlite3
+rm -f testfixture test.db
+rm -f LogEst fts3view rollback-test showdb
+rm -f showjournal showstat4 showwal speedtest1
+rm -f wordcount changeset
+rm -f sqlite3.dll sqlite3.lib sqlite3.exp sqlite3.def
+rm -f sqlite3.c
+rm -f sqlite3rc.h
+rm -f shell.c sqlite3ext.h
+rm -f sqlite3_analyzer sqlite3_analyzer.c
+rm -f sqlite-*-output.vsix
+rm -f mptester mptester.exe
+rm -f rbu rbu.exe
+rm -f srcck1 srcck1.exe
+rm -f fuzzershell fuzzershell.exe
+rm -f fuzzcheck fuzzcheck.exe
+rm -f sqldiff sqldiff.exe
+rm -f dbhash dbhash.exe
+rm -f fts5.* fts5parse.*
+rm -f threadtest5
+rm -f sqlite_cfg.h config.log config.status libtool Makefile sqlite3.pc \
+		testfixture sqlite3 sqlite3_analyzer sqldiff dbhash sqltclsh
+==== newCmd ./configure
+	--with-tcl=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Tcl.framework
+checking build system type... arm-apple-darwin21.6.0
+checking host system type... arm-apple-darwin21.6.0
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /Library/Developer/CommandLineTools/usr/bin/ld
+checking if the linker (/Library/Developer/CommandLineTools/usr/bin/ld) is GNU ld... no
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 786432
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking for /Library/Developer/CommandLineTools/usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for ar... ar
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for dsymutil... dsymutil
+checking for nmedit... nmedit
+checking for lipo... lipo
+checking for otool... otool
+checking for otool64... no
+checking for -single_module linker flag... yes
+checking for -exported_symbols_list linker flag... yes
+checking how to run the C preprocessor... gcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... yes
+checking for gcc option to produce PIC... -fno-common -DPIC
+checking if gcc PIC flag -fno-common -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/Library/Developer/CommandLineTools/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin21.6.0 dyld
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking for int8_t... yes
+checking for int16_t... yes
+checking for int32_t... yes
+checking for int64_t... yes
+checking for intptr_t... yes
+checking for uint8_t... yes
+checking for uint16_t... yes
+checking for uint32_t... yes
+checking for uint64_t... yes
+checking for uintptr_t... yes
+checking for sys/types.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for stdint.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking malloc.h usability... no
+checking malloc.h presence... no
+checking for malloc.h... no
+checking for fdatasync... yes
+checking for gmtime_r... yes
+checking for isnan... yes
+checking for localtime_r... yes
+checking for localtime_s... no
+checking for malloc_usable_size... no
+checking for strchrnul... no
+checking for usleep... yes
+checking for utime... yes
+checking for pread... yes
+checking for pread64... no
+checking for pwrite... yes
+checking for pwrite64... no
+checking for tclsh8.7... no
+checking for tclsh8.6... tclsh8.6
+configure: Version set to 3.41
+configure: Release set to 3.41.2
+checking for WASI SDK directory... no
+checking whether to support threadsafe operation... yes
+checking for library containing pthread_create... none required
+checking for library containing pthread_mutexattr_init... none required
+checking whether to support shared library linked as release mode or not... no
+checking whether to use an in-ram database for temporary tables... no
+checking if executables have the .exe suffix... unknown
+checking for Tcl configuration... found /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Tcl.framework/tclConfig.sh
+checking for existence of /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Tcl.framework/tclConfig.sh... loading
+checking for library containing readline... -ledit
+checking for library containing fdatasync... none required
+checking build type... release
+checking zlib.h usability... yes
+checking zlib.h presence... yes
+checking for zlib.h... yes
+checking for library containing deflate... -lz
+checking for library containing dlopen... none required
+checking whether to support math functions... yes
+checking for library containing ceil... none required
+checking whether to support JSON functions... yes
+checking whether to support MEMSYS5... no
+checking whether to support MEMSYS3... no
+checking whether to support FTS3... no
+checking whether to support FTS4... no
+checking whether to support FTS5... no
+checking whether to support LIMIT on UPDATE and DELETE statements... no
+checking whether to support GEOPOLY... no
+checking whether to support RTREE... no
+checking whether to support SESSION... no
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating sqlite3.pc
+config.status: creating sqlite_cfg.h
+config.status: executing libtool commands
+==== newCmd make
+	parse.h
+	opcodes.h
+gcc  -g -O2 -o lemon /Users/brennanlamey/Desktop/sqlite/testdata/sqlite-src-3410200/tool/lemon.c
+cp /Users/brennanlamey/Desktop/sqlite/testdata/sqlite-src-3410200/tool/lempar.c .
+cp /Users/brennanlamey/Desktop/sqlite/testdata/sqlite-src-3410200/src/parse.y .
+./lemon -DSQLITE_ENABLE_MATH_FUNCTIONS  -S parse.y
+cat parse.h /Users/brennanlamey/Desktop/sqlite/testdata/sqlite-src-3410200/src/vdbe.c | tclsh8.6 /Users/brennanlamey/Desktop/sqlite/testdata/sqlite-src-3410200/tool/mkopcodeh.tcl >opcodes.h
+target: darwin/arm64
+C front end 1/85: testdata/sqlite-src-3410200/ext/expert/sqlite3expert.c ... 32.75425ms
+C front end 2/85: testdata/sqlite-src-3410200/ext/expert/test_expert.c ... 32.561125ms
+C front end 3/85: testdata/sqlite-src-3410200/ext/fts3/fts3_term.c ... 1.677625ms
+C front end 4/85: testdata/sqlite-src-3410200/ext/fts3/fts3_test.c ... 13.546542ms
+C front end 5/85: testdata/sqlite-src-3410200/ext/fts5/fts5_tcl.c ... 26.097542ms
+C front end 6/85: testdata/sqlite-src-3410200/ext/fts5/fts5_test_mi.c ... 14.716791ms
+C front end 7/85: testdata/sqlite-src-3410200/ext/fts5/fts5_test_tok.c ... 13.80425ms
+C front end 8/85: testdata/sqlite-src-3410200/ext/misc/amatch.c ... 25.140541ms
+C front end 9/85: testdata/sqlite-src-3410200/ext/misc/appendvfs.c ... 17.567458ms
+C front end 10/85: testdata/sqlite-src-3410200/ext/misc/basexx.c ... 30.824916ms
+C front end 11/85: testdata/sqlite-src-3410200/ext/misc/carray.c ... 18.525584ms
+C front end 12/85: testdata/sqlite-src-3410200/ext/misc/cksumvfs.c ... 15.107708ms
+C front end 13/85: testdata/sqlite-src-3410200/ext/misc/closure.c ... 21.379416ms
+C front end 14/85: testdata/sqlite-src-3410200/ext/misc/csv.c ... 30.863ms
+C front end 15/85: testdata/sqlite-src-3410200/ext/misc/decimal.c ... 19.929208ms
+C front end 16/85: testdata/sqlite-src-3410200/ext/misc/eval.c ... 13.590125ms
+C front end 17/85: testdata/sqlite-src-3410200/ext/misc/explain.c ... 14.212375ms
+C front end 18/85: testdata/sqlite-src-3410200/ext/misc/fileio.c ... 25.872583ms
+C front end 19/85: testdata/sqlite-src-3410200/ext/misc/fuzzer.c ... 21.300875ms
+C front end 20/85: testdata/sqlite-src-3410200/ext/misc/ieee754.c ... 30.322625ms
+C front end 21/85: testdata/sqlite-src-3410200/ext/misc/mmapwarm.c ... 9.354334ms
+C front end 22/85: testdata/sqlite-src-3410200/ext/misc/nextchar.c ... 13.992125ms
+C front end 23/85: testdata/sqlite-src-3410200/ext/misc/normalize.c ... 14.23275ms
+C front end 24/85: testdata/sqlite-src-3410200/ext/misc/percentile.c ... 17.035125ms
+C front end 25/85: testdata/sqlite-src-3410200/ext/misc/prefixes.c ... 14.254834ms
+C front end 26/85: testdata/sqlite-src-3410200/ext/misc/qpvtab.c ... 19.155458ms
+C front end 27/85: testdata/sqlite-src-3410200/ext/misc/regexp.c ... 20.367ms
+C front end 28/85: testdata/sqlite-src-3410200/ext/misc/remember.c ... 11.973625ms
+C front end 29/85: testdata/sqlite-src-3410200/ext/misc/series.c ... 15.026333ms
+C front end 30/85: testdata/sqlite-src-3410200/ext/misc/spellfix.c ... 50.044334ms
+C front end 31/85: testdata/sqlite-src-3410200/ext/misc/totype.c ... 20.091167ms
+C front end 32/85: testdata/sqlite-src-3410200/ext/misc/unionvtab.c ... 20.187167ms
+C front end 33/85: testdata/sqlite-src-3410200/ext/misc/wholenumber.c ... 13.4475ms
+C front end 34/85: testdata/sqlite-src-3410200/ext/rbu/test_rbu.c ... 27.597709ms
+C front end 35/85: testdata/sqlite-src-3410200/ext/recover/dbdata.c ... 16.373459ms
+C front end 36/85: testdata/sqlite-src-3410200/ext/recover/sqlite3recover.c ... 21.903292ms
+C front end 37/85: testdata/sqlite-src-3410200/ext/recover/test_recover.c ... 64.355584ms
+C front end 38/85: testdata/sqlite-src-3410200/ext/rtree/test_rtreedoc.c ... 46.003666ms
+C front end 39/85: testdata/sqlite-src-3410200/ext/session/test_session.c ... 25.153334ms
+C front end 40/85: testdata/sqlite-src-3410200/ext/userauth/userauth.c ... 836.416µs
+C front end 41/85: testdata/sqlite-src-3410200/src/tclsqlite.c ... 39.082917ms
+C front end 42/85: testdata/sqlite-src-3410200/src/test1.c ... 71.633625ms
+C front end 43/85: testdata/sqlite-src-3410200/src/test2.c ... 62.317125ms
+C front end 44/85: testdata/sqlite-src-3410200/src/test3.c ... 54.557667ms
+C front end 45/85: testdata/sqlite-src-3410200/src/test4.c ... 43.523167ms
+C front end 46/85: testdata/sqlite-src-3410200/src/test5.c ... 35.717625ms
+C front end 47/85: testdata/sqlite-src-3410200/src/test6.c ... 41.471ms
+C front end 48/85: testdata/sqlite-src-3410200/src/test8.c ... 43.3845ms
+C front end 49/85: testdata/sqlite-src-3410200/src/test9.c ... 42.946375ms
+C front end 50/85: testdata/sqlite-src-3410200/src/test_async.c ... 11.539166ms
+C front end 51/85: testdata/sqlite-src-3410200/src/test_autoext.c ... 22.714041ms
+C front end 52/85: testdata/sqlite-src-3410200/src/test_backup.c ... 22.631ms
+C front end 53/85: testdata/sqlite-src-3410200/src/test_bestindex.c ... 79.947875ms
+C front end 54/85: testdata/sqlite-src-3410200/src/test_blob.c ... 34.232083ms
+C front end 55/85: testdata/sqlite-src-3410200/src/test_btree.c ... 36.169625ms
+C front end 56/85: testdata/sqlite-src-3410200/src/test_config.c ... 35.926916ms
+C front end 57/85: testdata/sqlite-src-3410200/src/test_delete.c ... 15.644792ms
+C front end 58/85: testdata/sqlite-src-3410200/src/test_demovfs.c ... 30.971542ms
+C front end 59/85: testdata/sqlite-src-3410200/src/test_devsym.c ... 35.178542ms
+C front end 60/85: testdata/sqlite-src-3410200/src/test_fs.c ... 44.848167ms
+C front end 61/85: testdata/sqlite-src-3410200/src/test_func.c ... 50.797667ms
+C front end 62/85: testdata/sqlite-src-3410200/src/test_hexio.c ... 43.069417ms
+C front end 63/85: testdata/sqlite-src-3410200/src/test_init.c ... 43.211166ms
+C front end 64/85: testdata/sqlite-src-3410200/src/test_intarray.c ... 64.162625ms
+C front end 65/85: testdata/sqlite-src-3410200/src/test_journal.c ... 46.683542ms
+C front end 66/85: testdata/sqlite-src-3410200/src/test_malloc.c ... 38.719542ms
+C front end 67/85: testdata/sqlite-src-3410200/src/test_md5.c ... 29.923625ms
+C front end 68/85: testdata/sqlite-src-3410200/src/test_multiplex.c ... 32.436042ms
+C front end 69/85: testdata/sqlite-src-3410200/src/test_mutex.c ... 43.115666ms
+C front end 70/85: testdata/sqlite-src-3410200/src/test_onefile.c ... 14.169917ms
+C front end 71/85: testdata/sqlite-src-3410200/src/test_osinst.c ... 23.440833ms
+C front end 72/85: testdata/sqlite-src-3410200/src/test_pcache.c ... 12.499291ms
+C front end 73/85: testdata/sqlite-src-3410200/src/test_quota.c ... 29.015458ms
+C front end 74/85: testdata/sqlite-src-3410200/src/test_rtree.c ... 43.934125ms
+C front end 75/85: testdata/sqlite-src-3410200/src/test_schema.c ... 39.490292ms
+C front end 76/85: testdata/sqlite-src-3410200/src/test_superlock.c ... 21.6965ms
+C front end 77/85: testdata/sqlite-src-3410200/src/test_syscall.c ... 49.39125ms
+C front end 78/85: testdata/sqlite-src-3410200/src/test_tclsh.c ... 19.561792ms
+C front end 79/85: testdata/sqlite-src-3410200/src/test_tclvar.c ... 38.105833ms
+C front end 80/85: testdata/sqlite-src-3410200/src/test_thread.c ... 69.601167ms
+C front end 81/85: testdata/sqlite-src-3410200/src/test_vdbecov.c ... 101.674ms
+C front end 82/85: testdata/sqlite-src-3410200/src/test_vfs.c ... 46.578083ms
+C front end 83/85: testdata/sqlite-src-3410200/src/test_windirent.c ... 680.375µs
+C front end 84/85: testdata/sqlite-src-3410200/src/test_window.c ... 40.668667ms
+C front end 85/85: testdata/sqlite-src-3410200/src/test_wsd.c ... 634.292µs
+processing file scope declarations ... 278.371541ms
+processing symbol table ... 4.402334ms
+processing struct/union types ... 2.009103625s
+processing enum values ... 269.703542ms
+processing #defines ... 17.729042ms
+processing static local declarations ... 167.028958ms
+Go back end 1/85: sqlite3expert.c ... 102.497833ms
+Go back end 2/85: test_expert.c ... 26.0745ms
+Go back end 3/85: fts3_term.c ... 320.041µs
+Go back end 4/85: fts3_test.c ... 10.4425ms
+Go back end 5/85: fts5_tcl.c ... 67.168ms
+Go back end 6/85: fts5_test_mi.c ... 25.62125ms
+Go back end 7/85: fts5_test_tok.c ... 24.0485ms
+Go back end 8/85: amatch.c ... 76.554333ms
+Go back end 9/85: appendvfs.c ... 32.68425ms
+Go back end 10/85: basexx.c ... 30.837125ms
+Go back end 11/85: carray.c ... 29.472667ms
+Go back end 12/85: cksumvfs.c ... 37.802375ms
+Go back end 13/85: closure.c ... 42.997958ms
+Go back end 14/85: csv.c ... 50.416042ms
+Go back end 15/85: decimal.c ... 40.867ms
+Go back end 16/85: eval.c ... 12.696958ms
+Go back end 17/85: explain.c ... 17.503417ms
+Go back end 18/85: fileio.c ... 50.708625ms
+Go back end 19/85: fuzzer.c ... 52.400792ms
+Go back end 20/85: ieee754.c ... 19.294959ms
+Go back end 21/85: mmapwarm.c ... 9.320459ms
+Go back end 22/85: nextchar.c ... 20.706083ms
+Go back end 23/85: normalize.c ... 39.298417ms
+Go back end 24/85: percentile.c ... 15.026917ms
+Go back end 25/85: prefixes.c ... 15.811583ms
+Go back end 26/85: qpvtab.c ... 25.032709ms
+Go back end 27/85: regexp.c ... 57.730083ms
+Go back end 28/85: remember.c ... 7.422208ms
+Go back end 29/85: series.c ... 20.645959ms
+Go back end 30/85: spellfix.c ... 136.561625ms
+Go back end 31/85: totype.c ... 34.332583ms
+Go back end 32/85: unionvtab.c ... 67.416459ms
+Go back end 33/85: wholenumber.c ... 16.038083ms
+Go back end 34/85: test_rbu.c ... 37.496542ms
+Go back end 35/85: dbdata.c ... 56.217834ms
+Go back end 36/85: sqlite3recover.c ... 138.176334ms
+Go back end 37/85: test_recover.c ... 36.646459ms
+Go back end 38/85: test_rtreedoc.c ... 39.27525ms
+Go back end 39/85: test_session.c ... 86.496958ms
+Go back end 40/85: userauth.c ... 265.958µs
+Go back end 41/85: tclsqlite.c ... 250.153125ms
+Go back end 42/85: test1.c ... 346.671625ms
+Go back end 43/85: test2.c ... 50.243708ms
+Go back end 44/85: test3.c ... 46.754792ms
+Go back end 45/85: test4.c ... 50.511042ms
+Go back end 46/85: test5.c ... 28.740333ms
+Go back end 47/85: test6.c ... 65.357333ms
+Go back end 48/85: test8.c ... 81.13675ms
+Go back end 49/85: test9.c ... 27.363167ms
+Go back end 50/85: test_async.c ... 9.894708ms
+Go back end 51/85: test_autoext.c ... 16.090416ms
+Go back end 52/85: test_backup.c ... 20.100834ms
+Go back end 53/85: test_bestindex.c ... 61.950417ms
+Go back end 54/85: test_blob.c ... 32.869875ms
+Go back end 55/85: test_btree.c ... 22.754458ms
+Go back end 56/85: test_config.c ... 36.142667ms
+Go back end 57/85: test_delete.c ... 11.720708ms
+Go back end 58/85: test_demovfs.c ... 37.436584ms
+Go back end 59/85: test_devsym.c ... 28.579791ms
+Go back end 60/85: test_fs.c ... 50.745ms
+Go back end 61/85: test_func.c ... 57.444041ms
+Go back end 62/85: test_hexio.c ... 41.40675ms
+Go back end 63/85: test_init.c ... 40.516083ms
+Go back end 64/85: test_intarray.c ... 26.783209ms
+Go back end 65/85: test_journal.c ... 47.319584ms
+Go back end 66/85: test_malloc.c ... 80.179541ms
+Go back end 67/85: test_md5.c ... 37.041084ms
+Go back end 68/85: test_multiplex.c ... 77.824708ms
+Go back end 69/85: test_mutex.c ... 40.981208ms
+Go back end 70/85: test_onefile.c ... 36.826583ms
+Go back end 71/85: test_osinst.c ... 61.055083ms
+Go back end 72/85: test_pcache.c ... 21.706916ms
+Go back end 73/85: test_quota.c ... 94.342334ms
+Go back end 74/85: test_rtree.c ... 39.458875ms
+Go back end 75/85: test_schema.c ... 31.405042ms
+Go back end 76/85: test_superlock.c ... 25.755208ms
+Go back end 77/85: test_syscall.c ... 52.909833ms
+Go back end 78/85: test_tclsh.c ... 17.255416ms
+Go back end 79/85: test_tclvar.c ... 44.515333ms
+Go back end 80/85: test_thread.c ... 42.002375ms
+Go back end 81/85: test_vdbecov.c ... 21.384125ms
+Go back end 82/85: test_vfs.c ... 99.502125ms
+Go back end 83/85: test_windirent.c ... 260µs
+Go back end 84/85: test_window.c ... 37.749625ms
+Go back end 85/85: test_wsd.c ... 259.167µs
